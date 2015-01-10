@@ -4,7 +4,7 @@
   <title><![CDATA[王春磊的博客]]></title>
   <link href="http://gitprimos.github.io/atom.xml" rel="self"/>
   <link href="http://gitprimos.github.io/"/>
-  <updated>2015-01-10T18:15:16+08:00</updated>
+  <updated>2015-01-10T23:23:21+08:00</updated>
   <id>http://gitprimos.github.io/</id>
   <author>
     <name><![CDATA[Chunlei Wang]]></name>
@@ -12,5 +12,53 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[这是一个开始，也是一个总结]]></title>
+    <link href="http://gitprimos.github.io/blog/2015/01/10/begininng-and-summary/"/>
+    <updated>2015-01-10T21:27:00+08:00</updated>
+    <id>http://gitprimos.github.io/blog/2015/01/10/begininng-and-summary</id>
+    <content type="html"><![CDATA[<p>这是一个开始，是因为这今天开始写博客，开始一点一滴的记录一下自己的行军图，也是一个总结，是认真的总结一下自己过去走过的这段路程，反思一下自己，展望一下未来。</p>
+
+<h1>昨天</h1>
+
+<p>我还在学校也写Java：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span> <span class="n">args</span><span class="o">[])</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;HelloWorld&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>今天</h1>
+
+<p>我在公司写Scala：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">HelloWorld</span> <span class="k">extends</span> <span class="nc">App</span><span class="o">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">(</span><span class="s">&quot;HelloWorld&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h1>明天</h1>
+
+<p>我会去写groovy：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">println</span> <span class="s2">&quot;Hello World&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+]]></content>
+  </entry>
   
 </feed>
