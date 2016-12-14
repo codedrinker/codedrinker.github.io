@@ -223,7 +223,7 @@ work@dev:/var/www/html$ tree
 >**参考文档：** http://softwaretester.info/create-private-vagrant-box-repository/
 
 ##更新镜像
-进入mermaid目录，输入
+进入mermaid目录，输入:
 ```
 vagrant box outdated
 ```
