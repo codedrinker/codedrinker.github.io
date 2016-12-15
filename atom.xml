@@ -4,7 +4,7 @@
   <title><![CDATA[王春磊的博客]]></title>
   <link href="http://codedrinker.github.io/atom.xml" rel="self"/>
   <link href="http://codedrinker.github.io/"/>
-  <updated>2016-12-15T02:31:14+08:00</updated>
+  <updated>2016-12-15T09:56:49+08:00</updated>
   <id>http://codedrinker.github.io/</id>
   <author>
     <name><![CDATA[Chunlei Wang]]></name>
@@ -372,6 +372,14 @@
 
 
 <p>提示显示已经有0.1.1版本，可以更新啦，那么我们直接输入如下命令更新，切记需要<code>vagrant halt</code>关闭虚拟机。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>A newer version of the box 'mermaid' is available! You currently
+</span><span class='line'>have version '0.1.0'. The latest is version '0.1.1'. Run
+</span><span class='line'>`vagrant box update` to update.</span></code></pre></td></tr></table></div></figure>
+
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class=''><span class='line'>vagrant box update</span></code></pre></td></tr></table></div></figure>
