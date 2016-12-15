@@ -229,6 +229,11 @@ vagrant box outdated
 ```
 提示显示已经有0.1.1版本，可以更新啦，那么我们直接输入如下命令更新，切记需要`vagrant halt`关闭虚拟机。
 ```
+A newer version of the box 'mermaid' is available! You currently
+have version '0.1.0'. The latest is version '0.1.1'. Run
+`vagrant box update` to update.
+```
+```
 vagrant box update
 ```
 更新以后，访问localhost，出现`It’s work`字样。
