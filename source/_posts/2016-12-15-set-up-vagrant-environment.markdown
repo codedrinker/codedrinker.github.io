@@ -175,6 +175,15 @@ config.vm.network "forwarded_port", guest: 80, host: 80
 ```
 
 按照`打包开发环境`步骤，重新打包一个新的mermaid.0.1.1.box上传到mermaid.0.1.0.box相同目录，如下图:
+
+>**注意：**这里有一个地方需要注意，如果你第二次打包，不能直接指定`Vagrantfile`是当目录的，因为它里面不包含你最初的配置，这时候有两种方案：
+>
+>1.如果你没有做什么配置的修改，需要指定到原来的配置文件，比如
+`~/.vagrant.d/boxes/mermaid/0.1.0/virtualbox/include`这个目录里面的`Vagrantfile`，是我上一个0.1.0的内置的vagrantfile。所以我打包的命令是：
+>```vagrant package --output mermaid.box --vagrantfile ~/.vagrant.d/boxes/mermaid/0.1.0/virtualbox/include/_Vagrantfile```
+>
+>2.如果你有修改配置，那么可以考虑把上面的路径的配置拷贝到当前目录的`Vagrantfile`里面，再进行打包。
+
 ```
 work@dev:/var/www/html$ tree
 .
