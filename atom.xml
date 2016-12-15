@@ -4,7 +4,7 @@
   <title><![CDATA[王春磊的博客]]></title>
   <link href="http://codedrinker.github.io/atom.xml" rel="self"/>
   <link href="http://codedrinker.github.io/"/>
-  <updated>2016-12-15T09:59:18+08:00</updated>
+  <updated>2016-12-15T12:10:04+08:00</updated>
   <id>http://codedrinker.github.io/</id>
   <author>
     <name><![CDATA[Chunlei Wang]]></name>
@@ -280,6 +280,14 @@
 
 
 <p>按照<code>打包开发环境</code>步骤，重新打包一个新的mermaid.0.1.1.box上传到mermaid.0.1.0.box相同目录，如下图:</p>
+
+<blockquote><p><strong>注意：</strong>这里有一个地方需要注意，如果你第二次打包，不能直接指定<code>Vagrantfile</code>是当目录的，因为它里面不包含你最初的配置，这时候有两种方案：</p>
+
+<p>1.如果你没有做什么配置的修改，需要指定到原来的配置文件，比如
+<code>~/.vagrant.d/boxes/mermaid/0.1.0/virtualbox/include</code>这个目录里面的<code>Vagrantfile</code>，是我上一个0.1.0的内置的vagrantfile。所以我打包的命令是：
+<code>vagrant package --output mermaid.box --vagrantfile ~/.vagrant.d/boxes/mermaid/0.1.0/virtualbox/include/_Vagrantfile</code></p>
+
+<p>2.如果你有修改配置，那么可以考虑把上面的路径的配置拷贝到当前目录的<code>Vagrantfile</code>里面，再进行打包。</p></blockquote>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
