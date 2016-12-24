@@ -91,8 +91,10 @@ delicious_user:
 delicious_count: 3
 
 # Disqus Comments
-disqus_short_name:
-disqus_show_comment_count: false
+disqus_short_name: codedrinker
+disqus_show_comment_count: true
+layout: default
+comments: true
 
 # Google Analytics
 google_analytics_tracking_id: UA-89103576-1
