@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://codedrinker.github.io/atom.xml" rel="self"/>
   <link href="http://codedrinker.github.io/"/>
-  <updated>2017-03-12T18:25:43+08:00</updated>
+  <updated>2017-03-12T18:37:34+08:00</updated>
   <id>http://codedrinker.github.io/</id>
   <author>
     <name><![CDATA[Chunlei Wang]]></name>
@@ -24,7 +24,7 @@
 
 <h2>示例</h2>
 
-<p><img src="http://codedrinker.github.io/images/posts/CustomFileInputs1.jpg" alt="Demo" />
+<p><img src="http://codedrinker.github.io/images/posts/CustomFileInputs1.jpg" alt="Demo" /><br/>
 <a href="http://tympanus.net/Tutorials/CustomFileInputs/">在线示例</a> | <a href="http://tympanus.net/Tutorials/CustomFileInputs/CustomFileInputs.zip">下载源码</a></p>
 
 <h2>调研</h2>
