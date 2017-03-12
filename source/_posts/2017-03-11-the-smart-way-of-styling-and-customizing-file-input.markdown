@@ -11,7 +11,7 @@ categories:
 
 ##示例
 
-![Demo](/images/posts/CustomFileInputs1.jpg)
+![Demo](/images/posts/CustomFileInputs1.jpg)  
 [在线示例](http://tympanus.net/Tutorials/CustomFileInputs/) | [下载源码](http://tympanus.net/Tutorials/CustomFileInputs/CustomFileInputs.zip)
 
 ##调研
