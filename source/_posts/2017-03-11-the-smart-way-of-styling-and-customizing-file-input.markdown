@@ -7,7 +7,7 @@ categories:
 ---
 
 ##前言
-通过使用`label`标签，简单的自定义`<input type=='file'>`的样式。
+通过使用`label`标签，简单的自定义`<input type='file'>`的样式。
 
 ##示例
 
