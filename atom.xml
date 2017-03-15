@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://codedrinker.github.io/atom.xml" rel="self"/>
   <link href="http://codedrinker.github.io/"/>
-  <updated>2017-03-15T21:28:12+08:00</updated>
+  <updated>2017-03-15T23:36:49+08:00</updated>
   <id>http://codedrinker.github.io/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[如何优雅的自定义File Input样式]]></title>
-    <link href="http://codedrinker.github.io/blog/2017/03/11/the-smart-way-of-styling-and-customizing-file-input/"/>
+    <link href="http://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input/"/>
     <updated>2017-03-11T15:05:51+08:00</updated>
-    <id>http://codedrinker.github.io/blog/2017/03/11/the-smart-way-of-styling-and-customizing-file-input</id>
+    <id>http://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input</id>
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>通过使用<code>label</code>标签，简单的自定义<code>&lt;input type='file'&gt;</code>的样式。</p>
@@ -327,9 +327,9 @@
   
   <entry>
     <title type="html"><![CDATA[Broswersync 前端实时预览工程搭建]]></title>
-    <link href="http://codedrinker.github.io/blog/2016/12/24/auto-preview-front-end-changes/"/>
+    <link href="http://codedrinker.github.io/blog/auto-preview-front-end-changes/"/>
     <updated>2016-12-24T20:46:37+08:00</updated>
-    <id>http://codedrinker.github.io/blog/2016/12/24/auto-preview-front-end-changes</id>
+    <id>http://codedrinker.github.io/blog/auto-preview-front-end-changes</id>
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话，还需要处理项目的热部署。所以笔者在网上查了查，同时咨询了一下身边的朋友<a href="https://github.com/HelloJacky">小马</a>，就有了下面这篇文章：通过<code>Broswersync</code>把文件变化实时更新到浏览器端，不同的前端技术架构体现的效果不一样，有的是不刷新页面的更新样式和布局，有的是刷新页面更新，效果更像是点击“F5”。无论做前端还是后端，使用它将提高30%的工作效率，下面我们就直接进入正题。</p>
@@ -464,9 +464,9 @@
   
   <entry>
     <title type="html"><![CDATA[Vagrant 私有开发环境搭建]]></title>
-    <link href="http://codedrinker.github.io/blog/2016/12/15/set-up-vagrant-environment/"/>
+    <link href="http://codedrinker.github.io/blog/set-up-vagrant-environment/"/>
     <updated>2016-12-15T01:28:27+08:00</updated>
-    <id>http://codedrinker.github.io/blog/2016/12/15/set-up-vagrant-environment</id>
+    <id>http://codedrinker.github.io/blog/set-up-vagrant-environment</id>
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>服务器端开发工程师的一个痛点就是各种搭建环境，尤其是对于我们这种特别爱捯饬技术，搭建环境，升级应用版本的这类人。这样除了让我们忍受搭建各种版本的环境的繁琐兼容问题，还让自己的开发机变得越来越臃肿，为此本文介绍了一种使用<code>Vagrant</code>搭建一套集成的开发环境(镜像)的方案，不仅可以让团队开发人员的环境保持一致，同时使得开发机保持瘦身。<br/>
@@ -849,9 +849,9 @@
   
   <entry>
     <title type="html"><![CDATA[这是一个开始，也是一个总结]]></title>
-    <link href="http://codedrinker.github.io/blog/2015/01/10/begininng-and-summary/"/>
+    <link href="http://codedrinker.github.io/blog/begininng-and-summary/"/>
     <updated>2015-01-10T21:27:00+08:00</updated>
-    <id>http://codedrinker.github.io/blog/2015/01/10/begininng-and-summary</id>
+    <id>http://codedrinker.github.io/blog/begininng-and-summary</id>
     <content type="html"><![CDATA[<p>这是一个开始，是因为这今天开始写博客，确切的说是开始认真的写博客，之前在<a href="http://blog.csdn.net/wclxyn">CSDN</a>写过一些博客，
 大概是在大二的时候开始写，不过感觉那些更像是笔记，现在呢，变成读后感了，
 我觉得开始一点一滴的记录一下自己的行军图，也是一个总结，

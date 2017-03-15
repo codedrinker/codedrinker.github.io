@@ -1,0 +1,593 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>如何优雅的自定义File Input样式 - 码匠笔记</title>
+  <meta name="author" content="麻酱">
+
+  
+  <meta name="description" content="前言 通过使用label标签，简单的自定义&lt;input type='file'&gt;的样式。 示例 在线示例 | 下载源码 调研 我尝试了许多通过修改&lt;input type='file'&gt;样式的方式解决这个问题，效果都不是很好，没有一个能像Readerrr( &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-89103576-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">码匠笔记</a></h1>
+  
+    <h2>用心雕琢</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="codedrinker.github.io">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">如何优雅的自定义File Input样式</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-03-11T15:05:51+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>3:05 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://codedrinker.github.io">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>前言</h2>
+
+<p>通过使用<code>label</code>标签，简单的自定义<code>&lt;input type='file'&gt;</code>的样式。</p>
+
+<h2>示例</h2>
+
+<p><img src="/images/posts/CustomFileInputs1.jpg" alt="Demo" /><br/>
+<a href="http://tympanus.net/Tutorials/CustomFileInputs/">在线示例</a> | <a href="http://tympanus.net/Tutorials/CustomFileInputs/CustomFileInputs.zip">下载源码</a></p>
+
+<h2>调研</h2>
+
+<p>我尝试了许多通过修改<code>&lt;input type='file'&gt;</code>样式的方式解决这个问题，效果都不是很好，没有一个能像<a href="http://readerrr.com/">Readerrr</a>(通过上传文件导入Feed)那样漂亮。还有一种奇怪的实现，把<code>&lt;input type='file'&gt;</code>放到一个容器里面，把容器画成按钮的样子，当你点击容器的任何地方的时候，实际是点击的<code>&lt;input type='file'&gt;</code>。这种实现方案很有趣，同时也很奇怪。因为从可用性和点击体验来说确实不是很理想。</p>
+
+<p>我尝试使用Google搜索答案可是没有什么结果，但是StackOverflow上面的内容让我茅塞顿开。它只有几个投票，并且在页面的中间位置，但是最重要的是他的内容里面包含了一个神奇的关键字<code>&lt;label&gt;</code>。就我们所知，点击<code>&lt;label&gt;</code>标签的时候，可以触发它所绑定<code>&lt;input&gt;</code>的焦点。那么我们尝试通过点击<code>&lt;label&gt;</code>标签，触发打开文件选择的窗口，这样从逻辑上来讲也是非常合理的。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;file&quot;</span> <span class="na">name=</span><span class="s">&quot;file&quot;</span> <span class="na">id=</span><span class="s">&quot;file&quot;</span> <span class="na">class=</span><span class="s">&quot;inputfile&quot;</span> <span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;file&quot;</span><span class="nt">&gt;</span>Choose a file<span class="nt">&lt;/label&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>点击两个标签中的任意一个都可以触发打开文件选择的窗口，这也意味着最难的部分我们已经解决了。同时不需要复杂的逻辑定位光标效果，也没有JavaScript代码，只有两行代码而已。</p>
+
+<p><img src="/images/posts/smart-custom-file-input-1.gif" alt="Demo" /></p>
+
+<p>下面我们就可以定义<code>&lt;label&gt;</code>的样式了，让它看起来更像一个按钮。</p>
+
+<h2>隐藏<code>&lt;input&gt;</code></h2>
+
+<p>首先，我们需要隐藏‘丑小鸭’，可以使用CSS属性<code>display:none</code>或<code>visibility:hidden</code>，但是这里不能使用<code>visibility:hidden</code>，因为提交<code>form</code>表单的时候不会传递参数到服务器端了。所以我们需要设置这个标签用户不可见，但是浏览器可见。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.inputfile</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">width</span><span class="o">:</span> <span class="m">0.1px</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">height</span><span class="o">:</span> <span class="m">0.1px</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">opacity</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">overflow</span><span class="o">:</span> <span class="k">hidden</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">z-index</span><span class="o">:</span> <span class="m">-1</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>你会好奇为什么宽度和高度设置为<code>0.1px</code>而不是<code>0px</code>，因为在某些浏览器里面将元素的属性设置为零会让它们排列很奇怪，同时为<code>input</code>设置<code>absolute</code>属性，保证他不会干扰到兄弟元素。</p>
+
+<h2>修饰<code>&lt;label&gt;</code></h2>
+
+<p>我们现在需要把<code>&lt;label&gt;</code>打造成一个按钮，所以你可以发挥你的想象绘制它，我现在先简单把它实现：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.inputfile</span> <span class="o">+</span> <span class="nt">label</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span> <span class="m">1.25em</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">font-weight</span><span class="o">:</span> <span class="m">700</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">background-color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="o">-</span><span class="k">block</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.inputfile</span><span class="nd">:focus</span> <span class="o">+</span> <span class="nt">label</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.inputfile</span> <span class="o">+</span> <span class="nt">label</span><span class="nd">:hover</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">background-color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>鼠标效果</h2>
+
+<p>你是怎么知道网站上面的元素可以点击的呢？首先，元素应该传递一种你可以点击它的感觉；其次，当光标悬浮在元素上面应该有适当的变化。下面我们就实现<code>&lt;label&gt;</code>的<code>可点击效果</code>：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.inputfile</span> <span class="o">+</span> <span class="nt">label</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">cursor</span><span class="o">:</span> <span class="k">pointer</span><span class="p">;</span> <span class="c">/* 小手光标*/</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center;"> 处理前        </th>
+<th style="text-align:center;"> 处理后         </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;"><img src="/images/posts/smart-custom-file-input-2.gif" alt="Demo" /></td>
+<td style="text-align:center;"> <img src="/images/posts/smart-custom-file-input-3.gif" alt="Demo" /></td>
+</tr>
+</tbody>
+</table>
+
+
+<h2>键盘导航</h2>
+
+<p>如果用户不能通过键盘在你的网站上面导航，那么就说明这设计是有问题的。我们隐藏了<code>input</code>，同时也隐藏了<code>input</code>的焦点。所以我们要把原本在<code>input</code>标签上面能体现的焦点同样实现在<code>label</code>上面。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.inputfile</span><span class="nd">:focus</span> <span class="o">+</span> <span class="nt">label</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">outline</span><span class="o">:</span> <span class="m">1px</span> <span class="k">dotted</span> <span class="m">#000</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">outline</span><span class="o">:</span> <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">focus</span><span class="o">-</span><span class="n">ring</span><span class="o">-</span><span class="k">color</span> <span class="k">auto</span> <span class="m">5px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>-webkit-focus-ring-color auto 5px</code>是一个有意思的小技巧，它使用外边框变色的效果巧妙地模拟了获取焦点的效果。它适用Chrome，Opera，Safari浏览器，上面的一行CSS样式是为了不支持<code>-webkit</code>属性的浏览器使用的。</p>
+
+<p><img src="/images/posts/smart-custom-file-input-4.gif" alt="Demo" /></p>
+
+<h2>触摸设备兼容</h2>
+
+<p>如果使用<a href="https://github.com/ftlabs/fastclick">FastClick</a>(一个简单易用的库，用于消除物理点击和移动浏览器上的点击事件触发之间的300毫秒延迟)或者是在标签内添加一些额外的标记，这样会让’按钮‘无法工作，所以我们需要使用<code>pointer-events:none</code>来解决这个问题：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;file&quot;</span><span class="nt">&gt;&lt;strong&gt;</span>Choose a file<span class="nt">&lt;/strong&gt;&lt;/label&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.inputfile</span> <span class="o">+</span> <span class="nt">label</span> <span class="o">*</span> <span class="p">{</span>
+</span><span class='line'>  <span class="k">pointer</span><span class="o">-</span><span class="n">events</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>显示所选择文件</h2>
+
+<p>我们已经完成了大部分，但是还有一个小瑕疵。当我们使用<code>input</code>选择文件的时候会显示我们所选择的文件，然而我们这种实现方案隐藏了<code>input</code>所以不能显示文件了。不过没有关系，我们可以用一小段JavaScript解决这个问题，把选择的文件名字显示到<code>label</code>上面，如果是多个，就说显示了多个文件，这样就解决了这个问题：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;file&quot;</span> <span class="na">name=</span><span class="s">&quot;file&quot;</span> <span class="na">id=</span><span class="s">&quot;file&quot;</span> <span class="na">class=</span><span class="s">&quot;inputfile&quot;</span>
+</span><span class='line'>     <span class="na">data-multiple-caption=</span><span class="s">&quot;{count} files selected&quot;</span> <span class="na">multiple</span> <span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="kd">var</span> <span class="nx">inputs</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span> <span class="s1">&#39;.inputfile&#39;</span> <span class="p">);</span>
+</span><span class='line'><span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">forEach</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span> <span class="nx">inputs</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">input</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="kd">var</span> <span class="nx">label</span>    <span class="o">=</span> <span class="nx">input</span><span class="p">.</span><span class="nx">nextElementSibling</span><span class="p">,</span>
+</span><span class='line'>      <span class="nx">labelVal</span> <span class="o">=</span> <span class="nx">label</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nx">input</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span> <span class="s1">&#39;change&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span> <span class="nx">e</span> <span class="p">)</span>
+</span><span class='line'>  <span class="p">{</span>
+</span><span class='line'>      <span class="kd">var</span> <span class="nx">fileName</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">files</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">length</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">)</span>
+</span><span class='line'>         <span class="nx">fileName</span> <span class="o">=</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getAttribute</span><span class="p">(</span><span class="s1">&#39;data-multiple-caption&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span><span class='line'>         <span class="p">.</span><span class="nx">replace</span><span class="p">(</span> <span class="s1">&#39;{count}&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">files</span><span class="p">.</span><span class="nx">length</span> <span class="p">);</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>          <span class="nx">fileName</span> <span class="o">=</span> <span class="nx">e</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span> <span class="s1">&#39;\\&#39;</span> <span class="p">).</span><span class="nx">pop</span><span class="p">();</span>
+</span><span class='line'>
+</span><span class='line'>      <span class="k">if</span><span class="p">(</span> <span class="nx">fileName</span> <span class="p">)</span>
+</span><span class='line'>          <span class="nx">label</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span> <span class="s1">&#39;span&#39;</span> <span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">fileName</span><span class="p">;</span>
+</span><span class='line'>      <span class="k">else</span>
+</span><span class='line'>          <span class="nx">label</span><span class="p">.</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nx">labelVal</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">});</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在源码里面也有一个JQuery的实现，如果需要可以下载查看。<br/>
+源码解析：</p>
+
+<ul>
+<li><p><code>multiple</code>属性是为了可以选择多个文件；<code>data-multiple-caption</code>是自定义的一个属性，用来显示选择多个文件的文案，当然你可以自定义这个文案。<code>{count}</code>是所选择的文件数的占位符。之所以使用一个额外的自定义属性而不是使用变量是因为这样只有一个地方有容易维护而已。</p></li>
+<li><p>IE9及以下的版本不支持<code>multiple</code>属性和JavaScript的<code>files</code>属性，所以针对这些浏览器我们只能采用其他的方式。因为选择文件以后我们是可以获取到文件的绝对路径的，比如<code>C:\fakepath\filename.jpg</code>，所以我们使用<code>split( '\\' ).pop()</code>来获取所选文件的名字用于显示。</p></li>
+<li><p>一个有意思的事情，原生的<code>input</code>打开选择窗口以后，你点击ESC是可以取消选择的，对此我也做了处理，使用<code>labelVal</code>来存取原来的值，在必要的时候重置这个值到<code>label</code>。</p></li>
+</ul>
+
+
+<p>下面就是最终的效果：</p>
+
+<p><img src="/images/posts/smart-custom-file-input-5.gif" alt="Demo" /></p>
+
+<h2>如果JavaScript不可用怎么办？</h2>
+
+<p>如果不使用JavaScript的话没有办法显示所选择的文件，为了可用性，如果不支持JavaScript我们把它变回原来的外观。因此我们在<code>&lt;html&gt;</code>元素添加一个<code>.no-js</code>的<code>class</code>，并且编写一个js脚本，如果js可用我们再将其替换成<code>.js</code>：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;html</span> <span class="na">class=</span><span class="s">&quot;no-js&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;head&gt;</span>
+</span><span class='line'>        <span class="c">&lt;!-- remove this if you use Modernizr --&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;script&gt;</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">,</span><span class="nx">t</span><span class="p">,</span><span class="nx">n</span><span class="p">){</span><span class="kd">var</span> <span class="nx">r</span><span class="o">=</span><span class="nx">e</span><span class="p">.</span><span class="nx">querySelectorAll</span><span class="p">(</span><span class="s2">&quot;html&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">];</span><span class="nx">r</span><span class="p">.</span><span class="nx">className</span><span class="o">=</span><span class="nx">r</span><span class="p">.</span><span class="nx">className</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/(^|\s)no-js(\s|$)/</span><span class="p">,</span><span class="s2">&quot;$1js$2&quot;</span><span class="p">)})(</span><span class="nb">document</span><span class="p">,</span><span class="nb">window</span><span class="p">,</span><span class="mi">0</span><span class="p">);</span><span class="nt">&lt;/script&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/head&gt;</span>
+</span><span class='line'><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.js</span> <span class="nc">.inputfile</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">0.1px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">height</span><span class="o">:</span> <span class="m">0.1px</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">opacity</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">overflow</span><span class="o">:</span> <span class="k">hidden</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">z-index</span><span class="o">:</span> <span class="m">-1</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nc">.no-js</span> <span class="nc">.inputfile</span> <span class="o">+</span> <span class="nt">label</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">display</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><img src="/images/posts/smart-custom-file-input-6.gif" alt="Demo" /></p>
+
+<h2>Firefox Bug</h2>
+
+<p>这里有一个非常奇怪的事情，<code>input[type="file"]:focus</code>这个属性在Firefox根本不起作用，但是<code>:hover</code>和<code>:active</code>却能很好地支持。更奇怪的事情，Firefox却允许使用<code>JavaScript</code>获取<code>focus</code>的事件，所以我们在<code>input</code>上面监听了事件，当触发<code>focus</code>的时候改变样式来实现我们之前的效果：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='javascript'><span class='line'><span class="nx">input</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;focus&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">input</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="s1">&#39;has-focus&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span><span class='line'><span class="nx">input</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;blur&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nx">input</span><span class="p">.</span><span class="nx">classList</span><span class="p">.</span><span class="nx">remove</span><span class="p">(</span><span class="s1">&#39;has-focus&#39;</span><span class="p">);</span>
+</span><span class='line'><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.inputfile</span><span class="nd">:focus</span> <span class="o">+</span> <span class="nt">label</span><span class="o">,</span>
+</span><span class='line'><span class="nc">.inputfile.has-focus</span> <span class="o">+</span> <span class="nt">label</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">outline</span><span class="o">:</span> <span class="m">1px</span> <span class="k">dotted</span> <span class="m">#000</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">outline</span><span class="o">:</span> <span class="o">-</span><span class="n">webkit</span><span class="o">-</span><span class="n">focus</span><span class="o">-</span><span class="n">ring</span><span class="o">-</span><span class="k">color</span> <span class="k">auto</span> <span class="m">5px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果你想查看是怎么自定义<code>input</code>样式的，欢迎下载并查看源码，并愉快使用。<br/>
+示例中的图标由<a href="http://www.danielbruce.se/">Daniel Bruce</a>制作，来源于<a href="http://www.flaticon.com">www.flaticon.com</a>，并获得CC BY3.0许可。</p>
+
+<blockquote><p><strong>原文地址：</strong> <a href="https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/">Styling &amp; Customizing File Inputs the Smart Way</a></p></blockquote>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2017-03-11T15:05:51+08:00'><span class='date'><span class='date-month'>Mar</span> <span class='date-day'>11</span><span class='date-suffix'>th</span>, <span class='date-year'>2017</span></span> <span class='time'>3:05 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input/" data-via="" data-counturl="http://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/auto-preview-front-end-changes/" title="Previous Post: Broswersync 前端实时预览工程搭建">&laquo; Broswersync 前端实时预览工程搭建</a>
+      
+      
+    </p>
+  </footer>
+</article>
+<section>
+    <h1>Subscription</h1>
+    <p>
+        主要用来记录自己的编程经历，学习笔记和心得体会，希望能和大家一起分享和讨论，共同进步，欢迎订阅。
+    </p>
+    <p>
+        <img src="/images/wechat.jpg" width="153px" height="153px">
+    </p>
+</section>
+
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+    <h1>About Me</h1>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;能剒削柱梁谓之木匠，能穴凿穴埳谓之土匠，能雕琢文书谓之史匠，能搬砖摞码谓之码匠。</p>
+</section><section>
+    <h1>Subscription</h1>
+    <p>
+        主要用来记录自己的编程经历，学习笔记和心得体会，希望能和大家一起分享和讨论，共同进步，欢迎订阅。
+    </p>
+    <p>
+        <img src="/images/wechat.jpg" width="153px" height="153px">
+    </p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/the-smart-way-of-styling-and-customizing-file-input/">如何优雅的自定义File Input样式</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/auto-preview-front-end-changes/">Broswersync 前端实时预览工程搭建</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/set-up-vagrant-environment/">Vagrant 私有开发环境搭建</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/begininng-and-summary/">这是一个开始，也是一个总结</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+    <h1>Contact Me</h1>
+
+    <p>
+        Weibo : <a href="http://weibo.com/1856265441">http://weibo.com/1856265441</a><br>
+        Email : <a href="mailto:gwangchunlei@gmail.com">gwangchunlei@gmail.com</a><br>
+        Github : <a href="https://github.com/codedrinker">https://github.com/codedrinker</a><br>
+    </p>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/codedrinker">@codedrinker</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'codedrinker',
+            count: 6,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 麻酱 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'codedrinker';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input/';
+        var disqus_url = 'http://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
