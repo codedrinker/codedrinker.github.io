@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://codedrinker.github.io/atom.xml" rel="self"/>
   <link href="http://codedrinker.github.io/"/>
-  <updated>2017-03-18T12:11:01+08:00</updated>
+  <updated>2017-03-18T12:44:52+08:00</updated>
   <id>http://codedrinker.github.io/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -322,6 +322,13 @@
 示例中的图标由<a href="http://www.danielbruce.se/">Daniel Bruce</a>制作，来源于<a href="http://www.flaticon.com">www.flaticon.com</a>，并获得CC BY3.0许可。</p>
 
 <blockquote><p><strong>原文地址：</strong> <a href="https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/">Styling &amp; Customizing File Inputs the Smart Way</a></p></blockquote>
+
+<h2>作者</h2>
+
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="http://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input/">如何优雅的自定义File Input样式</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="http://codedrinker.github.io/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
@@ -459,6 +466,13 @@
 <p>至此已经全部完成，这样你就可以尽情的，不打断思路的编写代码，任凭浏览器自己的更新文件去吧，等自己觉得差不多了，回过头来看一眼就行了。</p>
 
 <blockquote><p>PS:笔者写这篇文章的时候就是用的这个，一个显示器是编辑器，一个显示器就是Blog的Preview，确实是很方便呢。</p></blockquote>
+
+<h2>作者</h2>
+
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="http://codedrinker.github.io/blog/auto-preview-front-end-changes/">Browsersync 前端实时预览工程搭建</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="http://codedrinker.github.io/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
@@ -844,6 +858,13 @@
 
 <p>更新以后，访问localhost，出现<code>It’s work</code>字样。
 至此已经全部完成。</p>
+
+<h2>作者</h2>
+
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="http://codedrinker.github.io/blog/set-up-vagrant-environment/">Vagrant 私有开发环境搭建</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="http://codedrinker.github.io/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
@@ -857,7 +878,7 @@
 我觉得开始一点一滴的记录一下自己的行军图，也是一个总结，
 是认真的总结一下自己过去走过的这段路程，反思一下自己，展望一下未来。</p>
 
-<h1>昨天</h1>
+<h2>昨天</h2>
 
 <p>我还在学校也写Java：</p>
 
@@ -880,7 +901,7 @@
 <p>在那里有我的伙伴，有做.NET的小马，做PHP的戈壁，做JAVA的三哥，做前端的大悦和大玉，我们一起经历冬天没有暖气夏天没有空调的办公室，
 一起去体验在荒野山村做完项目回来打不到的的心情，</p>
 
-<h1>今天</h1>
+<h2>今天</h2>
 
 <p>我在公司写Scala：</p>
 
@@ -893,7 +914,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h1>明天</h1>
+<h2>明天</h2>
 
 <p>我会去写groovy：</p>
 
@@ -901,6 +922,13 @@
 </pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">println</span> <span class="s2">&quot;Hello World&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<h2>作者</h2>
+
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="http://codedrinker.github.io/blog/begininng-and-summary/">这是一个开始，也是一个总结</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="http://codedrinker.github.io/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
