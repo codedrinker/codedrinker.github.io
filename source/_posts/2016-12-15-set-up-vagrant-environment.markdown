@@ -247,3 +247,9 @@ vagrant box update
 ```
 更新以后，访问localhost，出现`It’s work`字样。
 至此已经全部完成。
+
+##作者
+本文作者`麻酱`，欢迎讨论，指正和转载，转载请注明出处。  
+原文地址：[Vagrant 私有开发环境搭建]({% post_url 2016-12-15-set-up-vagrant-environment %})  
+如果兴趣可以关注作者微信订阅号  
+![majiangbiji](/images/wechat.jpg =150x150) 

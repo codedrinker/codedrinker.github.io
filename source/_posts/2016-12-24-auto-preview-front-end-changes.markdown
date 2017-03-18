@@ -89,3 +89,9 @@ browser-sync start --files "~/Code/simple-web-sample-front" --port 8086
 至此已经全部完成，这样你就可以尽情的，不打断思路的编写代码，任凭浏览器自己的更新文件去吧，等自己觉得差不多了，回过头来看一眼就行了。
 
 >PS:笔者写这篇文章的时候就是用的这个，一个显示器是编辑器，一个显示器就是Blog的Preview，确实是很方便呢。
+
+##作者
+本文作者`麻酱`，欢迎讨论，指正和转载，转载请注明出处。  
+原文地址：[Browsersync 前端实时预览工程搭建]({% post_url 2016-12-24-auto-preview-front-end-changes %})  
+如果兴趣可以关注作者微信订阅号  
+![majiangbiji](/images/wechat.jpg =150x150) 

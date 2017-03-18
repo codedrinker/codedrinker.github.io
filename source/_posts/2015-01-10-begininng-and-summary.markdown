@@ -12,7 +12,7 @@ footer: true
 我觉得开始一点一滴的记录一下自己的行军图，也是一个总结，
 是认真的总结一下自己过去走过的这段路程，反思一下自己，展望一下未来。
 
-#昨天
+##昨天
 
 我还在学校也写Java：
 
@@ -30,7 +30,7 @@ public class HelloWorld {
 一起去体验在荒野山村做完项目回来打不到的的心情，
 
 
-#今天
+##今天
 
 我在公司写Scala：
 
@@ -39,10 +39,16 @@ object HelloWorld extends App{
     println("HelloWorld")
 }
 ```
-#明天
+##明天
 
 我会去写groovy：
 
 ```groovy
 println "Hello World"
 ```
+
+##作者
+本文作者`麻酱`，欢迎讨论，指正和转载，转载请注明出处。  
+原文地址：[这是一个开始，也是一个总结]({% post_url 2015-01-10-begininng-and-summary %})  
+如果兴趣可以关注作者微信订阅号  
+![majiangbiji](/images/wechat.jpg =150x150) 
