@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: http://codedrinker.github.io/sitemap.xml 
+Sitemap: https://codedrinker.github.io/sitemap.xml 
