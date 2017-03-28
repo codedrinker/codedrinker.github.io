@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>https://codedrinker.github.io/blog/optimize-octopress-blog-seo/</loc>
+<lastmod>2017-03-18T22:43:10+08:00</lastmod>
+</url>
+<url>
 <loc>https://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input/</loc>
 <lastmod>2017-03-11T15:05:51+08:00</lastmod>
 </url>

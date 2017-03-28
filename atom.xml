@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="https://codedrinker.github.io/atom.xml" rel="self"/>
   <link href="https://codedrinker.github.io/"/>
-  <updated>2017-03-18T23:16:37+08:00</updated>
+  <updated>2017-03-28T23:48:30+08:00</updated>
   <id>https://codedrinker.github.io/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,107 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress 博客搜索优化]]></title>
+    <link href="https://codedrinker.github.io/blog/optimize-octopress-blog-seo/"/>
+    <updated>2017-03-18T22:43:10+08:00</updated>
+    <id>https://codedrinker.github.io/blog/optimize-octopress-blog-seo</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>尝试在Google, Baidu, Bing 搜索之前写的文章的关键字基本搜不到，甚至使用标题一模一样去搜索也不行，更意外的是第一个出现的是转载的文章。于是就带着这个疑问去网上查了一些资料，尝试去优化一下，下面就是这次优化的笔记。<br/>
+PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
+
+<h2>搜索引擎优化</h2>
+
+<p>优化中包括文章链接的变动，已经提交的链接变得无法检索，所以先进行一些优化，需要再次提交链接。</p>
+
+<h2>内容优化</h2>
+
+<ul>
+<li><h4>修改post的url</h4>
+
+<p>因为Octpopress Jeklly的默认post路径带着日期，分级较多，造成URL较长，不利于搜索引擎检索，我们可以自己缩短URL。直接在<code>_config.yml</code>里面修改<code>permalink: /blog/:year/:month/:day/:title/</code> 为 <code>permalink: /blog/:title/</code>即可。<br/>
+接下来又出现问题了，因为之前已经发表的post，被搜索引擎索引了，或者是其他地方有引用就不能访问了。所以我们需要处理一下原来的文章地址，我的做法是把 <code>public</code>里面已经生成好的内容直接拷贝到<code>source/blog</code>目录下面，这样再次<code>generate</code>的时候就会把原来的目录生成在<code>public</code>里面。</p></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>source/blog/
+</span><span class='line'>├── 2015
+</span><span class='line'>│   └── 01
+</span><span class='line'>│       └── 10
+</span><span class='line'>│           └── begininng-and-summary
+</span><span class='line'>│               └── index.html
+</span><span class='line'>├── 2016
+</span><span class='line'>│   └── 12
+</span><span class='line'>│       ├── 15
+</span><span class='line'>│       │   └── set-up-vagrant-environment
+</span><span class='line'>│       │       └── index.html
+</span><span class='line'>│       └── 24
+</span><span class='line'>│           └── auto-preview-front-end-changes
+</span><span class='line'>│               └── index.html
+</span><span class='line'>├── 2017
+</span><span class='line'>│   └── 03
+</span><span class='line'>│       └── 11
+</span><span class='line'>│           └── the-smart-way-of-styling-and-customizing-file-input
+</span><span class='line'>│               └── index.html
+</span><span class='line'>└── archives
+</span><span class='line'>    └── index.html</span></code></pre></td></tr></table></div></figure>
+
+
+<p>切记不能复制<code>archives/index.html</code>，因为里面包含一些动态代码，并不是我们曾经发表的博文。然后把每一个<code>html</code>文件里面的内容删除，添加如下代码即可：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;refresh&quot;</span> <span class="na">content=</span><span class="s">&quot;0; url=/blog/begininng-and-summary&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;canonical&quot;</span> <span class="na">href=</span><span class="s">&quot;https://codedrinker.github.io/blog/begininng-and-summary&quot;</span> <span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>...http-equiv=“refresh...</code>是为了再次访问这个网页的时候可以自动跳转到相应的网页，<code>...rel="canonical" href=...</code>就相当于301，这样搜索引擎会重新索引指定的网址，这样久的post可以正常使用， 新发布的post的地址也可以自动变成短链接了。</p>
+
+<h2>版权</h2>
+
+<p>因为好多转载的文章或者类似最近比较火的<code>阅读模式</code>处理过的文章只包含正文，为了解决这个问题，所以把原来签名等相关信息放在了正文里面，内容的最下面，这样就可以和正文同样处理了，只是每次写博文的时候麻烦一些。如果想为本文添加一个跳转到博文的链接的话，可以使用如下代码添加：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>[Octopress 博客搜索优化](/blog/optimize-octopress-blog-seo/)
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>通过<code>post_url</code>动态生成<code>url</code>地址，修改域名或者目录的时候不会导致不必要的麻烦。示例如下文:</p>
+
+<h2>未完待续。。。</h2>
+
+<h2>作者</h2>
+
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="https://codedrinker.github.io/blog/optimize-octopress-blog-seo/">Octopress 博客搜索优化</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="https://codedrinker.github.io/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[如何优雅的自定义File Input样式]]></title>
