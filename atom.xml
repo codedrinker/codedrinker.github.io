@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="https://codedrinker.github.io/atom.xml" rel="self"/>
   <link href="https://codedrinker.github.io/"/>
-  <updated>2017-03-28T23:48:30+08:00</updated>
+  <updated>2017-04-01T20:29:58+08:00</updated>
   <id>https://codedrinker.github.io/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -25,7 +25,9 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <h2>搜索引擎优化</h2>
 
-<p>优化中包括文章链接的变动，已经提交的链接变得无法检索，所以先进行一些优化，需要再次提交链接。</p>
+<p>优化中包括文章链接的变动，已经提交的链接变得无法检索，所以先进行一些优化，需要再次提交链接。
+* #### 手动提交
+在Google搜索的时候发现搜索不到，可以手动添加到Google，这样可以主动收录，具体的地址<a href="https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1">https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1</a></p>
 
 <h2>内容优化</h2>
 
