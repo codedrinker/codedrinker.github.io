@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: 
 
-Sitemap: https://codedrinker.github.io/sitemap.xml 
+Sitemap: http://www.majiang.life/sitemap.xml 

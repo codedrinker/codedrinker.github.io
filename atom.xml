@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[码匠笔记]]></title>
-  <link href="https://codedrinker.github.io/atom.xml" rel="self"/>
-  <link href="https://codedrinker.github.io/"/>
-  <updated>2017-04-01T20:29:58+08:00</updated>
-  <id>https://codedrinker.github.io/</id>
+  <link href="http://www.majiang.life/atom.xml" rel="self"/>
+  <link href="http://www.majiang.life/"/>
+  <updated>2017-04-02T22:28:45+08:00</updated>
+  <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
     
@@ -15,9 +15,9 @@
   
   <entry>
     <title type="html"><![CDATA[Octopress 博客搜索优化]]></title>
-    <link href="https://codedrinker.github.io/blog/optimize-octopress-blog-seo/"/>
+    <link href="http://www.majiang.life/blog/optimize-octopress-blog-seo/"/>
     <updated>2017-03-18T22:43:10+08:00</updated>
-    <id>https://codedrinker.github.io/blog/optimize-octopress-blog-seo</id>
+    <id>http://www.majiang.life/blog/optimize-octopress-blog-seo</id>
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>尝试在Google, Baidu, Bing 搜索之前写的文章的关键字基本搜不到，甚至使用标题一模一样去搜索也不行，更意外的是第一个出现的是转载的文章。于是就带着这个疑问去网上查了一些资料，尝试去优化一下，下面就是这次优化的笔记。<br/>
@@ -25,9 +25,14 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <h2>搜索引擎优化</h2>
 
-<p>优化中包括文章链接的变动，已经提交的链接变得无法检索，所以先进行一些优化，需要再次提交链接。
-* #### 手动提交
-在Google搜索的时候发现搜索不到，可以手动添加到Google，这样可以主动收录，具体的地址<a href="https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1">https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1</a></p>
+<p>优化中包括文章链接的变动，已经提交的链接变得无法检索，所以先进行一些优化，需要再次提交链接。</p>
+
+<ul>
+<li><h4>手动提交</h4>
+
+<p>在Google搜索的时候发现搜索不到，可以手动添加到Google，这样可以主动收录，具体的地址<a href="https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1">https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1</a></p></li>
+</ul>
+
 
 <h2>内容优化</h2>
 
@@ -110,24 +115,24 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <h2>作者</h2>
 
 <p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="https://codedrinker.github.io/blog/optimize-octopress-blog-seo/">Octopress 博客搜索优化</a><br/>
+原文地址：<a href="http://www.majiang.life/blog/optimize-octopress-blog-seo/">Octopress 博客搜索优化</a><br/>
 如果兴趣可以关注作者微信订阅号<br/>
-<img src="https://codedrinker.github.io/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[如何优雅的自定义File Input样式]]></title>
-    <link href="https://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input/"/>
+    <link href="http://www.majiang.life/blog/the-smart-way-of-styling-and-customizing-file-input/"/>
     <updated>2017-03-11T15:05:51+08:00</updated>
-    <id>https://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input</id>
+    <id>http://www.majiang.life/blog/the-smart-way-of-styling-and-customizing-file-input</id>
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>通过使用<code>label</code>标签，简单的自定义<code>&lt;input type='file'&gt;</code>的样式。</p>
 
 <h2>示例</h2>
 
-<p><img src="https://codedrinker.github.io/images/posts/CustomFileInputs1.jpg" alt="Demo" /><br/>
+<p><img src="http://www.majiang.life/images/posts/CustomFileInputs1.jpg" alt="Demo" /><br/>
 <a href="http://tympanus.net/Tutorials/CustomFileInputs/">在线示例</a> | <a href="http://tympanus.net/Tutorials/CustomFileInputs/CustomFileInputs.zip">下载源码</a></p>
 
 <h2>调研</h2>
@@ -145,7 +150,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>点击两个标签中的任意一个都可以触发打开文件选择的窗口，这也意味着最难的部分我们已经解决了。同时不需要复杂的逻辑定位光标效果，也没有JavaScript代码，只有两行代码而已。</p>
 
-<p><img src="https://codedrinker.github.io/images/posts/smart-custom-file-input-1.gif" alt="Demo" /></p>
+<p><img src="http://www.majiang.life/images/posts/smart-custom-file-input-1.gif" alt="Demo" /></p>
 
 <p>下面我们就可以定义<code>&lt;label&gt;</code>的样式了，让它看起来更像一个按钮。</p>
 
@@ -227,8 +232,8 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center;"><img src="https://codedrinker.github.io/images/posts/smart-custom-file-input-2.gif" alt="Demo" /></td>
-<td style="text-align:center;"> <img src="https://codedrinker.github.io/images/posts/smart-custom-file-input-3.gif" alt="Demo" /></td>
+<td style="text-align:center;"><img src="http://www.majiang.life/images/posts/smart-custom-file-input-2.gif" alt="Demo" /></td>
+<td style="text-align:center;"> <img src="http://www.majiang.life/images/posts/smart-custom-file-input-3.gif" alt="Demo" /></td>
 </tr>
 </tbody>
 </table>
@@ -251,7 +256,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p><code>-webkit-focus-ring-color auto 5px</code>是一个有意思的小技巧，它使用外边框变色的效果巧妙地模拟了获取焦点的效果。它适用Chrome，Opera，Safari浏览器，上面的一行CSS样式是为了不支持<code>-webkit</code>属性的浏览器使用的。</p>
 
-<p><img src="https://codedrinker.github.io/images/posts/smart-custom-file-input-4.gif" alt="Demo" /></p>
+<p><img src="http://www.majiang.life/images/posts/smart-custom-file-input-4.gif" alt="Demo" /></p>
 
 <h2>触摸设备兼容</h2>
 
@@ -339,7 +344,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>下面就是最终的效果：</p>
 
-<p><img src="https://codedrinker.github.io/images/posts/smart-custom-file-input-5.gif" alt="Demo" /></p>
+<p><img src="http://www.majiang.life/images/posts/smart-custom-file-input-5.gif" alt="Demo" /></p>
 
 <h2>如果JavaScript不可用怎么办？</h2>
 
@@ -387,7 +392,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p><img src="https://codedrinker.github.io/images/posts/smart-custom-file-input-6.gif" alt="Demo" /></p>
+<p><img src="http://www.majiang.life/images/posts/smart-custom-file-input-6.gif" alt="Demo" /></p>
 
 <h2>Firefox Bug</h2>
 
@@ -429,24 +434,24 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <h2>作者</h2>
 
 <p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="https://codedrinker.github.io/blog/the-smart-way-of-styling-and-customizing-file-input/">如何优雅的自定义File Input样式</a><br/>
+原文地址：<a href="http://www.majiang.life/blog/the-smart-way-of-styling-and-customizing-file-input/">如何优雅的自定义File Input样式</a><br/>
 如果兴趣可以关注作者微信订阅号<br/>
-<img src="https://codedrinker.github.io/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Browsersync 前端实时预览工程搭建]]></title>
-    <link href="https://codedrinker.github.io/blog/auto-preview-front-end-changes/"/>
+    <link href="http://www.majiang.life/blog/auto-preview-front-end-changes/"/>
     <updated>2016-12-24T20:46:37+08:00</updated>
-    <id>https://codedrinker.github.io/blog/auto-preview-front-end-changes</id>
+    <id>http://www.majiang.life/blog/auto-preview-front-end-changes</id>
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话，还需要处理项目的热部署。所以笔者在网上查了查，同时咨询了一下身边的朋友<a href="https://github.com/HelloJacky">小马</a>，就有了下面这篇文章：通过<code>Browsersync</code>把文件变化实时更新到浏览器端，不同的前端技术架构体现的效果不一样，有的是不刷新页面的更新样式和布局，有的是刷新页面更新，效果更像是点击“F5”。无论做前端还是后端，使用它将提高30%的工作效率，下面我们就直接进入正题。</p>
 
 <h2>示例</h2>
 
-<p><img src="https://codedrinker.github.io/images/sync-demo.gif" alt="Sync Image" /></p>
+<p><img src="http://www.majiang.life/images/sync-demo.gif" alt="Sync Image" /></p>
 
 <h2>安装Node.js和Browsersync</h2>
 
@@ -573,17 +578,17 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <h2>作者</h2>
 
 <p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="https://codedrinker.github.io/blog/auto-preview-front-end-changes/">Browsersync 前端实时预览工程搭建</a><br/>
+原文地址：<a href="http://www.majiang.life/blog/auto-preview-front-end-changes/">Browsersync 前端实时预览工程搭建</a><br/>
 如果兴趣可以关注作者微信订阅号<br/>
-<img src="https://codedrinker.github.io/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[Vagrant 私有开发环境搭建]]></title>
-    <link href="https://codedrinker.github.io/blog/set-up-vagrant-environment/"/>
+    <link href="http://www.majiang.life/blog/set-up-vagrant-environment/"/>
     <updated>2016-12-15T01:28:27+08:00</updated>
-    <id>https://codedrinker.github.io/blog/set-up-vagrant-environment</id>
+    <id>http://www.majiang.life/blog/set-up-vagrant-environment</id>
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>服务器端开发工程师的一个痛点就是各种搭建环境，尤其是对于我们这种特别爱捯饬技术，搭建环境，升级应用版本的这类人。这样除了让我们忍受搭建各种版本的环境的繁琐兼容问题，还让自己的开发机变得越来越臃肿，为此本文介绍了一种使用<code>Vagrant</code>搭建一套集成的开发环境(镜像)的方案，不仅可以让团队开发人员的环境保持一致，同时使得开发机保持瘦身。<br/>
@@ -965,17 +970,17 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <h2>作者</h2>
 
 <p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="https://codedrinker.github.io/blog/set-up-vagrant-environment/">Vagrant 私有开发环境搭建</a><br/>
+原文地址：<a href="http://www.majiang.life/blog/set-up-vagrant-environment/">Vagrant 私有开发环境搭建</a><br/>
 如果兴趣可以关注作者微信订阅号<br/>
-<img src="https://codedrinker.github.io/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
   <entry>
     <title type="html"><![CDATA[这是一个开始，也是一个总结]]></title>
-    <link href="https://codedrinker.github.io/blog/begininng-and-summary/"/>
+    <link href="http://www.majiang.life/blog/begininng-and-summary/"/>
     <updated>2015-01-10T21:27:00+08:00</updated>
-    <id>https://codedrinker.github.io/blog/begininng-and-summary</id>
+    <id>http://www.majiang.life/blog/begininng-and-summary</id>
     <content type="html"><![CDATA[<p>这是一个开始，是因为这今天开始写博客，确切的说是开始认真的写博客，之前在<a href="http://blog.csdn.net/wclxyn">CSDN</a>写过一些博客，
 大概是在大二的时候开始写，不过感觉那些更像是笔记，现在呢，变成读后感了，
 我觉得开始一点一滴的记录一下自己的行军图，也是一个总结，
@@ -1029,9 +1034,9 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <h2>作者</h2>
 
 <p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="https://codedrinker.github.io/blog/begininng-and-summary/">这是一个开始，也是一个总结</a><br/>
+原文地址：<a href="http://www.majiang.life/blog/begininng-and-summary/">这是一个开始，也是一个总结</a><br/>
 如果兴趣可以关注作者微信订阅号<br/>
-<img src="https://codedrinker.github.io/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
