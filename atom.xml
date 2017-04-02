@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-04-02T22:28:45+08:00</updated>
+  <updated>2017-04-03T00:28:04+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -30,7 +30,9 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <ul>
 <li><h4>手动提交</h4>
 
-<p>在Google搜索的时候发现搜索不到，可以手动添加到Google，这样可以主动收录，具体的地址<a href="https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1">https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1</a></p></li>
+<p>在Google搜索的时候发现搜索不到，可以手动添加到Google，这样可以主动收录，具体的地址<br/>
+<a href="https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1">https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1</a><br/>
+里面包含搜索状态，搜索分析，网站优化等一些Google的调试工具可以使用，以提高网站的搜索效果。</p></li>
 </ul>
 
 
