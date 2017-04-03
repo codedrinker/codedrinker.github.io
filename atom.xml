@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-04-03T09:39:42+08:00</updated>
+  <updated>2017-04-03T09:43:20+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -20,7 +20,7 @@
     <id>http://www.majiang.life/blog/github-and-godaddy</id>
     <content type="html"><![CDATA[<h2>前言</h2>
 
-<p>一个“码农”基本都有一个自己的域名，有的人说是因为逼格，有的人说是因为有钱，无论怎么样都有自己的原因，我觉得是因为情节。
+<p>一个“码农”基本都有一个自己的域名，有的人说是因为逼格，有的人说是因为有钱，无论怎么样都有自己的原因，我觉得是因为情节。 <br/>
 因为我的博客是通过Octopress搭建在Github Pages上面的，所以我需要让我的域名的DNS解析到Github Pages上面。</p>
 
 <h2>Github</h2>
