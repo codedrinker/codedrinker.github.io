@@ -9,8 +9,8 @@
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 尝试在Google, Baidu, Bing 搜索之前写的文章的关键字基本搜不到，甚至使用标题一模一样去搜索也不行，更意外的是第一个出现的是转载的文章。于是就带着这个疑问去网上查了一些资料，尝试去优化一下，下面就是这次优化的笔记。
-PS:虽然做我们这行业的人基本都是用Google 搜索。 &hellip;">
+  <meta name="description" content="前言 一个“码农”基本都有一个自己的域名，有的人说是因为逼格，有的人说是因为有钱，无论怎么样都有自己的原因，我觉得是因为情节。
+因为我的博客是通过Octopress搭建在Github Pages上面的，所以我需要让我的域名的DNS解析到Github Pages上面。 Github &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -78,6 +78,123 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。 &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/github-and-godaddy/">Github Pages配置域名</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-04-03T00:32:47+08:00'><span class='date'>2017-04-03</span> <span class='time'>12:32 am</span></time>
+        
+           | <a href="/blog/github-and-godaddy/#disqus_thread"
+             data-disqus-identifier="http://www.majiang.life/blog/github-and-godaddy/">评论</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>一个“码农”基本都有一个自己的域名，有的人说是因为逼格，有的人说是因为有钱，无论怎么样都有自己的原因，我觉得是因为情节。
+因为我的博客是通过Octopress搭建在Github Pages上面的，所以我需要让我的域名的DNS解析到Github Pages上面。</p>
+
+<h2>Github</h2>
+
+<p>首先在<code>codedrinker.github.io</code>这个<code>repository</code>的<code>gh-pages</code>指向的分支根目录添加一个<code>CNAME</code>，里面写<code>majiang.life</code>，不需要添加<code>http</code>或者<code>www</code>。因为博客采用的Octopress，所以直接在<code>source</code>目录添加一个<code>CNAME</code>文件，然后<code>rake gen_deploy</code>就可以自动生成到<code>gh-pages</code>分支<code>master</code>了。</p>
+
+<h2>DNS</h2>
+
+<p>我是在Godaddy上面买的域名，不过DNS配置都大同小异，需要配置一个A记录，<code>host</code>是<code>@</code>,<code>Points to</code>是<code>192.30.252.153</code>；和一个CNAME记录<code>host</code>是<code>www</code>，<code>Points to</code>是<code>codedrinker.github.io</code>。<code>TTL</code>可以选择一个<code>CUSTOME</code>，比如<code>600S</code>。</p>
+
+<h2>DIG</h2>
+
+<p>等过一会DNS更新了以后，运行如下命令，看是否域名指向成功</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>dig majiang.life +nostats +nocomments +nocmd
+</span></code></pre></td></tr></table></div></figure>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="p">;</span> &lt;&lt;&gt;&gt; DiG 9.8.3-P1 &lt;&lt;&gt;&gt; majiang.life +nostats +nocomments +nocmd
+</span><span class='line'><span class="p">;;</span> global options: +cmd
+</span><span class='line'><span class="p">;</span>majiang.life.         IN  A
+</span><span class='line'>majiang.life.     600 IN  A   192.30.252.154
+</span><span class='line'>majiang.life.     600 IN  A   192.30.252.153
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>表示已经成功了。</p>
+
+<h2>意外</h2>
+
+<ol>
+<li><p>不能访问<br/>
+但是不幸的事情发生了，访问<code>majiang.life</code>的时候偶尔就会跳转到一个莫名其妙的网址，上面显示着
+<code>
+The domain majiang.life is no longer parked by GoDaddy.
+</code>
+<img src="/images/posts/godaddy.jpg" alt="Error" />
+于是在网上查了一下这个原因众说纷纭，有的说多配置了，有的说得等等，但是从我配置<code>DNS</code>到现在已经一天了。于是我有仔细排查了一下<code>DNS</code>的配置，发现还有一条默认的<code>GoDaddy 的A记录</code>(我通过IP反查域名，发现是GoDaddy自己的)，问题便解开了，因为如果同样配置两个一样的<code>A</code>记录，DNS会轮询访问者两个<code>Points to</code>，随后我把这个<code>A</code>记录删除了，这个问题也就迎刃而解，所以配置域名的时候还是需要谨慎一些。</p></li>
+<li><p>不能提交<br/>
+一切都搞定了，域名也能访问了，但是我本地<code>rake deploy</code>命令不工作了。</p></li>
+</ol>
+
+
+<pre><code class="`"> To https://github.com/codedrinker/codedrinker.github.io
+  ! [rejected]        master -&gt; master (non-fast-forward)
+  error: failed to push some refs to 'https://github.com/codedrinker/codedrinker.github.io'
+  hint: Updates were rejected because the tip of your current branch is behind
+  hint: its remote counterpart. Merge the remote changes (e.g. 'git pull')
+  hint: before pushing again.
+  hint: See the 'Note about fast-forwards' in 'git push --help' for details.
+
+ ## Github Pages deploy complete
+ cd -
+</code></pre>
+
+<p> 回想起来是因为我手贱，嫌麻烦开始直接在<code>Github</code>网页上面添加的CNAME，这样就没有办法更新博文了。看了一下<code>Rakefile</code>里面，他每次都是拷贝生成好的<code>public</code>目录到<code>_deploy</code>目录，然后执行<code>git push</code>，所以我更新<code>codedrinker.github.io</code>的代码没有用，如果是这样问题就好解决了：</p>
+
+<ul>
+<li>直接去<code>_deploy</code>目录，运行<code>git pull</code>，把<code>_deploy</code>代码更新到最新就可以了。</li>
+<li>如果还是不工作，反正原理就是<code>Octopress</code>会把<code>_deploy</code>目录当做更新生成好资源的目录，我们直接重新创建<code>_deploy</code>，然后把它和<code>master</code>关联就好了。</li>
+</ul>
+
+
+<pre><code class="`"> mkdir _deploy
+ cd _deploy
+ git init
+ git remote add -t master -f origin https://github.com/codedrinker/codedrinker.github.io.git
+</code></pre>
+
+<p> 这样以后就可以重新使用<code>rake deploy</code>了。</p>
+
+<h2>作者</h2>
+
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="/blog/github-and-godaddy/">Github Pages配置域名</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -1248,6 +1365,10 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/github-and-godaddy/">Github Pages配置域名</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/optimize-octopress-blog-seo/">Octopress 博客搜索优化</a>
       </li>
     
@@ -1261,10 +1382,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
     
       <li class="post">
         <a href="/blog/set-up-vagrant-environment/">Vagrant 私有开发环境搭建</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/begininng-and-summary/">这是一个开始，也是一个总结</a>
       </li>
     
   </ul>
