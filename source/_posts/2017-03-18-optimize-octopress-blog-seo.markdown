@@ -14,7 +14,10 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。
 优化中包括文章链接的变动，已经提交的链接变得无法检索，所以先进行一些优化，需要再次提交链接。
 
 * ####手动提交
-在Google搜索的时候发现搜索不到，可以手动添加到Google，这样可以主动收录，具体的地址https://www.google.com/webmasters/tools/home?hl=en&pli=1
+在Google搜索的时候发现搜索不到，可以手动添加到Google，这样可以主动收录，具体的地址  
+https://www.google.com/webmasters/tools/home?hl=en&pli=1  
+里面包含搜索状态，搜索分析，网站优化等一些Google的调试工具可以使用，以提高网站的搜索效果。
+
 
 ##内容优化
 
