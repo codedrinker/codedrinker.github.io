@@ -7,7 +7,7 @@ categories:
 ---
 
 ##前言
-一个“码农”基本都有一个自己的域名，有的人说是因为逼格，有的人说是因为有钱，无论怎么样都有自己的原因，我觉得是因为情节。 
+一个“码农”基本都有一个自己的域名，有的人说是因为逼格，有的人说是因为有钱，无论怎么样都有自己的原因，我觉得是因为情节。   
 因为我的博客是通过Octopress搭建在Github Pages上面的，所以我需要让我的域名的DNS解析到Github Pages上面。
 
 ##Github
@@ -33,6 +33,7 @@ majiang.life.		600	IN	A	192.30.252.153
 ##意外
 1. 不能访问  
  但是不幸的事情发生了，访问`majiang.life`的时候偶尔就会跳转到一个莫名其妙的网址，上面显示着
+ 
  ```
  The domain majiang.life is no longer parked by GoDaddy.
  ```
@@ -56,7 +57,7 @@ majiang.life.		600	IN	A	192.30.252.153
  ```
 
  回想起来是因为我手贱，嫌麻烦开始直接在`Github`网页上面添加的CNAME，这样就没有办法更新博文了。看了一下`Rakefile`里面，他每次都是拷贝生成好的`public`目录到`_deploy`目录，然后执行`git push`，所以我更新`codedrinker.github.io`的代码没有用，如果是这样问题就好解决了：   
- 
+
  - 直接去`_deploy`目录，运行`git pull`，把`_deploy`代码更新到最新就可以了。
  - 如果还是不工作，反正原理就是`Octopress`会把`_deploy`目录当做更新生成好资源的目录，我们直接重新创建`_deploy`，然后把它和`master`关联就好了。
 
