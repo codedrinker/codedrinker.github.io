@@ -139,15 +139,20 @@
 <h2>意外</h2>
 
 <ol>
-<li><p>不能访问<br/>
-但是不幸的事情发生了，访问<code>majiang.life</code>的时候偶尔就会跳转到一个莫名其妙的网址，上面显示着
-<code>
-The domain majiang.life is no longer parked by GoDaddy.
-</code>
-<img src="/images/posts/godaddy.jpg" alt="Error" />
-于是在网上查了一下这个原因众说纷纭，有的说多配置了，有的说得等等，但是从我配置<code>DNS</code>到现在已经一天了。于是我有仔细排查了一下<code>DNS</code>的配置，发现还有一条默认的<code>GoDaddy 的A记录</code>(我通过IP反查域名，发现是GoDaddy自己的)，问题便解开了，因为如果同样配置两个一样的<code>A</code>记录，DNS会轮询访问者两个<code>Points to</code>，随后我把这个<code>A</code>记录删除了，这个问题也就迎刃而解，所以配置域名的时候还是需要谨慎一些。</p></li>
-<li><p>不能提交<br/>
-一切都搞定了，域名也能访问了，但是我本地<code>rake deploy</code>命令不工作了。</p></li>
+<li>不能访问<br/>
+但是不幸的事情发生了，访问<code>majiang.life</code>的时候偶尔就会跳转到一个莫名其妙的网址，上面显示着</li>
+</ol>
+
+
+<pre><code class="`"> The domain majiang.life is no longer parked by GoDaddy.
+</code></pre>
+
+<p> <img src="/images/posts/godaddy.jpg" alt="Error" />
+ 于是在网上查了一下这个原因众说纷纭，有的说多配置了，有的说得等等，但是从我配置<code>DNS</code>到现在已经一天了。于是我有仔细排查了一下<code>DNS</code>的配置，发现还有一条默认的<code>GoDaddy 的A记录</code>(我通过IP反查域名，发现是GoDaddy自己的)，问题便解开了，因为如果同样配置两个一样的<code>A</code>记录，DNS会轮询访问者两个<code>Points to</code>，随后我把这个<code>A</code>记录删除了，这个问题也就迎刃而解，所以配置域名的时候还是需要谨慎一些。</p>
+
+<ol>
+<li>不能提交<br/>
+一切都搞定了，域名也能访问了，但是我本地<code>rake deploy</code>命令不工作了。</li>
 </ol>
 
 
