@@ -69,3 +69,9 @@ source/blog/
 原文地址：[Octopress 博客搜索优化]({% post_url 2017-03-18-optimize-octopress-blog-seo %})  
 如果兴趣可以关注作者微信订阅号  
 ![majiangbiji](/images/wechat.jpg =150x150) 
+
+##参考链接
+[Hexo-优化：提交sitemap及解决百度爬虫抓取-GitHub-Pages-问题](http://www.yuan-ji.me/Hexo-%E4%BC%98%E5%8C%96%EF%BC%9A%E6%8F%90%E4%BA%A4sitemap%E5%8F%8A%E8%A7%A3%E5%86%B3%E7%99%BE%E5%BA%A6%E7%88%AC%E8%99%AB%E6%8A%93%E5%8F%96-GitHub-Pages-%E9%97%AE%E9%A2%98/)  
+[解决 Github Pages 禁止百度爬虫的方法](https://bblove.me/2015/11/25/how-to-solve-the-problem-that-github-blocks-the-baidu-spider/)  
+[How I migrated my blog from Wordpress to Octopress](http://konradpodgorski.com/blog/2013/10/21/how-i-migrated-my-blog-from-wordpress-to-octopress/#redirect-301-on-github-pages)  
+
