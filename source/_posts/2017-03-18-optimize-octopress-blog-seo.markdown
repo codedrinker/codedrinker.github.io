@@ -50,7 +50,7 @@ source/blog/
 切记不能复制`archives/index.html`，因为里面包含一些动态代码，并不是我们曾经发表的博文。然后把每一个`html`文件里面的内容删除，添加如下代码即可：
 ```html
 <meta http-equiv="refresh" content="0; url=/blog/begininng-and-summary">
-<link rel="canonical" href="https://codedrinker.github.io/blog/begininng-and-summary" />
+<link rel="canonical" href="http://majiang.life/blog/begininng-and-summary" />
 ```
 `...http-equiv=“refresh...`是为了再次访问这个网页的时候可以自动跳转到相应的网页，`...rel="canonical" href=...`就相当于301，这样搜索引擎会重新索引指定的网址，这样久的post可以正常使用， 新发布的post的地址也可以自动变成短链接了。
 
