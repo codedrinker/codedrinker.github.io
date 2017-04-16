@@ -305,8 +305,9 @@ enable_page_level_ads: true
 </ul>
 
 
-<p>前者是全局的设置，后者是用户的设置，官方文档中指出如果两个都有设置，会以用户为主进行合并。但是我并不清楚它的合并力度，于是做了如下实验
-系统配置</p>
+<p>前者是全局的设置，后者是用户的设置，官方文档中指出如果两个都有设置，会以用户为主进行合并。但是我并不清楚它的合并力度，于是做了如下实验</p>
+
+<p>系统配置</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -372,7 +373,7 @@ enable_page_level_ads: true
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>令人奇怪的事情发生了，编译的结果以用户为准是正确的，但是系统配置里面多配置的<code>website</code>并没有编译。于是我就带着这个疑问看了一下Maven的源码：
+<p>令人奇怪的事情发生了，编译的结果确实以<code>用户级settings.xml</code>为准，但是<code>系统级settings.xml</code>里面额外配置的<code>website</code>并没有编译。于是我就带着这个疑问看了一下Maven的源码：
 本身 <code>Maven</code> 定义了一个 <code>Profile</code> 类用来映射每一个<code>profile</code>，该类有一个<code>properties</code>属性，用来存放当前<code>profile</code>的配置：</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
@@ -409,7 +410,7 @@ enable_page_level_ads: true
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>关键在于<code>以用户的settings为主，合并配置的逻辑</code>，他的逻辑是如果<code>profile.id</code>不相同才会合并到<code>用户级别的settings</code>，不会深度的比较。于是这个问题是无解的，他所以的以用户settings为主指的是每一个配置，里面的每一个<code>property</code>是不被合并的。</p>
+<p>关键在于<code>以用户的settings为主，合并配置的逻辑</code>，他的逻辑是如果<code>profile.id</code>不相同才会合并到<code>用户级别的settings</code>，不会深度的比较。于是这个问题是无解的，他所说的<code>以用户级settings.xml</code>为主指的是每一个配置，里面的每一个<code>property</code>是不被合并的。</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
