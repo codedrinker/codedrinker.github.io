@@ -116,6 +116,7 @@ GitHub : majiang
 - 用户的目录 `${user.home}/.m2/settings.xml`    
 
 前者是全局的设置，后者是用户的设置，官方文档中指出如果两个都有设置，会以用户为主进行合并。但是我并不清楚它的合并力度，于是做了如下实验
+
 系统配置
 ```
 	<!-- 系统配置 -->
@@ -151,7 +152,7 @@ username : codedrinker
 password : password
 website : ${website}
 ```
-令人奇怪的事情发生了，编译的结果以用户为准是正确的，但是系统配置里面多配置的`website`并没有编译。于是我就带着这个疑问看了一下Maven的源码：
+令人奇怪的事情发生了，编译的结果确实以`用户级settings.xml`为准，但是`系统级settings.xml`里面额外配置的`website`并没有编译。于是我就带着这个疑问看了一下Maven的源码：
 本身 `Maven` 定义了一个 `Profile` 类用来映射每一个`profile`，该类有一个`properties`属性，用来存放当前`profile`的配置：
 ```java
     /**
@@ -171,7 +172,7 @@ else if ( checkFieldWithDuplicate( parser, "properties", null, parsed ) )
                 }
             }
 ```
-关键在于`以用户的settings为主，合并配置的逻辑`，他的逻辑是如果`profile.id`不相同才会合并到`用户级别的settings`，不会深度的比较。于是这个问题是无解的，他所以的以用户settings为主指的是每一个配置，里面的每一个`property`是不被合并的。
+关键在于`以用户的settings为主，合并配置的逻辑`，他的逻辑是如果`profile.id`不相同才会合并到`用户级别的settings`，不会深度的比较。于是这个问题是无解的，他所说的`以用户级settings.xml`为主指的是每一个配置，里面的每一个`property`是不被合并的。
 ```java
 private static <T extends IdentifiableBase> void shallowMergeById( List<T> dominant, List<T> recessive,
                                                                        String recessiveSourceLevel )
