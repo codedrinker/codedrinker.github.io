@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-04-21T23:44:43+08:00</updated>
+  <updated>2017-04-21T23:54:35+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -372,13 +372,6 @@
 </ul>
 
 
-<h2>作者</h2>
-
-<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="http://www.majiang.life/blog/using-maven-for-multiple-environment/">安全的使用Maven实现生产环境和测试环境配置分离</a><br/>
-如果兴趣可以关注作者微信订阅号<br/>
-<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
-
 <h2>参考链接</h2>
 
 <p><a href="https://maven.apache.org/plugins/maven-resources-plugin/examples/filter.html">Filter</a><br/>
@@ -479,13 +472,6 @@
 </code></pre>
 
 <p> 这样以后就可以重新使用<code>rake deploy</code>了。</p>
-
-<h2>作者</h2>
-
-<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="http://www.majiang.life/blog/github-and-godaddy/">Github Pages配置域名</a><br/>
-如果兴趣可以关注作者微信订阅号<br/>
-<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
@@ -589,13 +575,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <p>通过<code>post_url</code>动态生成<code>url</code>地址，修改域名或者目录的时候不会导致不必要的麻烦。示例如下文:</p>
 
 <h2>未完待续。。。</h2>
-
-<h2>作者</h2>
-
-<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="http://www.majiang.life/blog/optimize-octopress-blog-seo/">Octopress 博客搜索优化</a><br/>
-如果兴趣可以关注作者微信订阅号<br/>
-<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 
 <h2>参考链接</h2>
 
@@ -914,13 +893,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 示例中的图标由<a href="http://www.danielbruce.se/">Daniel Bruce</a>制作，来源于<a href="http://www.flaticon.com">www.flaticon.com</a>，并获得CC BY3.0许可。</p>
 
 <blockquote><p><strong>原文地址：</strong> <a href="https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/">Styling &amp; Customizing File Inputs the Smart Way</a></p></blockquote>
-
-<h2>作者</h2>
-
-<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="http://www.majiang.life/blog/the-smart-way-of-styling-and-customizing-file-input/">如何优雅的自定义File Input样式</a><br/>
-如果兴趣可以关注作者微信订阅号<br/>
-<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
@@ -1058,13 +1030,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <p>至此已经全部完成，这样你就可以尽情的，不打断思路的编写代码，任凭浏览器自己的更新文件去吧，等自己觉得差不多了，回过头来看一眼就行了。</p>
 
 <blockquote><p>PS:笔者写这篇文章的时候就是用的这个，一个显示器是编辑器，一个显示器就是Blog的Preview，确实是很方便呢。</p></blockquote>
-
-<h2>作者</h2>
-
-<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="http://www.majiang.life/blog/auto-preview-front-end-changes/">Browsersync 前端实时预览工程搭建</a><br/>
-如果兴趣可以关注作者微信订阅号<br/>
-<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
@@ -1450,13 +1415,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>更新以后，访问localhost，出现<code>It’s work</code>字样。
 至此已经全部完成。</p>
-
-<h2>作者</h2>
-
-<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="http://www.majiang.life/blog/set-up-vagrant-environment/">Vagrant 私有开发环境搭建</a><br/>
-如果兴趣可以关注作者微信订阅号<br/>
-<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
@@ -1514,13 +1472,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">println</span> <span class="s2">&quot;Hello World&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
-
-<h2>作者</h2>
-
-<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="http://www.majiang.life/blog/begininng-and-summary/">这是一个开始，也是一个总结</a><br/>
-如果兴趣可以关注作者微信订阅号<br/>
-<img src="http://www.majiang.life/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 ]]></content>
   </entry>
   
