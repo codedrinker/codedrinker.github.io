@@ -191,14 +191,35 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <h2>版权</h2>
 
-<p>因为好多转载的文章或者类似最近比较火的<code>阅读模式</code>处理过的文章只包含正文，为了解决这个问题，所以把原来签名等相关信息放在了正文里面，内容的最下面，这样就可以和正文同样处理了，只是每次写博文的时候麻烦一些。如果想为本文添加一个跳转到博文的链接的话，可以使用如下代码添加：</p>
+<p>因为好多转载的文章或者类似最近比较火的<code>阅读模式</code>处理过的文章只包含正文，为了解决这个问题，所以把原来签名等相关信息放在了正文里面，内容的最下面，这样就可以和正文同样处理了，直接把内容添加到模板页面即可。找到<code>_includes/article.html</code>，找到如下内容，<code>content</code>表示文章的正文。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>[Octopress 博客搜索优化](/blog/optimize-octopress-blog-seo/)
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;entry-content&quot;</span><span class="nt">&gt;</span>{{{ content }}
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>通过<code>post_url</code>动态生成<code>url</code>地址，修改域名或者目录的时候不会导致不必要的麻烦。示例如下文:</p>
+<p>把我们预先准备好的版权的格式写入得到如下即可：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;entry-content&quot;</span><span class="nt">&gt;</span>{{ content }}
+</span><span class='line'><span class="nt">&lt;h2&gt;</span>作者<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>本文作者<span class="nt">&lt;code&gt;</span>麻酱<span class="nt">&lt;/code&gt;</span>，欢迎讨论，指正和转载，转载请注明出处。<span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>原文地址：<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% if index %}{{ root_url }}{{ post.url }}{% endif %}&quot;</span><span class="nt">&gt;</span>{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}<span class="nt">&lt;/a&gt;&lt;br/&gt;</span>
+</span><span class='line'>如果兴趣可以关注作者微信订阅号<span class="nt">&lt;br/&gt;</span>
+</span><span class='line'><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;/images/wechat.jpg&quot;</span> <span class="na">height=</span><span class="s">&quot;150&quot;</span> <span class="na">width=</span><span class="s">&quot;150&quot;</span> <span class="na">alt=</span><span class="s">&quot;majiangbiji&quot;</span> <span class="nt">/&gt;&lt;/p&gt;</span>
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>示例如下文:</p>
 
 <h2>未完待续。。。</h2>
 
