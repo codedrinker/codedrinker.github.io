@@ -46,9 +46,3 @@ object HelloWorld extends App{
 ```groovy
 println "Hello World"
 ```
-
-##作者
-本文作者`麻酱`，欢迎讨论，指正和转载，转载请注明出处。  
-原文地址：[这是一个开始，也是一个总结]({% post_url 2015-01-10-begininng-and-summary %})  
-如果兴趣可以关注作者微信订阅号  
-![majiangbiji](/images/wechat.jpg =150x150) 

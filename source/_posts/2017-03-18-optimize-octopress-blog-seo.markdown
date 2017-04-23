@@ -56,19 +56,30 @@ source/blog/
 
 
 ## 版权
-因为好多转载的文章或者类似最近比较火的`阅读模式`处理过的文章只包含正文，为了解决这个问题，所以把原来签名等相关信息放在了正文里面，内容的最下面，这样就可以和正文同样处理了，只是每次写博文的时候麻烦一些。如果想为本文添加一个跳转到博文的链接的话，可以使用如下代码添加：  
-```
-[Octopress 博客搜索优化]({% post_url 2017-03-18-optimize-octopress-blog-seo %})
-```
-通过`post_url`动态生成`url`地址，修改域名或者目录的时候不会导致不必要的麻烦。示例如下文:
+因为好多转载的文章或者类似最近比较火的`阅读模式`处理过的文章只包含正文，为了解决这个问题，所以把原来签名等相关信息放在了正文里面，内容的最下面，这样就可以和正文同样处理了，直接把内容添加到模板页面即可。找到`_includes/article.html`，找到如下内容，` content `表示文章的正文。
+
+{% codeblock lang:html %}
+{% raw %}
+<div class="entry-content">{{{ content }}
+</div>
+{% endraw %}
+{% endcodeblock %}
+把我们预先准备好的版权的格式写入得到如下即可：
+
+{% codeblock lang:html %}
+{% raw %}
+<div class="entry-content">{{ content }}
+<h2>作者</h2>
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="{% if index %}{{ root_url }}{{ post.url }}{% endif %}">{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+</div>
+{% endraw %}
+{% endcodeblock %}
+示例如下文:
 
 ##未完待续。。。
-
-##作者
-本文作者`麻酱`，欢迎讨论，指正和转载，转载请注明出处。  
-原文地址：[Octopress 博客搜索优化]({% post_url 2017-03-18-optimize-octopress-blog-seo %})  
-如果兴趣可以关注作者微信订阅号  
-![majiangbiji](/images/wechat.jpg =150x150) 
 
 ##参考链接
 [Hexo-优化：提交sitemap及解决百度爬虫抓取-GitHub-Pages-问题](http://www.yuan-ji.me/Hexo-%E4%BC%98%E5%8C%96%EF%BC%9A%E6%8F%90%E4%BA%A4sitemap%E5%8F%8A%E8%A7%A3%E5%86%B3%E7%99%BE%E5%BA%A6%E7%88%AC%E8%99%AB%E6%8A%93%E5%8F%96-GitHub-Pages-%E9%97%AE%E9%A2%98/)  

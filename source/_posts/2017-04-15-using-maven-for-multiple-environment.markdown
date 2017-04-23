@@ -202,12 +202,6 @@ private static <T extends IdentifiableBase> void shallowMergeById( List<T> domin
 - 安全性质的配置文件，配置到`用户级别的settings.xml`。
 - `系统级别的settings.xml`做一些系统级别的配置，不轻易使用，和用户区分开来。
 
-##作者
-本文作者`麻酱`，欢迎讨论，指正和转载，转载请注明出处。  
-原文地址：[安全的使用Maven实现生产环境和测试环境配置分离]({% post_url 2017-04-15-using-maven-for-multiple-environment %})  
-如果兴趣可以关注作者微信订阅号  
-![majiangbiji](/images/wechat.jpg =150x150) 
-
 ##参考链接
 [Filter](https://maven.apache.org/plugins/maven-resources-plugin/examples/filter.html)  
 [Profile](http://maven.apache.org/guides/introduction/introduction-to-profiles.html)  

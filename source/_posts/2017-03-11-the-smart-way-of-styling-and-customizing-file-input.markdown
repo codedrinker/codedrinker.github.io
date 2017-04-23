@@ -185,9 +185,3 @@ input.addEventListener('blur', function() {
 示例中的图标由[Daniel Bruce](http://www.danielbruce.se/)制作，来源于[www.flaticon.com](http://www.flaticon.com)，并获得CC BY3.0许可。
 
 >**原文地址：** [Styling & Customizing File Inputs the Smart Way](https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/)
-
-##作者
-本文作者`麻酱`，欢迎讨论，指正和转载，转载请注明出处。  
-原文地址：[如何优雅的自定义File Input样式]({% post_url 2017-03-11-the-smart-way-of-styling-and-customizing-file-input %})  
-如果兴趣可以关注作者微信订阅号  
-![majiangbiji](/images/wechat.jpg =150x150) 

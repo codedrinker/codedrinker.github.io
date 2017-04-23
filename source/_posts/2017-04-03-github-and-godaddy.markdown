@@ -69,9 +69,3 @@ majiang.life.		600	IN	A	192.30.252.153
  ```
 
  这样以后就可以重新使用`rake deploy`了。
-
-##作者
-本文作者`麻酱`，欢迎讨论，指正和转载，转载请注明出处。  
-原文地址：[Github Pages配置域名]({% post_url 2017-04-03-github-and-godaddy %})  
-如果兴趣可以关注作者微信订阅号  
-![majiangbiji](/images/wechat.jpg =150x150) 
