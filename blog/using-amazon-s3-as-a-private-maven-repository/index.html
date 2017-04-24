@@ -1,0 +1,881 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-9540087096615057",
+enable_page_level_ads: true
+});
+</script>
+  <title>基于Amazon S3 搭建 Maven 私有仓库 - 码匠笔记</title>
+  <meta name="author" content="麻酱">
+
+  
+  <meta name="description" content="Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭建 Maven 私有仓库, Maven 私有仓库, Maven 仓库, Maven 私服搭建">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.majiang.life/blog/using-amazon-s3-as-a-private-maven-repository">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/libs/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-89103576-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">码匠笔记</a></h1>
+  
+    <h2>用心雕琢</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="www.majiang.life">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">博文</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">基于Amazon S3 搭建 Maven 私有仓库</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-04-23T22:34:22+08:00'><span class='date'>2017-04-23</span> <span class='time'>10:34 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://www.majiang.life">评论</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>前言</h2>
+
+<p>最近项目慢慢变大，从一个模块，变成了十几个模块，有的模块是被其他模块依赖的，有的模块是可以单独部署的。如果继续在一个项目里面太臃肿了，也不方便维护，所以想着借着这个机会把项目分离开来，有一些模块可以直接作为公共组件使用。本身项目就是使用的<code>Maven</code>作为构建工具的，所以想着直接把模块提取出来，构建成可以通过<code>Maven</code>依赖的<code>jar</code>文件。然后发布到<code>Maven</code>仓库就可以轻松使用了。带着这个梦想，我们进入主题：</p>
+
+<h2>方案</h2>
+
+<ul>
+<li><p>直接发布到<code>sonatype</code>的中心仓库<code>http://central.sonatype.org/</code>或者类似公有仓库。
+不可行，原因是这样涉及到业务的代码也公开了，所以不能<code>Publish</code>到<code>Maven</code>的公有仓库。</p></li>
+<li><p>搭建自己的<code>sonatype</code>仓库<br/>
+不可行，原因是虽然搭建的<code>Maven</code>仓库是我们自己的，但是下载是公开的，还是不能解决我们的安全问题。</p></li>
+<li><p>基于<code>Amazon S3</code> 搭建<code>Maven</code> 私有仓库<br/>
+可行，使用 <code>Amazon S3</code> 作为<code>Maven</code> 数据的存储中心，安全性依赖于其本身的安全认证，这样我们既有了存储，也有了安全保障。</p></li>
+</ul>
+
+
+<h2>配置<code>Amazon S3</code>秘钥</h2>
+
+<p>正常访问<code>S3</code>我们都需要使用<code>S3</code>的<code>Access key ID</code>和<code>Secret access key</code>，无论是通过<code>CLI</code>还是<code>JAVA</code>。使用<code>Maven</code>也一样，我们需要配置<code>S3</code>的秘钥到<code>Maven</code>的配置文件里面<code>~/.m2/settings.xml</code>，如果还没有创建这个文件，使用系统级别的配置文件<code>$MAVEN_HOME/conf/settings.xml</code>也可以。具体配置如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'> <span class="nt">&lt;servers&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;server&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;id&gt;</span>aws-release<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;username&gt;</span>AKIAJ*******<span class="nt">&lt;/username&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;password&gt;</span>TyXar*******<span class="nt">&lt;/password&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/server&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;server&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;id&gt;</span>aws-snapshot<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;username&gt;</span>AKIAJ*******<span class="nt">&lt;/username&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;password&gt;</span>TyXar*******<span class="nt">&lt;/password&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/server&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/servers&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>配置要发布到<code>Maven</code>仓库的项目</h2>
+
+<p>配置要发布到<code>Maven</code>仓库的项目，一般直接在<code>POM.xml</code>里面配置到发布的地址就可以了，但是本身<code>Maven</code>是不支持<code>S3</code>，所以这里引入了一个第三方的工具，用来发布<code>jar</code>到<code>S3</code>仓库的。<a href="https://github.com/spring-projects/aws-maven">Spring-Aws-Maven</a>，具体的配置如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class='line'><span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0&quot;</span>
+</span><span class='line'>         <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+</span><span class='line'>         <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>com.github.codedrinker<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>maven-s3-lib<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.0.1<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nt">&lt;distributionManagement&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;repository&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;id&gt;</span>aws-release<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;name&gt;</span>AWS Release Repository<span class="nt">&lt;/name&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;url&gt;</span>s3://nexus-repository/release<span class="nt">&lt;/url&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/repository&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;snapshotRepository&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;id&gt;</span>aws-snapshot<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;name&gt;</span>AWS Snapshot Repository<span class="nt">&lt;/name&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;url&gt;</span>s3://nexus-repository/snapshot<span class="nt">&lt;/url&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/snapshotRepository&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/distributionManagement&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;build&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;extensions&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;extension&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;groupId&gt;</span>org.springframework.build<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;artifactId&gt;</span>aws-maven<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;version&gt;</span>5.0.0.RELEASE<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/extension&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/extensions&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;plugins&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;plugin&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;artifactId&gt;</span>maven-source-plugin<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;version&gt;</span>2.2.1<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;executions&gt;</span>
+</span><span class='line'>                    <span class="nt">&lt;execution&gt;</span>
+</span><span class='line'>                        <span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
+</span><span class='line'>                        <span class="nt">&lt;goals&gt;</span>
+</span><span class='line'>                            <span class="nt">&lt;goal&gt;</span>jar-no-fork<span class="nt">&lt;/goal&gt;</span>
+</span><span class='line'>                        <span class="nt">&lt;/goals&gt;</span>
+</span><span class='line'>                    <span class="nt">&lt;/execution&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;/executions&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/plugin&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;plugin&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;artifactId&gt;</span>maven-javadoc-plugin<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;version&gt;</span>2.9.1<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;executions&gt;</span>
+</span><span class='line'>                    <span class="nt">&lt;execution&gt;</span>
+</span><span class='line'>                        <span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
+</span><span class='line'>                        <span class="nt">&lt;goals&gt;</span>
+</span><span class='line'>                            <span class="nt">&lt;goal&gt;</span>jar<span class="nt">&lt;/goal&gt;</span>
+</span><span class='line'>                        <span class="nt">&lt;/goals&gt;</span>
+</span><span class='line'>                    <span class="nt">&lt;/execution&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;/executions&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/plugin&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/plugins&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;sourceDirectory&gt;</span>src/main/java<span class="nt">&lt;/sourceDirectory&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;resources&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;resource&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;directory&gt;</span>src/main/resources<span class="nt">&lt;/directory&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;filtering&gt;</span>true<span class="nt">&lt;/filtering&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/resource&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/resources&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/build&gt;</span>
+</span><span class='line'><span class="nt">&lt;/project&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面我们逐行进行解释</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;distributionManagement&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;repository&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;id&gt;</span>aws-release<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;name&gt;</span>AWS Release Repository<span class="nt">&lt;/name&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;url&gt;</span>s3://nexus-repository/release<span class="nt">&lt;/url&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/repository&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;snapshotRepository&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;id&gt;</span>aws-snapshot<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;name&gt;</span>AWS Snapshot Repository<span class="nt">&lt;/name&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;url&gt;</span>s3://nexus-repository/snapshot<span class="nt">&lt;/url&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/snapshotRepository&gt;</span>
+</span><span class='line'><span class="nt">&lt;/distributionManagement&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>是为了指定发布地址，这里我们指定的是<code>S3</code>的<code>bucket</code>地址<code>nexus-repository</code>，当然我们需要区分<code>release</code>和<code>snapshot</code>的位置。需要注意的是这里的<code>id</code>需要和<code>server</code>里面的<code>id</code>相对应。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;extensions&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;extension&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;groupId&gt;</span>org.springframework.build<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;artifactId&gt;</span>aws-maven<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;version&gt;</span>5.0.0.RELEASE<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/extension&gt;</span>
+</span><span class='line'><span class="nt">&lt;/extensions&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这句话是关键，它就是当我们运行<code>mvn deploy</code>的时候，<code>extension</code>会通过调用<code>Amazon S3</code>的<code>SDK</code>把我们的内容自动<code>Build</code>成<code>Maven</code>的格式上传到<code>S3</code>。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;plugin&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>maven-source-plugin<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>2.2.1<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;executions&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;execution&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;goals&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;goal&gt;</span>jar-no-fork<span class="nt">&lt;/goal&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/goals&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/execution&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/executions&gt;</span>
+</span><span class='line'><span class="nt">&lt;/plugin&gt;</span>
+</span><span class='line'><span class="nt">&lt;plugin&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>maven-javadoc-plugin<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>2.9.1<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;executions&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;execution&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;goals&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;goal&gt;</span>jar<span class="nt">&lt;/goal&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/goals&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/execution&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/executions&gt;</span>
+</span><span class='line'><span class="nt">&lt;/plugin&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>这两个插件是为了发布代码的时候，构建源码和文档，一起发布上去。这样如果开发人员没有下载原始项目，也可以通过文档和源码做简单的排查。<br/>
+这样我们就配置好了，最后直接在项目目录运行<code>mvn deploy</code>命令，等待运行成功，如果配置没有问题的话，一会儿我们会看到<code>S3</code>的目录有如下结构，这说明我们已经成功发布<code>jar</code>。
+<img src="/images/posts/s3.png" alt="S3" />
+<img src="/images/posts/tree.png" alt="Tree" /></p>
+
+<h2>配置需要依赖<code>jar</code>的项目</h2>
+
+<p>项目已经发布成功，我们这个时候就配置依赖它的项目。使用的时候相对配置就简单多了，具体配置如下：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class='line'><span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0&quot;</span>
+</span><span class='line'>         <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+</span><span class='line'>         <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>com.github.codedrinker<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>maven-s3-app<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.0.0<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;repositories&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;repository&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;id&gt;</span>aws-release<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;name&gt;</span>AWS Release Repository<span class="nt">&lt;/name&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;url&gt;</span>s3://nexus-repository/release<span class="nt">&lt;/url&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/repository&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;repository&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;id&gt;</span>aws-snapshot<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;name&gt;</span>AWS Snapshot Repository<span class="nt">&lt;/name&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;url&gt;</span>s3://nexus-repository/snapshot<span class="nt">&lt;/url&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/repository&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/repositories&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;dependencies&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;groupId&gt;</span>com.github.codedrinker<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;artifactId&gt;</span>maven-s3-lib<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;version&gt;</span>1.0.1<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/dependencies&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;build&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;extensions&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;extension&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;groupId&gt;</span>org.springframework.build<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;artifactId&gt;</span>aws-maven<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;version&gt;</span>5.0.0.RELEASE<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/extension&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/extensions&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/build&gt;</span>
+</span><span class='line'><span class="nt">&lt;/project&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>下面我们逐行进行解释：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;repositories&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;repository&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;id&gt;</span>aws-release<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;name&gt;</span>AWS Release Repository<span class="nt">&lt;/name&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;url&gt;</span>s3://nexus-repository/release<span class="nt">&lt;/url&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/repository&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;repository&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;id&gt;</span>aws-snapshot<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;name&gt;</span>AWS Snapshot Repository<span class="nt">&lt;/name&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;url&gt;</span>s3://nexus-repository/snapshot<span class="nt">&lt;/url&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/repository&gt;</span>
+</span><span class='line'><span class="nt">&lt;/repositories&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如上是在指定仓库，当然路径也应该是<code>S3</code>的地址，这个时候我们也是需要使用<code>settings.xml</code>里面配置的秘钥的，如果你担心没有秘钥也能下载，可以尝试删除秘钥和存在秘钥两种情况下下载依赖。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;extensions&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;extension&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;groupId&gt;</span>org.springframework.build<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;artifactId&gt;</span>aws-maven<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>                <span class="nt">&lt;version&gt;</span>5.0.0.RELEASE<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;/extension&gt;</span>
+</span><span class='line'><span class="nt">&lt;/extensions&gt;</span>       
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如上，下载的时候也是基于<code>S3</code>在操作，所以一样需要这个第三方工具。到此为止我们已经配置好了，需要注意的是，如果在你本机发布的上面的项目，会在<code>~/.m2</code>目录已经生成了<code>maven-s3-lib</code>的数据，所以我们必须手动删除这个目录，再运行<code>mvn clean compile</code>，看是否重新下载<code>jar</code>并且下载成功。如果不想去<code>~/.m2</code>目录删除的话，直接添加参数也是可以实现不使用本地缓存，重新获取<code>jar</code>的，命令：<code>mvn compile dependency:purge-local-repository</code>。</p>
+
+<blockquote><p><strong>注意：</strong> 单纯运行<code>mvn compile</code>不会下载源码，<code>IDE</code>也没有那么强大知道我们使用的是第三方工具，他会直接去<code>Maven</code>中心仓库去下载，所以我们需要使用命令下载源码<code>mvn dependency:sources</code>，然后<code>reload</code>到项目中。</p></blockquote>
+
+<h2>读写分离</h2>
+
+<p>这里的读写分离并不是环境的读写分离，而是发布，因为不可能每一个人都有发布的权限，如果做细致的话，只有打包的机器有发布的权限，其他人都是只有下载<code>jar</code>的权限，所以我们这里一样可以通过<code>AWS</code>的权限系统做控制。</p>
+
+<p><code>AWS</code>有一个叫做<code>IAM</code>的东西，他是专门用来控制权限的服务，很强大。我们可以直接在<code>IAM</code>里面创建两个<code>Policy</code>，<a href="http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/access_policies.html">文档地址</a>，一个用来写，一个只能读，他可以强大到指定到<code>bucket</code>，这样大大的提高了安全性。下面是具体的配置，如果有不明的的可以参照官方文档，很详细。</p>
+
+<p>读写，关键在于<code>s3:Put*</code>可以做任何更新操作：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;Version&quot;</span><span class="p">:</span> <span class="s2">&quot;2012-10-17&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;Statement&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="nt">&quot;Sid&quot;</span><span class="p">:</span> <span class="s2">&quot;Stmt1492711190***&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nt">&quot;Effect&quot;</span><span class="p">:</span> <span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nt">&quot;Action&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>                <span class="s2">&quot;s3:Get*&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="s2">&quot;s3:List*&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="s2">&quot;s3:Put*&quot;</span>
+</span><span class='line'>            <span class="p">],</span>
+</span><span class='line'>            <span class="nt">&quot;Resource&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>                <span class="s2">&quot;arn:aws:s3:::nexus-repository&quot;</span>
+</span><span class='line'>            <span class="p">]</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="nt">&quot;Sid&quot;</span><span class="p">:</span> <span class="s2">&quot;Stmt1492711145***&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nt">&quot;Effect&quot;</span><span class="p">:</span> <span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nt">&quot;Action&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>                <span class="s2">&quot;s3:Get*&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="s2">&quot;s3:List*&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="s2">&quot;s3:Put*&quot;</span>
+</span><span class='line'>            <span class="p">],</span>
+</span><span class='line'>            <span class="nt">&quot;Resource&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>                <span class="s2">&quot;arn:aws:s3:::nexus-repository/*&quot;</span>
+</span><span class='line'>            <span class="p">]</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>只读，只有<code>Get</code>和<code>List</code>操作：</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;Version&quot;</span><span class="p">:</span> <span class="s2">&quot;2012-10-17&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;Statement&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="nt">&quot;Sid&quot;</span><span class="p">:</span> <span class="s2">&quot;Stmt1492751111***&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nt">&quot;Effect&quot;</span><span class="p">:</span> <span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nt">&quot;Action&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>                <span class="s2">&quot;s3:Get*&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="s2">&quot;s3:List*&quot;</span>
+</span><span class='line'>            <span class="p">],</span>
+</span><span class='line'>            <span class="nt">&quot;Resource&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>                <span class="s2">&quot;arn:aws:s3:::nexus-repository&quot;</span>
+</span><span class='line'>            <span class="p">]</span>
+</span><span class='line'>        <span class="p">},</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>            <span class="nt">&quot;Sid&quot;</span><span class="p">:</span> <span class="s2">&quot;Stmt1492751111***&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nt">&quot;Effect&quot;</span><span class="p">:</span> <span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nt">&quot;Action&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>                <span class="s2">&quot;s3:Get*&quot;</span><span class="p">,</span>
+</span><span class='line'>                <span class="s2">&quot;s3:List*&quot;</span>
+</span><span class='line'>            <span class="p">],</span>
+</span><span class='line'>            <span class="nt">&quot;Resource&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>                <span class="s2">&quot;arn:aws:s3:::nexus-repository/*&quot;</span>
+</span><span class='line'>            <span class="p">]</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>    <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>同时呢，分别创建两个<code>User</code>，分别为他们创建AppKey，并且分别<code>Attach</code>上面已经创建好的两个<code>Policy</code>，这样就大功告成了。</p>
+
+<h2>总结</h2>
+
+<p>使用<code>Amazon S3</code>搭建<code>Maven</code>中心仓库，方便又安全，有这方面需求的朋友可以试试。</p>
+
+<h2>参考链接</h2>
+
+<p><a href="https://github.com/spring-projects/aws-maven">aws-maven</a><br/>
+<a href="https://softwareengineering.stackexchange.com/questions/231175/sharing-classes-or-interfaces-between-different-projects">Sharing classes or interfaces between different projects</a><br/>
+<a href="http://jmchung.github.io/blog/2015/03/01/using-amazon-s3-as-a-private-maven-repository/">Using Amazon S3 as a Private Maven Repository</a>
+<a href="http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/access_policies.html">Aws Policy</a></p>
+
+<h2>作者</h2>
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="">基于Amazon S3 搭建 Maven 私有仓库</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2017-04-23T22:34:22+08:00'><span class='date'>2017-04-23</span> <span class='time'>10:34 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/maven/'>maven</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/using-amazon-s3-as-a-private-maven-repository/" data-via="" data-counturl="http://www.majiang.life/blog/using-amazon-s3-as-a-private-maven-repository/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/using-maven-for-multiple-environment/" title="Previous Post: 安全的使用Maven实现不同环境配置文件的部署">&laquo; 安全的使用Maven实现不同环境配置文件的部署</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+    <h1>关于</h1>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;能剒削柱梁谓之木匠，能穴凿穴埳谓之土匠，能雕琢文书谓之史匠，能搬砖摞码谓之码匠。</p>
+</section><section>
+    <h1>订阅</h1>
+    <p>
+        主要用来记录自己的编程经历，学习笔记和心得体会，希望能和大家一起分享和讨论，共同进步，欢迎订阅。
+    </p>
+    <p>
+        <img src="/images/wechat.jpg" width="153px" height="153px">
+    </p>
+</section>
+<section>
+  <h1>最新</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/using-amazon-s3-as-a-private-maven-repository/">基于Amazon S3 搭建 Maven 私有仓库</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/using-maven-for-multiple-environment/">安全的使用Maven实现不同环境配置文件的部署</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/github-and-godaddy/">Github Pages配置域名</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/optimize-octopress-blog-seo/">Octopress 博客搜索优化</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/the-smart-way-of-styling-and-customizing-file-input/">如何优雅的自定义File Input样式</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+    <h1>联系</h1>
+
+    <p>
+        Weibo : <a href="http://weibo.com/1856265441">http://weibo.com/1856265441</a><br>
+        Email : <a href="mailto:gwangchunlei@gmail.com">gwangchunlei@gmail.com</a><br>
+        Github : <a href="https://github.com/codedrinker">https://github.com/codedrinker</a><br>
+    </p>
+</section>
+
+<section>
+  <h1>GitHub</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/codedrinker">@codedrinker</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'codedrinker',
+            count: 6,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 博客侧边栏自适应广告 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9540087096615057"
+     data-ad-slot="9463370724"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 麻酱 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'codedrinker';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.majiang.life/blog/using-amazon-s3-as-a-private-maven-repository/';
+        var disqus_url = 'http://www.majiang.life/blog/using-amazon-s3-as-a-private-maven-repository/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
