@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-04-24T23:14:49+08:00</updated>
+  <updated>2017-04-25T22:44:18+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -25,7 +25,7 @@
 <h2>方案</h2>
 
 <ul>
-<li><p>直接发布到<code>sonatype</code>的中心仓库<code>http://central.sonatype.org/</code>或者类似公有仓库。
+<li><p>直接发布到<code>sonatype</code>的中心仓库<code>http://central.sonatype.org/</code>或者类似公有仓库。 <br/>
 不可行，原因是这样涉及到业务的代码也公开了，所以不能<code>Publish</code>到<code>Maven</code>的公有仓库。</p></li>
 <li><p>搭建自己的<code>sonatype</code>仓库<br/>
 不可行，原因是虽然搭建的<code>Maven</code>仓库是我们自己的，但是下载是公开的，还是不能解决我们的安全问题。</p></li>
@@ -585,9 +585,9 @@
 
 <h2>参考链接</h2>
 
-<p><a href="https://github.com/spring-projects/aws-maven">aws-maven</a><br/>
-<a href="https://softwareengineering.stackexchange.com/questions/231175/sharing-classes-or-interfaces-between-different-projects">Sharing classes or interfaces between different projects</a><br/>
-<a href="http://jmchung.github.io/blog/2015/03/01/using-amazon-s3-as-a-private-maven-repository/">Using Amazon S3 as a Private Maven Repository</a>
+<p><a href="https://github.com/spring-projects/aws-maven">aws-maven</a>  <br/>
+<a href="https://softwareengineering.stackexchange.com/questions/231175/sharing-classes-or-interfaces-between-different-projects">Sharing classes or interfaces between different projects</a>  <br/>
+<a href="http://jmchung.github.io/blog/2015/03/01/using-amazon-s3-as-a-private-maven-repository/">Using Amazon S3 as a Private Maven Repository</a> <br/>
 <a href="http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/access_policies.html">Aws Policy</a></p>
 ]]></content>
   </entry>
