@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vagrant | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/vagrant/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-04-25T23:09:16+08:00</updated>
+  <updated>2017-04-25T23:31:18+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -37,30 +37,50 @@
 vagrant box add hashicorp/precise64
 </code>
 提示选择哪一种方式，我们这里选择的是virtualbox，我们刚刚已经安装了。
-&#8220;`
-box: URL: <a href="https://atlas.hashicorp.com/hashicorp/precise64">https://atlas.hashicorp.com/hashicorp/precise64</a>
-This box can work with multiple providers! The providers that it
-can work with are listed below. Please review the list and choose
-the provider you will be working with.</p>
-
-<p>1) hyperv
-2) virtualbox
-3) vmware_fusion</p>
-
-<p>Enter your choice: 2
-<code>
-初始化本地开发环境，我们可以理解为安装镜像。
-</code>
-vagrant init hashicorp/precise64
-<code>
-运行本地开发环境
-</code>
-vagrant up
-<code>
-ssh到本地开发环境
-</code>
-vagrant ssh
-&#8220;`
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>box: URL: &lt;a href="https://atlas.hashicorp.com/hashicorp/precise64"&gt;https://atlas.hashicorp.com/hashicorp/precise64&lt;/a&gt;
+</span><span class='line'>This box can work with multiple providers! The providers that it
+</span><span class='line'>can work with are listed below. Please review the list and choose
+</span><span class='line'>the provider you will be working with.&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;1) hyperv
+</span><span class='line'>2) virtualbox
+</span><span class='line'>3) vmware_fusion&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Enter your choice: 2
+</span><span class='line'>&lt;code&gt;
+</span><span class='line'>初始化本地开发环境，我们可以理解为安装镜像。
+</span><span class='line'>&lt;/code&gt;
+</span><span class='line'>vagrant init hashicorp/precise64
+</span><span class='line'>&lt;code&gt;
+</span><span class='line'>运行本地开发环境
+</span><span class='line'>&lt;/code&gt;
+</span><span class='line'>vagrant up
+</span><span class='line'>&lt;code&gt;
+</span><span class='line'>ssh到本地开发环境
+</span><span class='line'>&lt;/code&gt;
+</span><span class='line'>vagrant ssh</span></code></pre></td></tr></table></div></figure>
 如果能进入刚才安装的系统，那么说明我们安装成功。因为设置了免密钥登录，所以直接输入就可以登录。</p>
 
 <blockquote><p><strong>注意：</strong>切记，是在你的<code>Vagrantfile</code>目录执行<code>Vagrant</code>相关命令),
