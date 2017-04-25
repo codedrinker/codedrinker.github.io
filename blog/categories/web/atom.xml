@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Web | 码匠笔记]]></title>
+  <link href="http://www.majiang.life/blog/categories/web/atom.xml" rel="self"/>
+  <link href="http://www.majiang.life/"/>
+  <updated>2017-04-25T23:09:16+08:00</updated>
+  <id>http://www.majiang.life/</id>
+  <author>
+    <name><![CDATA[麻酱]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[如何优雅的自定义File Input样式]]></title>
+    <link href="http://www.majiang.life/blog/the-smart-way-of-styling-and-customizing-file-input/"/>
+    <updated>2017-03-11T15:05:51+08:00</updated>
+    <id>http://www.majiang.life/blog/the-smart-way-of-styling-and-customizing-file-input</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>通过使用<code>label</code>标签，简单的自定义<code>&lt;input type='file'&gt;</code>的样式。</p>
+
+<h2>示例</h2>
+
+<p><img src="/images/posts/CustomFileInputs1.jpg" alt="Demo" /><br/>
+<a href="http://tympanus.net/Tutorials/CustomFileInputs/">在线示例</a> | <a href="http://tympanus.net/Tutorials/CustomFileInputs/CustomFileInputs.zip">下载源码</a></p>
+
+<h2>调研</h2>
+
+<p>我尝试了许多通过修改<code>&lt;input type='file'&gt;</code>样式的方式解决这个问题，效果都不是很好，没有一个能像<a href="http://readerrr.com/">Readerrr</a>(通过上传文件导入Feed)那样漂亮。还有一种奇怪的实现，把<code>&lt;input type='file'&gt;</code>放到一个容器里面，把容器画成按钮的样子，当你点击容器的任何地方的时候，实际是点击的<code>&lt;input type='file'&gt;</code>。这种实现方案很有趣，同时也很奇怪。因为从可用性和点击体验来说确实不是很理想。</p>
+
+<p>我尝试使用Google搜索答案可是没有什么结果，但是StackOverflow上面的内容让我茅塞顿开。它只有几个投票，并且在页面的中间位置，但是最重要的是他的内容里面包含了一个神奇的关键字<code>&lt;label&gt;</code>。就我们所知，点击<code>&lt;label&gt;</code>标签的时候，可以触发它所绑定<code>&lt;input&gt;</code>的焦点。那么我们尝试通过点击<code>&lt;label&gt;</code>标签，触发打开文件选择的窗口，这样从逻辑上来讲也是非常合理的。</p>
+
+<pre><code class="html">&lt;input type="file" name="file" id="file" class="inputfile" /&gt;
+&lt;label for="file"&gt;Choose a file&lt;/label&gt;
+</code></pre>
+
+<p>点击两个标签中的任意一个都可以触发打开文件选择的窗口，这也意味着最难的部分我们已经解决了。同时不需要复杂的逻辑定位光标效果，也没有JavaScript代码，只有两行代码而已。</p>
+
+<p><img src="/images/posts/smart-custom-file-input-1.gif" alt="Demo" /></p>
+
+<p>下面我们就可以定义<code>&lt;label&gt;</code>的样式了，让它看起来更像一个按钮。</p>
+
+<h2>隐藏<code>&lt;input&gt;</code></h2>
+
+<p>首先，我们需要隐藏‘丑小鸭’，可以使用CSS属性<code>display:none</code>或<code>visibility:hidden</code>，但是这里不能使用<code>visibility:hidden</code>，因为提交<code>form</code>表单的时候不会传递参数到服务器端了。所以我们需要设置这个标签用户不可见，但是浏览器可见。
+<code>css
+.inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}
+</code>
+你会好奇为什么宽度和高度设置为<code>0.1px</code>而不是<code>0px</code>，因为在某些浏览器里面将元素的属性设置为零会让它们排列很奇怪，同时为<code>input</code>设置<code>absolute</code>属性，保证他不会干扰到兄弟元素。</p>
+
+<h2>修饰<code>&lt;label&gt;</code></h2>
+
+<p>我们现在需要把<code>&lt;label&gt;</code>打造成一个按钮，所以你可以发挥你的想象绘制它，我现在先简单把它实现：
+&#8220;`css
+.inputfile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
+}</p>
+
+<p>.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+}
+&#8220;`</p>
+
+<h2>鼠标效果</h2>
+
+<p>你是怎么知道网站上面的元素可以点击的呢？首先，元素应该传递一种你可以点击它的感觉；其次，当光标悬浮在元素上面应该有适当的变化。下面我们就实现<code>&lt;label&gt;</code>的<code>可点击效果</code>：
+<code>css
+.inputfile + label {
+    cursor: pointer; /* 小手光标*/
+}
+</code></p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center;"> 处理前        </th>
+<th style="text-align:center;"> 处理后         </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;"><img src="/images/posts/smart-custom-file-input-2.gif" alt="Demo" /></td>
+<td style="text-align:center;"> <img src="/images/posts/smart-custom-file-input-3.gif" alt="Demo" /></td>
+</tr>
+</tbody>
+</table>
+
+
+<h2>键盘导航</h2>
+
+<p>如果用户不能通过键盘在你的网站上面导航，那么就说明这设计是有问题的。我们隐藏了<code>input</code>，同时也隐藏了<code>input</code>的焦点。所以我们要把原本在<code>input</code>标签上面能体现的焦点同样实现在<code>label</code>上面。
+<code>css
+.inputfile:focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+</code>
+<code>-webkit-focus-ring-color auto 5px</code>是一个有意思的小技巧，它使用外边框变色的效果巧妙地模拟了获取焦点的效果。它适用Chrome，Opera，Safari浏览器，上面的一行CSS样式是为了不支持<code>-webkit</code>属性的浏览器使用的。</p>
+
+<p><img src="/images/posts/smart-custom-file-input-4.gif" alt="Demo" /></p>
+
+<h2>触摸设备兼容</h2>
+
+<p>如果使用<a href="https://github.com/ftlabs/fastclick">FastClick</a>(一个简单易用的库，用于消除物理点击和移动浏览器上的点击事件触发之间的300毫秒延迟)或者是在标签内添加一些额外的标记，这样会让’按钮‘无法工作，所以我们需要使用<code>pointer-events:none</code>来解决这个问题：
+<code>html
+&lt;label for="file"&gt;&lt;strong&gt;Choose a file&lt;/strong&gt;&lt;/label&gt;
+</code>
+<code>css
+.inputfile + label * {
+    pointer-events: none;
+}
+</code></p>
+
+<h2>显示所选择文件</h2>
+
+<p>我们已经完成了大部分，但是还有一个小瑕疵。当我们使用<code>input</code>选择文件的时候会显示我们所选择的文件，然而我们这种实现方案隐藏了<code>input</code>所以不能显示文件了。不过没有关系，我们可以用一小段JavaScript解决这个问题，把选择的文件名字显示到<code>label</code>上面，如果是多个，就说显示了多个文件，这样就解决了这个问题：</p>
+
+<pre><code class="html">&lt;input type="file" name="file" id="file" class="inputfile" 
+       data-multiple-caption="{count} files selected" multiple /&gt;
+</code></pre>
+
+<pre><code class="javascript">var inputs = document.querySelectorAll( '.inputfile' );
+Array.prototype.forEach.call( inputs, function( input )
+{
+    var label    = input.nextElementSibling,
+        labelVal = label.innerHTML;
+
+    input.addEventListener( 'change', function( e )
+    {
+        var fileName = '';
+        if(this.files &amp;&amp; this.files.length &gt; 1 )
+           fileName = (this.getAttribute('data-multiple-caption') || '')
+           .replace( '{count}', this.files.length );
+        else
+            fileName = e.target.value.split( '\\' ).pop();
+
+        if( fileName )
+            label.querySelector( 'span' ).innerHTML = fileName;
+        else
+            label.innerHTML = labelVal;
+    });
+});
+</code></pre>
+
+<p>在源码里面也有一个JQuery的实现，如果需要可以下载查看。<br/>
+源码解析：</p>
+
+<ul>
+<li><p><code>multiple</code>属性是为了可以选择多个文件；<code>data-multiple-caption</code>是自定义的一个属性，用来显示选择多个文件的文案，当然你可以自定义这个文案。<code>{count}</code>是所选择的文件数的占位符。之所以使用一个额外的自定义属性而不是使用变量是因为这样只有一个地方有容易维护而已。</p></li>
+<li><p>IE9及以下的版本不支持<code>multiple</code>属性和JavaScript的<code>files</code>属性，所以针对这些浏览器我们只能采用其他的方式。因为选择文件以后我们是可以获取到文件的绝对路径的，比如<code>C:\fakepath\filename.jpg</code>，所以我们使用<code>split( '\\' ).pop()</code>来获取所选文件的名字用于显示。</p></li>
+<li><p>一个有意思的事情，原生的<code>input</code>打开选择窗口以后，你点击ESC是可以取消选择的，对此我也做了处理，使用<code>labelVal</code>来存取原来的值，在必要的时候重置这个值到<code>label</code>。</p></li>
+</ul>
+
+
+<p>下面就是最终的效果：</p>
+
+<p><img src="/images/posts/smart-custom-file-input-5.gif" alt="Demo" /></p>
+
+<h2>如果JavaScript不可用怎么办？</h2>
+
+<p>如果不使用JavaScript的话没有办法显示所选择的文件，为了可用性，如果不支持JavaScript我们把它变回原来的外观。因此我们在<code>&lt;html&gt;</code>元素添加一个<code>.no-js</code>的<code>class</code>，并且编写一个js脚本，如果js可用我们再将其替换成<code>.js</code>：
+<code>html
+&lt;html class="no-js"&gt;
+    &lt;head&gt;
+        &lt;!-- remove this if you use Modernizr --&gt;
+        &lt;script&gt;(function(e,t,n){var r=e.querySelectorAll("html")[0];r.className=r.className.replace(/(^|\s)no-js(\s|$)/,"$1js$2")})(document,window,0);&lt;/script&gt;
+    &lt;/head&gt;
+&lt;/html&gt;
+</code>
+&#8220;`css
+.js .inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}</p>
+
+<p>.no-js .inputfile + label {
+    display: none;
+}
+&#8220;`</p>
+
+<p><img src="/images/posts/smart-custom-file-input-6.gif" alt="Demo" /></p>
+
+<h2>Firefox Bug</h2>
+
+<p>这里有一个非常奇怪的事情，<code>input[type="file"]:focus</code>这个属性在Firefox根本不起作用，但是<code>:hover</code>和<code>:active</code>却能很好地支持。更奇怪的事情，Firefox却允许使用<code>JavaScript</code>获取<code>focus</code>的事件，所以我们在<code>input</code>上面监听了事件，当触发<code>focus</code>的时候改变样式来实现我们之前的效果：
+<code>javascript
+input.addEventListener('focus', function() {
+    input.classList.add('has-focus');
+});
+input.addEventListener('blur', function() {
+    input.classList.remove('has-focus');
+});
+</code>
+<code>css
+.inputfile:focus + label,
+.inputfile.has-focus + label {
+    outline: 1px dotted #000;
+    outline: -webkit-focus-ring-color auto 5px;
+}
+</code>
+如果你想查看是怎么自定义<code>input</code>样式的，欢迎下载并查看源码，并愉快使用。<br/>
+示例中的图标由<a href="http://www.danielbruce.se/">Daniel Bruce</a>制作，来源于<a href="http://www.flaticon.com">www.flaticon.com</a>，并获得CC BY3.0许可。</p>
+
+<blockquote><p><strong>原文地址：</strong> <a href="https://tympanus.net/codrops/2015/09/15/styling-customizing-file-inputs-smart-way/">Styling &amp; Customizing File Inputs the Smart Way</a></p></blockquote>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Browsersync 前端实时预览工程搭建]]></title>
+    <link href="http://www.majiang.life/blog/auto-preview-front-end-changes/"/>
+    <updated>2016-12-24T20:46:37+08:00</updated>
+    <id>http://www.majiang.life/blog/auto-preview-front-end-changes</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话，还需要处理项目的热部署。所以笔者在网上查了查，同时咨询了一下身边的朋友<a href="https://github.com/HelloJacky">小马</a>，就有了下面这篇文章：通过<code>Browsersync</code>把文件变化实时更新到浏览器端，不同的前端技术架构体现的效果不一样，有的是不刷新页面的更新样式和布局，有的是刷新页面更新，效果更像是点击“F5”。无论做前端还是后端，使用它将提高30%的工作效率，下面我们就直接进入正题。</p>
+
+<h2>示例</h2>
+
+<p><img src="/images/sync-demo.gif" alt="Sync Image" /></p>
+
+<h2>安装Node.js和Browsersync</h2>
+
+<ul>
+<li>Node.js:因为<code>Browsersync</code>是基于<code>Node.js</code>的，所以我们需要先安装<code>Node.js</code>。不同的系统安装方式不尽相同，直接去官方安装即可，<a href="https://nodejs.org/en/">官网</a>。</li>
+<li>Browsersync:安装完<code>Node.js</code>以后会自动安装NPM包管理工具，我们直接使用NPM安装<code>Browsersync</code>。运行如下命令：
+<code>
+npm install -g browser-sync
+</code>
+
+<blockquote><p><strong>参考文档：</strong> <a href="https://www.browsersync.io/#install">https://www.browsersync.io/#install</a></p></blockquote></li>
+</ul>
+
+
+<h2>启动Browsersync</h2>
+
+<p>以我当前项目为例，是一个使用Intellij Idea编辑的Java Web项目，部署到集成的Tomcat下面，项目源码根目录在<code>~/Code/simple-web-sample</code>，静态资源目录在<code>~/Code/simple-web-sample/src/main/webapp/</code>，如下图：
+<code>
+.
+├── README.md
+├── pom.xml
+├── simple-web-sample.iml
+├── src
+│   └── main
+│       ├── java
+│       ├── resources
+│       │   ├── applicationContext.xml
+│       │   ├── config.properties
+│       │   └── db
+│       │       └── migration
+│       │           └── V1__Create_user_table.sql
+│       └── webapp
+│           ├── WEB-INF
+│           │   └── web.xml
+│           ├── index.css
+│           ├── index.html
+│           └── index.js
+└── target
+</code>
+我直接把Tomcat集成到Intellij Idea里面，直接可以部署运行Tomcat（详情累述，具体参照Idea的<a href="https://www.jetbrains.com/help/idea/2016.1/run-debug-configuration-tomcat-server.html?origin=old_help">文档</a>)，端口为8080。运行项目成功以后，运行下面命令启动<code>Browsersync</code>:
+<code>
+browser-sync start --proxy http://localhost:8080
+--files "~/Code/simple-web-sample/src/main/webapp" --port 8086
+</code>
+命令行会出现如下提示，说明我们运行成功了：
+&#8220;`
+[BS] Proxying: <a href="http://localhost:8080">http://localhost:8080</a></p>
+
+<h2>[BS] Access URLs:</h2>
+
+<pre><code>   Local: http://localhost:8086
+External: http://192.168.1.103:8086
+</code></pre>
+
+<hr />
+
+<pre><code>      UI: http://localhost:3001
+</code></pre>
+
+<h2> UI External: <a href="http://192.168.1.103:3001">http://192.168.1.103:3001</a></h2>
+
+<p>[BS] Watching files&hellip;
+<code>``
+这样我们打开浏览器，就可以通过访问</code><a href="http://localhost:8086">http://localhost:8086</a><code>访问之前8080端口的内容了。那么问题来了，运行是可以了，但是</code>Browsersync<code>，是通过代理访问的</code>8080`端口，不是替代的WEB容器，所以Idea里面的代码的热部署需要我们自己来处理。</p>
+
+<blockquote><p><strong>参考文档：</strong> <a href="https://www.browsersync.io/docs/command-line">https://www.browsersync.io/docs/command-line</a></p></blockquote>
+
+<h2>热部署</h2>
+
+<p>为解决实时把Idea的源代码热部署到Tomcat，我们需要使用<a href="https://zeroturnaround.com/software/jrebel/trial/">Jrebel</a>对项目进行热部署。如果不愿购买正版的，也可以参照如下文档:
+<a href="http://www.jianshu.com/p/d177316890e3">http://www.jianshu.com/p/d177316890e3</a>进行配置。
+热部署配置完成以后，我们就可以放心大胆的编写Java代码，然后通过<code>Browsersync</code>自动更新页面了。如果是其他语言能够动态编译的也不需要热部署这个步骤，直接配置好目录就可以了。</p>
+
+<blockquote><p><strong>参考文档：</strong> <a href="http://www.jianshu.com/p/d177316890e3">http://www.jianshu.com/p/d177316890e3</a></p></blockquote>
+
+<h2>前后端分离</h2>
+
+<p>如上其实不是最好的解决方案，如果好多请求依赖服务器语言比较重就没有办法了，若是仅仅针对HTML,CSS,JS等资源文件的话，那么大可以做到前后端分离，这样就省去了很多麻烦。</p>
+
+<p>还是用我的程序举例，使用Intellij Idea运行的程序仅包含API，单独分离静态项目(simple-web-sample-front)，可以使用目前比较火的AngularJS,ReactJS或者是Vue。这样变可以在静态项目下面直接运行如下命令启动一个服务，本身<code>Browsersync</code>不使用代理的方式自身会启动一个HTTP服务器：
+<code>
+browser-sync start --files "~/Code/simple-web-sample-front" --port 8086
+</code>
+但是需要注意的是，js本身是不可以跨域的，我们需要对<code>8080</code>端口的服务器进行跨域配置，笔者使用的是添加<code>Access-Control-Allow-Origin</code>HTTP响应头，允许跨域请求。这样把前后端就分离开来了，不用因为要修改页面的样式和布局，很大张旗鼓的打开Idea。</p>
+
+<blockquote><p><strong>参考文档：</strong> <a href="http://harttle.com/2015/10/10/cross-origin.html">http://harttle.com/2015/10/10/cross-origin.html</a></p></blockquote>
+
+<p>至此已经全部完成，这样你就可以尽情的，不打断思路的编写代码，任凭浏览器自己的更新文件去吧，等自己觉得差不多了，回过头来看一眼就行了。</p>
+
+<blockquote><p>PS:笔者写这篇文章的时候就是用的这个，一个显示器是编辑器，一个显示器就是Blog的Preview，确实是很方便呢。</p></blockquote>
+]]></content>
+  </entry>
+  
+</feed>
