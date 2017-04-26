@@ -3,7 +3,7 @@ layout: post
 title: "Octopress 博客搜索优化"
 date: 2017-03-18 22:43:10 +0800
 comments: true
-categories: 
+categories: Octopress
 ---
 
 ##前言

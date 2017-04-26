@@ -3,7 +3,7 @@ layout: post
 title: "Browsersync 前端实时预览工程搭建"
 date: 2016-12-24 20:46:37 +0800
 comments: true
-categories: 
+categories: Web
 ---
 
 ##前言

@@ -1,0 +1,10 @@
+<section>
+  <h1>分类</h1>
+  <ul id="categories">
+    {% for category in site.categories %}
+      <li class="post">
+        <a href="{{ root_url | append:category_url }}">{{ category | first }}({{ category | last | size }})</a>
+      </li>
+    {% endfor %}
+  </ul>
+</section>

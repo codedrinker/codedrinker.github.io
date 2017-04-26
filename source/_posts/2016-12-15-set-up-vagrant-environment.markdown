@@ -3,7 +3,7 @@ layout: post
 title: "Vagrant 私有开发环境搭建"
 date: 2016-12-15 01:28:27 +0800
 comments: true
-categories: 
+categories: Vagrant
 ---
 
 ##前言

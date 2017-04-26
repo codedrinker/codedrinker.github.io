@@ -3,7 +3,7 @@ layout: post
 title: "Github Pages配置域名"
 date: 2017-04-03 00:32:47 +0800
 comments: true
-categories: 
+categories: Github
 ---
 
 ##前言
