@@ -1,0 +1,627 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-9540087096615057",
+enable_page_level_ads: true
+});
+</script>
+  <title>优雅的使用 ThreadLocal 传递参数 - 码匠笔记</title>
+  <meta name="author" content="麻酱">
+
+  
+  <meta name="description" content="如何优雅的使用 ThreadLocal 传递参数，the smart way of passing parameter by threadlocal，巧妙使用ThreadLocal，使用ThreadLocal传递参数，ThreadLocal使用，ThreadLocal使用详解， &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.majiang.life/blog/the-smart-way-of-passing-parameter-by-threadlocal">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/libs/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-89103576-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">码匠笔记</a></h1>
+  
+    <h2>用心雕琢</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="sitesearch" value="www.majiang.life">
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">博文</a></li>
+  <li><a href="/blog/archives">归档</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">优雅的使用 ThreadLocal 传递参数</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-05-20T18:04:38+08:00'><span class='date'>2017-05-20</span> <span class='time'>6:04 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://www.majiang.life">评论</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h2>前言</h2>
+
+<p>在我们日常 <code>Web</code> 开发中难免遇到需要把一个参数层层的传递到最内层，然后中间层根本不需要使用这个参数，或者是仅仅在特定的工具类中使用，这样我们完全没有必要在每一个方法里面都传递这样一个<code>通用</code>的参数。如果有一个办法能够在任何一个类里面想用的时候直接拿来使用就太好了。<code>Java</code>的<code>Web</code>项目大部分都是基于<code>Tomcat</code>，每次访问都是一个新的线程，这样让我们联想到了<code>ThreadLocal</code>，每一个线程都独享一个<code>ThreadLocal</code>，在接收请求的时候<code>set</code>特定内容，在需要的时候<code>get</code>这个值。下面我们就进入主题。</p>
+
+<h2>ThreadLocal</h2>
+
+<p>维持线程封闭性的一种更规范的方法就是使用<code>ThreadLocal</code>，这个类能使线程中的某个值与保存的值的对象关联起来。<code>ThreadLocal</code>提供<code>get</code>和<code>set</code>等接口或方法，这些方法为每一个使用这个变量的线程都存有一份独立的副本，因此<code>get</code>总是返回由当前线程在调用<code>set</code>时设置的最新值。
+<code>ThreadLocal</code>有如下方法</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="n">T</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">set</span><span class="o">(</span><span class="n">T</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span> <span class="o">}</span>
+</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">remove</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
+</span><span class='line'><span class="kd">protected</span> <span class="n">T</span> <span class="nf">initialValue</span><span class="o">()</span> <span class="o">{</span> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>get()</code>方法是用来获取<code>ThreadLocal</code>在当前线程中保存的变量副本<br/>
+<code>set()</code>用来设置当前线程中变量的副本<br/>
+<code>remove()</code>用来移除当前线程中变量的副本 <br/>
+<code>initialValue()</code>是一个<code>protected</code>方法，一般是用来在使用时进行重写的，如果在没有set的时候就调用<code>get</code>，会调用<code>initialValue</code>方法初始化内容。
+为了使用的更放心，我们简单的看一下具体的实现:</p>
+
+<h3><code>set</code>方法</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">set</span><span class="o">(</span><span class="n">T</span> <span class="n">value</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Thread</span> <span class="n">t</span> <span class="o">=</span> <span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">ThreadLocalMap</span> <span class="n">map</span> <span class="o">=</span> <span class="n">getMap</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">map</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+</span><span class='line'>            <span class="n">map</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">else</span>
+</span><span class='line'>            <span class="nf">createMap</span><span class="o">(</span><span class="n">t</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>set</code>方法会获取当前的线程，通过当前线程获取<code>ThreadLocalMap</code>对象。然后把需要存储的值放到这个<code>map</code>里面。如果没有就调用<code>createMap</code>创建对象。</p>
+
+<h3><code>getMap</code>方法</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'> <span class="n">ThreadLocalMap</span> <span class="nf">getMap</span><span class="o">(</span><span class="n">Thread</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">t</span><span class="o">.</span><span class="na">threadLocals</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>getMap</code>方法直接返回当前<code>Thread</code>的<code>threadLocals</code>变量，这样说明了之所以说<code>ThreadLocal</code>是<code>线程局部变量</code>就是因为它只是通过<code>ThreadLocal</code>把<code>变量</code>存在了<code>Thread</code>本身而已。</p>
+
+<h3><code>createMap</code>方法</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">void</span> <span class="nf">createMap</span><span class="o">(</span><span class="n">Thread</span> <span class="n">t</span><span class="o">,</span> <span class="n">T</span> <span class="n">firstValue</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">t</span><span class="o">.</span><span class="na">threadLocals</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ThreadLocalMap</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">firstValue</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>在<code>set</code>的时候如果不存在<code>threadLocals</code>，直接创建对象。由上看出，放入<code>map</code>的<code>key</code>是当前的<code>ThreadLocal</code>，<code>value</code>是需要存放的内容，所以我们设置属性的时候需要注意存放和获取的是一个<code>ThreadLocal</code>。</p>
+
+<h3><code>get</code>方法</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="n">T</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Thread</span> <span class="n">t</span> <span class="o">=</span> <span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">ThreadLocalMap</span> <span class="n">map</span> <span class="o">=</span> <span class="n">getMap</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">map</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">ThreadLocalMap</span><span class="o">.</span><span class="na">Entry</span> <span class="n">e</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">getEntry</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">e</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+</span><span class='line'>                <span class="k">return</span> <span class="o">(</span><span class="n">T</span><span class="o">)</span><span class="n">e</span><span class="o">.</span><span class="na">value</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="nf">setInitialValue</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>get</code>方法就比较简单，获取当前线程，尝试获取当前线程里面的<code>threadLocals</code>，如果没有获取到就调用<code>setInitialValue</code>方法，<code>setInitialValue</code>基本和<code>set</code>是一样的，就不累累述了。</p>
+
+<h2>场景</h2>
+
+<p>本文应用<code>ThreadLocal</code>的场景：在调用API接口的时候传递了一些公共参数，这些公共参数携带了一些设备信息，服务端接口根据不同的信息组装不同的格式数据返回给客户端。假定服务器端需要通过设备类型(device)来下发下载地址，当然接口也有同样的其他逻辑，我们只要在返回数据的时候判断好是什么类型的客户端就好了。如下:</p>
+
+<h4>场景一</h4>
+
+<p>请求</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>GET api/users?device<span class="o">=</span>android
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>返回</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='JSON'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="err">user</span> <span class="err">:</span> <span class="err">{</span>     
+</span><span class='line'>  <span class="p">}</span><span class="err">,</span>
+</span><span class='line'>  <span class="err">link</span> <span class="err">:</span> <span class="s2">&quot;https://play.google.com/store/apps/details?id=***&quot;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>场景二</h4>
+
+<p>请求</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>GET api/users?device<span class="o">=</span>ios
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>返回</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='JSON'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="err">user</span> <span class="err">:</span> <span class="err">{</span> 
+</span><span class='line'>  <span class="p">}</span><span class="err">,</span>
+</span><span class='line'>  <span class="err">link</span> <span class="err">:</span> <span class="s2">&quot;https://itunes.apple.com/us/app/**&quot;</span>
+</span><span class='line'><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>实现</h2>
+
+<p>首先准备一个<code>BaseSigntureRequest</code>类用来存放公共参数</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BaseSignatureRequest</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">String</span> <span class="n">device</span><span class="o">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getDevice</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">device</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setDevice</span><span class="o">(</span><span class="n">String</span> <span class="n">device</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">device</span> <span class="o">=</span> <span class="n">device</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后准备一个<code>static</code>的<code>ThreadLocal</code>类用来存放<code>ThreadLocal</code>，以便存储和获取时候的<code>ThreadLocal</code>一致。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThreadLocalCache</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ThreadLocal</span><span class="o">&lt;</span><span class="n">BaseSignatureRequest</span><span class="o">&gt;</span>
+</span><span class='line'>      <span class="n">baseSignatureRequestThreadLocal</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ThreadLocal</span><span class="o">&lt;&gt;();</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>然后编写一个<code>Interceptor</code>，在请求的时候获取<code>device</code>参数，存入当前线程的<code>ThreadLocal</code>中。这里需要注意的是，重写了<code>afterCompletion</code>方法，当请求结束的时候把<code>ThreadLocal</code> <code>remove</code>，移除不必须要键值对。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ParameterInterceptor</span> <span class="kd">implements</span> <span class="n">HandlerInterceptor</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">preHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span>
+</span><span class='line'>                             <span class="n">Object</span> <span class="n">handler</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">device</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&quot;device&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">BaseSignatureRequest</span> <span class="n">baseSignatureRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BaseSignatureRequest</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">baseSignatureRequest</span><span class="o">.</span><span class="na">setDevice</span><span class="o">(</span><span class="n">device</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">ThreadLocalCache</span><span class="o">.</span><span class="na">baseSignatureRequestThreadLocal</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">baseSignatureRequest</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">afterCompletion</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span>
+</span><span class='line'>                                <span class="n">Object</span> <span class="n">handler</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">ThreadLocalCache</span><span class="o">.</span><span class="na">baseSignatureRequestThreadLocal</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">httpServletRequest</span><span class="o">,</span>
+</span><span class='line'>                           <span class="n">HttpServletResponse</span> <span class="n">httpServletResponse</span><span class="o">,</span>
+</span><span class='line'>                           <span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">ModelAndView</span> <span class="n">modelAndView</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>当然需要在<code>spring</code>里面配置<code>interceptor</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;mvc:interceptors&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;mvc:interceptor&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;mvc:mapping</span> <span class="na">path=</span><span class="s">&quot;/api/**&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;life.majiang.ParameterInterceptor&quot;</span><span class="nt">&gt;&lt;/bean&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/mvc:interceptor&gt;</span>
+</span><span class='line'><span class="nt">&lt;/mvc:interceptors&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后在<code>Converter</code>里面转换实体的时候直接使用即可，这样就大功告成了。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserConverter</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ResultDO</span> <span class="nf">toDO</span><span class="o">(</span><span class="n">User</span> <span class="n">user</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">ResultDO</span> <span class="n">resultDO</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ResultDO</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">resultDO</span><span class="o">.</span><span class="na">setUser</span><span class="o">(</span><span class="n">user</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">BaseSignatureRequest</span> <span class="n">baseSignatureRequest</span> <span class="o">=</span> <span class="n">ThreadLocalCache</span><span class="o">.</span><span class="na">baseSignatureRequestThreadLocal</span><span class="o">.</span><span class="na">get</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">device</span> <span class="o">=</span> <span class="n">baseSignatureRequest</span><span class="o">.</span><span class="na">getDevice</span><span class="o">();</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="n">StringUtils</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">device</span><span class="o">,</span> <span class="s">&quot;ios&quot;</span><span class="o">))</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">resultDO</span><span class="o">.</span><span class="na">setLink</span><span class="o">(</span><span class="s">&quot;https://itunes.apple.com/us/app/**&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">resultDO</span><span class="o">.</span><span class="na">setLink</span><span class="o">(</span><span class="s">&quot;https://play.google.com/store/apps/details?id=***&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">resultDO</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>总结</h2>
+
+<p>这种机制很方便，因为他避免了在调用每一个方法时都要传递执行上下文信息，合理的使用<code>ThreadLocal</code>可以起到事倍功半的效果，但是需要避免滥用，例如将所有的全局变量作为<code>ThreadLocal</code>对象，<code>ThreadLocal</code>类似全局变量，他能降低代码的可重用性，并在类之间引入隐含的耦合性，所以再使用前需要格外小心。</p>
+
+<h2>作者</h2>
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="">优雅的使用 ThreadLocal 传递参数</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<h2></h2>
+<p>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 文章列表页自适应文字和展示广告 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9540087096615057"
+     data-ad-slot="2018352322"
+     data-ad-format="auto">
+</ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2017-05-20T18:04:38+08:00'><span class='date'>2017-05-20</span> <span class='time'>6:04 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>java</a>, <a class='category' href='/blog/categories/threadlocal/'>threadlocal</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/the-smart-way-of-passing-parameter-by-threadlocal/" data-via="" data-counturl="http://www.majiang.life/blog/the-smart-way-of-passing-parameter-by-threadlocal/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/simple-in-memory-cache-in-java/" title="Previous Post: 构建 Java 应用内存级缓存">&laquo; 构建 Java 应用内存级缓存</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+    <h1>关于</h1>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;能剒削柱梁谓之木匠，能穴凿穴埳谓之土匠，能雕琢文书谓之史匠，能搬砖摞码谓之码匠。</p>
+</section><section>
+    <h1>订阅</h1>
+    <p>
+        主要用来记录自己的编程经历，学习笔记和心得体会，希望能和大家一起分享和讨论，共同进步，欢迎订阅。
+    </p>
+    <p>
+        <img src="/images/wechat.jpg" width="153px" height="153px">
+    </p>
+</section>
+<section>
+  <h1>最新</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/the-smart-way-of-passing-parameter-by-threadlocal/">优雅的使用 ThreadLocal 传递参数</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/simple-in-memory-cache-in-java/">构建 Java 应用内存级缓存</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/using-amazon-s3-as-a-private-maven-repository/">基于Amazon S3 搭建 Maven 私有仓库</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/using-maven-for-multiple-environment/">安全的使用Maven实现不同环境配置文件的部署</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/github-and-godaddy/">Github Pages配置域名</a>
+      </li>
+    
+  </ul>
+</section>
+<section>
+  <h1>分类</h1>
+  <ul id="categories">
+    
+      <li class="post">
+        <a href="">vagrant(1)</a>
+      </li>
+    
+      <li class="post">
+        <a href="">web(2)</a>
+      </li>
+    
+      <li class="post">
+        <a href="">octopress(1)</a>
+      </li>
+    
+      <li class="post">
+        <a href="">github(1)</a>
+      </li>
+    
+      <li class="post">
+        <a href="">maven(1)</a>
+      </li>
+    
+      <li class="post">
+        <a href="">java(2)</a>
+      </li>
+    
+      <li class="post">
+        <a href="">cache(1)</a>
+      </li>
+    
+      <li class="post">
+        <a href="">guava(1)</a>
+      </li>
+    
+      <li class="post">
+        <a href="">threadlocal(1)</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 博客侧边栏自适应广告 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9540087096615057"
+     data-ad-slot="9463370724"
+     data-ad-format="auto"></ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 麻酱 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'codedrinker';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.majiang.life/blog/the-smart-way-of-passing-parameter-by-threadlocal/';
+        var disqus_url = 'http://www.majiang.life/blog/the-smart-way-of-passing-parameter-by-threadlocal/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
