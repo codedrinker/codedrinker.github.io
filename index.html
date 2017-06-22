@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 在我们日常 Web 开发中难免遇到需要把一个参数层层的传递到最内层，然后中间层根本不需要使用这个参数，或者是仅仅在特定的工具类中使用，这样我们完全没有必要在每一个方法里面都传递这样一个通用的参数。如果有一个办法能够在任何一个类里面想用的时候直接拿来使用就太好了。 &hellip;">
+  <meta name="description" content="Spring Boot 最近 Spring Boot 如火如荼，于是也开始试试，不过上手真的太简单了。Idea非常方便的就可以创建，或者直接clone官方的例子https://spring.io/guides/gs/spring-boot/。通俗理解Spring Boot就是一个平台， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,8 +74,9 @@ enable_page_level_ads: true
 </form>
   
 <ul class="main-navigation">
-  <li><a href="/">博文</a></li>
+  <li><a href="/">首页</a></li>
   <li><a href="/blog/archives">归档</a></li>
+  <li><a href="/blog/categories/spring-boot/">Spring Boot</a></li>
 </ul>
 
 </nav>
@@ -83,6 +84,60 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/spring-boot-get-started/">使用 Idea 创建 Spring Boot 项目</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-06-22T22:22:14+08:00'><span class='date'>2017-06-22</span> <span class='time'>10:22 pm</span></time>
+        
+           | <a href="/blog/spring-boot-get-started/#disqus_thread"
+             data-disqus-identifier="http://www.majiang.life/blog/spring-boot-get-started/">评论</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>Spring Boot</h2>
+
+<p>最近 <code>Spring Boot</code> 如火如荼，于是也开始试试，不过上手真的太简单了。<code>Idea</code>非常方便的就可以创建，或者直接<code>clone</code>官方的例子<a href="https://spring.io/guides/gs/spring-boot/">https://spring.io/guides/gs/spring-boot/</a>。通俗理解<code>Spring Boot</code>就是一个<code>平台</code>，让你非常便捷的构建和运行一个项目，并且他是基于组件化的，你想用什么直接<code>拿来主义</code>就可以了，话不多少直接上手。</p>
+
+<h2>使用 <code>Idea</code> 快速搭建</h2>
+
+<p>选择<code>Spring Initialiar</code>直接创建。
+<img src="/images/posts/spring-boot-get-started-1.png" alt="spring-boot-get-started-1" /></p>
+
+<p>填写好<code>Group</code>和<code>Artifact</code>。
+<img src="/images/posts/spring-boot-get-started-2.png" alt="spring-boot-get-started-2" /></p>
+
+<p>下面直接选择<code>Web</code>就可以了，但是如果你想选择其他的直接勾选就行，她会自动为你加载依赖。并且一些<code>dependency</code>不需要配置版本，每一个<code>Spring Boot</code>的<code>parent</code>项目集成管理，这样省去了好多兼容麻烦。
+<img src="/images/posts/spring-boot-get-started-3.png" alt="spring-boot-get-started-3" /></p>
+
+<p>我们写一个<code>HelloController</code>试一下效果。
+<img src="/images/posts/spring-boot-get-started-4.png" alt="spring-boot-get-started-4" /></p>
+
+<p>最后访问<code>http://localhost:8080</code>成功。
+<img src="/images/posts/spring-boot-get-started-5.png" alt="spring-boot-get-started-5" /></p>
+
+<p>如果想改变端口也是非常简单的。
+<img src="/images/posts/spring-boot-get-started-6.png" alt="spring-boot-get-started-6" /></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -2980,87 +3035,9 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/begininng-and-summary/">这是一个开始，也是一个总结</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2015-01-10T21:27:00+08:00'><span class='date'>2015-01-10</span> <span class='time'>9:27 pm</span></time>
-        
-           | <a href="/blog/begininng-and-summary/#disqus_thread"
-             data-disqus-identifier="http://www.majiang.life/blog/begininng-and-summary/">评论</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p>这是一个开始，是因为这今天开始写博客，确切的说是开始认真的写博客，之前在<a href="http://blog.csdn.net/wclxyn">CSDN</a>写过一些博客，
-大概是在大二的时候开始写，不过感觉那些更像是笔记，现在呢，变成读后感了，
-我觉得开始一点一滴的记录一下自己的行军图，也是一个总结，
-是认真的总结一下自己过去走过的这段路程，反思一下自己，展望一下未来。</p>
-
-<h2>昨天</h2>
-
-<p>我还在学校也写Java：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span> <span class="n">args</span><span class="o">[])</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;HelloWorld&quot;</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>大学的生活的还历历在目，仿佛就在昨天。第一次接触编程语言便是JAVA，现在也不知道那是不是偶然，刚刚上大学的我盲目的加入各种社团，恰逢“**大学网络中心”在
-面向全校学生招新，我就怀揣着好奇心去了。也就是那次，我开始喜欢每天面对代码充实的大学生活，也是那时开始一直没有停下来。</p>
-
-<p>在那里有我的伙伴，有做.NET的小马，做PHP的戈壁，做JAVA的三哥，做前端的大悦和大玉，我们一起经历冬天没有暖气夏天没有空调的办公室，
-一起去体验在荒野山村做完项目回来打不到的的心情，</p>
-
-<h2>今天</h2>
-
-<p>我在公司写Scala：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">HelloWorld</span> <span class="k">extends</span> <span class="nc">App</span><span class="o">{</span>
-</span><span class='line'>    <span class="n">println</span><span class="o">(</span><span class="s">&quot;HelloWorld&quot;</span><span class="o">)</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>明天</h2>
-
-<p>我会去写groovy：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">println</span> <span class="s2">&quot;Hello World&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
+    
+      <a class="prev" href="/posts/2">&larr; Older</a>
     
     <a href="/blog/archives">博文归档</a>
     
@@ -3098,6 +3075,10 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/spring-boot-get-started/">使用 Idea 创建 Spring Boot 项目</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/the-smart-way-of-passing-parameter-by-threadlocal/">优雅的使用 ThreadLocal 传递参数</a>
       </li>
     
@@ -3131,10 +3112,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
     
       <li class="post">
         <a href="/blog/set-up-vagrant-environment/">Vagrant 私有开发环境搭建</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/begininng-and-summary/">这是一个开始，也是一个总结</a>
       </li>
     
   </ul>

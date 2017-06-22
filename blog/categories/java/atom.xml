@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-06-08T00:03:26+08:00</updated>
+  <updated>2017-06-22T22:55:14+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,37 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[使用 Idea 创建 Spring Boot 项目]]></title>
+    <link href="http://www.majiang.life/blog/spring-boot-get-started/"/>
+    <updated>2017-06-22T22:22:14+08:00</updated>
+    <id>http://www.majiang.life/blog/spring-boot-get-started</id>
+    <content type="html"><![CDATA[<h2>Spring Boot</h2>
+
+<p>最近 <code>Spring Boot</code> 如火如荼，于是也开始试试，不过上手真的太简单了。<code>Idea</code>非常方便的就可以创建，或者直接<code>clone</code>官方的例子<a href="https://spring.io/guides/gs/spring-boot/">https://spring.io/guides/gs/spring-boot/</a>。通俗理解<code>Spring Boot</code>就是一个<code>平台</code>，让你非常便捷的构建和运行一个项目，并且他是基于组件化的，你想用什么直接<code>拿来主义</code>就可以了，话不多少直接上手。</p>
+
+<h2>使用 <code>Idea</code> 快速搭建</h2>
+
+<p>选择<code>Spring Initialiar</code>直接创建。
+<img src="/images/posts/spring-boot-get-started-1.png" alt="spring-boot-get-started-1" /></p>
+
+<p>填写好<code>Group</code>和<code>Artifact</code>。
+<img src="/images/posts/spring-boot-get-started-2.png" alt="spring-boot-get-started-2" /></p>
+
+<p>下面直接选择<code>Web</code>就可以了，但是如果你想选择其他的直接勾选就行，她会自动为你加载依赖。并且一些<code>dependency</code>不需要配置版本，每一个<code>Spring Boot</code>的<code>parent</code>项目集成管理，这样省去了好多兼容麻烦。
+<img src="/images/posts/spring-boot-get-started-3.png" alt="spring-boot-get-started-3" /></p>
+
+<p>我们写一个<code>HelloController</code>试一下效果。
+<img src="/images/posts/spring-boot-get-started-4.png" alt="spring-boot-get-started-4" /></p>
+
+<p>最后访问<code>http://localhost:8080</code>成功。
+<img src="/images/posts/spring-boot-get-started-5.png" alt="spring-boot-get-started-5" /></p>
+
+<p>如果想改变端口也是非常简单的。
+<img src="/images/posts/spring-boot-get-started-6.png" alt="spring-boot-get-started-6" /></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[优雅的使用 ThreadLocal 传递参数]]></title>
