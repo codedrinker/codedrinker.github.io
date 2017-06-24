@@ -9,7 +9,7 @@ categories: [Spring-boot,Java]
 
 ##Spring Boot
 最近 `Spring Boot` 如火如荼，于是也开始试试，不过上手真的太简单了。`Idea`非常方便的就可以创建，或者直接`clone`官方的例子[https://spring.io/guides/gs/spring-boot/](https://spring.io/guides/gs/spring-boot/)。通俗理解`Spring Boot`就是一个`平台`，让你非常便捷的构建和运行一个项目，并且他是基于组件化的，你想用什么直接`拿来主义`就可以了，话不多少直接上手。
-
+<!-- more -->
 ##使用 `Idea` 快速搭建
 选择`Spring Initialiar`直接创建。
 ![spring-boot-get-started-1](/images/posts/spring-boot-get-started-1.png)  

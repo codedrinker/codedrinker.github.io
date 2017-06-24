@@ -25,7 +25,7 @@ description: Simple In Memory Cache in Java，构建Java应用内存级缓存，
 |Read 1 MB sequentially from network| 10,000,000 ns | 10 ms   |
 |Read 1 MB sequentially from disk   | 30,000,000 ns | 30 ms   |
 |Send packet CA->Netherlands->CA    | 150,000,000 ns| 150 ms  |
-
+<!-- more -->
 <br>  
 由上面表格，我们可以清楚的看出从网络上面获取1M数据和从内存中读取1M数据的差别。为什么说到这里呢，因为随着我们的用户的增加，集群的扩展，很少的情况下是把缓存数据库或者其他缓存中间件和应用程序放在一台服务器上，大部分情况都是分布式的应用系统和缓存系统，所以避免不了的我们需要考虑网络而的开销。然后网络的读取和本地的读取差别如此之大，进而引出了今天的话题，适当的使用Java应用内存级别的缓存。针对一些基本不变的数据，或者是变化不大，使用非常频繁的数据可以考虑采用Java应用内存级别缓存。
 

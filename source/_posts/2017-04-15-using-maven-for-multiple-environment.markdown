@@ -9,7 +9,7 @@ description: 安全的使用Maven实现不同环境配置文件的部署，安�
 
 ##前言
 每一个项目都有许多部署环境，诸如开发环境，测试环境，沙盒环境，线上环境，有的项目还会更多。每一个环境都有自己独有的配置文件，比如数据库连接地址，静态资源的访问地址等等。那么如何优雅的分离这些配置文件是首要任务。目前已有的技术可以轻松的搞定这件事情，比如 Spring 的 [Profile](https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-profiles.html)，Maven 的 [Profile](http://maven.apache.org/guides/introduction/introduction-to-profiles.html)，但是有的时候我们为了方便，直接把这些配置文件都放在了`Project`里面，这样增加了项目的风险，也不便于管理。那么接下来我们就想来一个优雅的方法使用 `Maven Profile` 安全分离配置文件。
-
+<!-- more -->
 ##Filter
 `Maven Filter`可以支持将写到 `settings.xml`, `pom.xml`, 或是自定义 `*.properties` 文件里面的 `properties` 在 `build` 的时候自动替换指定目录配置文件里面的`占位符`，以实现动态指定配置。基本配置如下：   
 我们在`resources` 目录有一配置文件 `src/main/resources/config.properties` 包含如下内容(*如果使用`Spring-boot`需要把 `${username}` 替换为 `@username@`*)    

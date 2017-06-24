@@ -12,7 +12,7 @@ categories: Github
 
 ##Github
 首先在`codedrinker.github.io`这个`repository`的`gh-pages`指向的分支根目录添加一个`CNAME`，里面写`majiang.life`，不需要添加`http`或者`www`。因为博客采用的Octopress，所以直接在`source`目录添加一个`CNAME`文件，然后`rake gen_deploy`就可以自动生成到`gh-pages`分支`master`了。
-
+<!-- more -->
 ##DNS
 我是在Godaddy上面买的域名，不过DNS配置都大同小异，需要配置一个A记录，`host`是`@`,`Points to`是`192.30.252.153`；和一个CNAME记录`host`是`www`，`Points to`是`codedrinker.github.io`。`TTL`可以选择一个`CUSTOME`，比如`600S`。
 
