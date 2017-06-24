@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-06-24T14:20:37+08:00</updated>
+  <updated>2017-06-24T14:56:36+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -14,11 +14,37 @@
 
   
   <entry>
+    <title type="html"><![CDATA[打开 Octopress 首页‘更多’]]></title>
+    <link href="http://www.majiang.life/blog/octopress-index-page-read-more/"/>
+    <updated>2017-06-24T14:32:31+08:00</updated>
+    <id>http://www.majiang.life/blog/octopress-index-page-read-more</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>在使用 <code>Octopress</code> 的过程中随着文章数量的增加，首页越来越臃肿，不仅加载慢而且可读性很差。看到过其他人的 <code>Octopress</code> 首页很简洁，有一个 <code>Read more</code>，这样就非常方便了。查询了一下操作起来也非常简单。</p>
+
+<h2>添加更多</h2>
+
+<p>方法是十分的简单，只是因为不是太熟悉<code>Octopress</code>导致查了很久。直接在 <code>*.markdown</code> 的 <code>post</code> 里面添加<code>&lt;!--more--&gt;</code>，这个标记下面的内容就不会在首页展示出来，并且通过一个<code>Read on</code>替换。原因是因为本身<code>Octopress</code>就支持，只是你没有使用。具体在<code>_config.yml</code>里面。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">//_.config.yml</span>
+</span><span class='line'><span class="l-Scalar-Plain">excerpt_link</span><span class="p-Indicator">:</span> <span class="s">&quot;Read</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">&amp;rarr;&quot;</span>  <span class="c1"># &quot;Continue reading&quot; link text at the bottom of excerpted articles</span>
+</span><span class='line'><span class="l-Scalar-Plain">excerpt_separator</span><span class="p-Indicator">:</span> <span class="s">&quot;&lt;!--more--&gt;&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果想修改<code>Read on</code>直接在<code>_config.yml</code>里面修改就可以了。</p>
+]]></content>
+  </entry>
+  
+  <entry>
     <title type="html"><![CDATA[使用 Idea 创建 Spring Boot 项目]]></title>
     <link href="http://www.majiang.life/blog/spring-boot-get-started/"/>
     <updated>2017-06-22T22:22:14+08:00</updated>
     <id>http://www.majiang.life/blog/spring-boot-get-started</id>
-    <content type="html"><![CDATA[<h2>Spring Boot</h2>
+    <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>最近 <code>Spring Boot</code> 如火如荼，于是也开始试试，不过上手真的太简单了。<code>Idea</code>非常方便的就可以创建，或者直接<code>clone</code>官方的例子<a href="https://spring.io/guides/gs/spring-boot/">https://spring.io/guides/gs/spring-boot/</a>。通俗理解<code>Spring Boot</code>就是一个<code>平台</code>，让你非常便捷的构建和运行一个项目，并且他是基于组件化的，你想用什么直接<code>拿来主义</code>就可以了，话不多少直接上手。</p>
 
