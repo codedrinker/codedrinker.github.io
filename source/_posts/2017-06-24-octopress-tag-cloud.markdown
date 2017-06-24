@@ -4,7 +4,7 @@ title: "Octopress 添加标签云"
 date: 2017-06-24 15:11:51 +0800
 comments: true
 categories: [Octopress]
-description: "octopress tag cloud，Octopress 标签云，Octopress标签，Octopress右侧标签，为Octopress添加右侧标签库，标签云，Octopress 标签云"
+description: "octopress tag cloud，Octopress 标签云，Octopress标签，Octopress右侧标签，为Octopress侧边栏添加标签云，标签云，为Octopress 添加标签云，为 Octopress 添加 tag cloud，为Octopress 侧边栏添加tag cloud"
 ---
 ##前言
 随着文章数量越来越多，分类也越来越多，不是很方便归类和查找，于是就有了`标签云`这个概念。简单明了的展示了标签和每一个标签下面的文章数量。这个功能可以自己编写，也非常简单。不过反正已经有轮子了，如果不喜欢重新造轮子，直接使用一个网上已经写好的就行了。下面直接进入正题：
