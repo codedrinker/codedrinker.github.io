@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "打开 Octopress 首页‘更多’"
+title: "为Octopress 首页添加‘更多’功能"
 date: 2017-06-24 14:32:31 +0800
 comments: true
 categories: [Octopress]
