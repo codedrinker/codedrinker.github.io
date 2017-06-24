@@ -122,6 +122,9 @@ enable_page_level_ads: true
 
 <p>每一个项目都有许多部署环境，诸如开发环境，测试环境，沙盒环境，线上环境，有的项目还会更多。每一个环境都有自己独有的配置文件，比如数据库连接地址，静态资源的访问地址等等。那么如何优雅的分离这些配置文件是首要任务。目前已有的技术可以轻松的搞定这件事情，比如 Spring 的 <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-profiles.html">Profile</a>，Maven 的 <a href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html">Profile</a>，但是有的时候我们为了方便，直接把这些配置文件都放在了<code>Project</code>里面，这样增加了项目的风险，也不便于管理。那么接下来我们就想来一个优雅的方法使用 <code>Maven Profile</code> 安全分离配置文件。</p>
 
+<!-- more -->
+
+
 <h2>Filter</h2>
 
 <p><code>Maven Filter</code>可以支持将写到 <code>settings.xml</code>, <code>pom.xml</code>, 或是自定义 <code>*.properties</code> 文件里面的 <code>properties</code> 在 <code>build</code> 的时候自动替换指定目录配置文件里面的<code>占位符</code>，以实现动态指定配置。基本配置如下： <br/>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Threadlocal | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/threadlocal/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-06-24T13:56:51+08:00</updated>
+  <updated>2017-06-24T14:20:37+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>在我们日常 <code>Web</code> 开发中难免遇到需要把一个参数层层的传递到最内层，然后中间层根本不需要使用这个参数，或者是仅仅在特定的工具类中使用，这样我们完全没有必要在每一个方法里面都传递这样一个<code>通用</code>的参数。如果有一个办法能够在任何一个类里面想用的时候直接拿来使用就太好了。<code>Java</code>的<code>Web</code>项目大部分都是基于<code>Tomcat</code>，每次访问都是一个新的线程，这样让我们联想到了<code>ThreadLocal</code>，每一个线程都独享一个<code>ThreadLocal</code>，在接收请求的时候<code>set</code>特定内容，在需要的时候<code>get</code>这个值。下面我们就进入主题。</p>
+
+<!-- more -->
+
 
 <h2>ThreadLocal</h2>
 

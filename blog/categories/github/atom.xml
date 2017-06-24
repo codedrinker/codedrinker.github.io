@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Github | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/github/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-06-24T13:56:51+08:00</updated>
+  <updated>2017-06-24T14:20:37+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -26,6 +26,9 @@
 <h2>Github</h2>
 
 <p>首先在<code>codedrinker.github.io</code>这个<code>repository</code>的<code>gh-pages</code>指向的分支根目录添加一个<code>CNAME</code>，里面写<code>majiang.life</code>，不需要添加<code>http</code>或者<code>www</code>。因为博客采用的Octopress，所以直接在<code>source</code>目录添加一个<code>CNAME</code>文件，然后<code>rake gen_deploy</code>就可以自动生成到<code>gh-pages</code>分支<code>master</code>了。</p>
+
+<!-- more -->
+
 
 <h2>DNS</h2>
 

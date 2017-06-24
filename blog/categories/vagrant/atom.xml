@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vagrant | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/vagrant/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-06-24T13:56:51+08:00</updated>
+  <updated>2017-06-24T14:20:37+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -23,6 +23,9 @@
 <p>服务器端开发工程师的一个痛点就是各种搭建环境，尤其是对于我们这种特别爱捯饬技术，搭建环境，升级应用版本的这类人。这样除了让我们忍受搭建各种版本的环境的繁琐兼容问题，还让自己的开发机变得越来越臃肿，为此本文介绍了一种使用<code>Vagrant</code>搭建一套集成的开发环境(镜像)的方案，不仅可以让团队开发人员的环境保持一致，同时使得开发机保持瘦身。<br/>
 当然也有缺点，不许要做好数据的保密性，不能让所有的开发人员的镜像都有一些生产数据。<br/>
 下面我们就直接进入正题，搭建一个可以升级的本地环境。</p>
+
+<!-- more -->
+
 
 <h2>安装vagrant和virtual box</h2>
 

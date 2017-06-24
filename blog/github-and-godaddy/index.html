@@ -127,6 +127,9 @@ enable_page_level_ads: true
 
 <p>首先在<code>codedrinker.github.io</code>这个<code>repository</code>的<code>gh-pages</code>指向的分支根目录添加一个<code>CNAME</code>，里面写<code>majiang.life</code>，不需要添加<code>http</code>或者<code>www</code>。因为博客采用的Octopress，所以直接在<code>source</code>目录添加一个<code>CNAME</code>文件，然后<code>rake gen_deploy</code>就可以自动生成到<code>gh-pages</code>分支<code>master</code>了。</p>
 
+<!-- more -->
+
+
 <h2>DNS</h2>
 
 <p>我是在Godaddy上面买的域名，不过DNS配置都大同小异，需要配置一个A记录，<code>host</code>是<code>@</code>,<code>Points to</code>是<code>192.30.252.153</code>；和一个CNAME记录<code>host</code>是<code>www</code>，<code>Points to</code>是<code>codedrinker.github.io</code>。<code>TTL</code>可以选择一个<code>CUSTOME</code>，比如<code>600S</code>。</p>

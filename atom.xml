@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-06-24T13:56:51+08:00</updated>
+  <updated>2017-06-24T14:20:37+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<h2>Spring Boot</h2>
 
 <p>最近 <code>Spring Boot</code> 如火如荼，于是也开始试试，不过上手真的太简单了。<code>Idea</code>非常方便的就可以创建，或者直接<code>clone</code>官方的例子<a href="https://spring.io/guides/gs/spring-boot/">https://spring.io/guides/gs/spring-boot/</a>。通俗理解<code>Spring Boot</code>就是一个<code>平台</code>，让你非常便捷的构建和运行一个项目，并且他是基于组件化的，你想用什么直接<code>拿来主义</code>就可以了，话不多少直接上手。</p>
+
+<!-- more -->
+
 
 <h2>使用 <code>Idea</code> 快速搭建</h2>
 
@@ -52,6 +55,9 @@
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>在我们日常 <code>Web</code> 开发中难免遇到需要把一个参数层层的传递到最内层，然后中间层根本不需要使用这个参数，或者是仅仅在特定的工具类中使用，这样我们完全没有必要在每一个方法里面都传递这样一个<code>通用</code>的参数。如果有一个办法能够在任何一个类里面想用的时候直接拿来使用就太好了。<code>Java</code>的<code>Web</code>项目大部分都是基于<code>Tomcat</code>，每次访问都是一个新的线程，这样让我们联想到了<code>ThreadLocal</code>，每一个线程都独享一个<code>ThreadLocal</code>，在接收请求的时候<code>set</code>特定内容，在需要的时候<code>get</code>这个值。下面我们就进入主题。</p>
+
+<!-- more -->
+
 
 <h2>ThreadLocal</h2>
 
@@ -440,6 +446,9 @@
 </table>
 
 
+<!-- more -->
+
+
 <p><br><br/>
 由上面表格，我们可以清楚的看出从网络上面获取1M数据和从内存中读取1M数据的差别。为什么说到这里呢，因为随着我们的用户的增加，集群的扩展，很少的情况下是把缓存数据库或者其他缓存中间件和应用程序放在一台服务器上，大部分情况都是分布式的应用系统和缓存系统，所以避免不了的我们需要考虑网络而的开销。然后网络的读取和本地的读取差别如此之大，进而引出了今天的话题，适当的使用Java应用内存级别的缓存。针对一些基本不变的数据，或者是变化不大，使用非常频繁的数据可以考虑采用Java应用内存级别缓存。</p>
 
@@ -736,6 +745,9 @@
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>最近项目慢慢变大，从一个模块，变成了十几个模块，有的模块是被其他模块依赖的，有的模块是可以单独部署的。如果继续在一个项目里面太臃肿了，也不方便维护，所以想着借着这个机会把项目分离开来，有一些模块可以直接作为公共组件使用。本身项目就是使用的<code>Maven</code>作为构建工具的，所以想着直接把模块提取出来，构建成可以通过<code>Maven</code>依赖的<code>jar</code>文件。然后发布到<code>Maven</code>仓库就可以轻松使用了。带着这个梦想，我们进入主题：</p>
+
+<!-- more -->
+
 
 <h2>方案</h2>
 
@@ -1316,6 +1328,9 @@
 
 <p>每一个项目都有许多部署环境，诸如开发环境，测试环境，沙盒环境，线上环境，有的项目还会更多。每一个环境都有自己独有的配置文件，比如数据库连接地址，静态资源的访问地址等等。那么如何优雅的分离这些配置文件是首要任务。目前已有的技术可以轻松的搞定这件事情，比如 Spring 的 <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-profiles.html">Profile</a>，Maven 的 <a href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html">Profile</a>，但是有的时候我们为了方便，直接把这些配置文件都放在了<code>Project</code>里面，这样增加了项目的风险，也不便于管理。那么接下来我们就想来一个优雅的方法使用 <code>Maven Profile</code> 安全分离配置文件。</p>
 
+<!-- more -->
+
+
 <h2>Filter</h2>
 
 <p><code>Maven Filter</code>可以支持将写到 <code>settings.xml</code>, <code>pom.xml</code>, 或是自定义 <code>*.properties</code> 文件里面的 <code>properties</code> 在 <code>build</code> 的时候自动替换指定目录配置文件里面的<code>占位符</code>，以实现动态指定配置。基本配置如下： <br/>
@@ -1689,6 +1704,9 @@
 
 <p>首先在<code>codedrinker.github.io</code>这个<code>repository</code>的<code>gh-pages</code>指向的分支根目录添加一个<code>CNAME</code>，里面写<code>majiang.life</code>，不需要添加<code>http</code>或者<code>www</code>。因为博客采用的Octopress，所以直接在<code>source</code>目录添加一个<code>CNAME</code>文件，然后<code>rake gen_deploy</code>就可以自动生成到<code>gh-pages</code>分支<code>master</code>了。</p>
 
+<!-- more -->
+
+
 <h2>DNS</h2>
 
 <p>我是在Godaddy上面买的域名，不过DNS配置都大同小异，需要配置一个A记录，<code>host</code>是<code>@</code>,<code>Points to</code>是<code>192.30.252.153</code>；和一个CNAME记录<code>host</code>是<code>www</code>，<code>Points to</code>是<code>codedrinker.github.io</code>。<code>TTL</code>可以选择一个<code>CUSTOME</code>，比如<code>600S</code>。</p>
@@ -1778,6 +1796,9 @@
 
 <p>尝试在Google, Baidu, Bing 搜索之前写的文章的关键字基本搜不到，甚至使用标题一模一样去搜索也不行，更意外的是第一个出现的是转载的文章。于是就带着这个疑问去网上查了一些资料，尝试去优化一下，下面就是这次优化的笔记。<br/>
 PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
+
+<!-- more -->
+
 
 <h2>搜索引擎优化</h2>
 
@@ -1916,6 +1937,9 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <h2>调研</h2>
 
 <p>我尝试了许多通过修改<code>&lt;input type='file'&gt;</code>样式的方式解决这个问题，效果都不是很好，没有一个能像<a href="http://readerrr.com/">Readerrr</a>(通过上传文件导入Feed)那样漂亮。还有一种奇怪的实现，把<code>&lt;input type='file'&gt;</code>放到一个容器里面，把容器画成按钮的样子，当你点击容器的任何地方的时候，实际是点击的<code>&lt;input type='file'&gt;</code>。这种实现方案很有趣，同时也很奇怪。因为从可用性和点击体验来说确实不是很理想。</p>
+
+<!-- more -->
+
 
 <p>我尝试使用Google搜索答案可是没有什么结果，但是StackOverflow上面的内容让我茅塞顿开。它只有几个投票，并且在页面的中间位置，但是最重要的是他的内容里面包含了一个神奇的关键字<code>&lt;label&gt;</code>。就我们所知，点击<code>&lt;label&gt;</code>标签的时候，可以触发它所绑定<code>&lt;input&gt;</code>的焦点。那么我们尝试通过点击<code>&lt;label&gt;</code>标签，触发打开文件选择的窗口，这样从逻辑上来讲也是非常合理的。</p>
 
@@ -2220,6 +2244,9 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话，还需要处理项目的热部署。所以笔者在网上查了查，同时咨询了一下身边的朋友<a href="https://github.com/HelloJacky">小马</a>，就有了下面这篇文章：通过<code>Browsersync</code>把文件变化实时更新到浏览器端，不同的前端技术架构体现的效果不一样，有的是不刷新页面的更新样式和布局，有的是刷新页面更新，效果更像是点击“F5”。无论做前端还是后端，使用它将提高30%的工作效率，下面我们就直接进入正题。</p>
 
+<!-- more -->
+
+
 <h2>示例</h2>
 
 <p><img src="http://www.majiang.life/images/sync-demo.gif" alt="Sync Image" /></p>
@@ -2358,6 +2385,9 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <p>服务器端开发工程师的一个痛点就是各种搭建环境，尤其是对于我们这种特别爱捯饬技术，搭建环境，升级应用版本的这类人。这样除了让我们忍受搭建各种版本的环境的繁琐兼容问题，还让自己的开发机变得越来越臃肿，为此本文介绍了一种使用<code>Vagrant</code>搭建一套集成的开发环境(镜像)的方案，不仅可以让团队开发人员的环境保持一致，同时使得开发机保持瘦身。<br/>
 当然也有缺点，不许要做好数据的保密性，不能让所有的开发人员的镜像都有一些生产数据。<br/>
 下面我们就直接进入正题，搭建一个可以升级的本地环境。</p>
+
+<!-- more -->
+
 
 <h2>安装vagrant和virtual box</h2>
 
@@ -2742,6 +2772,9 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 大概是在大二的时候开始写，不过感觉那些更像是笔记，现在呢，变成读后感了，
 我觉得开始一点一滴的记录一下自己的行军图，也是一个总结，
 是认真的总结一下自己过去走过的这段路程，反思一下自己，展望一下未来。</p>
+
+<!-- more -->
+
 
 <h2>昨天</h2>
 

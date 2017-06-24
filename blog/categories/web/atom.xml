@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Web | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-06-24T13:56:51+08:00</updated>
+  <updated>2017-06-24T14:20:37+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -30,6 +30,9 @@
 <h2>调研</h2>
 
 <p>我尝试了许多通过修改<code>&lt;input type='file'&gt;</code>样式的方式解决这个问题，效果都不是很好，没有一个能像<a href="http://readerrr.com/">Readerrr</a>(通过上传文件导入Feed)那样漂亮。还有一种奇怪的实现，把<code>&lt;input type='file'&gt;</code>放到一个容器里面，把容器画成按钮的样子，当你点击容器的任何地方的时候，实际是点击的<code>&lt;input type='file'&gt;</code>。这种实现方案很有趣，同时也很奇怪。因为从可用性和点击体验来说确实不是很理想。</p>
+
+<!-- more -->
+
 
 <p>我尝试使用Google搜索答案可是没有什么结果，但是StackOverflow上面的内容让我茅塞顿开。它只有几个投票，并且在页面的中间位置，但是最重要的是他的内容里面包含了一个神奇的关键字<code>&lt;label&gt;</code>。就我们所知，点击<code>&lt;label&gt;</code>标签的时候，可以触发它所绑定<code>&lt;input&gt;</code>的焦点。那么我们尝试通过点击<code>&lt;label&gt;</code>标签，触发打开文件选择的窗口，这样从逻辑上来讲也是非常合理的。</p>
 
@@ -254,6 +257,9 @@ input.addEventListener('blur', function() {
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话，还需要处理项目的热部署。所以笔者在网上查了查，同时咨询了一下身边的朋友<a href="https://github.com/HelloJacky">小马</a>，就有了下面这篇文章：通过<code>Browsersync</code>把文件变化实时更新到浏览器端，不同的前端技术架构体现的效果不一样，有的是不刷新页面的更新样式和布局，有的是刷新页面更新，效果更像是点击“F5”。无论做前端还是后端，使用它将提高30%的工作效率，下面我们就直接进入正题。</p>
+
+<!-- more -->
+
 
 <h2>示例</h2>
 
