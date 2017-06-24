@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-06-24T14:56:36+08:00</updated>
+  <updated>2017-06-24T16:04:44+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,128 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Octopress 添加标签云]]></title>
+    <link href="http://www.majiang.life/blog/octopress-tag-cloud/"/>
+    <updated>2017-06-24T15:11:51+08:00</updated>
+    <id>http://www.majiang.life/blog/octopress-tag-cloud</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>随着文章数量越来越多，分类也越来越多，不是很方便归类和查找，于是就有了<code>标签云</code>这个概念。简单明了的展示了标签和每一个标签下面的文章数量。这个功能可以自己编写，也非常简单。不过反正已经有轮子了，如果不喜欢重新造轮子，直接使用一个网上已经写好的就行了。下面直接进入正题：</p>
+
+<h2>使用轮子</h2>
+
+<p>直接<code>clone</code>轮子<code>https://github.com/tokkonopapa/octopress-tagcloud.git</code>到本地，如果不想<code>clone</code>直接点击<a href="/assets/octopress-tagcloud-master.zip">下载</a>，然后把对应的资源拷贝到相应的目录：</p>
+
+<!-- more -->
+
+
+<pre><code>.
+├─ plugins/
+│  └── tag_cloud.rb
+└─ source/
+   └─ _includes/
+      └─ custom/
+         └─ asides/
+            ├─ category_list.html
+            └─ tag_cloud.html
+</code></pre>
+
+<p>然后修改 <code>_config.yml</code>，添加 <code>tag_cloud.html</code> 到 <code>default_asides</code> 数组，重新<code>rake preview</code>即可。</p>
+
+<h2>造轮子</h2>
+
+<p>造轮子原理也是很简单，遍历所有的<code>category</code>和每一个<code>category</code>下面的<code>posts</code>，然后编写好样式做输出就可以了。<code>plugins</code>这个目录用户存放一些<code>Ruby</code>的<code>plugins</code>文件，所以我们直接写一个脚本到这个目录:
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;plugins/</span><span class="n">tag_cloud</span><span class="o">.</span><span class="n">rb</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;module Jekyll&lt;br/</span><span class="o">&gt;</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">CategoryListTag</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="no">Liquid</span><span class="o">::</span><span class="no">Tag</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">context</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>      <span class="n">html</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>      <span class="n">categories</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">registers</span><span class="o">[</span><span class="ss">:site</span><span class="o">].</span><span class="n">categories</span><span class="o">.</span><span class="n">keys</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>      <span class="n">categories</span><span class="o">.</span><span class="n">sort</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">category</span><span class="o">|&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>        <span class="n">posts_in_category</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">registers</span><span class="o">[</span><span class="ss">:site</span><span class="o">].</span><span class="n">categories</span><span class="o">[</span><span class="n">category</span><span class="o">].</span><span class="n">size</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>        <span class="n">category_dir</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">registers</span><span class="o">[</span><span class="ss">:site</span><span class="o">].</span><span class="n">config</span><span class="o">[&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="n">category_dir</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="p">;</span><span class="o">]&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>        <span class="n">category_url</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">category_dir</span><span class="p">,</span> <span class="n">category</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/_|\P{Word}/</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">-&amp;</span><span class="n">rsquo</span><span class="p">;)</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/-{2,}/</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="p">;</span><span class="o">-&amp;</span><span class="n">rsquo</span><span class="p">;)</span><span class="o">.</span><span class="n">downcase</span><span class="p">)</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>        <span class="n">html</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="o">&lt;</span><span class="n">li</span> <span class="n">class</span><span class="o">=</span><span class="s1">&#39;category&#39;</span><span class="o">&gt;&lt;</span><span class="n">a</span> <span class="n">href</span><span class="o">=</span><span class="s1">&#39;http://www.majiang.life/#{category_url}/&#39;</span><span class="o">&gt;</span><span class="c1">#{category} (#{posts_in_category})&lt;/a&gt;&lt;/li&gt;\n&amp;rdquo;&lt;br/&gt;</span>
+</span><span class='line'>      <span class="k">end</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>      <span class="n">html</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>    <span class="k">end</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'>  <span class="k">end</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;Liquid::Template.register_tag(&amp;lsquo;tag_cloud&amp;rsquo;, Jekyll::CategoryListTag)</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- source/_includes/custom/asides/tag_cloud.html--&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;&lt;section&gt;&lt;br/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;h1&gt;</span>Categories<span class="nt">&lt;/h1&gt;&lt;br/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ul</span> <span class="na">id=</span><span class="s">&quot;categories&quot;</span><span class="nt">&gt;&lt;br/&gt;</span>
+</span><span class='line'>    {% tag_cloud %}<span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/ul&gt;&lt;br/&gt;</span>
+</span><span class='line'><span class="nt">&lt;/section&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;h1&gt;_config.yml&lt;/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="l-Scalar-Plain">&lt;p&gt;default_asides</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="nl">&amp;hellip</span><span class="nv">;</span><span class="p-Indicator">,</span><span class="nv">custom/asides/tag_cloud.html</span><span class="p-Indicator">]</span><span class="l-Scalar-Plain">&lt;br/&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<p>下面我们逐行解释： <br/>
+<code>context</code>会传递传递静态博客需要的上下文,<code>category</code>和<code>posts</code>都可以在里面获取。<br/>
+<code>Liquid::Template.register_tag</code> 最后生成<code>tag_cloud</code>标签，以便在<code>html</code>里面可以直接使用。<br/>
+<code>tag_cloud.html</code> 直接在<code>html</code>里面使用<code>tag_cloud</code>标签<br/>
+<code>_config.yml</code> 最后再里面配置就可以了</p>
+
+<p>笔者前端不是很好，如果想把轮子造的好看一点，直接自定义<code>tag_cloud.rb</code>里面的<code>html</code>样式即可。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[打开 Octopress 首页‘更多’]]></title>

@@ -12,11 +12,11 @@ google_ad_client: "ca-pub-9540087096615057",
 enable_page_level_ads: true
 });
 </script>
-  <title>Browsersync 前端实时预览工程搭建 - 码匠笔记</title>
+  <title>Octopress 添加标签云 - 码匠笔记</title>
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话 &hellip;">
+  <meta name="description" content="octopress tag cloud，Octopress 标签云，Octopress标签，Octopress右侧标签，为Octopress添加右侧标签库，标签云，Octopress 标签云">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +25,7 @@ enable_page_level_ads: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.majiang.life/blog/auto-preview-front-end-changes">
+  <link rel="canonical" href="http://www.majiang.life/blog/octopress-tag-cloud">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
@@ -88,7 +88,7 @@ enable_page_level_ads: true
   
   <header>
     
-      <h1 class="entry-title">Browsersync 前端实时预览工程搭建</h1>
+      <h1 class="entry-title">Octopress 添加标签云</h1>
     
     
       <p class="meta">
@@ -97,7 +97,7 @@ enable_page_level_ads: true
 
 
 
-<time class='entry-date' datetime='2016-12-24T20:46:37+08:00'><span class='date'>2016-12-24</span> <span class='time'>8:46 pm</span></time>
+<time class='entry-date' datetime='2017-06-24T15:11:51+08:00'><span class='date'>2017-06-24</span> <span class='time'>3:11 pm</span></time>
         
            | <a href="#disqus_thread"
              data-disqus-identifier="http://www.majiang.life">评论</a>
@@ -121,32 +121,40 @@ enable_page_level_ads: true
 </div>
 <div class="entry-content"><h2>前言</h2>
 
-<p>有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话，还需要处理项目的热部署。所以笔者在网上查了查，同时咨询了一下身边的朋友<a href="https://github.com/HelloJacky">小马</a>，就有了下面这篇文章：通过<code>Browsersync</code>把文件变化实时更新到浏览器端，不同的前端技术架构体现的效果不一样，有的是不刷新页面的更新样式和布局，有的是刷新页面更新，效果更像是点击“F5”。无论做前端还是后端，使用它将提高30%的工作效率，下面我们就直接进入正题。</p>
+<p>随着文章数量越来越多，分类也越来越多，不是很方便归类和查找，于是就有了<code>标签云</code>这个概念。简单明了的展示了标签和每一个标签下面的文章数量。这个功能可以自己编写，也非常简单。不过反正已经有轮子了，如果不喜欢重新造轮子，直接使用一个网上已经写好的就行了。下面直接进入正题：</p>
+
+<h2>使用轮子</h2>
+
+<p>直接<code>clone</code>轮子<code>https://github.com/tokkonopapa/octopress-tagcloud.git</code>到本地，如果不想<code>clone</code>直接点击<a href="/assets/octopress-tagcloud-master.zip">下载</a>，然后把对应的资源拷贝到相应的目录：</p>
 
 <!-- more -->
 
 
-<h2>示例</h2>
-
-<p><img src="/images/sync-demo.gif" alt="Sync Image" /></p>
-
-<h2>安装Node.js和Browsersync</h2>
-
-<ul>
-<li>Node.js:因为<code>Browsersync</code>是基于<code>Node.js</code>的，所以我们需要先安装<code>Node.js</code>。不同的系统安装方式不尽相同，直接去官方安装即可，<a href="https://nodejs.org/en/">官网</a>。</li>
-<li>Browsersync:安装完<code>Node.js</code>以后会自动安装NPM包管理工具，我们直接使用NPM安装<code>Browsersync</code>。运行如下命令：</li>
-</ul>
-
-
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>npm install -g browser-sync</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>.
+</span><span class='line'>├─ plugins/
+</span><span class='line'>│  └── tag_cloud.rb
+</span><span class='line'>└─ source/
+</span><span class='line'>   └─ _includes/
+</span><span class='line'>      └─ custom/
+</span><span class='line'>         └─ asides/
+</span><span class='line'>            ├─ category_list.html
+</span><span class='line'>            └─ tag_cloud.html</span></code></pre></td></tr></table></div></figure>
 
 
-<blockquote><p><strong>参考文档：</strong> <a href="https://www.browsersync.io/#install">https://www.browsersync.io/#install</a></p></blockquote>
+<p>然后修改 <code>_config.yml</code>，添加 <code>tag_cloud.html</code> 到 <code>default_asides</code> 数组，重新<code>rake preview</code>即可。</p>
 
-<h2>启动Browsersync</h2>
+<h2>造轮子</h2>
 
-<p>以我当前项目为例，是一个使用Intellij Idea编辑的Java Web项目，部署到集成的Tomcat下面，项目源码根目录在<code>~/Code/simple-web-sample</code>，静态资源目录在<code>~/Code/simple-web-sample/src/main/webapp/</code>，如下图：</p>
+<p>造轮子原理也是很简单，遍历所有的<code>category</code>和每一个<code>category</code>下面的<code>posts</code>，然后编写好样式做输出就可以了。<code>plugins</code>这个目录用户存放一些<code>Ruby</code>的<code>plugins</code>文件，所以我们直接写一个脚本到这个目录:</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -166,39 +174,28 @@ enable_page_level_ads: true
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>.
-</span><span class='line'>├── README.md
-</span><span class='line'>├── pom.xml
-</span><span class='line'>├── simple-web-sample.iml
-</span><span class='line'>├── src
-</span><span class='line'>│   └── main
-</span><span class='line'>│       ├── java
-</span><span class='line'>│       ├── resources
-</span><span class='line'>│       │   ├── applicationContext.xml
-</span><span class='line'>│       │   ├── config.properties
-</span><span class='line'>│       │   └── db
-</span><span class='line'>│       │       └── migration
-</span><span class='line'>│       │           └── V1__Create_user_table.sql
-</span><span class='line'>│       └── webapp
-</span><span class='line'>│           ├── WEB-INF
-</span><span class='line'>│           │   └── web.xml
-</span><span class='line'>│           ├── index.css
-</span><span class='line'>│           ├── index.html
-</span><span class='line'>│           └── index.js
-</span><span class='line'>└── target</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># plugins/tag_cloud.rb</span>
+</span><span class='line'><span class="k">module</span> <span class="nn">Jekyll</span>
+</span><span class='line'>  <span class="k">class</span> <span class="nc">CategoryListTag</span> <span class="o">&lt;</span> <span class="no">Liquid</span><span class="o">::</span><span class="no">Tag</span>
+</span><span class='line'>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+</span><span class='line'>      <span class="n">html</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+</span><span class='line'>      <span class="n">categories</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">registers</span><span class="o">[</span><span class="ss">:site</span><span class="o">].</span><span class="n">categories</span><span class="o">.</span><span class="n">keys</span>
+</span><span class='line'>      <span class="n">categories</span><span class="o">.</span><span class="n">sort</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">category</span><span class="o">|</span>
+</span><span class='line'>        <span class="n">posts_in_category</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">registers</span><span class="o">[</span><span class="ss">:site</span><span class="o">].</span><span class="n">categories</span><span class="o">[</span><span class="n">category</span><span class="o">].</span><span class="n">size</span>
+</span><span class='line'>        <span class="n">category_dir</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">registers</span><span class="o">[</span><span class="ss">:site</span><span class="o">].</span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;category_dir&#39;</span><span class="o">]</span>
+</span><span class='line'>        <span class="n">category_url</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">category_dir</span><span class="p">,</span> <span class="n">category</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/_|\P{Word}/</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/-{2,}/</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">downcase</span><span class="p">)</span>
+</span><span class='line'>        <span class="n">html</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;&lt;li class=&#39;category&#39;&gt;&lt;a href=&#39;/</span><span class="si">#{</span><span class="n">category_url</span><span class="si">}</span><span class="s2">/&#39;&gt;</span><span class="si">#{</span><span class="n">category</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">posts_in_category</span><span class="si">}</span><span class="s2">)&lt;/a&gt;&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
+</span><span class='line'>      <span class="k">end</span>
+</span><span class='line'>      <span class="n">html</span>
+</span><span class='line'>    <span class="k">end</span>
+</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span>
+</span><span class='line'>
+</span><span class='line'><span class="no">Liquid</span><span class="o">::</span><span class="no">Template</span><span class="o">.</span><span class="n">register_tag</span><span class="p">(</span><span class="s1">&#39;tag_cloud&#39;</span><span class="p">,</span> <span class="no">Jekyll</span><span class="o">::</span><span class="no">CategoryListTag</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>我直接把Tomcat集成到Intellij Idea里面，直接可以部署运行Tomcat（详情累述，具体参照Idea的<a href="https://www.jetbrains.com/help/idea/2016.1/run-debug-configuration-tomcat-server.html?origin=old_help">文档</a>)，端口为8080。运行项目成功以后，运行下面命令启动<code>Browsersync</code>:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>browser-sync start --proxy http://localhost:8080 
-</span><span class='line'>--files "~/Code/simple-web-sample/src/main/webapp" --port 8086</span></code></pre></td></tr></table></div></figure>
-
-
-<p>命令行会出现如下提示，说明我们运行成功了：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -207,54 +204,36 @@ enable_page_level_ads: true
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[BS] Proxying: http://localhost:8080
-</span><span class='line'>[BS] Access URLs:
-</span><span class='line'> --------------------------------------
-</span><span class='line'>       Local: http://localhost:8086
-</span><span class='line'>    External: http://192.168.1.103:8086
-</span><span class='line'> --------------------------------------
-</span><span class='line'>          UI: http://localhost:3001
-</span><span class='line'> UI External: http://192.168.1.103:3001
-</span><span class='line'> --------------------------------------
-</span><span class='line'>[BS] Watching files...</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- source/_includes/custom/asides/tag_cloud.html--&gt;</span>
+</span><span class='line'><span class="nt">&lt;section&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;h1&gt;</span>Categories<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;ul</span> <span class="na">id=</span><span class="s">&quot;categories&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    {% tag_cloud %}
+</span><span class='line'>  <span class="nt">&lt;/ul&gt;</span>
+</span><span class='line'><span class="nt">&lt;/section&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>这样我们打开浏览器，就可以通过访问<code>http://localhost:8086</code>访问之前8080端口的内容了。那么问题来了，运行是可以了，但是<code>Browsersync</code>，是通过代理访问的<code>8080</code>端口，不是替代的WEB容器，所以Idea里面的代码的热部署需要我们自己来处理。</p>
 
-<blockquote><p><strong>参考文档：</strong> <a href="https://www.browsersync.io/docs/command-line">https://www.browsersync.io/docs/command-line</a></p></blockquote>
-
-<h2>热部署</h2>
-
-<p>为解决实时把Idea的源代码热部署到Tomcat，我们需要使用<a href="https://zeroturnaround.com/software/jrebel/trial/">Jrebel</a>对项目进行热部署。如果不愿购买正版的，也可以参照如下文档:
-<a href="http://www.jianshu.com/p/d177316890e3">http://www.jianshu.com/p/d177316890e3</a>进行配置。
-热部署配置完成以后，我们就可以放心大胆的编写Java代码，然后通过<code>Browsersync</code>自动更新页面了。如果是其他语言能够动态编译的也不需要热部署这个步骤，直接配置好目录就可以了。</p>
-
-<blockquote><p><strong>参考文档：</strong> <a href="http://www.jianshu.com/p/d177316890e3">http://www.jianshu.com/p/d177316890e3</a></p></blockquote>
-
-<h2>前后端分离</h2>
-
-<p>如上其实不是最好的解决方案，如果好多请求依赖服务器语言比较重就没有办法了，若是仅仅针对HTML,CSS,JS等资源文件的话，那么大可以做到前后端分离，这样就省去了很多麻烦。</p>
-
-<p>还是用我的程序举例，使用Intellij Idea运行的程序仅包含API，单独分离静态项目(simple-web-sample-front)，可以使用目前比较火的AngularJS,ReactJS或者是Vue。这样变可以在静态项目下面直接运行如下命令启动一个服务，本身<code>Browsersync</code>不使用代理的方式自身会启动一个HTTP服务器：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>browser-sync start --files "~/Code/simple-web-sample-front" --port 8086</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1">#_config.yml</span>
+</span><span class='line'><span class="l-Scalar-Plain">default_asides</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="nv">...</span><span class="p-Indicator">,</span><span class="nv">custom/asides/tag_cloud.html</span><span class="p-Indicator">]</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>但是需要注意的是，js本身是不可以跨域的，我们需要对<code>8080</code>端口的服务器进行跨域配置，笔者使用的是添加<code>Access-Control-Allow-Origin</code>HTTP响应头，允许跨域请求。这样把前后端就分离开来了，不用因为要修改页面的样式和布局，很大张旗鼓的打开Idea。</p>
+<p>下面我们逐行解释： <br/>
+<code>context</code>会传递传递静态博客需要的上下文,<code>category</code>和<code>posts</code>都可以在里面获取。<br/>
+<code>Liquid::Template.register_tag</code> 最后生成<code>tag_cloud</code>标签，以便在<code>html</code>里面可以直接使用。<br/>
+<code>tag_cloud.html</code> 直接在<code>html</code>里面使用<code>tag_cloud</code>标签<br/>
+<code>_config.yml</code> 最后再里面配置就可以了</p>
 
-<blockquote><p><strong>参考文档：</strong> <a href="http://harttle.com/2015/10/10/cross-origin.html">http://harttle.com/2015/10/10/cross-origin.html</a></p></blockquote>
-
-<p>至此已经全部完成，这样你就可以尽情的，不打断思路的编写代码，任凭浏览器自己的更新文件去吧，等自己觉得差不多了，回过头来看一眼就行了。</p>
-
-<blockquote><p>PS:笔者写这篇文章的时候就是用的这个，一个显示器是编辑器，一个显示器就是Blog的Preview，确实是很方便呢。</p></blockquote>
+<p>笔者前端不是很好，如果想把轮子造的好看一点，直接自定义<code>tag_cloud.rb</code>里面的<code>html</code>样式即可。</p>
 
 <h2>作者</h2>
 <p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="">Browsersync 前端实时预览工程搭建</a><br/>
+原文地址：<a href="">Octopress 添加标签云</a><br/>
 如果兴趣可以关注作者微信订阅号<br/>
 <img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 <h2></h2>
@@ -286,12 +265,12 @@ enable_page_level_ads: true
 
 
 
-<time class='entry-date' datetime='2016-12-24T20:46:37+08:00'><span class='date'>2016-12-24</span> <span class='time'>8:46 pm</span></time>
+<time class='entry-date' datetime='2017-06-24T15:11:51+08:00'><span class='date'>2017-06-24</span> <span class='time'>3:11 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/web/'>web</a>
+    <a class='category' href='/blog/categories/octopress/'>octopress</a>
   
 </span>
 
@@ -300,7 +279,7 @@ enable_page_level_ads: true
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/auto-preview-front-end-changes/" data-via="" data-counturl="http://www.majiang.life/blog/auto-preview-front-end-changes/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/octopress-tag-cloud/" data-via="" data-counturl="http://www.majiang.life/blog/octopress-tag-cloud/" >Tweet</a>
   
   
   
@@ -309,10 +288,8 @@ enable_page_level_ads: true
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/set-up-vagrant-environment/" title="Previous Post: Vagrant 私有开发环境搭建">&laquo; Vagrant 私有开发环境搭建</a>
+        <a class="basic-alignment left" href="/blog/octopress-index-page-read-more/" title="Previous Post: 打开 Octopress 首页‘更多’">&laquo; 打开 Octopress 首页‘更多’</a>
       
-      
-        <a class="basic-alignment right" href="/blog/the-smart-way-of-styling-and-customizing-file-input/" title="Next Post: 如何优雅的自定义File Input样式">如何优雅的自定义File Input样式 &raquo;</a>
       
     </p>
   </footer>
@@ -435,8 +412,8 @@ enable_page_level_ads: true
       
         
         // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.majiang.life/blog/auto-preview-front-end-changes/';
-        var disqus_url = 'http://www.majiang.life/blog/auto-preview-front-end-changes/';
+        var disqus_identifier = 'http://www.majiang.life/blog/octopress-tag-cloud/';
+        var disqus_url = 'http://www.majiang.life/blog/octopress-tag-cloud/';
         var disqus_script = 'embed.js';
       
     (function () {

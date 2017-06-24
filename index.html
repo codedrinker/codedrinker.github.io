@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 在使用 Octopress 的过程中随着文章数量的增加，首页越来越臃肿，不仅加载慢而且可读性很差。看到过其他人的 Octopress 首页很简洁，有一个 Read more，这样就非常方便了。查询了一下操作起来也非常简单。 添加更多 方法是十分的简单， &hellip;">
+  <meta name="description" content="前言 随着文章数量越来越多，分类也越来越多，不是很方便归类和查找，于是就有了标签云这个概念。简单明了的展示了标签和每一个标签下面的文章数量。这个功能可以自己编写，也非常简单。不过反正已经有轮子了，如果不喜欢重新造轮子，直接使用一个网上已经写好的就行了。下面直接进入正题： 使用轮子 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +85,49 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/octopress-tag-cloud/">Octopress 添加标签云</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-06-24T15:11:51+08:00'><span class='date'>2017-06-24</span> <span class='time'>3:11 pm</span></time>
+        
+           | <a href="/blog/octopress-tag-cloud/#disqus_thread"
+             data-disqus-identifier="http://www.majiang.life/blog/octopress-tag-cloud/">评论</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>随着文章数量越来越多，分类也越来越多，不是很方便归类和查找，于是就有了<code>标签云</code>这个概念。简单明了的展示了标签和每一个标签下面的文章数量。这个功能可以自己编写，也非常简单。不过反正已经有轮子了，如果不喜欢重新造轮子，直接使用一个网上已经写好的就行了。下面直接进入正题：</p>
+
+<h2>使用轮子</h2>
+
+<p>直接<code>clone</code>轮子<code>https://github.com/tokkonopapa/octopress-tagcloud.git</code>到本地，如果不想<code>clone</code>直接点击<a href="/assets/octopress-tagcloud-master.zip">下载</a>，然后把对应的资源拷贝到相应的目录：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/octopress-tag-cloud/">更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -541,45 +584,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/auto-preview-front-end-changes/">Browsersync 前端实时预览工程搭建</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-12-24T20:46:37+08:00'><span class='date'>2016-12-24</span> <span class='time'>8:46 pm</span></time>
-        
-           | <a href="/blog/auto-preview-front-end-changes/#disqus_thread"
-             data-disqus-identifier="http://www.majiang.life/blog/auto-preview-front-end-changes/">评论</a>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话，还需要处理项目的热部署。所以笔者在网上查了查，同时咨询了一下身边的朋友<a href="https://github.com/HelloJacky">小马</a>，就有了下面这篇文章：通过<code>Browsersync</code>把文件变化实时更新到浏览器端，不同的前端技术架构体现的效果不一样，有的是不刷新页面的更新样式和布局，有的是刷新页面更新，效果更像是点击“F5”。无论做前端还是后端，使用它将提高30%的工作效率，下面我们就直接进入正题。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/auto-preview-front-end-changes/">更多 &rarr;</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -625,8 +629,16 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 	</script>
 </section>
 <section>
+  <h1>Tag Cloud</h1>
+    <span id="tag-cloud"><a href='/blog/categories/cache' style='font-size: 120.0%'>cache(1)</a> <a href='/blog/categories/github' style='font-size: 120.0%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 120.0%'>guava(1)</a> <a href='/blog/categories/java' style='font-size: 160.0%'>java(3)</a> <a href='/blog/categories/maven' style='font-size: 120.0%'>maven(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 120.0%'>spring-boot(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 120.0%'>threadlocal(1)</a> <a href='/blog/categories/vagrant' style='font-size: 120.0%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web(2)</a> </span>
+</section>
+<section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/octopress-tag-cloud/">Octopress 添加标签云</a>
+      </li>
     
       <li class="post">
         <a href="/blog/octopress-index-page-read-more/">打开 Octopress 首页‘更多’</a>
@@ -662,10 +674,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
     
       <li class="post">
         <a href="/blog/the-smart-way-of-styling-and-customizing-file-input/">如何优雅的自定义File Input样式</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/auto-preview-front-end-changes/">Browsersync 前端实时预览工程搭建</a>
       </li>
     
   </ul>
