@@ -12,11 +12,11 @@ google_ad_client: "ca-pub-9540087096615057",
 enable_page_level_ads: true
 });
 </script>
-  <title>Category: Github - 码匠笔记</title>
+  <title>阅读模式是如何实现的? - 码匠笔记</title>
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="Category: github">
+  <meta name="description" content="阅读模式是如何实现的，阅读模式是怎么实现的，模拟读读日报的阅读模式实现">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +25,7 @@ enable_page_level_ads: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.majiang.life/blog/categories/github">
+  <link rel="canonical" href="http://www.majiang.life/blog/make-article-more-readable">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
@@ -84,62 +84,146 @@ enable_page_level_ads: true
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">
     
-        
-           Github
-        
+      <h1 class="entry-title">阅读模式是如何实现的?</h1>
     
-    </h1>
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-07-04T21:09:10+08:00'><span class='date'>2017-07-04</span> <span class='time'>9:09 pm</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://www.majiang.life">评论</a>
+        
+      </p>
     
   </header>
-  
+
+
+<div class="entry-content">
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <!-- 博客列表页面头部自适应广告 -->
+  <!-- 文章列表页面头部自适应仅图片广告 -->
   <ins class="adsbygoogle"
-       style="display:block"
+       style="display:block;width: 100%;"
        data-ad-client="ca-pub-9540087096615057"
-       data-ad-slot="1951289127"
+       data-ad-slot="2998997121"
        data-ad-format="auto"></ins>
   <script>
   (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
-  <div id="blog-archives" class="category">
+</div>
+<div class="entry-content"><h2>前言</h2>
+
+<p>最近使用读读日报发现其阅读模式很是方便，除了字体和布局舒服了，最重要的是去掉了干扰阅读的所有因素，包括广告，相关文章，栏目等等。于是就查找了一下有没有类似的实现方案。最后找了一些方案，不过并不知道正解，只是抛砖引玉罢了。(PS:感觉更深层次的处理应该是机器学习吧)</p>
+
+<h2>霸王硬上弓</h2>
+
+<p>这种方式就非常简单了，如题，直接对于每一个网站做适配，就是麻烦一些。直接通过编程语言解析页面的元素，然后找出对应的文章正文的位置，然后重新绘制样式，最后输出就搞定了。这样做麻烦一些，每一个网页都要做适配，不过可控的是对每一个元素的样式都可以把握。</p>
+
+<h2>使用轮子</h2>
+
+<p>使用第三方<code>API</code>，<a href="https://mercury.postlight.com/">Mercury</a>。这是一个免费的非常强大的<code>API</code>，他提供在线的把文章转换为便于阅读的文章。官方给的解释是：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Make your content work anywhere. Free.
+</span><span class='line'>Mercury transforms web pages into clean text. 
+</span><span class='line'>Publishers and programmers use it to make the web make sense, 
+</span><span class='line'>and readers use it to read any web article comfortably.</span></code></pre></td></tr></table></div></figure>
 
 
+<p>我们只需要注册一个账号，然后使用它的<code>api-key</code>调用接口就可以了。下面是预览效果：</p>
 
-  
-  <h2>2017</h2>
+<p><img src="/images/posts/article-readable-preview.png" alt="article-readable-preview" /><br/>
+同时他提供了一个免费的Chrome 插件，如果想预先看看效果的话可以下载下来试用。<a href="https://chrome.google.com/webstore/detail/oknpjjbmpnndlpmnhmekjpocelpnlfdi">插件地址</a> <br/>
+当然免费的肯定也有免费的弊端，他对于网页制作比较规格的适配比较好，有一些网页并不是很好。</p>
 
-<article>
-  
-<h1><a href="/blog/github-and-godaddy/">Github Pages配置域名</a></h1>
-<time datetime="2017-04-03T00:32:47+08:00" pubdate><span class='month'>04</span>-<span class='day'>03</span> <span class='year'>2017</span></time>
+<h2>野路子</h2>
 
-<footer>
-  <span class="categories"><a class='category' href='/blog/categories/github/'>github</a></span>
-</footer>
+<p>我们大家都用过<code>pocket</code>吧，他就是通过离线阅读起家的，所以无论是他的效果，适配都是一流的，但是他官方的<code>API</code>只支持<code>CUD</code>不支持<code>R</code>。不过有说明，如果你真的需要的话可以找他们合作。我本着学习做了如下理论推测：首先通过调用其<code>API</code>存储网址，然后直接通过网页登录，然后就能看到<code>完美</code>的预览图了，拷贝下来不就行了嘛。当然程序如果想实现也是可以的，不过笔者就不提供代码了。但是如果你选择这个方案一定仔细阅读以下他的<code>Terms</code>。</p>
 
+<h2>总结</h2>
 
-</article>
+<p>笔者只是抛砖引玉，希望有更好实现的人可以赐教。</p>
 
+<h2>作者</h2>
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="">阅读模式是如何实现的?</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<h2></h2>
+<p>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 文章列表页自适应文字和展示广告 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9540087096615057"
+     data-ad-slot="2018352322"
+     data-ad-format="auto">
+</ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</p>
 </div>
 
-  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <!-- 博客列表页面尾部自适应广告 -->
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-9540087096615057"
-       data-ad-slot="3428022322"
-       data-ad-format="auto"></ins>
-  <script>
-  (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2017-07-04T21:09:10+08:00'><span class='date'>2017-07-04</span> <span class='time'>9:09 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/tech/'>tech</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/make-article-more-readable/" data-via="" data-counturl="http://www.majiang.life/blog/make-article-more-readable/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/octopress-tag-cloud/" title="Previous Post: Octopress 添加标签云">&laquo; Octopress 添加标签云</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
 
 </div>
 
@@ -251,7 +335,10 @@ enable_page_level_ads: true
       var disqus_shortname = 'codedrinker';
       
         
-        var disqus_script = 'count.js';
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.majiang.life/blog/make-article-more-readable/';
+        var disqus_url = 'http://www.majiang.life/blog/make-article-more-readable/';
+        var disqus_script = 'embed.js';
       
     (function () {
       var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;

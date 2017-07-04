@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话， &hellip;">
+  <meta name="description" content="前言 通过使用label标签，简单的自定义&lt;input type='file'&gt;的样式。 示例 在线示例 | 下载源码 调研 我尝试了许多通过修改&lt;input type='file'&gt;样式的方式解决这个问题，效果都不是很好，没有一个能像Readerrr( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +85,54 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/the-smart-way-of-styling-and-customizing-file-input/">如何优雅的自定义File Input样式</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-03-11T15:05:51+08:00'><span class='date'>2017-03-11</span> <span class='time'>3:05 pm</span></time>
+        
+           | <a href="/blog/the-smart-way-of-styling-and-customizing-file-input/#disqus_thread"
+             data-disqus-identifier="http://www.majiang.life/blog/the-smart-way-of-styling-and-customizing-file-input/">评论</a>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>通过使用<code>label</code>标签，简单的自定义<code>&lt;input type='file'&gt;</code>的样式。</p>
+
+<h2>示例</h2>
+
+<p><img src="/images/posts/CustomFileInputs1.jpg" alt="Demo" /><br/>
+<a href="http://tympanus.net/Tutorials/CustomFileInputs/">在线示例</a> | <a href="http://tympanus.net/Tutorials/CustomFileInputs/CustomFileInputs.zip">下载源码</a></p>
+
+<h2>调研</h2>
+
+<p>我尝试了许多通过修改<code>&lt;input type='file'&gt;</code>样式的方式解决这个问题，效果都不是很好，没有一个能像<a href="http://readerrr.com/">Readerrr</a>(通过上传文件导入Feed)那样漂亮。还有一种奇怪的实现，把<code>&lt;input type='file'&gt;</code>放到一个容器里面，把容器画成按钮的样子，当你点击容器的任何地方的时候，实际是点击的<code>&lt;input type='file'&gt;</code>。这种实现方案很有趣，同时也很奇怪。因为从可用性和点击体验来说确实不是很理想。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/the-smart-way-of-styling-and-customizing-file-input/">更多 &rarr;</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -252,11 +300,15 @@ enable_page_level_ads: true
 </section>
 <section>
   <h1>标签云</h1>
-    <span id="tag-cloud"><a href='/blog/categories/cache' style='font-size: 120.0%'>cache(1)</a> <a href='/blog/categories/github' style='font-size: 120.0%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 120.0%'>guava(1)</a> <a href='/blog/categories/java' style='font-size: 160.0%'>java(3)</a> <a href='/blog/categories/maven' style='font-size: 120.0%'>maven(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 120.0%'>spring-boot(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 120.0%'>threadlocal(1)</a> <a href='/blog/categories/vagrant' style='font-size: 120.0%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web(2)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/cache' style='font-size: 120.0%'>cache(1)</a> <a href='/blog/categories/github' style='font-size: 120.0%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 120.0%'>guava(1)</a> <a href='/blog/categories/java' style='font-size: 160.0%'>java(3)</a> <a href='/blog/categories/maven' style='font-size: 120.0%'>maven(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 120.0%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 120.0%'>tech(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 120.0%'>threadlocal(1)</a> <a href='/blog/categories/vagrant' style='font-size: 120.0%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web(2)</a> </span>
 </section>
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/make-article-more-readable/">阅读模式是如何实现的?</a>
+      </li>
     
       <li class="post">
         <a href="/blog/octopress-tag-cloud/">Octopress 添加标签云</a>
@@ -292,10 +344,6 @@ enable_page_level_ads: true
     
       <li class="post">
         <a href="/blog/optimize-octopress-blog-seo/">Octopress 博客搜索优化</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/the-smart-way-of-styling-and-customizing-file-input/">如何优雅的自定义File Input样式</a>
       </li>
     
   </ul>
