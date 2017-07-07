@@ -275,7 +275,8 @@ enable_page_level_ads: true
 
 <p>mermaid.json  里面具体内容如下:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>mermaid.json </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -292,23 +293,24 @@ enable_page_level_ads: true
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  "name": "mermaid",
-</span><span class='line'>  "description": "mermaid dev environment",
-</span><span class='line'>  "versions": [
-</span><span class='line'>    {
-</span><span class='line'>      "version": "0.1.0",
-</span><span class='line'>      "providers": [
-</span><span class='line'>        {
-</span><span class='line'>          "name": "virtualbox",
-</span><span class='line'>          "url": "http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box",
-</span><span class='line'>          "checksum_type": "sha1",
-</span><span class='line'>          "checksum": "3badb9acb07992938d6415e67a8291d60f3aafe9"
-</span><span class='line'>        }
-</span><span class='line'>      ]
-</span><span class='line'>    }
-</span><span class='line'>  ]
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid dev environment&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;versions&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.1.0&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;providers&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;virtualbox&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum_type&quot;</span><span class="o">:</span> <span class="s2">&quot;sha1&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum&quot;</span><span class="o">:</span> <span class="s2">&quot;3badb9acb07992938d6415e67a8291d60f3aafe9&quot;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>基本配置都比较容易理解，注意的是checksum，需要把box上传到服务器的时候，使用
@@ -413,7 +415,8 @@ enable_page_level_ads: true
 
 <p>修改mermaid.json文件，添加新的版本</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>mermaid.json </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -441,34 +444,35 @@ enable_page_level_ads: true
 <span class='line-number'>26</span>
 <span class='line-number'>27</span>
 <span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  "name": "mermaid",
-</span><span class='line'>  "description": "mermaid dev environment",
-</span><span class='line'>  "versions": [
-</span><span class='line'>    {
-</span><span class='line'>      "version": "0.1.0",
-</span><span class='line'>      "providers": [
-</span><span class='line'>        {
-</span><span class='line'>          "name": "virtualbox",
-</span><span class='line'>          "url": "http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box",
-</span><span class='line'>          "checksum_type": "sha1",
-</span><span class='line'>          "checksum": "3badb9acb07992938d6415e67a8291d60f3aafe9"
-</span><span class='line'>        }
-</span><span class='line'>      ]
-</span><span class='line'>    },
-</span><span class='line'>    {
-</span><span class='line'>      "version": "0.1.1",
-</span><span class='line'>      "providers": [
-</span><span class='line'>        {
-</span><span class='line'>          "name": "virtualbox",
-</span><span class='line'>          "url": "http://192.168.1.137/vagrant/boxes/mermaid.0.1.1.box",
-</span><span class='line'>          "checksum_type": "sha1",
-</span><span class='line'>          "checksum": "99e6d7fc44cccabdfc6ed9ce178ca65fd9dcbac8"
-</span><span class='line'>        }
-</span><span class='line'>      ]
-</span><span class='line'>    }
-</span><span class='line'>  ]
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid dev environment&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;versions&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.1.0&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;providers&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;virtualbox&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum_type&quot;</span><span class="o">:</span> <span class="s2">&quot;sha1&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum&quot;</span><span class="o">:</span> <span class="s2">&quot;3badb9acb07992938d6415e67a8291d60f3aafe9&quot;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.1.1&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;providers&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;virtualbox&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.1.box&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum_type&quot;</span><span class="o">:</span> <span class="s2">&quot;sha1&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum&quot;</span><span class="o">:</span> <span class="s2">&quot;99e6d7fc44cccabdfc6ed9ce178ca65fd9dcbac8&quot;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>配置完成。</p>

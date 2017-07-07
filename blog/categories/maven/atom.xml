@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Maven | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/maven/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-07-07T21:13:21+08:00</updated>
+  <updated>2017-07-07T21:59:20+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -40,7 +40,7 @@
 <h2>配置<code>Amazon S3</code>秘钥</h2>
 
 <p>正常访问<code>S3</code>我们都需要使用<code>S3</code>的<code>Access key ID</code>和<code>Secret access key</code>，无论是通过<code>CLI</code>还是<code>JAVA</code>。使用<code>Maven</code>也一样，我们需要配置<code>S3</code>的秘钥到<code>Maven</code>的配置文件里面<code>~/.m2/settings.xml</code>，如果还没有创建这个文件，使用系统级别的配置文件<code>$MAVEN_HOME/conf/settings.xml</code>也可以。具体配置如下：
-<code>xml
+<code>xml $MAVEN_HOME/conf/settings.xml
  &lt;servers&gt;
         &lt;server&gt;
             &lt;id&gt;aws-release&lt;/id&gt;
@@ -58,7 +58,7 @@
 <h2>配置要发布到<code>Maven</code>仓库的项目</h2>
 
 <p>配置要发布到<code>Maven</code>仓库的项目，一般直接在<code>POM.xml</code>里面配置到发布的地址就可以了，但是本身<code>Maven</code>是不支持<code>S3</code>，所以这里引入了一个第三方的工具，用来发布<code>jar</code>到<code>S3</code>仓库的。<a href="https://github.com/spring-projects/aws-maven">Spring-Aws-Maven</a>，具体的配置如下：
-&#8220;`xml
+&#8220;`xml pom.xml
 &lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;UTF-8&rdquo;?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -130,7 +130,7 @@
 <p></project>
 <code>
 下面我们逐行进行解释
-</code>xml
+</code>xml pom.xml
 <distributionManagement>
     <repository>
         <id>aws-release</id>
@@ -145,7 +145,7 @@
 </distributionManagement>
 <code>
 是为了指定发布地址，这里我们指定的是`S3`的`bucket`地址`nexus-repository`，当然我们需要区分`release`和`snapshot`的位置。需要注意的是这里的`id`需要和`server`里面的`id`相对应。
-</code>xml
+</code>xml pom.xml
 <extensions>
     <extension>
         <groupId>org.springframework.build</groupId>
@@ -156,7 +156,7 @@
 <code>``
 这句话是关键，它就是当我们运行</code>mvn deploy<code>的时候，</code>extension<code>会通过调用</code>Amazon S3<code>的</code>SDK<code>把我们的内容自动</code>Build<code>成</code>Maven<code>的格式上传到</code>S3`。</p>
 
-<pre><code class="xml">&lt;plugin&gt;
+<pre><code class="xml pom.xml">&lt;plugin&gt;
     &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
     &lt;artifactId&gt;maven-source-plugin&lt;/artifactId&gt;
     &lt;version&gt;2.2.1&lt;/version&gt;
@@ -192,7 +192,7 @@
 <h2>配置需要依赖<code>jar</code>的项目</h2>
 
 <p>项目已经发布成功，我们这个时候就配置依赖它的项目。使用的时候相对配置就简单多了，具体配置如下：
-<code>xml
+<code>xml pom.xml
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -232,7 +232,7 @@
 &lt;/project&gt;
 </code>
 下面我们逐行进行解释：
-<code>xml
+<code>xml pom.xml
 &lt;repositories&gt;
         &lt;repository&gt;
             &lt;id&gt;aws-release&lt;/id&gt;
@@ -247,7 +247,7 @@
 &lt;/repositories&gt;
 </code>
 如上是在指定仓库，当然路径也应该是<code>S3</code>的地址，这个时候我们也是需要使用<code>settings.xml</code>里面配置的秘钥的，如果你担心没有秘钥也能下载，可以尝试删除秘钥和存在秘钥两种情况下下载依赖。
-<code>xml
+<code>xml pom.xml
 &lt;extensions&gt;
             &lt;extension&gt;
                 &lt;groupId&gt;org.springframework.build&lt;/groupId&gt;
@@ -267,7 +267,7 @@
 <p><code>AWS</code>有一个叫做<code>IAM</code>的东西，他是专门用来控制权限的服务，很强大。我们可以直接在<code>IAM</code>里面创建两个<code>Policy</code>，<a href="http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/access_policies.html">文档地址</a>，一个用来写，一个只能读，他可以强大到指定到<code>bucket</code>，这样大大的提高了安全性。下面是具体的配置，如果有不明的的可以参照官方文档，很详细。</p>
 
 <p>读写，关键在于<code>s3:Put*</code>可以做任何更新操作：
-<code>json
+<code>json "IAM PUT 配置"
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -299,7 +299,7 @@
 }
 </code>
 只读，只有<code>Get</code>和<code>List</code>操作：
-<code>json
+<code>json "IAM GET 配置"
 {
     "Version": "2012-10-17",
     "Statement": [

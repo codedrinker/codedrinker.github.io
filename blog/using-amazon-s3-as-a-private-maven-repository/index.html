@@ -142,7 +142,7 @@ enable_page_level_ads: true
 
 <p>正常访问<code>S3</code>我们都需要使用<code>S3</code>的<code>Access key ID</code>和<code>Secret access key</code>，无论是通过<code>CLI</code>还是<code>JAVA</code>。使用<code>Maven</code>也一样，我们需要配置<code>S3</code>的秘钥到<code>Maven</code>的配置文件里面<code>~/.m2/settings.xml</code>，如果还没有创建这个文件，使用系统级别的配置文件<code>$MAVEN_HOME/conf/settings.xml</code>也可以。具体配置如下：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>$MAVEN_HOME/conf/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -173,7 +173,7 @@ enable_page_level_ads: true
 
 <p>配置要发布到<code>Maven</code>仓库的项目，一般直接在<code>POM.xml</code>里面配置到发布的地址就可以了，但是本身<code>Maven</code>是不支持<code>S3</code>，所以这里引入了一个第三方的工具，用来发布<code>jar</code>到<code>S3</code>仓库的。<a href="https://github.com/spring-projects/aws-maven">Spring-Aws-Maven</a>，具体的配置如下：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -312,7 +312,7 @@ enable_page_level_ads: true
 
 <p>下面我们逐行进行解释</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -341,7 +341,7 @@ enable_page_level_ads: true
 
 <p>是为了指定发布地址，这里我们指定的是<code>S3</code>的<code>bucket</code>地址<code>nexus-repository</code>，当然我们需要区分<code>release</code>和<code>snapshot</code>的位置。需要注意的是这里的<code>id</code>需要和<code>server</code>里面的<code>id</code>相对应。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -360,7 +360,7 @@ enable_page_level_ads: true
 
 <p>这句话是关键，它就是当我们运行<code>mvn deploy</code>的时候，<code>extension</code>会通过调用<code>Amazon S3</code>的<code>SDK</code>把我们的内容自动<code>Build</code>成<code>Maven</code>的格式上传到<code>S3</code>。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -424,7 +424,7 @@ enable_page_level_ads: true
 
 <p>项目已经发布成功，我们这个时候就配置依赖它的项目。使用的时候相对配置就简单多了，具体配置如下：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -503,7 +503,7 @@ enable_page_level_ads: true
 
 <p>下面我们逐行进行解释：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -532,7 +532,7 @@ enable_page_level_ads: true
 
 <p>如上是在指定仓库，当然路径也应该是<code>S3</code>的地址，这个时候我们也是需要使用<code>settings.xml</code>里面配置的秘钥的，如果你担心没有秘钥也能下载，可以尝试删除秘钥和存在秘钥两种情况下下载依赖。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -561,7 +561,7 @@ enable_page_level_ads: true
 
 <p>读写，关键在于<code>s3:Put*</code>可以做任何更新操作：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>&#8220;IAM PUT 配置&#8221;</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -624,7 +624,7 @@ enable_page_level_ads: true
 
 <p>只读，只有<code>Get</code>和<code>List</code>操作：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>&#8220;IAM GET 配置&#8221;</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>

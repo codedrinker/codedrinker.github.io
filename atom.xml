@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-07-07T21:13:21+08:00</updated>
+  <updated>2017-07-07T21:59:20+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -957,7 +957,7 @@
 
 <p>正常访问<code>S3</code>我们都需要使用<code>S3</code>的<code>Access key ID</code>和<code>Secret access key</code>，无论是通过<code>CLI</code>还是<code>JAVA</code>。使用<code>Maven</code>也一样，我们需要配置<code>S3</code>的秘钥到<code>Maven</code>的配置文件里面<code>~/.m2/settings.xml</code>，如果还没有创建这个文件，使用系统级别的配置文件<code>$MAVEN_HOME/conf/settings.xml</code>也可以。具体配置如下：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>$MAVEN_HOME/conf/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -988,7 +988,7 @@
 
 <p>配置要发布到<code>Maven</code>仓库的项目，一般直接在<code>POM.xml</code>里面配置到发布的地址就可以了，但是本身<code>Maven</code>是不支持<code>S3</code>，所以这里引入了一个第三方的工具，用来发布<code>jar</code>到<code>S3</code>仓库的。<a href="https://github.com/spring-projects/aws-maven">Spring-Aws-Maven</a>，具体的配置如下：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1127,7 +1127,7 @@
 
 <p>下面我们逐行进行解释</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1156,7 +1156,7 @@
 
 <p>是为了指定发布地址，这里我们指定的是<code>S3</code>的<code>bucket</code>地址<code>nexus-repository</code>，当然我们需要区分<code>release</code>和<code>snapshot</code>的位置。需要注意的是这里的<code>id</code>需要和<code>server</code>里面的<code>id</code>相对应。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1175,7 +1175,7 @@
 
 <p>这句话是关键，它就是当我们运行<code>mvn deploy</code>的时候，<code>extension</code>会通过调用<code>Amazon S3</code>的<code>SDK</code>把我们的内容自动<code>Build</code>成<code>Maven</code>的格式上传到<code>S3</code>。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1239,7 +1239,7 @@
 
 <p>项目已经发布成功，我们这个时候就配置依赖它的项目。使用的时候相对配置就简单多了，具体配置如下：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1318,7 +1318,7 @@
 
 <p>下面我们逐行进行解释：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1347,7 +1347,7 @@
 
 <p>如上是在指定仓库，当然路径也应该是<code>S3</code>的地址，这个时候我们也是需要使用<code>settings.xml</code>里面配置的秘钥的，如果你担心没有秘钥也能下载，可以尝试删除秘钥和存在秘钥两种情况下下载依赖。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1376,7 +1376,7 @@
 
 <p>读写，关键在于<code>s3:Put*</code>可以做任何更新操作：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>&#8220;IAM PUT 配置&#8221;</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1439,7 +1439,7 @@
 
 <p>只读，只有<code>Get</code>和<code>List</code>操作：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>&#8220;IAM GET 配置&#8221;</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1534,7 +1534,7 @@
 
 <p>POM文件如下，用来指定资源的存放路径和是否使用<code>filter</code>：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1605,7 +1605,7 @@
 
 <p><code>Profile</code> 可以让我们根据不同的环境，定义不同的 <code>properties</code>。配置如下：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1720,7 +1720,7 @@
 
 <p>系统配置</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${maven.home}/conf/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1729,21 +1729,21 @@
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>&lt;!-- 系统配置 --&gt;
-</span><span class='line'>&lt;profile&gt;
-</span><span class='line'>    &lt;id&gt;sandbox&lt;/id&gt;
-</span><span class='line'>    &lt;properties&gt;
-</span><span class='line'>        &lt;username&gt;majiang&lt;/username&gt;
-</span><span class='line'>        &lt;password&gt;majiang&lt;/password&gt;
-</span><span class='line'>        &lt;website&gt;http://www.majiang.life&lt;/website&gt;
-</span><span class='line'>    &lt;/properties&gt;
-</span><span class='line'>&lt;/profile&gt;
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- 系统配置 --&gt;</span>
+</span><span class='line'><span class="nt">&lt;profile&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;id&gt;</span>sandbox<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;properties&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;username&gt;</span>majiang<span class="nt">&lt;/username&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;password&gt;</span>majiang<span class="nt">&lt;/password&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;website&gt;</span>http://www.majiang.life<span class="nt">&lt;/website&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/properties&gt;</span>
+</span><span class='line'><span class="nt">&lt;/profile&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>用户配置</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${user.home}/.m2/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1751,36 +1751,36 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>&lt;!-- 用户配置 --&gt;
-</span><span class='line'>&lt;profile&gt;
-</span><span class='line'>        &lt;id&gt;sandbox&lt;/id&gt;
-</span><span class='line'>        &lt;properties&gt;
-</span><span class='line'>            &lt;username&gt;codedrinker&lt;/username&gt;
-</span><span class='line'>            &lt;password&gt;codedrinker&lt;/password&gt;
-</span><span class='line'>        &lt;/properties&gt;
-</span><span class='line'>&lt;/profile&gt;
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- 用户配置 --&gt;</span>
+</span><span class='line'><span class="nt">&lt;profile&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;id&gt;</span>sandbox<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;properties&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;username&gt;</span>codedrinker<span class="nt">&lt;/username&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;password&gt;</span>codedrinker<span class="nt">&lt;/password&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/properties&gt;</span>
+</span><span class='line'><span class="nt">&lt;/profile&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>config.properties</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${user.home}/.m2/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>username : <span class="k">${</span><span class="nv">username</span><span class="k">}</span>
-</span><span class='line'>password : <span class="k">${</span><span class="nv">password</span><span class="k">}</span>
-</span><span class='line'>website : <span class="k">${</span><span class="nv">website</span><span class="k">}</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>username : ${username}
+</span><span class='line'>password : ${password}
+</span><span class='line'>website : ${website}
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>再次运行命令以后的结果</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${user.home}/.m2/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>username : codedrinker
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>username : codedrinker
 </span><span class='line'>password : password
-</span><span class='line'>website : <span class="k">${</span><span class="nv">website</span><span class="k">}</span>
+</span><span class='line'>website : ${website}
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -2135,7 +2135,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>我尝试使用Google搜索答案可是没有什么结果，但是StackOverflow上面的内容让我茅塞顿开。它只有几个投票，并且在页面的中间位置，但是最重要的是他的内容里面包含了一个神奇的关键字<code>&lt;label&gt;</code>。就我们所知，点击<code>&lt;label&gt;</code>标签的时候，可以触发它所绑定<code>&lt;input&gt;</code>的焦点。那么我们尝试通过点击<code>&lt;label&gt;</code>标签，触发打开文件选择的窗口，这样从逻辑上来讲也是非常合理的。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;file&quot;</span> <span class="na">name=</span><span class="s">&quot;file&quot;</span> <span class="na">id=</span><span class="s">&quot;file&quot;</span> <span class="na">class=</span><span class="s">&quot;inputfile&quot;</span> <span class="nt">/&gt;</span>
 </span><span class='line'><span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;file&quot;</span><span class="nt">&gt;</span>Choose a file<span class="nt">&lt;/label&gt;</span>
@@ -2152,7 +2152,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>首先，我们需要隐藏‘丑小鸭’，可以使用CSS属性<code>display:none</code>或<code>visibility:hidden</code>，但是这里不能使用<code>visibility:hidden</code>，因为提交<code>form</code>表单的时候不会传递参数到服务器端了。所以我们需要设置这个标签用户不可见，但是浏览器可见。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>component.css</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2177,7 +2177,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>我们现在需要把<code>&lt;label&gt;</code>打造成一个按钮，所以你可以发挥你的想象绘制它，我现在先简单把它实现：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>component.css</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2208,7 +2208,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>你是怎么知道网站上面的元素可以点击的呢？首先，元素应该传递一种你可以点击它的感觉；其次，当光标悬浮在元素上面应该有适当的变化。下面我们就实现<code>&lt;label&gt;</code>的<code>可点击效果</code>：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>component.css</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.inputfile</span> <span class="o">+</span> <span class="nt">label</span> <span class="p">{</span>
@@ -2237,7 +2237,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>如果用户不能通过键盘在你的网站上面导航，那么就说明这设计是有问题的。我们隐藏了<code>input</code>，同时也隐藏了<code>input</code>的焦点。所以我们要把原本在<code>input</code>标签上面能体现的焦点同样实现在<code>label</code>上面。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>component.css</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2256,12 +2256,12 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>如果使用<a href="https://github.com/ftlabs/fastclick">FastClick</a>(一个简单易用的库，用于消除物理点击和移动浏览器上的点击事件触发之间的300毫秒延迟)或者是在标签内添加一些额外的标记，这样会让’按钮‘无法工作，所以我们需要使用<code>pointer-events:none</code>来解决这个问题：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;label</span> <span class="na">for=</span><span class="s">&quot;file&quot;</span><span class="nt">&gt;&lt;strong&gt;</span>Choose a file<span class="nt">&lt;/strong&gt;&lt;/label&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>component.css</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.inputfile</span> <span class="o">+</span> <span class="nt">label</span> <span class="o">*</span> <span class="p">{</span>
@@ -2274,14 +2274,14 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>我们已经完成了大部分，但是还有一个小瑕疵。当我们使用<code>input</code>选择文件的时候会显示我们所选择的文件，然而我们这种实现方案隐藏了<code>input</code>所以不能显示文件了。不过没有关系，我们可以用一小段JavaScript解决这个问题，把选择的文件名字显示到<code>label</code>上面，如果是多个，就说显示了多个文件，这样就解决了这个问题：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;file&quot;</span> <span class="na">name=</span><span class="s">&quot;file&quot;</span> <span class="na">id=</span><span class="s">&quot;file&quot;</span> <span class="na">class=</span><span class="s">&quot;inputfile&quot;</span>
 </span><span class='line'>     <span class="na">data-multiple-caption=</span><span class="s">&quot;{count} files selected&quot;</span> <span class="na">multiple</span> <span class="nt">/&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>custom-file-input.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2344,7 +2344,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>如果不使用JavaScript的话没有办法显示所选择的文件，为了可用性，如果不支持JavaScript我们把它变回原来的外观。因此我们在<code>&lt;html&gt;</code>元素添加一个<code>.no-js</code>的<code>class</code>，并且编写一个js脚本，如果js可用我们再将其替换成<code>.js</code>：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2359,7 +2359,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>component.css</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2392,7 +2392,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>这里有一个非常奇怪的事情，<code>input[type="file"]:focus</code>这个属性在Firefox根本不起作用，但是<code>:hover</code>和<code>:active</code>却能很好地支持。更奇怪的事情，Firefox却允许使用<code>JavaScript</code>获取<code>focus</code>的事件，所以我们在<code>input</code>上面监听了事件，当触发<code>focus</code>的时候改变样式来实现我们之前的效果：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>custom-file-input.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2407,7 +2407,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </span></code></pre></td></tr></table></div></figure>
 
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>component.css</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2728,7 +2728,8 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>mermaid.json  里面具体内容如下:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>mermaid.json </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2745,23 +2746,24 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  "name": "mermaid",
-</span><span class='line'>  "description": "mermaid dev environment",
-</span><span class='line'>  "versions": [
-</span><span class='line'>    {
-</span><span class='line'>      "version": "0.1.0",
-</span><span class='line'>      "providers": [
-</span><span class='line'>        {
-</span><span class='line'>          "name": "virtualbox",
-</span><span class='line'>          "url": "http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box",
-</span><span class='line'>          "checksum_type": "sha1",
-</span><span class='line'>          "checksum": "3badb9acb07992938d6415e67a8291d60f3aafe9"
-</span><span class='line'>        }
-</span><span class='line'>      ]
-</span><span class='line'>    }
-</span><span class='line'>  ]
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid dev environment&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;versions&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.1.0&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;providers&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;virtualbox&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum_type&quot;</span><span class="o">:</span> <span class="s2">&quot;sha1&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum&quot;</span><span class="o">:</span> <span class="s2">&quot;3badb9acb07992938d6415e67a8291d60f3aafe9&quot;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>基本配置都比较容易理解，注意的是checksum，需要把box上传到服务器的时候，使用
@@ -2866,7 +2868,8 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>修改mermaid.json文件，添加新的版本</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>mermaid.json </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2894,34 +2897,35 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <span class='line-number'>26</span>
 <span class='line-number'>27</span>
 <span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>{
-</span><span class='line'>  "name": "mermaid",
-</span><span class='line'>  "description": "mermaid dev environment",
-</span><span class='line'>  "versions": [
-</span><span class='line'>    {
-</span><span class='line'>      "version": "0.1.0",
-</span><span class='line'>      "providers": [
-</span><span class='line'>        {
-</span><span class='line'>          "name": "virtualbox",
-</span><span class='line'>          "url": "http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box",
-</span><span class='line'>          "checksum_type": "sha1",
-</span><span class='line'>          "checksum": "3badb9acb07992938d6415e67a8291d60f3aafe9"
-</span><span class='line'>        }
-</span><span class='line'>      ]
-</span><span class='line'>    },
-</span><span class='line'>    {
-</span><span class='line'>      "version": "0.1.1",
-</span><span class='line'>      "providers": [
-</span><span class='line'>        {
-</span><span class='line'>          "name": "virtualbox",
-</span><span class='line'>          "url": "http://192.168.1.137/vagrant/boxes/mermaid.0.1.1.box",
-</span><span class='line'>          "checksum_type": "sha1",
-</span><span class='line'>          "checksum": "99e6d7fc44cccabdfc6ed9ce178ca65fd9dcbac8"
-</span><span class='line'>        }
-</span><span class='line'>      ]
-</span><span class='line'>    }
-</span><span class='line'>  ]
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid dev environment&quot;</span><span class="p">,</span>
+</span><span class='line'>  <span class="s2">&quot;versions&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.1.0&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;providers&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;virtualbox&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum_type&quot;</span><span class="o">:</span> <span class="s2">&quot;sha1&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum&quot;</span><span class="o">:</span> <span class="s2">&quot;3badb9acb07992938d6415e67a8291d60f3aafe9&quot;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.1.1&quot;</span><span class="p">,</span>
+</span><span class='line'>      <span class="s2">&quot;providers&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;virtualbox&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.1.box&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum_type&quot;</span><span class="o">:</span> <span class="s2">&quot;sha1&quot;</span><span class="p">,</span>
+</span><span class='line'>          <span class="s2">&quot;checksum&quot;</span><span class="o">:</span> <span class="s2">&quot;99e6d7fc44cccabdfc6ed9ce178ca65fd9dcbac8&quot;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>配置完成。</p>

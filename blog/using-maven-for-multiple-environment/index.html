@@ -137,7 +137,7 @@ enable_page_level_ads: true
 
 <p>POM文件如下，用来指定资源的存放路径和是否使用<code>filter</code>：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -208,7 +208,7 @@ enable_page_level_ads: true
 
 <p><code>Profile</code> 可以让我们根据不同的环境，定义不同的 <code>properties</code>。配置如下：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -323,7 +323,7 @@ enable_page_level_ads: true
 
 <p>系统配置</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${maven.home}/conf/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -332,21 +332,21 @@ enable_page_level_ads: true
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>&lt;!-- 系统配置 --&gt;
-</span><span class='line'>&lt;profile&gt;
-</span><span class='line'>    &lt;id&gt;sandbox&lt;/id&gt;
-</span><span class='line'>    &lt;properties&gt;
-</span><span class='line'>        &lt;username&gt;majiang&lt;/username&gt;
-</span><span class='line'>        &lt;password&gt;majiang&lt;/password&gt;
-</span><span class='line'>        &lt;website&gt;http://www.majiang.life&lt;/website&gt;
-</span><span class='line'>    &lt;/properties&gt;
-</span><span class='line'>&lt;/profile&gt;
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- 系统配置 --&gt;</span>
+</span><span class='line'><span class="nt">&lt;profile&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;id&gt;</span>sandbox<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;properties&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;username&gt;</span>majiang<span class="nt">&lt;/username&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;password&gt;</span>majiang<span class="nt">&lt;/password&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;website&gt;</span>http://www.majiang.life<span class="nt">&lt;/website&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/properties&gt;</span>
+</span><span class='line'><span class="nt">&lt;/profile&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>用户配置</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${user.home}/.m2/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -354,36 +354,36 @@ enable_page_level_ads: true
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>&lt;!-- 用户配置 --&gt;
-</span><span class='line'>&lt;profile&gt;
-</span><span class='line'>        &lt;id&gt;sandbox&lt;/id&gt;
-</span><span class='line'>        &lt;properties&gt;
-</span><span class='line'>            &lt;username&gt;codedrinker&lt;/username&gt;
-</span><span class='line'>            &lt;password&gt;codedrinker&lt;/password&gt;
-</span><span class='line'>        &lt;/properties&gt;
-</span><span class='line'>&lt;/profile&gt;
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- 用户配置 --&gt;</span>
+</span><span class='line'><span class="nt">&lt;profile&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;id&gt;</span>sandbox<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;properties&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;username&gt;</span>codedrinker<span class="nt">&lt;/username&gt;</span>
+</span><span class='line'>            <span class="nt">&lt;password&gt;</span>codedrinker<span class="nt">&lt;/password&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/properties&gt;</span>
+</span><span class='line'><span class="nt">&lt;/profile&gt;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>config.properties</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${user.home}/.m2/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>username : <span class="k">${</span><span class="nv">username</span><span class="k">}</span>
-</span><span class='line'>password : <span class="k">${</span><span class="nv">password</span><span class="k">}</span>
-</span><span class='line'>website : <span class="k">${</span><span class="nv">website</span><span class="k">}</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>username : ${username}
+</span><span class='line'>password : ${password}
+</span><span class='line'>website : ${website}
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>再次运行命令以后的结果</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${user.home}/.m2/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>username : codedrinker
+</pre></td><td class='code'><pre><code class='xml'><span class='line'>username : codedrinker
 </span><span class='line'>password : password
-</span><span class='line'>website : <span class="k">${</span><span class="nv">website</span><span class="k">}</span>
+</span><span class='line'>website : ${website}
 </span></code></pre></td></tr></table></div></figure>
 
 
