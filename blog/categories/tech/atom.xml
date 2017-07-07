@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tech | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/tech/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-07-04T21:52:56+08:00</updated>
+  <updated>2017-07-07T21:13:21+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -22,6 +22,9 @@
 
 <p>最近使用读读日报发现其阅读模式很是方便，除了字体和布局舒服了，最重要的是去掉了干扰阅读的所有因素，包括广告，相关文章，栏目等等。于是就查找了一下有没有类似的实现方案。最后找了一些方案，不过并不知道正解，只是抛砖引玉罢了。(PS:感觉更深层次的处理应该是机器学习吧)</p>
 
+<!-- more -->
+
+
 <h2>霸王硬上弓</h2>
 
 <p>这种方式就非常简单了，如题，直接对于每一个网站做适配，就是麻烦一些。直接通过编程语言解析页面的元素，然后找出对应的文章正文的位置，然后重新绘制样式，最后输出就搞定了。这样做麻烦一些，每一个网页都要做适配，不过可控的是对每一个元素的样式都可以把握。</p>
@@ -29,13 +32,21 @@
 <h2>使用轮子</h2>
 
 <p>使用第三方<code>API</code>，<a href="https://mercury.postlight.com/">Mercury</a>。这是一个免费的非常强大的<code>API</code>，他提供在线的把文章转换为便于阅读的文章。官方给的解释是：
-<code>
-Make your content work anywhere. Free.
-Mercury transforms web pages into clean text.
-Publishers and programmers use it to make the web make sense,
-and readers use it to read any web article comfortably.
-</code>
-我们只需要注册一个账号，然后使用它的<code>api-key</code>调用接口就可以了。下面是预览效果：</p>
+<figure class='code'><figcaption><span>官方文档 </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&lt;/p>
+</span><span class='line'>
+</span><span class='line'>&lt;p>Make your content work anywhere. Free.
+</span><span class='line'>Mercury transforms web pages into clean text.
+</span><span class='line'>Publishers and programmers use it to make the web make sense,
+</span><span class='line'>and readers use it to read any web article comfortably.</span></code></pre></td></tr></table></div></figure></p>
+
+<p>我们只需要注册一个账号，然后使用它的<code>api-key</code>调用接口就可以了。下面是预览效果：</p>
 
 <p><img src="/images/posts/article-readable-preview.png" alt="article-readable-preview" /><br/>
 同时他提供了一个免费的Chrome 插件，如果想预先看看效果的话可以下载下来试用。<a href="https://chrome.google.com/webstore/detail/oknpjjbmpnndlpmnhmekjpocelpnlfdi">插件地址</a> <br/>
