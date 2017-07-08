@@ -23,7 +23,7 @@ description: Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭�
 
 ##配置`Amazon S3`秘钥
 正常访问`S3`我们都需要使用`S3`的`Access key ID`和`Secret access key`，无论是通过`CLI`还是`JAVA`。使用`Maven`也一样，我们需要配置`S3`的秘钥到`Maven`的配置文件里面`~/.m2/settings.xml`，如果还没有创建这个文件，使用系统级别的配置文件`$MAVEN_HOME/conf/settings.xml`也可以。具体配置如下：
-```xml
+```xml $MAVEN_HOME/conf/settings.xml
  <servers>
         <server>
             <id>aws-release</id>
@@ -40,7 +40,7 @@ description: Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭�
 
 ##配置要发布到`Maven`仓库的项目
 配置要发布到`Maven`仓库的项目，一般直接在`POM.xml`里面配置到发布的地址就可以了，但是本身`Maven`是不支持`S3`，所以这里引入了一个第三方的工具，用来发布`jar`到`S3`仓库的。[Spring-Aws-Maven](https://github.com/spring-projects/aws-maven)，具体的配置如下：
-```xml
+```xml pom.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -110,7 +110,7 @@ description: Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭�
 </project>
 ```
 下面我们逐行进行解释
-```xml
+```xml pom.xml
 <distributionManagement>
     <repository>
         <id>aws-release</id>
@@ -125,7 +125,7 @@ description: Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭�
 </distributionManagement>
 ```
 是为了指定发布地址，这里我们指定的是`S3`的`bucket`地址`nexus-repository`，当然我们需要区分`release`和`snapshot`的位置。需要注意的是这里的`id`需要和`server`里面的`id`相对应。
-```xml
+```xml pom.xml
 <extensions>
     <extension>
         <groupId>org.springframework.build</groupId>
@@ -136,7 +136,7 @@ description: Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭�
 ```
 这句话是关键，它就是当我们运行`mvn deploy`的时候，`extension`会通过调用`Amazon S3`的`SDK`把我们的内容自动`Build`成`Maven`的格式上传到`S3`。
 
-```xml
+```xml pom.xml
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     <artifactId>maven-source-plugin</artifactId>
@@ -171,7 +171,7 @@ description: Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭�
 
 ##配置需要依赖`jar`的项目
 项目已经发布成功，我们这个时候就配置依赖它的项目。使用的时候相对配置就简单多了，具体配置如下：
-```xml
+```xml pom.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -211,7 +211,7 @@ description: Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭�
 </project>
 ```
 下面我们逐行进行解释：
-```xml
+```xml pom.xml
 <repositories>
         <repository>
             <id>aws-release</id>
@@ -226,7 +226,7 @@ description: Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭�
 </repositories>
 ```
 如上是在指定仓库，当然路径也应该是`S3`的地址，这个时候我们也是需要使用`settings.xml`里面配置的秘钥的，如果你担心没有秘钥也能下载，可以尝试删除秘钥和存在秘钥两种情况下下载依赖。
-```xml
+```xml pom.xml
 <extensions>
             <extension>
                 <groupId>org.springframework.build</groupId>
@@ -244,7 +244,7 @@ description: Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭�
 `AWS`有一个叫做`IAM`的东西，他是专门用来控制权限的服务，很强大。我们可以直接在`IAM`里面创建两个`Policy`，[文档地址](http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/access_policies.html)，一个用来写，一个只能读，他可以强大到指定到`bucket`，这样大大的提高了安全性。下面是具体的配置，如果有不明的的可以参照官方文档，很详细。  
 
 读写，关键在于`s3:Put*`可以做任何更新操作：
-```json
+```json IAM PUT 配置
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -276,7 +276,7 @@ description: Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭�
 }
 ```
 只读，只有`Get`和`List`操作：
-```json
+```json IAM GET 配置
 {
     "Version": "2012-10-17",
     "Statement": [

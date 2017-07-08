@@ -19,7 +19,7 @@ categories: Web
 <!-- more -->
 我尝试使用Google搜索答案可是没有什么结果，但是StackOverflow上面的内容让我茅塞顿开。它只有几个投票，并且在页面的中间位置，但是最重要的是他的内容里面包含了一个神奇的关键字`<label>`。就我们所知，点击`<label>`标签的时候，可以触发它所绑定`<input>`的焦点。那么我们尝试通过点击`<label>`标签，触发打开文件选择的窗口，这样从逻辑上来讲也是非常合理的。
 
-```html
+```html index.html
 <input type="file" name="file" id="file" class="inputfile" />
 <label for="file">Choose a file</label>
 ```
@@ -31,7 +31,7 @@ categories: Web
 
 ##隐藏`<input>`
 首先，我们需要隐藏‘丑小鸭’，可以使用CSS属性`display:none`或`visibility:hidden`，但是这里不能使用`visibility:hidden`，因为提交`form`表单的时候不会传递参数到服务器端了。所以我们需要设置这个标签用户不可见，但是浏览器可见。
-```css
+```css component.css
 .inputfile {
 	width: 0.1px;
 	height: 0.1px;
@@ -45,7 +45,7 @@ categories: Web
 
 ##修饰`<label>`
 我们现在需要把`<label>`打造成一个按钮，所以你可以发挥你的想象绘制它，我现在先简单把它实现：
-```css
+```css component.css
 .inputfile + label {
     font-size: 1.25em;
     font-weight: 700;
@@ -61,7 +61,7 @@ categories: Web
 ```
 ##鼠标效果
 你是怎么知道网站上面的元素可以点击的呢？首先，元素应该传递一种你可以点击它的感觉；其次，当光标悬浮在元素上面应该有适当的变化。下面我们就实现`<label>`的`可点击效果`：
-```css
+```css component.css
 .inputfile + label {
 	cursor: pointer; /* 小手光标*/
 }
@@ -74,7 +74,7 @@ categories: Web
 
 ##键盘导航
 如果用户不能通过键盘在你的网站上面导航，那么就说明这设计是有问题的。我们隐藏了`input`，同时也隐藏了`input`的焦点。所以我们要把原本在`input`标签上面能体现的焦点同样实现在`label`上面。
-```css
+```css component.css
 .inputfile:focus + label {
 	outline: 1px dotted #000;
 	outline: -webkit-focus-ring-color auto 5px;
@@ -86,10 +86,10 @@ categories: Web
 
 ##触摸设备兼容
 如果使用[FastClick](https://github.com/ftlabs/fastclick)(一个简单易用的库，用于消除物理点击和移动浏览器上的点击事件触发之间的300毫秒延迟)或者是在标签内添加一些额外的标记，这样会让’按钮‘无法工作，所以我们需要使用`pointer-events:none`来解决这个问题：
-```html
+```html index.html
 <label for="file"><strong>Choose a file</strong></label>
 ```
-```css
+```css component.css
 .inputfile + label * {
 	pointer-events: none;
 }
@@ -97,11 +97,11 @@ categories: Web
 ##显示所选择文件
 我们已经完成了大部分，但是还有一个小瑕疵。当我们使用`input`选择文件的时候会显示我们所选择的文件，然而我们这种实现方案隐藏了`input`所以不能显示文件了。不过没有关系，我们可以用一小段JavaScript解决这个问题，把选择的文件名字显示到`label`上面，如果是多个，就说显示了多个文件，这样就解决了这个问题：
 
-```html
+```html index.html
 <input type="file" name="file" id="file" class="inputfile" 
 	   data-multiple-caption="{count} files selected" multiple />
 ```
-```javascript
+```javascript custom-file-input.js
 var inputs = document.querySelectorAll( '.inputfile' );
 Array.prototype.forEach.call( inputs, function( input )
 {
@@ -139,7 +139,7 @@ Array.prototype.forEach.call( inputs, function( input )
 
 ##如果JavaScript不可用怎么办？
 如果不使用JavaScript的话没有办法显示所选择的文件，为了可用性，如果不支持JavaScript我们把它变回原来的外观。因此我们在`<html>`元素添加一个`.no-js`的`class`，并且编写一个js脚本，如果js可用我们再将其替换成`.js`：
-```html
+```html index.html
 <html class="no-js">
     <head>
         <!-- remove this if you use Modernizr -->
@@ -147,7 +147,7 @@ Array.prototype.forEach.call( inputs, function( input )
     </head>
 </html>
 ```
-```css
+```css component.css
 .js .inputfile {
     width: 0.1px;
     height: 0.1px;
@@ -166,7 +166,7 @@ Array.prototype.forEach.call( inputs, function( input )
 
 ##Firefox Bug
 这里有一个非常奇怪的事情，`input[type="file"]:focus`这个属性在Firefox根本不起作用，但是`:hover`和`:active`却能很好地支持。更奇怪的事情，Firefox却允许使用`JavaScript`获取`focus`的事件，所以我们在`input`上面监听了事件，当触发`focus`的时候改变样式来实现我们之前的效果：
-```javascript
+```javascript custom-file-input.js
 input.addEventListener('focus', function() {
     input.classList.add('has-focus');
 });
@@ -174,7 +174,7 @@ input.addEventListener('blur', function() {
     input.classList.remove('has-focus');
 });
 ```
-```css
+```css component.css
 .inputfile:focus + label,
 .inputfile.has-focus + label {
     outline: 1px dotted #000;

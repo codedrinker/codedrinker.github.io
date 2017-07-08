@@ -106,7 +106,7 @@ work@dev:/var/www/html$ tree
     `-- mermaid.json
 ```
 mermaid.json  里面具体内容如下:
-```
+{% codeblock lang:js mermaid.json %}
 {
   "name": "mermaid",
   "description": "mermaid dev environment",
@@ -124,7 +124,8 @@ mermaid.json  里面具体内容如下:
     }
   ]
 }
-```
+{% endcodeblock %}
+
 基本配置都比较容易理解，注意的是checksum，需要把box上传到服务器的时候，使用
 `sha1sum boxes/mermaid.0.1.0.box `生成一下checksum值。
 配置都完成之后，我们测试访问`http://192.168.1.137/vagrant/mermaid.json`ok，那么表示我们配置成功。
@@ -197,7 +198,7 @@ work@dev:/var/www/html$ tree
 
 修改mermaid.json文件，添加新的版本
 
-```
+{% codeblock lang:js mermaid.json %}
 {
   "name": "mermaid",
   "description": "mermaid dev environment",
@@ -226,7 +227,8 @@ work@dev:/var/www/html$ tree
     }
   ]
 }
-```
+{% endcodeblock %}
+
 配置完成。
 
 >**参考文档：** http://softwaretester.info/create-private-vagrant-box-repository/

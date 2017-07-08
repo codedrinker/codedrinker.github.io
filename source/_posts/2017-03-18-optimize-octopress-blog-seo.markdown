@@ -24,7 +24,7 @@ https://www.google.com/webmasters/tools/home?hl=en&pli=1
 * ####修改post的url  
 因为Octpopress Jeklly的默认post路径带着日期，分级较多，造成URL较长，不利于搜索引擎检索，我们可以自己缩短URL。直接在`_config.yml`里面修改`permalink: /blog/:year/:month/:day/:title/` 为 `permalink: /blog/:title/`即可。  
 接下来又出现问题了，因为之前已经发表的post，被搜索引擎索引了，或者是其他地方有引用就不能访问了。所以我们需要处理一下原来的文章地址，我的做法是把 `public`里面已经生成好的内容直接拷贝到`source/blog`目录下面，这样再次`generate`的时候就会把原来的目录生成在`public`里面。
-```
+```sh 博客目录
 source/blog/
 ├── 2015
 │   └── 01
@@ -48,7 +48,7 @@ source/blog/
     └── index.html
 ```
 切记不能复制`archives/index.html`，因为里面包含一些动态代码，并不是我们曾经发表的博文。然后把每一个`html`文件里面的内容删除，添加如下代码即可：
-```html
+```html /blog/:year/:month/:day/:title/index.html
 <meta http-equiv="refresh" content="0; url=/blog/begininng-and-summary">
 <link rel="canonical" href="http://majiang.life/blog/begininng-and-summary" />
 ```
@@ -58,7 +58,7 @@ source/blog/
 ## 版权
 因为好多转载的文章或者类似最近比较火的`阅读模式`处理过的文章只包含正文，为了解决这个问题，所以把原来签名等相关信息放在了正文里面，内容的最下面，这样就可以和正文同样处理了，直接把内容添加到模板页面即可。找到`_includes/article.html`，找到如下内容，` content `表示文章的正文。
 
-{% codeblock lang:html %}
+{% codeblock lang:html  /source/_includes/article.html%}
 {% raw %}
 <div class="entry-content">{{{ content }}
 </div>
@@ -66,7 +66,7 @@ source/blog/
 {% endcodeblock %}
 把我们预先准备好的版权的格式写入得到如下即可：
 
-{% codeblock lang:html %}
+{% codeblock lang:html  /source/_includes/article.html%}
 {% raw %}
 <div class="entry-content">{{ content }}
 <h2>作者</h2>

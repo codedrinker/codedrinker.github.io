@@ -13,11 +13,11 @@ description: 安全的使用Maven实现不同环境配置文件的部署，安�
 ##Filter
 `Maven Filter`可以支持将写到 `settings.xml`, `pom.xml`, 或是自定义 `*.properties` 文件里面的 `properties` 在 `build` 的时候自动替换指定目录配置文件里面的`占位符`，以实现动态指定配置。基本配置如下：   
 我们在`resources` 目录有一配置文件 `src/main/resources/config.properties` 包含如下内容(*如果使用`Spring-boot`需要把 `${username}` 替换为 `@username@`*)    
-```
+```properties src/main/resources/config.properties
 GitHub : ${username}
 ```
 POM文件如下，用来指定资源的存放路径和是否使用`filter`：
-```xml
+```xml ${project}/pom.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -49,13 +49,13 @@ mvn resources:resources
 #这里同样可以使用 mvn clean compile，只是resources不会编译代码，只会构建资源文件，这样更方便我们调试
 ```
 在 `target/classes/config.properties` 查看文件内容，已经变化了。
-```
+```properties target/classes/config.properties
 GitHub : codedrinker
 ```
 
 ##Profile
 `Profile` 可以让我们根据不同的环境，定义不同的 `properties`。配置如下：
-```xml
+```xml ${project}/pom.xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -118,7 +118,7 @@ GitHub : majiang
 前者是全局的设置，后者是用户的设置，官方文档中指出如果两个都有设置，会以用户为主进行合并。但是我并不清楚它的合并力度，于是做了如下实验
 
 系统配置
-```
+```xml ${maven.home}/conf/settings.xml
 	<!-- 系统配置 -->
     <profile>
         <id>sandbox</id>
@@ -130,7 +130,7 @@ GitHub : majiang
     </profile>
 ```
 用户配置
-```
+```xml ${user.home}/.m2/settings.xml
 	<!-- 用户配置 -->
     <profile>
             <id>sandbox</id>
@@ -141,13 +141,13 @@ GitHub : majiang
     </profile>
 ```
 config.properties
-```
+```properties src/main/resources/config.properties
 username : ${username}
 password : ${password}
 website : ${website}
 ```
 再次运行命令以后的结果
-```
+```properties target/classes/config.properties
 username : codedrinker
 password : password
 website : ${website}
@@ -161,7 +161,7 @@ website : ${website}
     private java.util.Properties properties;
 ```
 在读取配置文件的时候，直接读取`properties`，没有其他处理
-```java
+```java SettingsXpp3Reader.java
 else if ( checkFieldWithDuplicate( parser, "properties", null, parsed ) )
             {
                 while ( parser.nextTag() == XmlPullParser.START_TAG )
@@ -173,7 +173,7 @@ else if ( checkFieldWithDuplicate( parser, "properties", null, parsed ) )
             }
 ```
 关键在于`以用户的settings为主，合并配置的逻辑`，他的逻辑是如果`profile.id`不相同才会合并到`用户级别的settings`，不会深度的比较。于是这个问题是无解的，他所说的`以用户级settings.xml`为主指的是每一个配置，里面的每一个`property`是不被合并的。
-```java
+```java MavenSettingsMerger.java
 private static <T extends IdentifiableBase> void shallowMergeById( List<T> dominant, List<T> recessive,
                                                                        String recessiveSourceLevel )
     {

@@ -25,7 +25,7 @@ protected T initialValue() { }
 为了使用的更放心，我们简单的看一下具体的实现:
 
 ###`set`方法
-```java
+```java ThreadLocal.java
 public void set(T value) {
         Thread t = Thread.currentThread();
         ThreadLocalMap map = getMap(t);
@@ -38,7 +38,7 @@ public void set(T value) {
 `set`方法会获取当前的线程，通过当前线程获取`ThreadLocalMap`对象。然后把需要存储的值放到这个`map`里面。如果没有就调用`createMap`创建对象。
 
 ###`getMap`方法
-```
+```java ThreadLocal.java
  ThreadLocalMap getMap(Thread t) {
         return t.threadLocals;
     }
@@ -46,7 +46,7 @@ public void set(T value) {
 `getMap`方法直接返回当前`Thread`的`threadLocals`变量，这样说明了之所以说`ThreadLocal`是`线程局部变量`就是因为它只是通过`ThreadLocal`把`变量`存在了`Thread`本身而已。
 
 ### `createMap`方法
-```java
+```java ThreadLocal.java
 void createMap(Thread t, T firstValue) {
         t.threadLocals = new ThreadLocalMap(this, firstValue);
     }
@@ -54,7 +54,7 @@ void createMap(Thread t, T firstValue) {
 在`set`的时候如果不存在`threadLocals`，直接创建对象。由上看出，放入`map`的`key`是当前的`ThreadLocal`，`value`是需要存放的内容，所以我们设置属性的时候需要注意存放和获取的是一个`ThreadLocal`。
 
 ###`get`方法
-```java
+```java ThreadLocal.java
 public T get() {
         Thread t = Thread.currentThread();
         ThreadLocalMap map = getMap(t);
@@ -99,7 +99,7 @@ GET api/users?device=ios
 ```
 ##实现
 首先准备一个`BaseSigntureRequest`类用来存放公共参数
-```java
+```java BaseSignatureRequest.java
 public class BaseSignatureRequest {
     private String device;
 
@@ -113,14 +113,14 @@ public class BaseSignatureRequest {
 }
 ```
 然后准备一个`static`的`ThreadLocal`类用来存放`ThreadLocal`，以便存储和获取时候的`ThreadLocal`一致。
-```java
+```java ThreadLocalCache.java
 public class ThreadLocalCache {
     public static ThreadLocal<BaseSignatureRequest> 
     	baseSignatureRequestThreadLocal = new ThreadLocal<>();
 }
 ```
 然后编写一个`Interceptor`，在请求的时候获取`device`参数，存入当前线程的`ThreadLocal`中。这里需要注意的是，重写了`afterCompletion`方法，当请求结束的时候把`ThreadLocal` `remove`，移除不必须要键值对。
-```java
+```java ParameterInterceptor.java
 public class ParameterInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
@@ -147,7 +147,7 @@ public class ParameterInterceptor implements HandlerInterceptor {
 }
 ```
 当然需要在`spring`里面配置`interceptor`
-```xml
+```xml applicationContext.xml
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/api/**"/>
@@ -157,7 +157,7 @@ public class ParameterInterceptor implements HandlerInterceptor {
 ```
 
 最后在`Converter`里面转换实体的时候直接使用即可，这样就大功告成了。
-```java
+```java UserConverter.java
 public class UserConverter {
     public static ResultDO toDO(User user) {
         ResultDO resultDO = new ResultDO();

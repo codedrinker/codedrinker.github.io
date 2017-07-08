@@ -27,7 +27,7 @@ description: "octopress tag cloud，Octopress 标签云，Octopress标签，Octo
 
 ##造轮子
 造轮子原理也是很简单，遍历所有的`category`和每一个`category`下面的`posts`，然后编写好样式做输出就可以了。`plugins`这个目录用户存放一些`Ruby`的`plugins`文件，所以我们直接写一个脚本到这个目录:
-{% codeblock lang:ruby %}
+{% codeblock lang:ruby plugins/tag_cloud.rb%}
 {% raw %}
 # plugins/tag_cloud.rb
 module Jekyll  
@@ -50,7 +50,7 @@ Liquid::Template.register_tag('tag_cloud', Jekyll::CategoryListTag)
 {% endraw %}
 {% endcodeblock %}
 
-{% codeblock lang:html %}
+{% codeblock lang:html source/_includes/custom/asides/tag_cloud.html%}
 {% raw %}
 <!-- source/_includes/custom/asides/tag_cloud.html-->
 <section>  
@@ -62,7 +62,7 @@ Liquid::Template.register_tag('tag_cloud', Jekyll::CategoryListTag)
 {% endraw %}
 {% endcodeblock %}
 
-{% codeblock lang:yml %}
+{% codeblock lang:yml _.config.yml%}
 {% raw %}
 #_config.yml
 default_asides: [...,custom/asides/tag_cloud.html]  

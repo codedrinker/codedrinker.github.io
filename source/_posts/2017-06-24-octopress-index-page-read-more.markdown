@@ -11,7 +11,7 @@ description: "octopress index page read more, enable excerpt_link, Octopress 首
 
 ##添加更多
 方法是十分的简单，只是因为不是太熟悉`Octopress`导致查了很久。直接在 `*.markdown` 的 `post` 里面添加`<!--more-->`，这个标记下面的内容就不会在首页展示出来，并且通过一个`Read on`替换。原因是因为本身`Octopress`就支持，只是你没有使用。具体在`_config.yml`里面。
-```yml
+```yml _.config.yml
 //_.config.yml
 excerpt_link: "Read on &rarr;"  # "Continue reading" link text at the bottom of excerpted articles
 excerpt_separator: "<!--more-->"

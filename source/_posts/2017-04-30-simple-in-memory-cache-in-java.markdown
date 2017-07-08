@@ -34,7 +34,7 @@ description: Simple In Memory Cache in Java，构建Java应用内存级缓存，
 
 ##依赖
 笔者项目使用`Maven`构建，直接使用如下配合文件
-```xml
+```xml pom.xml
 <dependency>
     <groupId>com.google.guava</groupId>
     <artifactId>guava</artifactId>
@@ -44,7 +44,7 @@ description: Simple In Memory Cache in Java，构建Java应用内存级缓存，
 
 ## CacheLoader
 预先准备好一个`MockDB`类，用来模拟缓存中没有的时候在数据库中获取
-{% codeblock lang:java %}
+{% codeblock lang:java MockDB.java%}
 {% raw %}
 public class MockDB {
     private static Map<String, String> mockPersistence = new HashMap<String, String>() {{
@@ -59,7 +59,7 @@ public class MockDB {
 {% endraw %}
 {% endcodeblock %}
 下面是使用`CacheLoader`的代码
-{% codeblock lang:java %}
+{% codeblock lang:java GuavaLoadingCache.java%}
 {% raw %}
 public class GuavaLoadingCache {
     public static void main(String[] args) {
@@ -116,7 +116,7 @@ load not exist key from cache : null
 
 ## Callable
 这里我们依然需要使用上面的`MockDB`类，具体代码如下。
-{% codeblock lang:java %}
+{% codeblock lang:java GuavaCallableCache.java%}
 {% raw %}
 public class GuavaCallableCache {
     public static void main(String[] args) {

@@ -8,17 +8,18 @@ categories: [Tech]
 ---
 ##前言
 最近使用读读日报发现其阅读模式很是方便，除了字体和布局舒服了，最重要的是去掉了干扰阅读的所有因素，包括广告，相关文章，栏目等等。于是就查找了一下有没有类似的实现方案。最后找了一些方案，不过并不知道正解，只是抛砖引玉罢了。(PS:感觉更深层次的处理应该是机器学习吧)
-
+<!-- more -->
 ##霸王硬上弓
 这种方式就非常简单了，如题，直接对于每一个网站做适配，就是麻烦一些。直接通过编程语言解析页面的元素，然后找出对应的文章正文的位置，然后重新绘制样式，最后输出就搞定了。这样做麻烦一些，每一个网页都要做适配，不过可控的是对每一个元素的样式都可以把握。
 ##使用轮子
 使用第三方`API`，[Mercury](https://mercury.postlight.com/)。这是一个免费的非常强大的`API`，他提供在线的把文章转换为便于阅读的文章。官方给的解释是：
-```
+{% codeblock 官方文档 %}
 Make your content work anywhere. Free.
 Mercury transforms web pages into clean text. 
 Publishers and programmers use it to make the web make sense, 
 and readers use it to read any web article comfortably.
-```
+{% endcodeblock %}
+
 我们只需要注册一个账号，然后使用它的`api-key`调用接口就可以了。下面是预览效果：
 
 ![article-readable-preview](/images/posts/article-readable-preview.png)  

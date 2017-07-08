@@ -16,7 +16,7 @@ footer: true
 
 我还在学校也写Java：
 
-```java
+```java HelloWorld.java
 public class HelloWorld {
     public static void main(String args[]) {
         System.out.println("HelloWorld");
@@ -34,7 +34,7 @@ public class HelloWorld {
 
 我在公司写Scala：
 
-```scala
+```scala HelloWorld.scala
 object HelloWorld extends App{
     println("HelloWorld")
 }
@@ -43,6 +43,6 @@ object HelloWorld extends App{
 
 我会去写groovy：
 
-```groovy
+```groovy HelloWorld.groovy
 println "Hello World"
 ```
