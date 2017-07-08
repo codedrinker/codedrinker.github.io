@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-07-07T21:59:20+08:00</updated>
+  <updated>2017-07-08T10:06:21+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -45,7 +45,8 @@
 <h2>造轮子</h2>
 
 <p>造轮子原理也是很简单，遍历所有的<code>category</code>和每一个<code>category</code>下面的<code>posts</code>，然后编写好样式做输出就可以了。<code>plugins</code>这个目录用户存放一些<code>Ruby</code>的<code>plugins</code>文件，所以我们直接写一个脚本到这个目录:
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>plugins/tag_cloud.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -89,7 +90,8 @@
 </span><span class='line'><span class="sr">&lt;p&gt;Liquid::Template.register_tag(&amp;lsquo;tag_cloud&amp;rsquo;, Jekyll::CategoryListTag)</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><figcaption><span>source/_includes/custom/asides/tag_cloud.html</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -113,7 +115,8 @@
 </span><span class='line'><span class="nt">&lt;/section&gt;</span>
 </span></code></pre></td></tr></table></div></figure></p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><figcaption><span>_.config.yml</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -147,7 +150,7 @@
 <h2>添加更多</h2>
 
 <p>方法是十分的简单，只是因为不是太熟悉<code>Octopress</code>导致查了很久。直接在 <code>*.markdown</code> 的 <code>post</code> 里面添加<code>&lt;!--more--&gt;</code>，这个标记下面的内容就不会在首页展示出来，并且通过一个<code>Read on</code>替换。原因是因为本身<code>Octopress</code>就支持，只是你没有使用。具体在<code>_config.yml</code>里面。
-<code>yml
+<code>yml _.config.yml
 //_.config.yml
 excerpt_link: "Read on &amp;rarr;"  # "Continue reading" link text at the bottom of excerpted articles
 excerpt_separator: "&lt;!--more--&gt;"
@@ -189,7 +192,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>因为Octpopress Jeklly的默认post路径带着日期，分级较多，造成URL较长，不利于搜索引擎检索，我们可以自己缩短URL。直接在<code>_config.yml</code>里面修改<code>permalink: /blog/:year/:month/:day/:title/</code> 为 <code>permalink: /blog/:title/</code>即可。<br/>
 接下来又出现问题了，因为之前已经发表的post，被搜索引擎索引了，或者是其他地方有引用就不能访问了。所以我们需要处理一下原来的文章地址，我的做法是把 <code>public</code>里面已经生成好的内容直接拷贝到<code>source/blog</code>目录下面，这样再次<code>generate</code>的时候就会把原来的目录生成在<code>public</code>里面。
-<code>
+<code>sh 博客目录
 source/blog/
 ├── 2015
 │   └── 01
@@ -213,7 +216,7 @@ source/blog/
   └── index.html
 </code>
 切记不能复制<code>archives/index.html</code>，因为里面包含一些动态代码，并不是我们曾经发表的博文。然后把每一个<code>html</code>文件里面的内容删除，添加如下代码即可：
-<code>html
+<code>html /blog/:year/:month/:day/:title/index.html
 &lt;meta http-equiv="refresh" content="0; url=/blog/begininng-and-summary"&gt;
 &lt;link rel="canonical" href="http://majiang.life/blog/begininng-and-summary" /&gt;
 </code>
@@ -225,7 +228,8 @@ source/blog/
 
 <p>因为好多转载的文章或者类似最近比较火的<code>阅读模式</code>处理过的文章只包含正文，为了解决这个问题，所以把原来签名等相关信息放在了正文里面，内容的最下面，这样就可以和正文同样处理了，直接把内容添加到模板页面即可。找到<code>_includes/article.html</code>，找到如下内容，<code>content</code>表示文章的正文。</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><figcaption><span>/source/_includes/article.html</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -242,7 +246,8 @@ source/blog/
 </span></code></pre></td></tr></table></div></figure>
 把我们预先准备好的版权的格式写入得到如下即可：</p>
 
-<p><figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p><figure class='code'><figcaption><span>/source/_includes/article.html</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>

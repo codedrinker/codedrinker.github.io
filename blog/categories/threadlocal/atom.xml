@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Threadlocal | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/threadlocal/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-07-07T21:59:20+08:00</updated>
+  <updated>2017-07-08T10:06:21+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -43,7 +43,7 @@ protected T initialValue() { }
 
 <h3><code>set</code>方法</h3>
 
-<pre><code class="java">public void set(T value) {
+<pre><code class="java ThreadLocal.java">public void set(T value) {
         Thread t = Thread.currentThread();
         ThreadLocalMap map = getMap(t);
         if (map != null)
@@ -57,7 +57,7 @@ protected T initialValue() { }
 
 <h3><code>getMap</code>方法</h3>
 
-<pre><code> ThreadLocalMap getMap(Thread t) {
+<pre><code class="java ThreadLocal.java"> ThreadLocalMap getMap(Thread t) {
         return t.threadLocals;
     }
 </code></pre>
@@ -66,7 +66,7 @@ protected T initialValue() { }
 
 <h3><code>createMap</code>方法</h3>
 
-<pre><code class="java">void createMap(Thread t, T firstValue) {
+<pre><code class="java ThreadLocal.java">void createMap(Thread t, T firstValue) {
         t.threadLocals = new ThreadLocalMap(this, firstValue);
     }
 </code></pre>
@@ -75,7 +75,7 @@ protected T initialValue() { }
 
 <h3><code>get</code>方法</h3>
 
-<pre><code class="java">public T get() {
+<pre><code class="java ThreadLocal.java">public T get() {
         Thread t = Thread.currentThread();
         ThreadLocalMap map = getMap(t);
         if (map != null) {
@@ -126,7 +126,7 @@ GET api/users?device=ios
 <h2>实现</h2>
 
 <p>首先准备一个<code>BaseSigntureRequest</code>类用来存放公共参数
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>BaseSignatureRequest.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -199,14 +199,14 @@ GET api/users?device=ios
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
 </span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
 </span><span class='line'><span class="n">然后准备一个</span><span class="err">`</span><span class="kd">static</span><span class="err">`</span><span class="n">的</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span><span class="n">类用来存放</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`，</span><span class="n">以便存储和获取时候的</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span><span class="n">一致</span><span class="err">。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">ThreadLocalCache</span><span class="o">.</span><span class="na">java</span>
 </span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThreadLocalCache</span> <span class="o">{</span>
 </span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ThreadLocal</span><span class="o">&lt;</span><span class="n">BaseSignatureRequest</span><span class="o">&gt;</span>
 </span><span class='line'>        <span class="n">baseSignatureRequestThreadLocal</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ThreadLocal</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;();</span>
 </span><span class='line'><span class="o">}</span>
 </span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
 </span><span class='line'><span class="n">然后编写一个</span><span class="err">`</span><span class="n">Interceptor</span><span class="err">`，</span><span class="n">在请求的时候获取</span><span class="err">`</span><span class="n">device</span><span class="err">`</span><span class="n">参数</span><span class="err">，</span><span class="n">存入当前线程的</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span><span class="n">中</span><span class="err">。</span><span class="n">这里需要注意的是</span><span class="err">，</span><span class="n">重写了</span><span class="err">`</span><span class="n">afterCompletion</span><span class="err">`</span><span class="n">方法</span><span class="err">，</span><span class="n">当请求结束的时候把</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span> <span class="err">`</span><span class="n">remove</span><span class="err">`，</span><span class="n">移除不必须要键值对</span><span class="err">。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">ParameterInterceptor</span><span class="o">.</span><span class="na">java</span>
 </span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ParameterInterceptor</span> <span class="kd">implements</span> <span class="n">HandlerInterceptor</span> <span class="o">{</span>
 </span><span class='line'>    <span class="nd">@Override</span>
 </span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">preHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span>
@@ -235,7 +235,7 @@ GET api/users?device=ios
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
 </span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
 </span><span class='line'><span class="n">当然需要在</span><span class="err">`</span><span class="n">spring</span><span class="err">`</span><span class="n">里面配置</span><span class="err">`</span><span class="n">interceptor</span><span class="err">`</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">xml</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">xml</span> <span class="n">applicationContext</span><span class="o">.</span><span class="na">xml</span>
 </span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="nl">mvc:</span><span class="n">interceptors</span><span class="o">&gt;</span>
 </span><span class='line'>        <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="nl">mvc:</span><span class="n">interceptor</span><span class="o">&gt;</span>
 </span><span class='line'>            <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="nl">mvc:</span><span class="n">mapping</span> <span class="n">path</span><span class="o">=&amp;</span><span class="n">ldquo</span><span class="o">;/</span><span class="n">api</span><span class="o">/**&amp;</span><span class="n">rdquo</span><span class="o">;/&gt;</span>
@@ -245,7 +245,7 @@ GET api/users?device=ios
 </span></code></pre></td></tr></table></div></figure></p>
 
 <p>最后在<code>Converter</code>里面转换实体的时候直接使用即可，这样就大功告成了。
-<code>java
+<code>java UserConverter.java
 public class UserConverter {
     public static ResultDO toDO(User user) {
         ResultDO resultDO = new ResultDO();

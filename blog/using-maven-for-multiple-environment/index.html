@@ -131,13 +131,14 @@ enable_page_level_ads: true
 <p><code>Maven Filter</code>可以支持将写到 <code>settings.xml</code>, <code>pom.xml</code>, 或是自定义 <code>*.properties</code> 文件里面的 <code>properties</code> 在 <code>build</code> 的时候自动替换指定目录配置文件里面的<code>占位符</code>，以实现动态指定配置。基本配置如下： <br/>
 我们在<code>resources</code> 目录有一配置文件 <code>src/main/resources/config.properties</code> 包含如下内容(<em>如果使用<code>Spring-boot</code>需要把 <code>${username}</code> 替换为 <code>@username@</code></em>)</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>GitHub : ${username}</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span>src/main/resources/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">GitHub</span> <span class="o">:</span> <span class="s">${username}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>POM文件如下，用来指定资源的存放路径和是否使用<code>filter</code>：</p>
 
-<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${project}/pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -199,8 +200,8 @@ enable_page_level_ads: true
 
 <p>在 <code>target/classes/config.properties</code> 查看文件内容，已经变化了。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>GitHub : codedrinker
+<figure class='code'><figcaption><span>target/classes/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">GitHub</span> <span class="o">:</span> <span class="s">codedrinker</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -208,7 +209,7 @@ enable_page_level_ads: true
 
 <p><code>Profile</code> 可以让我们根据不同的环境，定义不同的 <code>properties</code>。配置如下：</p>
 
-<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${project}/pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -367,23 +368,23 @@ enable_page_level_ads: true
 
 <p>config.properties</p>
 
-<figure class='code'><figcaption><span>${user.home}/.m2/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>src/main/resources/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>username : ${username}
-</span><span class='line'>password : ${password}
-</span><span class='line'>website : ${website}
+</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">username</span> <span class="o">:</span> <span class="s">${username}</span>
+</span><span class='line'><span class="na">password</span> <span class="o">:</span> <span class="s">${password}</span>
+</span><span class='line'><span class="na">website</span> <span class="o">:</span> <span class="s">${website}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>再次运行命令以后的结果</p>
 
-<figure class='code'><figcaption><span>${user.home}/.m2/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>target/classes/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>username : codedrinker
-</span><span class='line'>password : password
-</span><span class='line'>website : ${website}
+</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">username</span> <span class="o">:</span> <span class="s">codedrinker</span>
+</span><span class='line'><span class="na">password</span> <span class="o">:</span> <span class="s">password</span>
+</span><span class='line'><span class="na">website</span> <span class="o">:</span> <span class="s">${website}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -403,7 +404,7 @@ enable_page_level_ads: true
 
 <p>在读取配置文件的时候，直接读取<code>properties</code>，没有其他处理</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>SettingsXpp3Reader.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -426,7 +427,7 @@ enable_page_level_ads: true
 
 <p>关键在于<code>以用户的settings为主，合并配置的逻辑</code>，他的逻辑是如果<code>profile.id</code>不相同才会合并到<code>用户级别的settings</code>，不会深度的比较。于是这个问题是无解的，他所说的<code>以用户级settings.xml</code>为主指的是每一个配置，里面的每一个<code>property</code>是不被合并的。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>MavenSettingsMerger.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>

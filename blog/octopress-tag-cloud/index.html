@@ -156,7 +156,8 @@ enable_page_level_ads: true
 
 <p>造轮子原理也是很简单，遍历所有的<code>category</code>和每一个<code>category</code>下面的<code>posts</code>，然后编写好样式做输出就可以了。<code>plugins</code>这个目录用户存放一些<code>Ruby</code>的<code>plugins</code>文件，所以我们直接写一个脚本到这个目录:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>plugins/tag_cloud.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -197,7 +198,8 @@ enable_page_level_ads: true
 
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>source/_includes/custom/asides/tag_cloud.html</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -216,7 +218,8 @@ enable_page_level_ads: true
 
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>_.config.yml</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1">#_config.yml</span>
 </span><span class='line'><span class="l-Scalar-Plain">default_asides</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="nv">...</span><span class="p-Indicator">,</span><span class="nv">custom/asides/tag_cloud.html</span><span class="p-Indicator">]</span>

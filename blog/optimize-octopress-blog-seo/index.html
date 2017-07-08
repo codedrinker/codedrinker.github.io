@@ -151,7 +151,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>博客目录</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -172,7 +172,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>source/blog/
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">source</span>/blog/
 </span><span class='line'>├── 2015
 </span><span class='line'>│   └── 01
 </span><span class='line'>│       └── 10
@@ -181,7 +181,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </span><span class='line'>├── 2016
 </span><span class='line'>│   └── 12
 </span><span class='line'>│       ├── 15
-</span><span class='line'>│       │   └── set-up-vagrant-environment
+</span><span class='line'>│       │   └── <span class="nb">set</span>-up-vagrant-environment
 </span><span class='line'>│       │       └── index.html
 </span><span class='line'>│       └── 24
 </span><span class='line'>│           └── auto-preview-front-end-changes
@@ -192,12 +192,13 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </span><span class='line'>│           └── the-smart-way-of-styling-and-customizing-file-input
 </span><span class='line'>│               └── index.html
 </span><span class='line'>└── archives
-</span><span class='line'>    └── index.html</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>    └── index.html
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>切记不能复制<code>archives/index.html</code>，因为里面包含一些动态代码，并不是我们曾经发表的博文。然后把每一个<code>html</code>文件里面的内容删除，添加如下代码即可：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>/blog/:year/:month/:day/:title/index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;refresh&quot;</span> <span class="na">content=</span><span class="s">&quot;0; url=/blog/begininng-and-summary&quot;</span><span class="nt">&gt;</span>
 </span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;canonical&quot;</span> <span class="na">href=</span><span class="s">&quot;http://majiang.life/blog/begininng-and-summary&quot;</span> <span class="nt">/&gt;</span>
@@ -210,7 +211,8 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>因为好多转载的文章或者类似最近比较火的<code>阅读模式</code>处理过的文章只包含正文，为了解决这个问题，所以把原来签名等相关信息放在了正文里面，内容的最下面，这样就可以和正文同样处理了，直接把内容添加到模板页面即可。找到<code>_includes/article.html</code>，找到如下内容，<code>content</code>表示文章的正文。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>/source/_includes/article.html</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;entry-content&quot;</span><span class="nt">&gt;</span>{{{ content }}
 </span><span class='line'><span class="nt">&lt;/div&gt;</span>
@@ -219,7 +221,8 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>把我们预先准备好的版权的格式写入得到如下即可：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>/source/_includes/article.html</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>

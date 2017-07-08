@@ -150,7 +150,7 @@ enable_page_level_ads: true
 
 <h3><code>set</code>方法</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ThreadLocal.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -173,7 +173,7 @@ enable_page_level_ads: true
 
 <h3><code>getMap</code>方法</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ThreadLocal.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='java'><span class='line'> <span class="n">ThreadLocalMap</span> <span class="nf">getMap</span><span class="o">(</span><span class="n">Thread</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
@@ -186,7 +186,7 @@ enable_page_level_ads: true
 
 <h3><code>createMap</code>方法</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ThreadLocal.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">void</span> <span class="nf">createMap</span><span class="o">(</span><span class="n">Thread</span> <span class="n">t</span><span class="o">,</span> <span class="n">T</span> <span class="n">firstValue</span><span class="o">)</span> <span class="o">{</span>
@@ -199,7 +199,7 @@ enable_page_level_ads: true
 
 <h3><code>get</code>方法</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ThreadLocal.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -280,7 +280,7 @@ enable_page_level_ads: true
 
 <p>首先准备一个<code>BaseSigntureRequest</code>类用来存放公共参数</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>BaseSignatureRequest.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -307,7 +307,7 @@ enable_page_level_ads: true
 
 <p>然后准备一个<code>static</code>的<code>ThreadLocal</code>类用来存放<code>ThreadLocal</code>，以便存储和获取时候的<code>ThreadLocal</code>一致。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ThreadLocalCache.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -320,7 +320,7 @@ enable_page_level_ads: true
 
 <p>然后编写一个<code>Interceptor</code>，在请求的时候获取<code>device</code>参数，存入当前线程的<code>ThreadLocal</code>中。这里需要注意的是，重写了<code>afterCompletion</code>方法，当请求结束的时候把<code>ThreadLocal</code> <code>remove</code>，移除不必须要键值对。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ParameterInterceptor.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -373,7 +373,7 @@ enable_page_level_ads: true
 
 <p>当然需要在<code>spring</code>里面配置<code>interceptor</code></p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>applicationContext.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -390,7 +390,7 @@ enable_page_level_ads: true
 
 <p>最后在<code>Converter</code>里面转换实体的时候直接使用即可，这样就大功告成了。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>UserConverter.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>

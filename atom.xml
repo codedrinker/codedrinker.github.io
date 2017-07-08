@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-07-07T21:59:20+08:00</updated>
+  <updated>2017-07-08T10:06:21+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -102,7 +102,8 @@
 
 <p>造轮子原理也是很简单，遍历所有的<code>category</code>和每一个<code>category</code>下面的<code>posts</code>，然后编写好样式做输出就可以了。<code>plugins</code>这个目录用户存放一些<code>Ruby</code>的<code>plugins</code>文件，所以我们直接写一个脚本到这个目录:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>plugins/tag_cloud.rb</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -143,7 +144,8 @@
 
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>source/_includes/custom/asides/tag_cloud.html</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -162,7 +164,8 @@
 
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>_.config.yml</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1">#_config.yml</span>
 </span><span class='line'><span class="l-Scalar-Plain">default_asides</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="nv">...</span><span class="p-Indicator">,</span><span class="nv">custom/asides/tag_cloud.html</span><span class="p-Indicator">]</span>
@@ -192,7 +195,7 @@
 
 <p>方法是十分的简单，只是因为不是太熟悉<code>Octopress</code>导致查了很久。直接在 <code>*.markdown</code> 的 <code>post</code> 里面添加<code>&lt;!--more--&gt;</code>，这个标记下面的内容就不会在首页展示出来，并且通过一个<code>Read on</code>替换。原因是因为本身<code>Octopress</code>就支持，只是你没有使用。具体在<code>_config.yml</code>里面。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>_.config.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">//_.config.yml</span>
@@ -275,7 +278,7 @@
 
 <h3><code>set</code>方法</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ThreadLocal.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -298,7 +301,7 @@
 
 <h3><code>getMap</code>方法</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ThreadLocal.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='java'><span class='line'> <span class="n">ThreadLocalMap</span> <span class="nf">getMap</span><span class="o">(</span><span class="n">Thread</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
@@ -311,7 +314,7 @@
 
 <h3><code>createMap</code>方法</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ThreadLocal.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 </pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">void</span> <span class="nf">createMap</span><span class="o">(</span><span class="n">Thread</span> <span class="n">t</span><span class="o">,</span> <span class="n">T</span> <span class="n">firstValue</span><span class="o">)</span> <span class="o">{</span>
@@ -324,7 +327,7 @@
 
 <h3><code>get</code>方法</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ThreadLocal.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -405,7 +408,7 @@
 
 <p>首先准备一个<code>BaseSigntureRequest</code>类用来存放公共参数</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>BaseSignatureRequest.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -432,7 +435,7 @@
 
 <p>然后准备一个<code>static</code>的<code>ThreadLocal</code>类用来存放<code>ThreadLocal</code>，以便存储和获取时候的<code>ThreadLocal</code>一致。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ThreadLocalCache.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -445,7 +448,7 @@
 
 <p>然后编写一个<code>Interceptor</code>，在请求的时候获取<code>device</code>参数，存入当前线程的<code>ThreadLocal</code>中。这里需要注意的是，重写了<code>afterCompletion</code>方法，当请求结束的时候把<code>ThreadLocal</code> <code>remove</code>，移除不必须要键值对。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>ParameterInterceptor.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -498,7 +501,7 @@
 
 <p>当然需要在<code>spring</code>里面配置<code>interceptor</code></p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>applicationContext.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -515,7 +518,7 @@
 
 <p>最后在<code>Converter</code>里面转换实体的时候直接使用即可，这样就大功告成了。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>UserConverter.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -652,7 +655,7 @@
 
 <p>笔者项目使用<code>Maven</code>构建，直接使用如下配合文件</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -669,7 +672,8 @@
 
 <p>预先准备好一个<code>MockDB</code>类，用来模拟缓存中没有的时候在数据库中获取</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>MockDB.java</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -694,7 +698,8 @@
 
 <p>下面是使用<code>CacheLoader</code>的代码</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>GuavaLoadingCache.java</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -796,7 +801,8 @@
 
 <p>这里我们依然需要使用上面的<code>MockDB</code>类，具体代码如下。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>GuavaCallableCache.java</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1376,7 +1382,7 @@
 
 <p>读写，关键在于<code>s3:Put*</code>可以做任何更新操作：</p>
 
-<figure class='code'><figcaption><span>&#8220;IAM PUT 配置&#8221;</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>IAM PUT 配置</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1439,7 +1445,7 @@
 
 <p>只读，只有<code>Get</code>和<code>List</code>操作：</p>
 
-<figure class='code'><figcaption><span>&#8220;IAM GET 配置&#8221;</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>IAM GET 配置</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1528,13 +1534,14 @@
 <p><code>Maven Filter</code>可以支持将写到 <code>settings.xml</code>, <code>pom.xml</code>, 或是自定义 <code>*.properties</code> 文件里面的 <code>properties</code> 在 <code>build</code> 的时候自动替换指定目录配置文件里面的<code>占位符</code>，以实现动态指定配置。基本配置如下： <br/>
 我们在<code>resources</code> 目录有一配置文件 <code>src/main/resources/config.properties</code> 包含如下内容(<em>如果使用<code>Spring-boot</code>需要把 <code>${username}</code> 替换为 <code>@username@</code></em>)</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>GitHub : ${username}</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span>src/main/resources/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">GitHub</span> <span class="o">:</span> <span class="s">${username}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>POM文件如下，用来指定资源的存放路径和是否使用<code>filter</code>：</p>
 
-<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${project}/pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1596,8 +1603,8 @@
 
 <p>在 <code>target/classes/config.properties</code> 查看文件内容，已经变化了。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>GitHub : codedrinker
+<figure class='code'><figcaption><span>target/classes/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">GitHub</span> <span class="o">:</span> <span class="s">codedrinker</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1605,7 +1612,7 @@
 
 <p><code>Profile</code> 可以让我们根据不同的环境，定义不同的 <code>properties</code>。配置如下：</p>
 
-<figure class='code'><figcaption><span>pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>${project}/pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1764,23 +1771,23 @@
 
 <p>config.properties</p>
 
-<figure class='code'><figcaption><span>${user.home}/.m2/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>src/main/resources/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>username : ${username}
-</span><span class='line'>password : ${password}
-</span><span class='line'>website : ${website}
+</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">username</span> <span class="o">:</span> <span class="s">${username}</span>
+</span><span class='line'><span class="na">password</span> <span class="o">:</span> <span class="s">${password}</span>
+</span><span class='line'><span class="na">website</span> <span class="o">:</span> <span class="s">${website}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
 <p>再次运行命令以后的结果</p>
 
-<figure class='code'><figcaption><span>${user.home}/.m2/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>target/classes/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'>username : codedrinker
-</span><span class='line'>password : password
-</span><span class='line'>website : ${website}
+</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">username</span> <span class="o">:</span> <span class="s">codedrinker</span>
+</span><span class='line'><span class="na">password</span> <span class="o">:</span> <span class="s">password</span>
+</span><span class='line'><span class="na">website</span> <span class="o">:</span> <span class="s">${website}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
@@ -1800,7 +1807,7 @@
 
 <p>在读取配置文件的时候，直接读取<code>properties</code>，没有其他处理</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>SettingsXpp3Reader.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -1823,7 +1830,7 @@
 
 <p>关键在于<code>以用户的settings为主，合并配置的逻辑</code>，他的逻辑是如果<code>profile.id</code>不相同才会合并到<code>用户级别的settings</code>，不会深度的比较。于是这个问题是无解的，他所说的<code>以用户级settings.xml</code>为主指的是每一个配置，里面的每一个<code>property</code>是不被合并的。</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>MavenSettingsMerger.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2015,7 +2022,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>博客目录</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -2036,7 +2043,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>source/blog/
+</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">source</span>/blog/
 </span><span class='line'>├── 2015
 </span><span class='line'>│   └── 01
 </span><span class='line'>│       └── 10
@@ -2045,7 +2052,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </span><span class='line'>├── 2016
 </span><span class='line'>│   └── 12
 </span><span class='line'>│       ├── 15
-</span><span class='line'>│       │   └── set-up-vagrant-environment
+</span><span class='line'>│       │   └── <span class="nb">set</span>-up-vagrant-environment
 </span><span class='line'>│       │       └── index.html
 </span><span class='line'>│       └── 24
 </span><span class='line'>│           └── auto-preview-front-end-changes
@@ -2056,12 +2063,13 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </span><span class='line'>│           └── the-smart-way-of-styling-and-customizing-file-input
 </span><span class='line'>│               └── index.html
 </span><span class='line'>└── archives
-</span><span class='line'>    └── index.html</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'>    └── index.html
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>切记不能复制<code>archives/index.html</code>，因为里面包含一些动态代码，并不是我们曾经发表的博文。然后把每一个<code>html</code>文件里面的内容删除，添加如下代码即可：</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>/blog/:year/:month/:day/:title/index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;refresh&quot;</span> <span class="na">content=</span><span class="s">&quot;0; url=/blog/begininng-and-summary&quot;</span><span class="nt">&gt;</span>
 </span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;canonical&quot;</span> <span class="na">href=</span><span class="s">&quot;http://majiang.life/blog/begininng-and-summary&quot;</span> <span class="nt">/&gt;</span>
@@ -2074,7 +2082,8 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>因为好多转载的文章或者类似最近比较火的<code>阅读模式</code>处理过的文章只包含正文，为了解决这个问题，所以把原来签名等相关信息放在了正文里面，内容的最下面，这样就可以和正文同样处理了，直接把内容添加到模板页面即可。找到<code>_includes/article.html</code>，找到如下内容，<code>content</code>表示文章的正文。</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>/source/_includes/article.html</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 </pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;entry-content&quot;</span><span class="nt">&gt;</span>{{{ content }}
 </span><span class='line'><span class="nt">&lt;/div&gt;</span>
@@ -2083,7 +2092,8 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p>把我们预先准备好的版权的格式写入得到如下即可：</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>/source/_includes/article.html</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Guava | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/guava/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-07-07T21:59:20+08:00</updated>
+  <updated>2017-07-08T10:06:21+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -114,7 +114,7 @@
 <h2>依赖</h2>
 
 <p>笔者项目使用<code>Maven</code>构建，直接使用如下配合文件
-<code>xml
+<code>xml pom.xml
 &lt;dependency&gt;
     &lt;groupId&gt;com.google.guava&lt;/groupId&gt;
     &lt;artifactId&gt;guava&lt;/artifactId&gt;
@@ -125,7 +125,8 @@
 <h2>CacheLoader</h2>
 
 <p>预先准备好一个<code>MockDB</code>类，用来模拟缓存中没有的时候在数据库中获取
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>MockDB.java</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -151,7 +152,8 @@
 </span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
 </span></code></pre></td></tr></table></div></figure>
 下面是使用<code>CacheLoader</code>的代码
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>GuavaLoadingCache.java</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -241,7 +243,8 @@ load not exist key from cache : null
 <h2>Callable</h2>
 
 <p>这里我们依然需要使用上面的<code>MockDB</code>类，具体代码如下。
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>GuavaCallableCache.java</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>

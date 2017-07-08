@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Maven | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/maven/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-07-07T21:59:20+08:00</updated>
+  <updated>2017-07-08T10:06:21+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -267,7 +267,7 @@
 <p><code>AWS</code>有一个叫做<code>IAM</code>的东西，他是专门用来控制权限的服务，很强大。我们可以直接在<code>IAM</code>里面创建两个<code>Policy</code>，<a href="http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/access_policies.html">文档地址</a>，一个用来写，一个只能读，他可以强大到指定到<code>bucket</code>，这样大大的提高了安全性。下面是具体的配置，如果有不明的的可以参照官方文档，很详细。</p>
 
 <p>读写，关键在于<code>s3:Put*</code>可以做任何更新操作：
-<code>json "IAM PUT 配置"
+<code>json IAM PUT 配置
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -299,7 +299,7 @@
 }
 </code>
 只读，只有<code>Get</code>和<code>List</code>操作：
-<code>json "IAM GET 配置"
+<code>json IAM GET 配置
 {
     "Version": "2012-10-17",
     "Statement": [
