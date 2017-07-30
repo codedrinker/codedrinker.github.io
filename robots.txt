@@ -2,3 +2,5 @@ User-agent: *
 Disallow: 
 
 Sitemap: http://www.majiang.life/sitemap.xml 
+Sitemap: http://www.majiang.life/baidusitemap.xml 
+

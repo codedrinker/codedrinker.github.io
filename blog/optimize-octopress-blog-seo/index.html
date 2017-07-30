@@ -16,9 +16,8 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 尝试在Google, Baidu, Bing 搜索之前写的文章的关键字基本搜不到，甚至使用标题一模一样去搜索也不行，更意外的是第一个出现的是转载的文章。于是就带着这个疑问去网上查了一些资料，尝试去优化一下，下面就是这次优化的笔记。
-PS:虽然做我们这行业的人基本都是用Google 搜索。 &hellip;">
-  
+  <meta name="description" content="优化octopress blog的搜索SEO">
+  <meta name="keywords" content="Octopress,博客搜索优化,博客SEO,Octopress SEO">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -127,7 +126,38 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <p>在Google搜索的时候发现搜索不到，可以手动添加到Google，这样可以主动收录，具体的地址<br/>
 <a href="https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1">https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1</a><br/>
 里面包含搜索状态，搜索分析，网站优化等一些Google的调试工具可以使用，以提高网站的搜索效果。</p></li>
+<li><h4>提交baidusitemap.xml</h4>
+
+<p>Octopress会默认创建sitemap.xml但是不会创建baidusitemap.xml，但是他们的内容基本一样，所以需要我们想办法每次重新生成博客的时候，复制一份sitemap.xml到baidusitemap.xml里面去。作者的实现方案比较简单粗暴，直接在<code>Rakefile</code>里面的<code>generate</code>的<code>task</code>后面添加了一行拷贝：</p></li>
 </ul>
+
+
+<figure class='code'><figcaption><span>robots.txt</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>desc <span class="s2">&quot;Generate jekyll site&quot;</span>
+</span><span class='line'>task :generate <span class="k">do</span>
+</span><span class='line'>  raise <span class="s2">&quot;### You haven&#39;t set anything up yet. First run `rake install` to set up an Octopress theme.&quot;</span> unless File.directory?<span class="o">(</span>source_dir<span class="o">)</span>
+</span><span class='line'>  puts <span class="s2">&quot;## Generating Site with Jekyll&quot;</span>
+</span><span class='line'>  system <span class="s2">&quot;compass compile --css-dir #{source_dir}/stylesheets&quot;</span>
+</span><span class='line'>  system <span class="s2">&quot;jekyll build&quot;</span>
+</span><span class='line'>  cp_r <span class="s2">&quot;#{public_dir}/sitemap.xml&quot;</span>, <span class="s2">&quot;#{public_dir}/baidusitemap.xml&quot;</span>
+</span><span class='line'>end
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>同时在robots.txt追加如下内容：</p>
+
+<figure class='code'><figcaption><span>robots.txt</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>Sitemap: <span class="o">{{</span> site.url <span class="o">}}</span>/baidusitemap.xml
+</span></code></pre></td></tr></table></div></figure>
 
 
 <h2>内容优化</h2>
@@ -196,6 +226,24 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p><code>...http-equiv=“refresh...</code>是为了再次访问这个网页的时候可以自动跳转到相应的网页，<code>...rel="canonical" href=...</code>就相当于301，这样搜索引擎会重新索引指定的网址，这样久的post可以正常使用， 新发布的post的地址也可以自动变成短链接了。</p>
 
+<ul>
+<li><h4>提高文章内容的检索</h4>
+
+<p>页面最前面用一个段落的文字，通常就是一句话，简洁明确回答“xxx是什么“，或者说给出xxx的定义。我觉得更好的是概括文章大意，一方面可以直接告诉用户你观看我的文章可以得到什么，另一个能起到搜索优化的效果。<br/>
+后面的内容小标题尽量靠拢文章中心(提炼于参考链接)，突然觉得搜索引擎也是一个人，他更喜欢好的文章，全文围绕一个中心思想。</p></li>
+<li><h4>添加description和keywords</h4>
+
+<p>类似于这篇文章，以便于搜索引擎检索</p></li>
+</ul>
+
+
+<figure class='code'><figcaption><span>/blog/:year/:month/:day/:title/index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>description:优化octopress blog的搜索SEO
+</span><span class='line'>keywords:Octopress，博客搜索优化，博客SEO，Octopress SEO
+</span></code></pre></td></tr></table></div></figure>
+
+
 <h2>版权</h2>
 
 <p>因为好多转载的文章或者类似最近比较火的<code>阅读模式</code>处理过的文章只包含正文，为了解决这个问题，所以把原来签名等相关信息放在了正文里面，内容的最下面，这样就可以和正文同样处理了，直接把内容添加到模板页面即可。找到<code>_includes/article.html</code>，找到如下内容，<code>content</code>表示文章的正文。</p>
@@ -236,7 +284,8 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
 <p><a href="http://www.yuan-ji.me/Hexo-%E4%BC%98%E5%8C%96%EF%BC%9A%E6%8F%90%E4%BA%A4sitemap%E5%8F%8A%E8%A7%A3%E5%86%B3%E7%99%BE%E5%BA%A6%E7%88%AC%E8%99%AB%E6%8A%93%E5%8F%96-GitHub-Pages-%E9%97%AE%E9%A2%98/">Hexo-优化：提交sitemap及解决百度爬虫抓取-GitHub-Pages-问题</a><br/>
 <a href="https://bblove.me/2015/11/25/how-to-solve-the-problem-that-github-blocks-the-baidu-spider/">解决 Github Pages 禁止百度爬虫的方法</a><br/>
-<a href="http://konradpodgorski.com/blog/2013/10/21/how-i-migrated-my-blog-from-wordpress-to-octopress/#redirect-301-on-github-pages">How I migrated my blog from Wordpress to Octopress</a></p>
+<a href="http://konradpodgorski.com/blog/2013/10/21/how-i-migrated-my-blog-from-wordpress-to-octopress/#redirect-301-on-github-pages">How I migrated my blog from Wordpress to Octopress</a><br/>
+<a href="https://www.seozac.com/google/featured-snippet-how/">怎样把Google排名优化到第0位？</a></p>
 
 <h2>作者</h2>
 <p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>

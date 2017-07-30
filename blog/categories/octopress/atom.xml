@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-07-23T16:47:12+08:00</updated>
+  <updated>2017-07-30T11:14:04+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -182,6 +182,32 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <p>在Google搜索的时候发现搜索不到，可以手动添加到Google，这样可以主动收录，具体的地址<br/>
 <a href="https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1">https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1</a><br/>
 里面包含搜索状态，搜索分析，网站优化等一些Google的调试工具可以使用，以提高网站的搜索效果。</p></li>
+<li><h4>提交baidusitemap.xml</h4>
+
+<p>Octopress会默认创建sitemap.xml但是不会创建baidusitemap.xml，但是他们的内容基本一样，所以需要我们想办法每次重新生成博客的时候，复制一份sitemap.xml到baidusitemap.xml里面去。作者的实现方案比较简单粗暴，直接在<code>Rakefile</code>里面的<code>generate</code>的<code>task</code>后面添加了一行拷贝：
+<figure class='code'><figcaption><span>robots.txt</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>desc <span class="p">&amp;</span>ldquo<span class="p">;</span>Generate jekyll site<span class="p">&amp;</span>rdquo<span class="p">;</span>
+</span><span class='line'>task :generate <span class="k">do</span>
+</span><span class='line'>raise <span class="p">&amp;</span>ldquo<span class="p">;</span><span class="c">### You haven&amp;rsquo;t set anything up yet. First run &lt;code&gt;rake install&lt;/code&gt; to set up an Octopress theme.&amp;rdquo; unless File.directory?(source_dir)</span>
+</span><span class='line'>puts <span class="p">&amp;</span>ldquo<span class="p">;</span><span class="c">## Generating Site with Jekyll&amp;rdquo;</span>
+</span><span class='line'>system <span class="p">&amp;</span>ldquo<span class="p">;</span>compass compile <span class="p">&amp;</span>ndash<span class="p">;</span>css-dir <span class="c">#{source_dir}/stylesheets&amp;rdquo;</span>
+</span><span class='line'>system <span class="p">&amp;</span>ldquo<span class="p">;</span>jekyll build<span class="p">&amp;</span>rdquo<span class="p">;</span>
+</span><span class='line'>cp_r <span class="p">&amp;</span>ldquo<span class="p">;</span><span class="c">#{public_dir}/sitemap.xml&amp;rdquo;, &amp;ldquo;#{public_dir}/baidusitemap.xml&amp;rdquo;</span>
+</span><span class='line'>end
+</span></code></pre></td></tr></table></div></figure>
+同时在robots.txt追加如下内容：
+<figure class='code'><figcaption><span>robots.txt</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>Sitemap: <span class="o">{{</span> site.url <span class="o">}}</span>/baidusitemap.xml
+</span></code></pre></td></tr></table></div></figure></p></li>
 </ul>
 
 
@@ -221,6 +247,17 @@ source/blog/
 &lt;link rel="canonical" href="http://majiang.life/blog/begininng-and-summary" /&gt;
 </code>
 <code>...http-equiv=“refresh...</code>是为了再次访问这个网页的时候可以自动跳转到相应的网页，<code>...rel="canonical" href=...</code>就相当于301，这样搜索引擎会重新索引指定的网址，这样久的post可以正常使用， 新发布的post的地址也可以自动变成短链接了。</p></li>
+<li><h4>提高文章内容的检索</h4>
+
+<p>页面最前面用一个段落的文字，通常就是一句话，简洁明确回答“xxx是什么“，或者说给出xxx的定义。我觉得更好的是概括文章大意，一方面可以直接告诉用户你观看我的文章可以得到什么，另一个能起到搜索优化的效果。<br/>
+后面的内容小标题尽量靠拢文章中心(提炼于参考链接)，突然觉得搜索引擎也是一个人，他更喜欢好的文章，全文围绕一个中心思想。</p></li>
+<li><h4>添加description和keywords</h4>
+
+<p>类似于这篇文章，以便于搜索引擎检索
+<code>
+description:优化octopress blog的搜索SEO
+keywords:Octopress，博客搜索优化，博客SEO，Octopress SEO
+</code></p></li>
 </ul>
 
 
@@ -280,7 +317,8 @@ source/blog/
 
 <p><a href="http://www.yuan-ji.me/Hexo-%E4%BC%98%E5%8C%96%EF%BC%9A%E6%8F%90%E4%BA%A4sitemap%E5%8F%8A%E8%A7%A3%E5%86%B3%E7%99%BE%E5%BA%A6%E7%88%AC%E8%99%AB%E6%8A%93%E5%8F%96-GitHub-Pages-%E9%97%AE%E9%A2%98/">Hexo-优化：提交sitemap及解决百度爬虫抓取-GitHub-Pages-问题</a><br/>
 <a href="https://bblove.me/2015/11/25/how-to-solve-the-problem-that-github-blocks-the-baidu-spider/">解决 Github Pages 禁止百度爬虫的方法</a><br/>
-<a href="http://konradpodgorski.com/blog/2013/10/21/how-i-migrated-my-blog-from-wordpress-to-octopress/#redirect-301-on-github-pages">How I migrated my blog from Wordpress to Octopress</a></p>
+<a href="http://konradpodgorski.com/blog/2013/10/21/how-i-migrated-my-blog-from-wordpress-to-octopress/#redirect-301-on-github-pages">How I migrated my blog from Wordpress to Octopress</a><br/>
+<a href="https://www.seozac.com/google/featured-snippet-how/">怎样把Google排名优化到第0位？</a></p>
 ]]></content>
   </entry>
   
