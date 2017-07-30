@@ -4,7 +4,7 @@ title: "Octopress 博客搜索优化"
 date: 2017-03-18 22:43:10 +0800
 comments: true
 categories: Octopress
-description: 优化octopress blog的搜索SEO
+description: 如果优化百度和谷歌对博客的搜索,从内容角度优化博文,怎么配置Octopress的baidusitemap.xml,修改博文地址为短连接来优化博客
 keywords: Octopress,博客搜索优化,博客SEO,Octopress SEO
 ---
 

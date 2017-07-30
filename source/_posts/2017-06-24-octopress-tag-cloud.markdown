@@ -4,7 +4,7 @@ title: "Octopress 添加标签云"
 date: 2017-06-24 15:11:51 +0800
 comments: true
 categories: [Octopress]
-description: "octopress tag cloud，Octopress 标签云，Octopress标签，Octopress右侧标签，为Octopress侧边栏添加标签云，标签云，为Octopress 添加标签云，为 Octopress 添加 tag cloud，为Octopress 侧边栏添加tag cloud"
+description: 如何为Octopress博客添加标签云,如何自己为Octopress博客编写标签云
 keywords: octopress tag cloud,Octopress 标签云,Octopress标签,Octopress右侧标签,为Octopress侧边栏添加标签云,标签云,为Octopress 添加标签云,为 Octopress 添加 tag cloud,为Octopress 侧边栏添加tag cloud
 ---
 ##前言

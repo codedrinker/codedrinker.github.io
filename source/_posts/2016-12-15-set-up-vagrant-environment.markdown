@@ -4,7 +4,7 @@ title: "Vagrant 私有开发环境搭建"
 date: 2016-12-15 01:28:27 +0800
 comments: true
 categories: Vagrant
-description: Vagrant 私有开发环境搭建
+description: 如何使用Vagrant搭建私有开发环境,如何打包Vagrant环境,如何下载打包好的Vagrant环境,如何更新并升级Vagrant环境
 keywords: Vagrant 私有开发环境搭建,Vagrant 搭建,私有 Vagrant
 ---
 

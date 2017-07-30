@@ -4,7 +4,7 @@ title: "为Octopress 首页添加‘更多’功能"
 date: 2017-06-24 14:32:31 +0800
 comments: true
 categories: [Octopress]
-description: "octopress index page read more, enable excerpt_link, Octopress 首页 更多，Octopress 首页简介，Octopress 首页文章描述，Octopress 首页显示文章简介，Octopress home display article description"
+description: Octopress首页的"阅读原文"是怎么实现的
 keywords: octopress index page read more, enable excerpt_link, Octopress 首页 更多,Octopress 首页简介,Octopress 首页文章描述,Octopress 首页显示文章简介,Octopress home display article description
 ---
 ##前言

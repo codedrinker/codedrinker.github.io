@@ -4,7 +4,7 @@ title: "构建 Java 应用内存级缓存"
 date: 2017-04-30 10:49:21 +0800
 comments: true
 categories: JAVA Cache Guava
-description: Simple In Memory Cache in Java，构建Java应用内存级缓存，Java application cache，guava cache，LoadingCache，CacheLoader，CacheLoader, JAVA 缓存，缓存与LRU，Java Guava Cache，Spring Guava Cache
+description: 介绍不同媒介的读取数据的性能比较,使用Guava Cache实现JAVA内存缓存应用
 keywords: Simple In Memory Cache in Java，构建Java应用内存级缓存，Java application cache，guava cache，LoadingCache，CacheLoader，CacheLoader, JAVA 缓存，缓存与LRU，Java Guava Cache，Spring Guava Cache
 ---
 ##前言

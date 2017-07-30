@@ -4,7 +4,7 @@ title: "优雅的使用 ThreadLocal 传递参数"
 date: 2017-05-20 18:04:38 +0800
 comments: true
 categories: [java,threadlocal]
-description: 如何优雅的使用 ThreadLocal 传递参数，the smart way of passing parameter by threadlocal，巧妙使用ThreadLocal，使用ThreadLocal传递参数，ThreadLocal使用，ThreadLocal使用详解，ThreadLocal原理，ThreadLocal分析，ThreadLocal的使用场景
+description: ThreadLocal源码分析,在Spring项目中使用ThreadLocal传递参数
 keywords: 如何优雅的使用 ThreadLocal 传递参数,the smart way of passing parameter by threadlocal,巧妙使用ThreadLocal,使用ThreadLocal传递参数,ThreadLocal使用,ThreadLocal使用详解,ThreadLocal原理,ThreadLocal分析,ThreadLocal的使用场景
 ---
 ##前言

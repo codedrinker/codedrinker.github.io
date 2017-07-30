@@ -3,7 +3,7 @@ layout: post
 title: "阅读模式是如何实现的?"
 date: 2017-07-04 21:09:10 +0800
 comments: true
-description: "阅读模式是如何实现的，阅读模式是怎么实现的，模拟读读日报的阅读模式实现"
+description: 模仿读读日报的阅读模式实现
 categories: [Tech]
 keywords: 阅读模式是如何实现的,阅读模式是怎么实现的,模拟读读日报的阅读模式实现,读读日报的阅读模式实现
 ---
