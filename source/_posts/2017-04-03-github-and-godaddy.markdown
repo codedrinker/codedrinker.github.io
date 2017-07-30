@@ -4,6 +4,8 @@ title: "Github Pages配置域名"
 date: 2017-04-03 00:32:47 +0800
 comments: true
 categories: Github
+description: Github Pages配置域名
+keywords: Github Pages配置域名,Github Pages GoDaddy 配置域名, Github Pages dig命令,Github Pages Godaddy域名指向,The domain is no longer parked by GoDaddy
 ---
 
 ##前言

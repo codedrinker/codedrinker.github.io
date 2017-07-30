@@ -5,6 +5,7 @@ date: 2017-06-22 22:22:14 +0800
 description: "Spring Boot Get Started, 创建Spring Boot项目，使用Idea 创建Spring Boot 项目，Spring Boot项目入门，什么是Spring Boot"
 comments: true
 categories: [Spring-boot,Java]
+keywords: Spring Boot Get Started, 创建Spring Boot项目,使用Idea 创建Spring Boot 项目,Spring Boot项目入门,什么是Spring Boot
 ---
 
 ##前言

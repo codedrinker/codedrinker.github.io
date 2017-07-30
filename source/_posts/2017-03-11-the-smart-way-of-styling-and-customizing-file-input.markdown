@@ -4,6 +4,8 @@ title: "如何优雅的自定义File Input样式"
 date: 2017-03-11 15:05:51 +0800
 comments: true
 categories: Web
+description: 如何优雅的自定义File Input样式
+keywords: 自定义File Input样式,修改File Input样式,怎么修改File Input样式,修改选择按钮样式
 ---
 
 ##前言

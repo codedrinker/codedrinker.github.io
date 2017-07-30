@@ -13,3 +13,5 @@ http://hukai.me
 http://codingjunkie.net
 ###匠心写作，一个用匠心写博文的地方
 https://gank.io
+###《R语言编程艺术》译者
+http://yanping.me/cn/

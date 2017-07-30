@@ -5,6 +5,7 @@ date: 2017-04-30 10:49:21 +0800
 comments: true
 categories: JAVA Cache Guava
 description: Simple In Memory Cache in Java，构建Java应用内存级缓存，Java application cache，guava cache，LoadingCache，CacheLoader，CacheLoader, JAVA 缓存，缓存与LRU，Java Guava Cache，Spring Guava Cache
+keywords: Simple In Memory Cache in Java，构建Java应用内存级缓存，Java application cache，guava cache，LoadingCache，CacheLoader，CacheLoader, JAVA 缓存，缓存与LRU，Java Guava Cache，Spring Guava Cache
 ---
 ##前言
 缓存是我们日常开发中是必不可少的一种解决性能问题的方法。早期Cache只应用在CPU和内存之间，现在遍布在每一个角落，内存和磁盘，磁盘和网路都存在Cache。Cache同样是做Java应用必不可少的元素。缓存在各种用例中非常有用。例如，当一个值计算或检索成本高昂时，应该考虑使用高速缓存，并且需要在某个输入上多次使用它的值。通常我们使用的缓存有`分布式的缓存数据库`,`本机的缓存数据库`,`本地的内存缓存`，当然也有直接使用数据库的。无论我们选择哪一种实现，都需要结合自身的机器配置和网路情况考虑，毕竟内存，网路带宽都是量化的。下面的表格来源于[ Jeff Dean](https://research.google.com/pubs/jeff.html)的一个PPT，里面罗列了不同级别的IO时间，这正是我们评估如何设计我们系统的必要因素。

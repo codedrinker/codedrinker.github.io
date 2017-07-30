@@ -4,6 +4,8 @@ title: "Browsersync 前端实时预览工程搭建"
 date: 2016-12-24 20:46:37 +0800
 comments: true
 categories: Web
+description: Browsersync 前端实时预览工程搭建
+keywords: Browsersync搭建,Browsersync 实时预览,Browsersync 是什么
 ---
 
 ##前言

@@ -5,3 +5,5 @@ User-agent: *
 Disallow: 
 
 Sitemap: {{ site.url }}/sitemap.xml 
+Sitemap: {{ site.url }}/baidusitemap.xml 
+

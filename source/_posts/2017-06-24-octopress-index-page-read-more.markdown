@@ -5,6 +5,7 @@ date: 2017-06-24 14:32:31 +0800
 comments: true
 categories: [Octopress]
 description: "octopress index page read more, enable excerpt_link, Octopress 首页 更多，Octopress 首页简介，Octopress 首页文章描述，Octopress 首页显示文章简介，Octopress home display article description"
+keywords: octopress index page read more, enable excerpt_link, Octopress 首页 更多,Octopress 首页简介,Octopress 首页文章描述,Octopress 首页显示文章简介,Octopress home display article description
 ---
 ##前言
 在使用 `Octopress` 的过程中随着文章数量的增加，首页越来越臃肿，不仅加载慢而且可读性很差。看到过其他人的 `Octopress` 首页很简洁，有一个 `Read more`，这样就非常方便了。查询了一下操作起来也非常简单。

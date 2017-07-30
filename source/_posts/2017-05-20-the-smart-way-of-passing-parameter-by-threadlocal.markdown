@@ -5,6 +5,7 @@ date: 2017-05-20 18:04:38 +0800
 comments: true
 categories: [java,threadlocal]
 description: 如何优雅的使用 ThreadLocal 传递参数，the smart way of passing parameter by threadlocal，巧妙使用ThreadLocal，使用ThreadLocal传递参数，ThreadLocal使用，ThreadLocal使用详解，ThreadLocal原理，ThreadLocal分析，ThreadLocal的使用场景
+keywords: 如何优雅的使用 ThreadLocal 传递参数,the smart way of passing parameter by threadlocal,巧妙使用ThreadLocal,使用ThreadLocal传递参数,ThreadLocal使用,ThreadLocal使用详解,ThreadLocal原理,ThreadLocal分析,ThreadLocal的使用场景
 ---
 ##前言
 在我们日常 `Web` 开发中难免遇到需要把一个参数层层的传递到最内层，然后中间层根本不需要使用这个参数，或者是仅仅在特定的工具类中使用，这样我们完全没有必要在每一个方法里面都传递这样一个`通用`的参数。如果有一个办法能够在任何一个类里面想用的时候直接拿来使用就太好了。`Java`的`Web`项目大部分都是基于`Tomcat`，每次访问都是一个新的线程，这样让我们联想到了`ThreadLocal`，每一个线程都独享一个`ThreadLocal`，在接收请求的时候`set`特定内容，在需要的时候`get`这个值。下面我们就进入主题。
