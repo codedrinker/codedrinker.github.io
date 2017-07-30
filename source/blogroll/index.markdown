@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "大牛博客"
+title: "推荐博客"
 date: 2017-07-23 16:32
 comments: true
 sharing: true
@@ -15,3 +15,5 @@ http://codingjunkie.net
 https://gank.io
 ###《R语言编程艺术》译者
 http://yanping.me/cn/
+###姜逸坤 = Yikun(码农) + Kero(漫画) + 小困(自媒)
+http://yikun.github.io/
