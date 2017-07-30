@@ -5,11 +5,14 @@
   {% endif %}
 </ul>
   {% if site.simple_search %}
-<form action="{{ site.simple_search }}" method="get">
-  <fieldset role="search">
-    <input type="hidden" name="sitesearch" value="{{ site.url | shorthand_url }}">
-    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
-  </fieldset>
-</form>
+ 
+  <form action="http://localhost:4000/search" id="cse-search-box">
+     <fieldset role="search">
+      <input type="hidden" name="cx" value="partner-pub-9540087096615057:8024957125" />
+      <input type="hidden" name="cof" value="FORID:10" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input class="search" size="55" type="text" name="q" placeholder="Google搜索，输入回车"/>
+     </fieldset>
+  </form>
   {% endif %}
 {% include custom/navigation.html %}
