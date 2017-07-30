@@ -63,10 +63,13 @@
 <loc>http://www.majiang.life/</loc>
 </url>
 <url>
-<loc>http://www.majiang.life/blogroll/</loc>
+<loc>http://www.majiang.life/search/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/about/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/blogroll/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/vagrant/</loc>
@@ -100,6 +103,9 @@
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/tech/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/posts/2/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/2015/01/10/begininng-and-summary/index.html</loc>
