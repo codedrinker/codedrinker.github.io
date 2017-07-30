@@ -20,7 +20,7 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。
 https://www.google.com/webmasters/tools/home?hl=en&pli=1  
 里面包含搜索状态，搜索分析，网站优化等一些Google的调试工具可以使用，以提高网站的搜索效果。
 
-* ####提交baidusitemap.xml
+* ####为Octopress提交baidusitemap.xml
 Octopress会默认创建sitemap.xml但是不会创建baidusitemap.xml，但是他们的内容基本一样，所以需要我们想办法每次重新生成博客的时候，复制一份sitemap.xml到baidusitemap.xml里面去。作者的实现方案比较简单粗暴，直接在`Rakefile`里面的`generate`的`task`后面添加了一行拷贝：
 {% codeblock lang:sh robots.txt%}
 {% raw %}
