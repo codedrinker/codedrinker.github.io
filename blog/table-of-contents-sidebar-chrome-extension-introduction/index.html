@@ -1,0 +1,526 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-9540087096615057",
+enable_page_level_ads: true
+});
+</script>
+  <title>Chrome自动生成网页目录插件的编写和使用 - 码匠笔记</title>
+  <meta name="author" content="麻酱">
+
+  
+  <meta name="description" content="怎么样编写Chrome Extension,Chrome Extension的项目目录和简单说明,自动生成文章目录的Chrome Extension讲解,编写Chrome Extension过程中遇到的坑,如何为插件编写主题,下载地址">
+  <meta name="keywords" content="Chrome插件的编写,Chrome Extension 编写,Chrome Extension setIcon, Chrome Extension LocalStorage,自己动手写Chrome Extension">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.majiang.life/blog/table-of-contents-sidebar-chrome-extension-introduction">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/libs/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-89103576-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">码匠笔记</a></h1>
+  
+    <h2>用心雕琢</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+ 
+  <form action="/search" id="cse-search-box">
+     <fieldset role="search">
+      <input type="hidden" name="cx" value="partner-pub-9540087096615057:8024957125" />
+      <input type="hidden" name="cof" value="FORID:10" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input class="search" size="55" type="text" name="q" placeholder="Google搜索"/>
+     </fieldset>
+  </form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">博文</a></li>
+  <li><a href="/blog/categories/spring-boot/">Spring Boot</a></li>
+  <li><a href="/blog/categories/octopress/">Octopress</a></li>
+  <li><a href="/blogroll">推荐博客</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Chrome自动生成网页目录插件的编写和使用</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-08-13T00:16:06+08:00'><span class='date'>2017-08-13</span> <span class='time'>12:16 am</span></time>
+        
+           | <a href="#disqus_thread"
+             data-disqus-identifier="http://www.majiang.life">评论</a>
+        
+      </p>
+    
+  </header>
+
+
+
+<style type="text/css">
+  .note {
+    margin: 30px 0;
+    padding: 20px 20px 24px;
+    padding-left: 50px;
+    -webkit-border-radius: 0 5px 5px 0;
+    -moz-border-radius: 0 5px 5px 0;
+    border-radius:8px;
+    position: relative;
+    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.2),inset 0 -1px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
+    background-color: #7e6d42;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#7e6d42), to(#5c4e35));
+    background-image: -webkit-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: -moz-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: -o-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: linear-gradient(to bottom, #86847f 0%, #3e3b36 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=&#8217;#7e6d42&#8217;, endColorstr=&#8217;#5c4e35&#8217;,GradientType=0 );
+  }
+  .note h4, .note p {
+    margin: 0;
+    color: #fff;
+  }
+</style>
+<div class="entry-content">
+  <div class="note">
+    <h4>本文内容概要如下：</h4>
+    <p>
+      
+      
+        1, 怎么样编写Chrome Extension<br>
+      
+        2, Chrome Extension的项目目录和简单说明<br>
+      
+        3, 自动生成文章目录的Chrome Extension讲解<br>
+      
+        4, 编写Chrome Extension过程中遇到的坑<br>
+      
+        5, 如何为插件编写主题<br>
+      
+        6, 下载地址<br>
+      
+    </p>
+  </div>
+</div>
+
+<div class="entry-content"><h2>前言</h2>
+
+<p>虽然移动设备已经很普遍了，但是大家使用电脑阅读网页的时间还是很长，尤其是做我们这个行业，除了阅读博客，通过网页搜索资料的时间也是比其他行业要多出来很多的。每次遇到特别长的文章的时候，从上到下的翻阅查找重点内容，肉眼的分离段落实在是比较费劲。但是有的网站这方面比较人性化，<code>Hexo</code>的博客系统或者是最近比较火的<code>segmentfault</code>，他们的文章目录就很方便，便于我们快速的定位(如下图)。但是大部分博客或者是贴吧还是没有目录的，于是笔者就突发奇想，自己写一个<code>Chrome</code>的插件，能自动的识别出来文章的目录，于是就有了这篇文章：</p>
+
+<!-- more -->
+
+
+<p><img src="/images/posts/chrome-extension-segmentfault.png" alt="SegmentFault" /></p>
+
+<h2>效果展示</h2>
+
+<p>如图，简单的展示了一下插件的使用方式。
+<img src="/images/posts/chrome-extension-tutorial.gif" alt="Chrome Extension Toturial" /></p>
+
+<h2>怎么快速编写Chrome Extension？</h2>
+
+<p>首先需要的是<code>翻墙</code>，这个应该是<code>攻城狮</code>必备了吧。然后访问<code>Google</code>的官方<a href="https://developer.chrome.com/extensions/getstarted">Get Started</a>文章即可。里面的通过一个具体的实力详解，非常详细。如果想用更简单的办法，直接<code>clone</code>笔者的<a href="https://github.com/codedrinker/table-of-contents-sidebar">Repo</a>，然后修修改改。</p>
+
+<h2>简单描述一下Chrome Extension的目录结构</h2>
+
+<p>如下是笔者插件项目的目录结构，内容很多，我们挑一些重点说。
+<img src="/images/posts/chrome-extension-tree.png" alt="Tree" /><br/>
+<code>manifest.json</code>是必不可少的，它是插件的入口，包括名字，版本，权限，icon等配置都在这里面。</p>
+
+<p><code>background.js</code>可以是长时间运行在<code>Extension</code>的生性周期里面长时间运行的脚本，用它来管理一些任务或状态非常方便。他可以这样的原因是如下配置：</p>
+
+<figure class='code'><figcaption><span>manifest.json</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;background&quot;</span><span class="err">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;scripts&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>      <span class="s2">&quot;background.js&quot;</span>
+</span><span class='line'>    <span class="p">],</span>
+</span><span class='line'>    <span class="nt">&quot;persistent&quot;</span><span class="p">:</span> <span class="kc">true</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+<code>app.js</code>是使用插件过程中，网页里面可以执行的<code>js</code>文件，原因如下配置：</p>
+
+<figure class='code'><figcaption><span>manifest.json</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;content_scripts&quot;</span><span class="err">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="nt">&quot;css&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s2">&quot;table-of-contents-sidebar.css&quot;</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>      <span class="nt">&quot;js&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s2">&quot;app.js&quot;</span>
+</span><span class='line'>      <span class="p">],</span>
+</span><span class='line'>      <span class="nt">&quot;matches&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="s2">&quot;http://*/*&quot;</span><span class="p">,</span>
+</span><span class='line'>        <span class="s2">&quot;https://*/*&quot;</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>options.html</code>是设置界面，点击插件右键的<code>Options</code>出现的界面。因为<code>manifest.json</code>里面的<code>options_ui</code>配置了。</p>
+
+<figure class='code'><figcaption><span>manifest.json</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;options_ui&quot;</span><span class="err">:</span> <span class="p">{</span>
+</span><span class='line'>    <span class="nt">&quot;page&quot;</span><span class="p">:</span> <span class="s2">&quot;options.html&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;chrome_style&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class='line'>    <span class="nt">&quot;open_in_tab&quot;</span><span class="p">:</span> <span class="kc">true</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p><code>table-of-contents-sidebar.css</code>文件是插件的样式文件，如果需要在修改网页样式的时候使用，需要通过<code>chrome.extension.getURL("table-of-contents-sidebar.css");</code>的方式获取到他的绝对路径，然后写到页面里面使用。<br/>
+<code>options.css</code>这个是设置页面需要使用的样式，不需要上面那么复杂，因为配置页面就是直接的网页了，可以直接引用：</p>
+
+<figure class='code'><figcaption><span>options.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;options.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;options.css&quot;</span><span class="nt">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>其他的都是一起图片或者是样式资源，没有特别要说的，只要路径对应好就可以了。</p>
+
+<h2>插件的实现思路</h2>
+
+<p>1.采用遍历h<em>标签作为菜单<br/>
+2.使用元素距离屏幕的垂直距离来过滤无用标签，笔者初步认为，h</em>标签高度递增说明一直是一个<code>Section</code>里面的标签，如果有变化，说明已经不对了，所以通过这个方式过滤一部分无用标签。<br/>
+3.通过原始元素的<code>ID</code>定位锚，但是如果原始元素没有，自动生成一个<code>UUID</code>绑定到原始元素，方便定位。<br/>
+4.使用获取当前页面的<code>domain</code>实现黑名单拦截功能，过滤掉一些使用者不希望看到<code>目录</code>的页面。
+5.使用<code>mouseover</code>和<code>mouseout</code>事件实现鼠标移走就自动消失，最大限度的不要遮挡阅读内容。<br/>
+6.使用<code>LocalStorage</code>实现保持用户搜索的设置，包括黑名单拦截。这样保证重启浏览器配置不会丢失。</p>
+
+<h2>踩过的坑</h2>
+
+<p>1.<code>Extension</code>使用的<code>icon</code>不能大于<code>190px</code>，所以再设置<code>broswer_action</code>或者是<code>content_menus</code>的时候一定要控制<code>icon</code>大小，因为大小超过以后他不会报错，只是不显示而已。<br/>
+2.如果是页面想访问<code>Extension</code>资源，需要配置<code>web_accessible_resources</code>访问权限：</p>
+
+<figure class='code'><figcaption><span>options.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>&quot;web_accessible_resources&quot;: [
+</span><span class='line'>    &quot;images/*&quot;,
+</span><span class='line'>    &quot;table-of-contents-sidebar.css&quot;,
+</span><span class='line'>    &quot;options.html&quot;,
+</span><span class='line'>    &quot;themes/*&quot;
+</span><span class='line'>  ]
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>3.修改完代码以后，必须到<code>chrome://extensions/</code>页面强制刷新，不然不会更新。  <br/>
+4.上传第一个<code>Chrome Extension</code>需要交纳<code>7$</code>费用，官方说这是为了验证你的合法性。</p>
+
+<h2>下载和使用</h2>
+
+<p>直接在<code>Chrome Webstore</code>搜索<code>Table of contents sidebar</code>下载，或者直接点击如下地址<a href="https://chrome.google.com/webstore/detail/table-of-contents-sidebar/ohohkfheangmbedkgechjkmbepeikkej">https://chrome.google.com/webstore/detail/table-of-contents-sidebar/ohohkfheangmbedkgechjkmbepeikkej</a>安装。操作是非常简单的，所以就不具体说了，如果需要讲解，可以参照插件下载页面的视频(YouTube)。</p>
+
+<h2>自定义样式</h2>
+
+<p>由于笔者是后端出身，虽然编码前端没问题，但是对于页面美观上面还是差一些。于是笔者提供了一个用户可以简单的编写样式的方式，这样如果想自己编写一个样式并且应用到<code>Chrome Extension</code>的同学，可以按照如下操作。  <br/>
+1.第一步，<code>fork</code><a href="https://github.com/codedrinker/table-of-contents-sidebar">项目</a>代码，<code>clone</code>到自己本地。<br/>
+2.第二步，<code>load</code>项目到<code>Chrome</code>，需要在开发模式才能<code>load</code>本地的包。<br/>
+3.第三步，在<code>themes</code>目录添加你自定义样式文件，比如<code>darcula.css</code>。里面的内容仿照<code>table-of-contents-sidebar.css</code>编写即可，里面的元素很清楚。<br/>
+4.第四步，在<code>options.html</code>里面找到<code>theme</code>的<code>select</code>，添加一个<code>option</code>如下即可：</p>
+
+<figure class='code'><figcaption><span>options.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">&quot;themes/darcula.css&quot;</span><span class="nt">&gt;</span>Darcula<span class="nt">&lt;/option&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>5.第五步，提交一个<code>Pull Request</code>，我会尽快<code>Accept</code>。
+这样你自定义的样式就可以展示在设置页面了。
+<img src="/images/posts/chrome-extension-theme.png" alt="Chrome Extension Theme" /></p>
+
+<h2>使用愉快</h2>
+
+<p>希望这个插件对大家有用，如果有任何问题，可以提<a href="https://github.com/codedrinker/table-of-contents-sidebar/issues">Issue</a>到<code>GitHub</code>。</p>
+
+<h2>作者</h2>
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="">Chrome自动生成网页目录插件的编写和使用</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<h2></h2>
+<p>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 文章列表页自适应文字和展示广告 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9540087096615057"
+     data-ad-slot="2018352322"
+     data-ad-format="auto">
+</ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2017-08-13T00:16:06+08:00'><span class='date'>2017-08-13</span> <span class='time'>12:16 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/chrome-extension/'>chrome extension</a>, <a class='category' href='/blog/categories/project/'>project</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/table-of-contents-sidebar-chrome-extension-introduction/" data-via="" data-counturl="http://www.majiang.life/blog/table-of-contents-sidebar-chrome-extension-introduction/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/make-article-more-readable/" title="Previous Post: 阅读模式是如何实现的?">&laquo; 阅读模式是如何实现的?</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+    <h1>关于</h1>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;能剒削柱梁谓之木匠，能穴凿穴埳谓之土匠，能雕琢文书谓之史匠，能搬砖摞码谓之码匠。</p>
+</section><section>
+    <h1>订阅</h1>
+    <p>
+        主要用来记录自己的编程经历，学习笔记和心得体会，希望能和大家一起分享和讨论，共同进步，欢迎订阅。
+    </p>
+    <p>
+        <img src="/images/wechat.jpg" width="153px" height="153px">
+    </p>
+</section>
+<section>
+  	<h1>广告</h1>
+  	<br>
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- 博客邮编正方形广告 -->
+	<ins class="adsbygoogle"
+	     style="display:inline-block;width:250px;height:250px"
+	     data-ad-client="ca-pub-9540087096615057"
+	     data-ad-slot="5415909924"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</section>
+<section>
+  <h1>标签云</h1>
+    <span id="tag-cloud"><a href='/blog/categories/cache' style='font-size: 120.0%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 120.0%'>chrome extension(1)</a> <a href='/blog/categories/github' style='font-size: 120.0%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 120.0%'>guava(1)</a> <a href='/blog/categories/java' style='font-size: 160.0%'>java(3)</a> <a href='/blog/categories/maven' style='font-size: 120.0%'>maven(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(3)</a> <a href='/blog/categories/project' style='font-size: 120.0%'>project(1)</a> <a href='/blog/categories/spring-boot' style='font-size: 120.0%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 120.0%'>tech(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 120.0%'>threadlocal(1)</a> <a href='/blog/categories/vagrant' style='font-size: 120.0%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 140.0%'>web(2)</a> </span>
+</section>
+<section>
+  <h1>最新</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/table-of-contents-sidebar-chrome-extension-introduction/">Chrome自动生成网页目录插件的编写和使用</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/make-article-more-readable/">阅读模式是如何实现的?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/octopress-tag-cloud/">Octopress 添加标签云</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/octopress-index-page-read-more/">为Octopress 首页添加‘更多’功能</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/spring-boot-get-started/">使用 Idea 创建 Spring Boot 项目</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/the-smart-way-of-passing-parameter-by-threadlocal/">优雅的使用 ThreadLocal 传递参数</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/simple-in-memory-cache-in-java/">构建 Java 应用内存级缓存</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/using-amazon-s3-as-a-private-maven-repository/">基于Amazon S3 搭建 Maven 私有仓库</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/using-maven-for-multiple-environment/">安全的使用Maven实现不同环境配置文件的部署</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/github-and-godaddy/">Github Pages配置域名</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 麻酱 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> and <a href="https://help.shopify.com/themes/liquid">Liquid</a> | Contact - gwangchunlei at gmail.com</span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'codedrinker';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://www.majiang.life/blog/table-of-contents-sidebar-chrome-extension-introduction/';
+        var disqus_url = 'http://www.majiang.life/blog/table-of-contents-sidebar-chrome-extension-introduction/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
