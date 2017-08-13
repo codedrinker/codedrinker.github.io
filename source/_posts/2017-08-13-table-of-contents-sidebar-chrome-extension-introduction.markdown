@@ -77,7 +77,7 @@ keywords: Chrome插件的编写,Chrome Extension 编写,Chrome Extension setIcon
 ##踩过的坑
 1.`Extension`使用的`icon`不能大于`190px`，所以再设置`broswer_action`或者是`content_menus`的时候一定要控制`icon`大小，因为大小超过以后他不会报错，只是不显示而已。  
 2.如果是页面想访问`Extension`资源，需要配置`web_accessible_resources`访问权限：
-```
+```json manifest.json
 "web_accessible_resources": [
     "images/*",
     "table-of-contents-sidebar.css",
