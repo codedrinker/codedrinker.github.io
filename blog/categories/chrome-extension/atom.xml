@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Chrome Extension | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/chrome-extension/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-08-13T02:08:16+08:00</updated>
+  <updated>2017-08-13T08:49:40+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -102,7 +102,7 @@
 
 <p>1.<code>Extension</code>使用的<code>icon</code>不能大于<code>190px</code>，所以再设置<code>broswer_action</code>或者是<code>content_menus</code>的时候一定要控制<code>icon</code>大小，因为大小超过以后他不会报错，只是不显示而已。<br/>
 2.如果是页面想访问<code>Extension</code>资源，需要配置<code>web_accessible_resources</code>访问权限：
-<code>
+<code>json manifest.json
 "web_accessible_resources": [
     "images/*",
     "table-of-contents-sidebar.css",

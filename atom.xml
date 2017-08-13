@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-08-13T02:08:16+08:00</updated>
+  <updated>2017-08-13T08:49:40+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -134,18 +134,18 @@
 <p>1.<code>Extension</code>使用的<code>icon</code>不能大于<code>190px</code>，所以再设置<code>broswer_action</code>或者是<code>content_menus</code>的时候一定要控制<code>icon</code>大小，因为大小超过以后他不会报错，只是不显示而已。<br/>
 2.如果是页面想访问<code>Extension</code>资源，需要配置<code>web_accessible_resources</code>访问权限：</p>
 
-<figure class='code'><figcaption><span>options.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span>manifest.json</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>&quot;web_accessible_resources&quot;: [
-</span><span class='line'>    &quot;images/*&quot;,
-</span><span class='line'>    &quot;table-of-contents-sidebar.css&quot;,
-</span><span class='line'>    &quot;options.html&quot;,
-</span><span class='line'>    &quot;themes/*&quot;
-</span><span class='line'>  ]
+</pre></td><td class='code'><pre><code class='json'><span class='line'><span class="s2">&quot;web_accessible_resources&quot;</span><span class="err">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="s2">&quot;images/*&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;table-of-contents-sidebar.css&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;options.html&quot;</span><span class="p">,</span>
+</span><span class='line'>    <span class="s2">&quot;themes/*&quot;</span>
+</span><span class='line'>  <span class="p">]</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
