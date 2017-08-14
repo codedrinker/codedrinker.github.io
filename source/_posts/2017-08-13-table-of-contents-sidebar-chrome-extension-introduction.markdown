@@ -86,7 +86,8 @@ keywords: Chrome插件的编写,Chrome Extension 编写,Chrome Extension setIcon
   ]
 ```
 3.修改完代码以后，必须到`chrome://extensions/`页面强制刷新，不然不会更新。    
-4.上传第一个`Chrome Extension`需要交纳`7$`费用，官方说这是为了验证你的合法性。
+4.上传第一个`Chrome Extension`需要交纳`7$`费用，官方说这是为了验证你的合法性。  
+5.如果更新的`Plugin`到商店的话，已经安装的用户会在5小时左右自动更新。`Chrome`的默认配置是5小时更新一次配置。
 
 ##下载和使用
 直接在`Chrome Webstore`搜索`Table of contents sidebar`下载，或者直接点击如下地址[https://chrome.google.com/webstore/detail/table-of-contents-sidebar/ohohkfheangmbedkgechjkmbepeikkej](https://chrome.google.com/webstore/detail/table-of-contents-sidebar/ohohkfheangmbedkgechjkmbepeikkej)安装。操作是非常简单的，所以就不具体说了，如果需要讲解，可以参照插件下载页面的视频(YouTube)。
