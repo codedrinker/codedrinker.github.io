@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-08-13T09:10:06+08:00</updated>
+  <updated>2017-08-14T13:04:05+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -150,7 +150,8 @@
 
 
 <p>3.修改完代码以后，必须到<code>chrome://extensions/</code>页面强制刷新，不然不会更新。  <br/>
-4.上传第一个<code>Chrome Extension</code>需要交纳<code>7$</code>费用，官方说这是为了验证你的合法性。</p>
+4.上传第一个<code>Chrome Extension</code>需要交纳<code>7$</code>费用，官方说这是为了验证你的合法性。<br/>
+5.如果更新的<code>Plugin</code>到商店的话，已经安装的用户会在5小时左右自动更新。<code>Chrome</code>的默认配置是5小时更新一次配置。</p>
 
 <h2>下载和使用</h2>
 
