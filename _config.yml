@@ -95,6 +95,9 @@ delicious_count: 3
 # Disqus Comments
 disqus_short_name: codedrinker
 disqus_show_comment_count: true
+
+commenthub_id: 3821949
+
 layout: default
 comments: true
 

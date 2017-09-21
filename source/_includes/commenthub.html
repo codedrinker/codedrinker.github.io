@@ -1,0 +1,17 @@
+{% comment %} Load script if commenthub comments are enabled and `page.comments` is either empty (index) or set to true {% endcomment %}
+{% if site.commenthub_id and page.comments != false %}
+<script type="text/javascript">
+    var commenthub_id = '{{ site.commenthub_id }}';
+    var commenthub_website = '{{ site.url }}';
+    var commenthub_identifier = '{{ site.url }}{{ page.url }}';
+    var commenthub_url = '{{ site.url }}{{ page.url }}';
+    var commenthub_title = '{{ page.title }}';
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://commenthub.herokuapp.com/js/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+{% endif %}
