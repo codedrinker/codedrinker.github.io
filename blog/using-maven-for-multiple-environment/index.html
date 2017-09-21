@@ -102,10 +102,6 @@ enable_page_level_ads: true
 
 
 <time class='entry-date' datetime='2017-04-15T19:30:35+08:00'><span class='date'>2017-04-15</span> <span class='time'>7:30 pm</span></time>
-        
-           | <a href="#disqus_thread"
-             data-disqus-identifier="http://www.majiang.life">评论</a>
-        
       </p>
     
   </header>
@@ -583,8 +579,7 @@ enable_page_level_ads: true
 
   <section>
     <h1>评论</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
+    <div id="commenthub_thread" aria-live="polite"></div>
   </section>
 
 </div>
@@ -685,18 +680,17 @@ enable_page_level_ads: true
   
 
 <script type="text/javascript">
-      var disqus_shortname = 'codedrinker';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.majiang.life/blog/using-maven-for-multiple-environment/';
-        var disqus_url = 'http://www.majiang.life/blog/using-maven-for-multiple-environment/';
-        var disqus_script = 'embed.js';
-      
+    var commenthub_id = '3821949';
+    var commenthub_website = 'http://www.majiang.life';
+    var commenthub_identifier = 'http://www.majiang.life/blog/using-maven-for-multiple-environment/';
+    var commenthub_url = 'http://www.majiang.life/blog/using-maven-for-multiple-environment/';
+    var commenthub_title = '安全的使用Maven实现不同环境配置文件的部署';
     (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://commenthub.herokuapp.com/js/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
 

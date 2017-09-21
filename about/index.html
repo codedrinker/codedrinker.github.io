@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="About the Author 2015-01-10 4:27 pm 2015-01-10 4:27 pm Tweet 评论 Please enable JavaScript to view the comments powered by Disqus. 关于 &nbsp;&nbsp;& &hellip;">
+  <meta name="description" content="About the Author 2015-01-10 4:27 pm 2015-01-10 4:27 pm Tweet 评论 关于 &nbsp;&nbsp;&nbsp;&nbsp;能剒削柱梁谓之木匠，能穴凿穴埳谓之土匠，能雕琢文书谓之史匠，能搬砖摞码谓之码匠。 订阅 主要用来记录自己的编程经历 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -144,8 +144,7 @@ enable_page_level_ads: true
 
   <section>
     <h1>评论</h1>
-    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-</div>
+    <div id="commenthub_thread" aria-live="polite"></div>
   </section>
 
 </div>
@@ -246,18 +245,17 @@ enable_page_level_ads: true
   
 
 <script type="text/javascript">
-      var disqus_shortname = 'codedrinker';
-      
-        
-        // var disqus_developer = 1;
-        var disqus_identifier = 'http://www.majiang.life/about/index.html';
-        var disqus_url = 'http://www.majiang.life/about/index.html';
-        var disqus_script = 'embed.js';
-      
+    var commenthub_id = '3821949';
+    var commenthub_website = 'http://www.majiang.life';
+    var commenthub_identifier = 'http://www.majiang.life/about/index.html';
+    var commenthub_url = 'http://www.majiang.life/about/index.html';
+    var commenthub_title = 'About the author';
     (function () {
-      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-      dsq.src = '//' + disqus_shortname + '.disqus.com/' + disqus_script;
-      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://commenthub.herokuapp.com/js/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
     }());
 </script>
 
