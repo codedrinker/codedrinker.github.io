@@ -1,0 +1,600 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-9540087096615057",
+enable_page_level_ads: true
+});
+</script>
+  <title>总是听别人说响应式布局，原来这么简单 - 码匠笔记</title>
+  <meta name="author" content="麻酱">
+
+  
+  <meta name="description" content="什么是响应式布局,如何快速实现web响应式布局,Css 优先级,Meta ViewPort 是什么,Media Queries 详解">
+  <meta name="keywords" content="web响应式布局设计,Head First Responsive Web Design,什么是响应式布局,怎么快速实现web响应式布局,Css 优先级详解,Meta ViewPort是什么">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.majiang.life/blog/head-first-responsive-web-design">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/libs/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-89103576-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">码匠笔记</a></h1>
+  
+    <h2>用心雕琢</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+ 
+  <form action="/search" id="cse-search-box">
+     <fieldset role="search">
+      <input type="hidden" name="cx" value="partner-pub-9540087096615057:8024957125" />
+      <input type="hidden" name="cof" value="FORID:10" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input class="search" size="55" type="text" name="q" placeholder="Google搜索"/>
+     </fieldset>
+  </form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">博文</a></li>
+  <li><a href="/blog/categories/spring-boot/">Spring Boot</a></li>
+  <li><a href="/blog/categories/octopress/">Octopress</a></li>
+  <li><a href="/blogroll">推荐博客</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">总是听别人说响应式布局，原来这么简单</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-10-28T10:37:55+08:00'><span class='date'>2017-10-28</span> <span class='time'>10:37 am</span></time>
+      </p>
+    
+  </header>
+
+
+
+<style type="text/css">
+  .note {
+    margin: 30px 0;
+    padding: 20px 20px 24px;
+    padding-left: 50px;
+    -webkit-border-radius: 0 5px 5px 0;
+    -moz-border-radius: 0 5px 5px 0;
+    border-radius:8px;
+    position: relative;
+    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.2),inset 0 -1px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
+    background-color: #7e6d42;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#7e6d42), to(#5c4e35));
+    background-image: -webkit-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: -moz-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: -o-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: linear-gradient(to bottom, #86847f 0%, #3e3b36 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=&#8217;#7e6d42&#8217;, endColorstr=&#8217;#5c4e35&#8217;,GradientType=0 );
+  }
+  .note h4, .note p {
+    margin: 0;
+    color: #fff;
+  }
+</style>
+<div class="entry-content">
+  <div class="note">
+    <h4>本文内容概要如下：</h4>
+    <p>
+      
+      
+        1, 什么是响应式布局<br>
+      
+        2, 如何快速实现web响应式布局<br>
+      
+        3, Css 优先级<br>
+      
+        4, Meta ViewPort 是什么<br>
+      
+        5, Media Queries 详解<br>
+      
+    </p>
+  </div>
+</div>
+
+<div class="entry-content"><h2>前言</h2>
+
+<p>总听别人说响应式布局，觉得是一个很高大上的东西，近日做的一个项目需要适配不同的屏幕尺寸，于是就简单研究了一下<code>Web响应式布局</code>，其实原理很简单，下面就简单整理了一下分享给大家。</p>
+
+<!-- more -->
+
+
+<h2>什么是响应式布局</h2>
+
+<p><img src="/images/posts/rwd-demo.gif" alt="Demo" />
+<font color=gray size=4>[<em>图片来源</em><code>caktusgroup</code>]</font><br/></p>
+
+<p>如图就是响应式布局的体现，简单的说响应式布局就是一个网站能够兼容多个终端，而不是为每个终端做一个特定的版本。这个概念随着移动设备的兴起而深入人心。<br/>
+比如<code>头条</code>他做的就不是响应式布局，他通过实时检测设备信息，在<code>www.toutiao.com</code>和<code>m.toutiao.com</code>两个网站之间切换。而最近比较火的开发者社区<code>segmentfault.com</code>就是响应式布局，页面的布局会会随着你拖动浏览器窗口大小变化而变化。响应式布局没有绝对的话好与坏，需要根据网站的性质来确定，比如<code>toutiao</code>的页面元素非常多，页面需要包括所有屏幕尺寸的样式显示不是很好操作，然而<code>segmentfault</code>页面元素较少，反而放在一起方便维护。</p>
+
+<h2>如何快速实现<code>web响应式布局</code></h2>
+
+<p>我们通过一个例子来具体说明，首先使用<code>@media</code>关键字为不同的屏幕尺寸设置不同样式，关于<code>@media</code>我们下文有更详细的介绍</p>
+
+<figure class='code'><figcaption><span>代码片段</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;style </span><span class="na">type=</span><span class="s">&quot;text/css&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="k">@media</span> <span class="nt">only</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">min-width</span><span class="o">:</span> <span class="nt">480px</span><span class="o">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nc">.col-sm-6</span><span class="o">,</span> <span class="nc">.col-sm-12</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="nc">.col-sm-12</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="nc">.col-sm-6</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">50%</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="k">@media</span> <span class="nt">only</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">min-width</span><span class="o">:</span> <span class="nt">768px</span><span class="o">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="nc">.col-md-6</span><span class="o">,</span> <span class="nc">.col-md-12</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">float</span><span class="o">:</span> <span class="k">left</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="nc">.col-md-12</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">100%</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="nc">.col-md-6</span> <span class="p">{</span>
+</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">50%</span><span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'><span class="nt">&lt;/style&gt;</span>
+</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-12 col-sm-12 row&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-6 col-sm-12 col-1 col&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+</span><span class='line'>          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+</span><span class='line'>          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+</span><span class='line'>          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+</span><span class='line'>          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+</span><span class='line'>          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-6 col-sm-12 col-2 col&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+</span><span class='line'>          tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+</span><span class='line'>          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+</span><span class='line'>          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+</span><span class='line'>          cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+</span><span class='line'>          proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</span><span class='line'>      <span class="nt">&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/div&gt;</span>    
+</span><span class='line'><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们简单解释一下上述代码片段<br/>
+<code>min-width</code>指的是当屏幕尺寸大于当前值的时候样式生效。<br/>
+外层的<code>div</code>包裹内层的两个<code>div</code>。<br/>
+<code>col-md-6 col-sm-12</code>当屏幕尺寸大于<code>768px</code>的时候子<code>div</code>宽度是父<code>div</code>的一半，所以是并排。当屏幕尺寸大于<code>480px</code>的时候子<code>div</code>宽度和父<code>div</code>的宽度一样。下图为不同尺寸下的效果图。</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center;"> 768px        </th>
+<th style="text-align:center;"> 480px         </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;"><img src="/images/posts/rwd-desktop.png" alt="Demo" /></td>
+<td style="text-align:center;"> <img src="/images/posts/rwd-iphone5.png" alt="Demo" /></td>
+</tr>
+</tbody>
+</table>
+
+
+<p>那么问题来了，图一尺寸大于<code>768px</code>不假，但是也大于<code>480px</code>啊，那么怎么就按照<code>768px</code>的尺寸排布了呢？这里就涉及到了<code>CSS 优先级</code>：<br/>
+<code>CSS</code> 的基本优先级如下 <br/>
+<code>（外部样式）External style sheet &lt;（内部样式）Internal style sheet &lt;（内联样式）Inline style</code><br/>
+如果优先级一样便有一个覆盖原则，后面的覆盖前面的，于是如例，当屏幕尺寸慢慢变大到<code>768px</code>的时候，后者遍生效了。</p>
+
+<p>注意观察的同学又发现问题了，图二没有办法看啊，太小了吧。是的，我们的响应式还没有做完，这个时候我们在<code>head</code>里面添加如下一行代码再试试？</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">&quot;viewport&quot;</span>
+</span><span class='line'>  <span class="na">content=</span><span class="s">&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0&quot;</span><span class="nt">&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如图神奇的一幕出现了：<br/>
+<img src="/images/posts/rwd-iphone-mete-viewport.png" alt="Demo" /><br/>
+width=device-width: 表示此宽度不依赖于原始象素(px)，而依赖于屏幕的宽度.这样我们就大功告成了.如需要下载源码请<a href="http://www.majiang.life/repository/asserts/rwd.html.zip">点击</a>，在线查看请<a href="http://www.majiang.life/repository/asserts/rwd.html">点击</a>。想知道为什么<code>meta</code>有这么大作用请翻看下文。</p>
+
+<h2>Meta ViewPort 是什么</h2>
+
+<p>手机浏览器是把页面放在一个虚拟的“窗口”(<code>viewport</code>)中，通常这个虚拟的“窗口”(<code>viewport</code>)比屏幕宽，默认是把网页挤到一个很小窗口以便全部预览，这样也不会破坏没有适配手机布局的网页。移动版的 Safari 浏览器最新引进了 <code>viewport</code> 这个 meta tag，让网页开发者来控制 viewport 的大小和缩放，其他手机浏览器也逐步支持。我们如果做了手机屏幕尺寸的适配就可以手动调整<code>viewport</code>，这样就可以把网页内容和手机布局合理的展示给用户。下面是具体参数的说明：</p>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:left;">                 </th>
+<th style="text-align:left;">               </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">width</td>
+<td style="text-align:left;"> 设置layout viewport  的宽度，为一个正整数，或字符串&#8221;width-device&#8221;</td>
+</tr>
+<tr>
+<td style="text-align:left;">initial-scale</td>
+<td style="text-align:left;">     设置页面的初始缩放值，为一个数字，可以带小数</td>
+</tr>
+<tr>
+<td style="text-align:left;">minimum-scale</td>
+<td style="text-align:left;"> 允许用户的最小缩放值，为一个数字，可以带小数</td>
+</tr>
+<tr>
+<td style="text-align:left;">maximum-scale</td>
+<td style="text-align:left;"> 允许用户的最大缩放值，为一个数字，可以带小数</td>
+</tr>
+<tr>
+<td style="text-align:left;">height</td>
+<td style="text-align:left;"> 设置layout viewport  的高度，这个属性对我们并不重要，很少使用&#8221;</td>
+</tr>
+<tr>
+<td style="text-align:left;">user-scalable</td>
+<td style="text-align:left;"> 是否允许用户进行缩放，值为&#8221;no&#8221;或&#8221;yes&#8221;, no 代表不允许，yes代表允许</td>
+</tr>
+</tbody>
+</table>
+
+
+<h2>Media Queries 详解</h2>
+
+<p>中文叫做媒体查询，它包含一个媒体类型(media type)和至少一个表达式，用媒体特性限制样式表的作用范围。下面我们直接通过例子对相对的关键字进行分析：</p>
+
+<h4>only</h4>
+
+<p>用于向早期浏览器隐藏媒体查询，比如IE如果不支持的话直接忽略当前定义的样式。和其他表达式一起用需要<code>and</code></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="k">@media</span> <span class="nt">only</span> <span class="nt">screen</span> <span class="nt">and</span> <span class="o">(</span><span class="nt">min-width</span><span class="o">:</span> <span class="nt">400px</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>screen</h4>
+
+<p>screen是一种<code>媒体类型</code>，例中的<code>screen</code>意思是仅支持彩色电脑显示器。其他属性如下：<br/>
+all：适用与所有设备<br/>
+print：paged material and documents viewed on screen in print previe mode.<br/>
+screen: 彩色电脑显示器<br/>
+speech：intended for speech synthesizers</p>
+
+<h4>and</h4>
+
+<p><code>and</code>是一种<code>操作符</code>，表示被链接的表达式不许同时满足，其他表达式如下：  <br/>
+<code>and</code>：所有条件必须满足<br/>
+<code>,</code>：只要满足一种条件即可<br/>
+<code>not</code>：条件的取反</p>
+
+<h4>min-width</h4>
+
+<p><code>min-width</code>是<code>媒体特征</code>，他的意思是最小宽度满足的时候就为真，其他媒体特征：<br/>
+width： viewport width<br/>
+height: viewport height <br/>
+aspect-ratio: viewport的宽高比如：16/9 <br/>
+orientation: 宽度和高度的大小关系 <br/>
+resolution: pixel density of the output device <br/>
+scan: scanning process of the output device <br/>
+grid: is the device a grid or bitmap <br/>
+color: number of bits per color component of the output device, or zero if the device isn&rsquo;t color <br/>
+color-index: number of entries in the output device&rsquo;s color lookup table, or zero if the device does not use such a table</p>
+
+<h2>总结</h2>
+
+<p>笔者只是随学随卖，抛砖引玉，如有想更深入理解<code>响应式布局</code>请观看如下参考链接。</p>
+
+<h2>参考链接</h2>
+
+<p><a href="http://www.cnblogs.com/xugang/archive/2010/09/24/1833760.html">CSS 优先级</a>  <br/>
+<a href="https://segmentfault.com/a/1190000002812335/sharing-classes-or-interfaces-between-different-projects">Media Queries 详解</a>  <br/>
+<a href="https://www.cnblogs.com/2050/p/3877280.html">ViewPort 详解</a></p>
+
+<h2>作者</h2>
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="">总是听别人说响应式布局，原来这么简单</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<h2></h2>
+<p>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 文章列表页自适应文字和展示广告 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9540087096615057"
+     data-ad-slot="2018352322"
+     data-ad-format="auto">
+</ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2017-10-28T10:37:55+08:00'><span class='date'>2017-10-28</span> <span class='time'>10:37 am</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/web/'>web</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/head-first-responsive-web-design/" data-via="" data-counturl="http://www.majiang.life/blog/head-first-responsive-web-design/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/table-of-contents-sidebar-chrome-extension-introduction/" title="Previous Post: Chrome自动生成网页目录插件的编写和使用">&laquo; Chrome自动生成网页目录插件的编写和使用</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="commenthub_thread" aria-live="polite"></div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+    <h1>关于</h1>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;能剒削柱梁谓之木匠，能穴凿穴埳谓之土匠，能雕琢文书谓之史匠，能搬砖摞码谓之码匠。</p>
+</section><section>
+    <h1>订阅</h1>
+    <p>
+        主要用来记录自己的编程经历，学习笔记和心得体会，希望能和大家一起分享和讨论，共同进步，欢迎订阅。
+    </p>
+    <p>
+        <img src="/images/wechat.jpg" width="153px" height="153px">
+    </p>
+</section>
+<section>
+  	<h1>广告</h1>
+  	<br>
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- 博客邮编正方形广告 -->
+	<ins class="adsbygoogle"
+	     style="display:inline-block;width:250px;height:250px"
+	     data-ad-client="ca-pub-9540087096615057"
+	     data-ad-slot="5415909924"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</section>
+<section>
+  <h1>标签云</h1>
+    <span id="tag-cloud"><a href='/blog/categories/cache' style='font-size: 120.0%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 120.0%'>chrome extension(1)</a> <a href='/blog/categories/github' style='font-size: 120.0%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 120.0%'>guava(1)</a> <a href='/blog/categories/java' style='font-size: 160.0%'>java(3)</a> <a href='/blog/categories/maven' style='font-size: 120.0%'>maven(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(3)</a> <a href='/blog/categories/project' style='font-size: 120.0%'>project(1)</a> <a href='/blog/categories/spring-boot' style='font-size: 120.0%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 120.0%'>tech(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 120.0%'>threadlocal(1)</a> <a href='/blog/categories/vagrant' style='font-size: 120.0%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 160.0%'>web(3)</a> </span>
+</section>
+<section>
+  <h1>最新</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/head-first-responsive-web-design/">总是听别人说响应式布局，原来这么简单</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/table-of-contents-sidebar-chrome-extension-introduction/">Chrome自动生成网页目录插件的编写和使用</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/make-article-more-readable/">阅读模式是如何实现的?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/octopress-tag-cloud/">Octopress 添加标签云</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/octopress-index-page-read-more/">为Octopress 首页添加‘更多’功能</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/spring-boot-get-started/">使用 Idea 创建 Spring Boot 项目</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/the-smart-way-of-passing-parameter-by-threadlocal/">优雅的使用 ThreadLocal 传递参数</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/simple-in-memory-cache-in-java/">构建 Java 应用内存级缓存</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/using-amazon-s3-as-a-private-maven-repository/">基于Amazon S3 搭建 Maven 私有仓库</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/using-maven-for-multiple-environment/">安全的使用Maven实现不同环境配置文件的部署</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - 麻酱 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> and <a href="https://help.shopify.com/themes/liquid">Liquid</a> | Contact - gwangchunlei at gmail.com</span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    var commenthub_id = '3821949';
+    var commenthub_website = 'http://www.majiang.life';
+    var commenthub_identifier = 'http://www.majiang.life/blog/head-first-responsive-web-design/';
+    var commenthub_url = 'http://www.majiang.life/blog/head-first-responsive-web-design/';
+    var commenthub_title = '总是听别人说响应式布局，原来这么简单';
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://commenthub.herokuapp.com/js/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

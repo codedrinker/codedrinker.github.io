@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://www.majiang.life/blog/head-first-responsive-web-design/</loc>
+<lastmod>2017-10-28T10:37:55+08:00</lastmod>
+</url>
+<url>
 <loc>http://www.majiang.life/blog/table-of-contents-sidebar-chrome-extension-introduction/</loc>
 <lastmod>2017-08-13T00:16:06+08:00</lastmod>
 </url>
