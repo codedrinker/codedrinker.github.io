@@ -5,6 +5,10 @@
 <lastmod>2017-10-28T10:37:55+08:00</lastmod>
 </url>
 <url>
+<loc>http://www.majiang.life/blog/quick-start-spring-data-redis/</loc>
+<lastmod>2017-10-21T10:37:55+08:00</lastmod>
+</url>
+<url>
 <loc>http://www.majiang.life/blog/table-of-contents-sidebar-chrome-extension-introduction/</loc>
 <lastmod>2017-08-13T00:16:06+08:00</lastmod>
 </url>
@@ -110,6 +114,9 @@
 <loc>http://www.majiang.life/blog/categories/spring-boot/</loc>
 </url>
 <url>
+<loc>http://www.majiang.life/blog/categories/spring/</loc>
+</url>
+<url>
 <loc>http://www.majiang.life/blog/categories/tech/</loc>
 </url>
 <url>
@@ -117,6 +124,9 @@
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/project/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/blog/categories/redis/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/2015/01/10/begininng-and-summary/index.html</loc>
