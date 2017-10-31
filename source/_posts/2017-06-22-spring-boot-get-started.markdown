@@ -4,7 +4,7 @@ title: "使用 Idea 创建 Spring Boot 项目"
 date: 2017-06-22 22:22:14 +0800
 description: 使用Idea快速创建Spring Boot项目
 comments: true
-categories: [Spring-boot,Java]
+categories: [Spring-boot,Java,Spring]
 keywords: Spring Boot Get Started, 创建Spring Boot项目,使用Idea 创建Spring Boot 项目,Spring Boot项目入门,什么是Spring Boot
 ---
 
