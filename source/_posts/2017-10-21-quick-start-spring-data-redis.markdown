@@ -106,4 +106,4 @@ nested exception is java.lang.NoClassDefFoundError: redis/clients/jedis/JedisPoo
 出现这个问题的原因是因为其使用的默认是RedisTemplate，它使用的是Java的Serialization方式，所以会在前面有一段类似乱码的东西。如果是String作为key的话可以直接修改为StringRedisTemplate这个问题就修改了。
 
 ##参考链接
-[String Date Redis](http://projects.spring.io/spring-data-redis/)
+[Spring Data Redis](http://projects.spring.io/spring-data-redis/)
