@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Spring | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/spring/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-10-31T21:27:50+08:00</updated>
+  <updated>2017-11-04T12:47:04+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -52,87 +52,917 @@
 &lt;/repositories&gt;
 </code>
 然后直接在<code>Spring</code>的配置文件里面定义<code>bean</code>就可以了，官方没有说怎么配置<code>hostname</code>等等，但是点击<code>JedisConnectionFactory</code>里面一看就知道了，直接添加一行<code>p:host-name="172.10.23.234"</code>即可。
-&#8220;`xml applicationContext.xml
-<bean id="jedisConnFactory"
-    class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-    p:use-pool="true"
-    p:host-name="172.10.23.234"
-    /></p>
+<figure class='code'><figcaption><span>applicationContext.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;jedisConnFactory&quot;</span>
+</span><span class='line'>    <span class="na">class=</span><span class="s">&quot;org.springframework.data.redis.connection.jedis.JedisConnectionFactory&quot;</span>
+</span><span class='line'>    <span class="na">p:use-pool=</span><span class="s">&quot;true&quot;</span>
+</span><span class='line'>    <span class="na">p:host-name=</span><span class="s">&quot;172.10.23.234&quot;</span>
+</span><span class='line'>    <span class="nt">/&gt;&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- redis template definition --&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;&lt;bean</span> <span class="na">id=</span><span class="s">&quot;redisTemplate&quot;</span>
+</span><span class='line'>    <span class="na">class=</span><span class="s">&quot;org.springframework.data.redis.core.RedisTemplate&quot;</span>
+</span><span class='line'>    <span class="na">p:connection-factory-ref=</span><span class="s">&quot;jedisConnFactory&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'><span class="nt">&lt;code&gt;</span>
+</span><span class='line'>最后直接引入`bean`使用：
+</span><span class='line'><span class="nt">&lt;/code&gt;</span>java Example.java
+</span><span class='line'>public class Example {<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code&gt;</span>// inject the actual template
+</span><span class='line'>@Autowired
+</span><span class='line'>private RedisTemplate<span class="ni">&amp;lt;</span>String, String<span class="ni">&amp;gt;</span> template;
+</span><span class='line'>
+</span><span class='line'>// inject the template as ListOperations
+</span><span class='line'>// can also inject as Value, Set, ZSet, and HashOperations
+</span><span class='line'>@Resource(name=&quot;redisTemplate&quot;)
+</span><span class='line'>private ListOperations<span class="ni">&amp;lt;</span>String, String<span class="ni">&amp;gt;</span> listOps;
+</span><span class='line'>
+</span><span class='line'>public void addLink(String userId, URL url) {
+</span><span class='line'>    listOps.leftPush(userId, url.toExternalForm());
+</span><span class='line'>    // or use template directly
+</span><span class='line'>    redisTemplate.boundListOps(userId).leftPush(url.toExternalForm());
+</span><span class='line'>}
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>}
+</span><span class='line'><span class="nt">&lt;code&gt;</span>``
+</span><span class='line'>如上，根据<span class="nt">&lt;/code&gt;</span>Spring`的官方文档已经全部完成，是不是非常简单？那么接下来我们运行一下试一试。<span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>这时候出现了第一个异常。<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;h2&gt;</span>NoClassDefFoundError 问题解决<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;pre&gt;&lt;code</span> <span class="na">class=</span><span class="s">&quot;sh&quot;</span><span class="nt">&gt;</span>nested exception is java.lang.NoClassDefFoundError: org/apache/commons/pool2/impl/GenericObjectPoolConfig
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>很明显是没有引入这个包嘛，我们直接从<span class="nt">&lt;code&gt;</span>spring-data-redis<span class="nt">&lt;/code&gt;</span>的<span class="nt">&lt;code&gt;</span>pom.xml<span class="nt">&lt;/code&gt;</span>里面可以看到多了一个<span class="nt">&lt;code&gt;</span>optional<span class="nt">&lt;/code&gt;</span>属性。
+</span><span class='line'><span class="nt">&lt;code&gt;</span>xml pom.xml[spring-data-redis]
+</span><span class='line'>  <span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'>      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.commons<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+</span><span class='line'>      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>commons-pool2<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+</span><span class='line'>      <span class="ni">&amp;lt;</span>optional<span class="ni">&amp;gt;</span>true<span class="ni">&amp;lt;</span>/optional<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;</span>
+</span><span class='line'>那么这个问题就迎刃而解了，因为在<span class="nt">&lt;code&gt;</span>spring-data-redis<span class="nt">&lt;/code&gt;</span>里面声明的<span class="nt">&lt;code&gt;</span>commons-pool2<span class="nt">&lt;/code&gt;</span>是<span class="nt">&lt;code&gt;</span>optional<span class="nt">&lt;/code&gt;</span>的，根据<span class="nt">&lt;code&gt;</span>Maven<span class="nt">&lt;/code&gt;</span>的规则如果A项目依赖配置为optional的，那么依赖A项目的B项目如果不手动引入A里面optional的依赖B项目是不会自动引入依赖的的。说起来有点绕，反正就是导致我们必须手动添加下面的依赖。详情可以参照<span class="nt">&lt;code&gt;</span>Maven<span class="nt">&lt;/code&gt;</span>的官方网文档。<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://maven.apache.org/guides/introduction/introduction-to-optional-and-excludes-dependencies.html&quot;</span><span class="nt">&gt;</span>点击查看官方文档<span class="nt">&lt;/a&gt;</span>。
+</span><span class='line'><span class="nt">&lt;code&gt;</span>xml pom.xml
+</span><span class='line'><span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.apache.commons<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>commons-pool2<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>2.2<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;</span>
+</span><span class='line'>再次运行的时候我们发现了另一个问题
+</span><span class='line'><span class="nt">&lt;code&gt;</span>sh
+</span><span class='line'>nested exception is java.lang.NoClassDefFoundError: redis/clients/jedis/JedisPoolConfig
+</span><span class='line'><span class="nt">&lt;/code&gt;</span>
+</span><span class='line'>这问题就显而易见了，直接添加如下到<span class="nt">&lt;code&gt;</span>pom.xml<span class="nt">&lt;/code&gt;</span>中即可。
+</span><span class='line'><span class="nt">&lt;code&gt;</span>xml pom.xml
+</span><span class='line'><span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>redis.clients<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>jedis<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>2.9.0<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;</span>
+</span><span class='line'>这时候我们再次运行项目可以正常运行啦，然而有出现了一个奇怪的问题，存入<span class="nt">&lt;code&gt;</span>Redis<span class="nt">&lt;/code&gt;</span>里面的<span class="nt">&lt;code&gt;</span>Key<span class="nt">&lt;/code&gt;</span>有一个看起来像是乱码的前缀<span class="nt">&lt;code&gt;</span>\xac\xed\x00\x05t\x00<span class="nt">&lt;/code&gt;</span>:<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;h2&gt;</span>\xac\xed\x00\x05t\x00 到底是啥<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>出现这个问题的原因是因为其使用的默认是RedisTemplate，它使用的是Java的Serialization方式，所以会在前面有一段类似乱码的东西。如果是String作为key的话可以直接修改为StringRedisTemplate这个问题就修改了。<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;h2&gt;</span>参考链接<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;&lt;a</span> <span class="na">href=</span><span class="s">&quot;http://projects.spring.io/spring-data-redis/&quot;</span><span class="nt">&gt;</span>Spring Data Redis<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+</span><span class='line'>]]&gt;<span class="nt">&lt;/content&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/entry&gt;</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="nt">&lt;entry&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;title</span> <span class="na">type=</span><span class="s">&quot;html&quot;</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[从 Spring 集成 Mybatis 到 浅析Java动态代理]]&gt;</span><span class="nt">&lt;/title&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;http://www.majiang.life/blog/spring-mybatis-and-dynamic-proxy/&quot;</span><span class="nt">/&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;updated&gt;</span>2017-10-15T21:10:30+08:00<span class="nt">&lt;/updated&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;id&gt;</span>http://www.majiang.life/blog/spring-mybatis-and-dynamic-proxy<span class="nt">&lt;/id&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;content</span> <span class="na">type=</span><span class="s">&quot;html&quot;</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[&lt;h2&gt;</span>前言<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>因为 <span class="nt">&lt;code&gt;</span>MyBatis<span class="nt">&lt;/code&gt;</span> 的易上手性和可控性，使得它成为了<span class="nt">&lt;code&gt;</span>ORM<span class="nt">&lt;/code&gt;</span>框架中的首选。近日新起了一个项目，所以重新搭建了一下 <span class="nt">&lt;code&gt;</span>Spring-mybatis<span class="nt">&lt;/code&gt;</span>, 下面是搭建笔记和从<span class="nt">&lt;code&gt;</span>Spring-mybatis<span class="nt">&lt;/code&gt;</span>源码分析其如何使用<span class="nt">&lt;code&gt;</span>Java动态代理<span class="nt">&lt;/code&gt;</span>，希望对大家有帮助。<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="c">&lt;!-- more --&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;h2&gt;</span>Spring 集成 Mybatis<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;&lt;code&gt;</span>Spring<span class="nt">&lt;/code&gt;</span> 集成 <span class="nt">&lt;code&gt;</span>Mybatis<span class="nt">&lt;/code&gt;</span>的方式有很多种，大家耳熟能详的<span class="nt">&lt;code&gt;</span>xml<span class="nt">&lt;/code&gt;</span>配置方式或者本文的采用的方式：<span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>首先需要添加<span class="nt">&lt;code&gt;</span>MyBatis<span class="nt">&lt;/code&gt;</span>的和<span class="nt">&lt;code&gt;</span>MyBatis-Spring<span class="nt">&lt;/code&gt;</span>的依赖，本文使用的<span class="nt">&lt;code&gt;</span>Spring-mybatis<span class="nt">&lt;/code&gt;</span>版本是1.3.1。在<span class="nt">&lt;code&gt;</span>mvnrepository<span class="nt">&lt;/code&gt;</span>里面我们可以找到当前<span class="nt">&lt;code&gt;</span>Spring-mybatis<span class="nt">&lt;/code&gt;</span>依赖的<span class="nt">&lt;code&gt;</span>spring<span class="nt">&lt;/code&gt;</span>和<span class="nt">&lt;code&gt;</span>mybatis<span class="nt">&lt;/code&gt;</span>版本，最好是选择匹配的版本以避免处理不必要的兼容性问题。因为<span class="nt">&lt;code&gt;</span>MyBatis-Spring<span class="nt">&lt;/code&gt;</span>中对<span class="nt">&lt;code&gt;</span>mybatis<span class="nt">&lt;/code&gt;</span>的依赖选择了<span class="nt">&lt;code&gt;</span>provided<span class="nt">&lt;/code&gt;</span>模式，所以我们不得不额外添加<span class="nt">&lt;code&gt;</span>mybatis<span class="nt">&lt;/code&gt;</span>依赖，依赖配置如下。
+</span><span class='line'><span class="nt">&lt;code&gt;</span>xml pom.xml
+</span><span class='line'><span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.mybatis<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>mybatis-spring<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+</span><span class='line'>    <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.3.1<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'>      <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>org.mybatis<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+</span><span class='line'>      <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>mybatis<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+</span><span class='line'>      <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>3.4.1<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;</span>
+</span><span class='line'>接下来会我们要创建工厂bean,放置下面的代码在 Spring 的 XML 配置文件中:<span class="nt">&lt;br/&gt;</span>
+</span><span class='line'><span class="nt">&lt;code&gt;</span>xml applicationContext.xml
+</span><span class='line'><span class="ni">&amp;lt;</span>bean id=&quot;sqlSessionFactory&quot; class=&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>  <span class="ni">&amp;lt;</span>property name=&quot;dataSource&quot; ref=&quot;dataSource&quot; /<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/bean<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;&lt;br/&gt;</span>
+</span><span class='line'>这个工厂需要一个<span class="nt">&lt;code&gt;</span>DataSource<span class="nt">&lt;/code&gt;</span>，就是我们熟知的数据源了。这里我们选择了阿里的<span class="nt">&lt;code&gt;</span>Druid<span class="nt">&lt;/code&gt;</span>，同样我们需要引入两个配置
+</span><span class='line'><span class="nt">&lt;code&gt;</span>xml pom.xml
+</span><span class='line'><span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'> <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>mysql<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+</span><span class='line'> <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>mysql-connector-java<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+</span><span class='line'> <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>5.1.41<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'> <span class="ni">&amp;lt;</span>groupId<span class="ni">&amp;gt;</span>com.alibaba<span class="ni">&amp;lt;</span>/groupId<span class="ni">&amp;gt;</span>
+</span><span class='line'> <span class="ni">&amp;lt;</span>artifactId<span class="ni">&amp;gt;</span>druid<span class="ni">&amp;lt;</span>/artifactId<span class="ni">&amp;gt;</span>
+</span><span class='line'> <span class="ni">&amp;lt;</span>version<span class="ni">&amp;gt;</span>1.1.2<span class="ni">&amp;lt;</span>/version<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/dependency<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;</span>          <span class="nt">&lt;br/&gt;</span>
+</span><span class='line'>添加<span class="nt">&lt;code&gt;</span>Spring<span class="nt">&lt;/code&gt;</span>配置如下
+</span><span class='line'><span class="nt">&lt;code&gt;</span>xml applicationContext.xml
+</span><span class='line'><span class="ni">&amp;lt;</span>bean id=&quot;dataSource&quot; class=&quot;com.alibaba.druid.pool.DruidDataSource&quot; init-method=&quot;init&quot; destroy-method=&quot;close&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>        <span class="ni">&amp;lt;</span>!-- 基本属性 url、user、password --<span class="ni">&amp;gt;</span>
+</span><span class='line'>        <span class="ni">&amp;lt;</span>property name=&quot;url&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>            <span class="ni">&amp;lt;</span>value<span class="ni">&amp;gt;&amp;lt;</span>![CDATA[${db.url}]]<span class="ni">&amp;gt;&amp;lt;</span>/value<span class="ni">&amp;gt;</span>
+</span><span class='line'>        <span class="ni">&amp;lt;</span>/property<span class="ni">&amp;gt;</span>
+</span><span class='line'>        <span class="ni">&amp;lt;</span>property name=&quot;username&quot; value=&quot;${db.username}&quot;/<span class="ni">&amp;gt;</span>
+</span><span class='line'>        <span class="ni">&amp;lt;</span>property name=&quot;password&quot; value=&quot;${db.password}&quot;/<span class="ni">&amp;gt;</span>
+</span><span class='line'>        <span class="ni">&amp;lt;</span>!-- 省略其他配置 --<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/bean<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;</span>
+</span><span class='line'>接下来我们要编写数据库访问对象，大多数人会把它叫做<span class="nt">&lt;code&gt;</span>DAO<span class="nt">&lt;/code&gt;</span>或者<span class="nt">&lt;code&gt;</span>Repository<span class="nt">&lt;/code&gt;</span>，在这里其被称为<span class="nt">&lt;code&gt;</span>Mapper<span class="nt">&lt;/code&gt;</span>，也是因为它的实现方式所决定。要注意的是所指定的映射器类必须是一个接口，而不是具体的实现类。这便因为<span class="nt">&lt;code&gt;</span>Mybatis<span class="nt">&lt;/code&gt;</span>的内部实现使用的是<span class="nt">&lt;code&gt;</span>Java动态代理<span class="nt">&lt;/code&gt;</span>，而<span class="nt">&lt;code&gt;</span>Java动态代理<span class="nt">&lt;/code&gt;</span>只支持接口，关于<span class="nt">&lt;code&gt;</span>动态代理<span class="nt">&lt;/code&gt;</span>我们下文有更详细的描述。
+</span><span class='line'><span class="nt">&lt;code&gt;</span>java UserMapper.java
+</span><span class='line'>public interface UserMapper {
+</span><span class='line'>  @Select(&quot;SELECT * FROM users WHERE id = #{userId}&quot;)
+</span><span class='line'>  User getUser(@Param(&quot;userId&quot;) String userId);
+</span><span class='line'>}
+</span><span class='line'><span class="nt">&lt;/code&gt;</span>
+</span><span class='line'>接下来可以使用 <span class="nt">&lt;code&gt;</span>MapperFactoryBean<span class="nt">&lt;/code&gt;</span>,像下面这样来把接口加入到 <span class="nt">&lt;code&gt;</span>Spring<span class="nt">&lt;/code&gt;</span> 中，这样就把 <span class="nt">&lt;code&gt;</span>UserMapper<span class="nt">&lt;/code&gt;</span> 和 <span class="nt">&lt;code&gt;</span>SessionFactory<span class="nt">&lt;/code&gt;</span>关联到一起了，原来使用<span class="nt">&lt;code&gt;</span>xml<span class="nt">&lt;/code&gt;</span>配置的时候还需要Dao继承<span class="nt">&lt;code&gt;</span>SqlSessionDaoSupport<span class="nt">&lt;/code&gt;</span>才能注入<span class="nt">&lt;code&gt;</span>SessionFactory<span class="nt">&lt;/code&gt;</span>，这种方式直接通过<span class="nt">&lt;code&gt;</span>Java动态代理<span class="nt">&lt;/code&gt;</span>把<span class="nt">&lt;code&gt;</span>SqlSessionFactory<span class="nt">&lt;/code&gt;</span>代理给了<span class="nt">&lt;code&gt;</span>UserMapper<span class="nt">&lt;/code&gt;</span>，使得我们直接使用<span class="nt">&lt;code&gt;</span>UserMapper<span class="nt">&lt;/code&gt;</span>即可。配置如下。
+</span><span class='line'><span class="nt">&lt;code&gt;</span>xml applicationContext.xml
+</span><span class='line'><span class="ni">&amp;lt;</span>bean id=&quot;userMapper&quot; class=&quot;org.mybatis.spring.mapper.MapperFactoryBean&quot;<span class="ni">&amp;gt;</span>
+</span><span class='line'>  <span class="ni">&amp;lt;</span>property name=&quot;mapperInterface&quot; value=&quot;org.mybatis.spring.sample.mapper.UserMapper&quot; /<span class="ni">&amp;gt;</span>
+</span><span class='line'>  <span class="ni">&amp;lt;</span>property name=&quot;sqlSessionFactory&quot; ref=&quot;sqlSessionFactory&quot; /<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="ni">&amp;lt;</span>/bean<span class="ni">&amp;gt;</span>
+</span><span class='line'><span class="nt">&lt;/code&gt;</span>
+</span><span class='line'>这样我们已经完成了90%，就差调用了，前提是你<span class="nt">&lt;code&gt;</span>Spring<span class="nt">&lt;/code&gt;</span>环境是OK的。调用 <span class="nt">&lt;code&gt;</span>MyBatis<span class="nt">&lt;/code&gt;</span> 数据方法现在只需一行代码:
+</span></code></pre></td></tr></table></div></figure>java FooServiceImpl.java
+public class FooServiceImpl implements FooService {</p>
 
-<!-- redis template definition -->
+<p>private UserMapper userMapper;</p>
 
+<p>public void setUserMapper(UserMapper userMapper) {
+  this.userMapper = userMapper;
+}</p>
 
-<p><bean id="redisTemplate"
-    class="org.springframework.data.redis.core.RedisTemplate"
-    p:connection-factory-ref="jedisConnFactory"/>
-<code>
-最后直接引入`bean`使用：
-</code>java Example.java
-public class Example {</p>
-
-<pre><code>// inject the actual template
-@Autowired
-private RedisTemplate&lt;String, String&gt; template;
-
-// inject the template as ListOperations
-// can also inject as Value, Set, ZSet, and HashOperations
-@Resource(name="redisTemplate")
-private ListOperations&lt;String, String&gt; listOps;
-
-public void addLink(String userId, URL url) {
-    listOps.leftPush(userId, url.toExternalForm());
-    // or use template directly
-    redisTemplate.boundListOps(userId).leftPush(url.toExternalForm());
+<p>public User doSomeBusinessStuff(String userId) {
+  return this.userMapper.getUser(userId);
 }
-</code></pre>
-
-<p>}
+<code>
+那么问题又来了，每次写一个DAO都需要为其写一个`Bean`配置，那不是累死？于是我们又寻找另一种方案，代替手动声明`*Mapper`。`MapperScannerConfigurer`的出现解决了这个问题， 它会根据你配置的包路径自动的扫描类文件并自动将它们创建成`MapperFactoryBean`，可以在 Spring 的配置中添加如下代码:
+</code>xml applicationContext.xml
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+  <property name="basePackage" value="com.github.codedrinker.mapper" />
+</bean>
+<code>
+`basePackage`属性是让你为映射器接口文件设置基本的包路径。你可以使用分号或逗号作为分隔符设置多于一个的包路径。这个时候如果想自定义`sqlSessionFactory`可以添加如下配置：
+</code>xml applicationContext.xml
+<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 <code>``
-如上，根据</code>Spring`的官方文档已经全部完成，是不是非常简单？那么接下来我们运行一下试一试。<br/>
-这时候出现了第一个异常。</p>
+这样以后还有一点点小瑕疵，如果我们数据的</code>column<code>名字是</code>_<code>连接的，那么它不会那么聪明自动转换为驼峰的变量，所以我们需要对</code>SqlSessionFactoryBean`做如下配置，但是在1.3.0以后才可以通过xml配置，如果用早起版本的需要注意了。</p>
 
-<h2>NoClassDefFoundError 问题解决</h2>
-
-<pre><code class="sh">nested exception is java.lang.NoClassDefFoundError: org/apache/commons/pool2/impl/GenericObjectPoolConfig
+<pre><code class="xml applicationContext.xml">&lt;bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"&gt;
+  &lt;property name="dataSource" ref="dataSource" /&gt;
+  &lt;property name="configuration"&gt;
+    &lt;bean class="org.apache.ibatis.session.Configuration"&gt;
+      &lt;property name="mapUnderscoreToCamelCase" value="true"/&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
 </code></pre>
 
-<p>很明显是没有引入这个包嘛，我们直接从<code>spring-data-redis</code>的<code>pom.xml</code>里面可以看到多了一个<code>optional</code>属性。
-<code>xml pom.xml[spring-data-redis]
-  &lt;dependency&gt;
-      &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
-      &lt;artifactId&gt;commons-pool2&lt;/artifactId&gt;
-      &lt;optional&gt;true&lt;/optional&gt;
-    &lt;/dependency&gt;
-</code>
-那么这个问题就迎刃而解了，因为在<code>spring-data-redis</code>里面声明的<code>commons-pool2</code>是<code>optional</code>的，根据<code>Maven</code>的规则如果A项目依赖配置为optional的，那么依赖A项目的B项目如果不手动引入A里面optional的依赖B项目是不会自动引入依赖的的。说起来有点绕，反正就是导致我们必须手动添加下面的依赖。详情可以参照<code>Maven</code>的官方网文档。<a href="http://maven.apache.org/guides/introduction/introduction-to-optional-and-excludes-dependencies.html">点击查看官方文档</a>。
-<code>xml pom.xml
-&lt;dependency&gt;
-    &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
-    &lt;artifactId&gt;commons-pool2&lt;/artifactId&gt;
-    &lt;version&gt;2.2&lt;/version&gt;
-&lt;/dependency&gt;
-</code>
-再次运行的时候我们发现了另一个问题
-<code>sh
-nested exception is java.lang.NoClassDefFoundError: redis/clients/jedis/JedisPoolConfig
-</code>
-这问题就显而易见了，直接添加如下到<code>pom.xml</code>中即可。
-<code>xml pom.xml
-&lt;dependency&gt;
-    &lt;groupId&gt;redis.clients&lt;/groupId&gt;
-    &lt;artifactId&gt;jedis&lt;/artifactId&gt;
-    &lt;version&gt;2.9.0&lt;/version&gt;
-&lt;/dependency&gt;
-</code>
-这时候我们再次运行项目可以正常运行啦，然而有出现了一个奇怪的问题，存入<code>Redis</code>里面的<code>Key</code>有一个看起来像是乱码的前缀<code>\xac\xed\x00\x05t\x00</code>:</p>
+<p>至此关于<code>Spring MyBatis</code>的配置已经全部结束，后面我们会简单说下<code>Spring MyBatis</code>中的动态代理。</p>
 
-<h2>\xac\xed\x00\x05t\x00 到底是啥</h2>
+<h2>浅析 Java 动态代理</h2>
 
-<p>出现这个问题的原因是因为其使用的默认是RedisTemplate，它使用的是Java的Serialization方式，所以会在前面有一段类似乱码的东西。如果是String作为key的话可以直接修改为StringRedisTemplate这个问题就修改了。</p>
+<p><code>JDK</code>自带的动态代理需要了解InvocationHandler接口和Proxy类，他们都是在java.lang.reflect包下。<br/>
+<code>InvocationHandler</code>是代理实例的调用处理程序实现的接口。每个代理实例都具有一个关联的<code>InvocationHandler</code>。对代理实例调用方法时，这个方法会调用<code>InvocationHandler</code>的<code>invoke</code>方法。
+<code>Proxy</code>提供静态方法用于创建动态代理类和实例,同时后面自动生成的代理类都是<code>Proxy</code>对象。下面我们直接通过代码来分析<code>Java动态代理</code>：
+<code>InvocationInterceptor</code>实现<code>InvocationHandler</code>接口，用于处理具体的代理逻辑。
+<figure class='code'><figcaption><span>InvocationInterceptor.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+<span class='line-number'>179</span>
+<span class='line-number'>180</span>
+<span class='line-number'>181</span>
+<span class='line-number'>182</span>
+<span class='line-number'>183</span>
+<span class='line-number'>184</span>
+<span class='line-number'>185</span>
+<span class='line-number'>186</span>
+<span class='line-number'>187</span>
+<span class='line-number'>188</span>
+<span class='line-number'>189</span>
+<span class='line-number'>190</span>
+<span class='line-number'>191</span>
+<span class='line-number'>192</span>
+<span class='line-number'>193</span>
+<span class='line-number'>194</span>
+<span class='line-number'>195</span>
+<span class='line-number'>196</span>
+<span class='line-number'>197</span>
+<span class='line-number'>198</span>
+<span class='line-number'>199</span>
+<span class='line-number'>200</span>
+<span class='line-number'>201</span>
+<span class='line-number'>202</span>
+<span class='line-number'>203</span>
+<span class='line-number'>204</span>
+<span class='line-number'>205</span>
+<span class='line-number'>206</span>
+<span class='line-number'>207</span>
+<span class='line-number'>208</span>
+<span class='line-number'>209</span>
+<span class='line-number'>210</span>
+<span class='line-number'>211</span>
+<span class='line-number'>212</span>
+<span class='line-number'>213</span>
+<span class='line-number'>214</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;*</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">Created</span> <span class="n">by</span> <span class="n">codedrinker</span> <span class="n">on</span> <span class="mi">12</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">2017</span><span class="o">.</span>
+</span><span class='line'> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">InvocationInterceptor</span> <span class="kd">implements</span> <span class="n">InvocationHandler</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="n">Object</span> <span class="n">target</span><span class="o">;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="nf">InvocationInterceptor</span><span class="o">(</span><span class="n">Object</span> <span class="n">target</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">target</span> <span class="o">=</span> <span class="n">target</span><span class="o">;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="nd">@Override</span>
+</span><span class='line'><span class="kd">public</span> <span class="n">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="n">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;before user create&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="n">target</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;end user create&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">`</span><span class="n">User</span><span class="err">`</span><span class="n">和</span><span class="err">`</span><span class="n">UserImpl</span><span class="err">`</span><span class="n">是被代理对象的接口和类</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">User</span><span class="o">.</span><span class="na">java</span>
+</span><span class='line'><span class="o">/&lt;</span><span class="n">em</span><span class="o">&gt;*</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">Created</span> <span class="n">by</span> <span class="n">codedrinker</span> <span class="n">on</span> <span class="mi">12</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">2017</span><span class="o">.</span>
+</span><span class='line'> <span class="o">&lt;/</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">User</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kt">void</span> <span class="nf">create</span><span class="o">();</span>
+</span><span class='line'><span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">UserImpl</span><span class="o">.</span><span class="na">java</span>
+</span><span class='line'><span class="o">/&lt;</span><span class="n">strong</span><span class="o">&gt;</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">Created</span> <span class="n">by</span> <span class="n">codedrinker</span> <span class="n">on</span> <span class="mi">12</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">2017</span><span class="o">.</span>
+</span><span class='line'> <span class="o">*/</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">UserImpl</span> <span class="kd">implements</span> <span class="n">User</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">create</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">create</span> <span class="n">user</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="err">`</span><span class="n">DynamicProxyTest</span><span class="err">`</span><span class="n">是测试类</span><span class="err">，</span><span class="n">用于创建</span><span class="err">`</span><span class="n">InvocationInterceptor</span><span class="err">`</span><span class="n">和</span><span class="err">`</span><span class="n">Proxy</span><span class="err">`</span><span class="n">类以便测试</span><span class="err">。</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">DynamicProxyTest</span><span class="o">.</span><span class="na">java</span>
+</span><span class='line'><span class="o">/&lt;/</span><span class="n">strong</span><span class="o">&gt;</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">Created</span> <span class="n">by</span> <span class="n">codedrinker</span> <span class="n">on</span> <span class="mi">12</span><span class="o">/</span><span class="mi">10</span><span class="o">/</span><span class="mi">2017</span><span class="o">.</span>
+</span><span class='line'> <span class="o">&lt;</span><span class="n">em</span><span class="o">&gt;/</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DynamicProxyTest</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">User</span> <span class="n">target</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">UserImpl</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">InvocationInterceptor</span> <span class="n">invocationInterceptor</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InvocationInterceptor</span><span class="o">(</span><span class="n">target</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">User</span> <span class="n">proxyInstance</span> <span class="o">=</span> <span class="o">(</span><span class="n">User</span><span class="o">)</span> <span class="n">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="n">UserImpl</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">(),</span>
+</span><span class='line'>                <span class="n">UserImpl</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getInterfaces</span><span class="o">(),</span>
+</span><span class='line'>                <span class="n">invocationInterceptor</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">proxyInstance</span><span class="o">.</span><span class="na">create</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">输入结果如下</span><span class="err">：</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">sh</span>
+</span><span class='line'><span class="n">before</span> <span class="n">user</span> <span class="n">create</span>
+</span><span class='line'><span class="n">create</span> <span class="n">user</span>
+</span><span class='line'><span class="n">end</span> <span class="n">user</span> <span class="n">create</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">很明显</span><span class="err">，</span><span class="n">我们通过proxyInstance这个代理类进行方法调用的时候</span><span class="err">，</span><span class="n">会在方法调用前后进行输出打印</span><span class="err">，</span><span class="n">这样就简单的实现了一个</span><span class="err">`</span><span class="n">Java动态代理</span><span class="err">`</span><span class="n">例子</span><span class="err">。</span><span class="n">动态代理不仅仅是打印输出这么简单</span><span class="err">，</span><span class="n">我们可以通过它打印日志</span><span class="err">，</span><span class="n">打开关闭事务</span><span class="err">，</span> <span class="n">权限检查了等等</span><span class="err">。</span><span class="n">当然它更是许多框架的钟爱</span><span class="err">，</span><span class="n">就如下文我们要说的</span><span class="err">`</span><span class="n">MyBatis</span><span class="err">`</span><span class="n">中</span><span class="err">`</span><span class="n">Java动态代理</span><span class="err">`</span><span class="n">的实现</span><span class="err">。</span><span class="n">再多说一句</span><span class="err">`</span><span class="n">Spring</span><span class="err">`</span><span class="n">的</span><span class="err">`</span><span class="n">AOP</span><span class="err">`</span><span class="n">也是使用动态代理实现的</span><span class="err">，</span><span class="n">当然它同时使用了</span><span class="err">`</span><span class="n">Java动态代理</span><span class="err">`</span><span class="n">和</span><span class="err">`</span><span class="n">CGLib</span><span class="err">`</span><span class="n">两种方式</span><span class="err">。</span><span class="n">不过</span><span class="err">`</span><span class="n">CGLIB</span><span class="err">`</span><span class="n">不是本文要讨论的范围</span><span class="err">。</span>
+</span><span class='line'><span class="n">注意观察的同学看到上面代码的时候可能发现</span><span class="err">`</span><span class="n">invoke</span><span class="err">`</span><span class="n">方法的</span><span class="err">`</span><span class="n">proxy</span><span class="err">`</span><span class="n">参数并没有被使用</span><span class="err">，</span><span class="n">笔者查阅了一些相关文档也没有找到合理的说法</span><span class="err">，</span><span class="n">只能在源码中看看究竟喽</span><span class="err">，</span><span class="n">笔者当前的JDK版本是1</span><span class="o">.</span><span class="mi">8</span><span class="err">。</span><span class="n">我们从入口开始</span><span class="err">，`</span><span class="n">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="err">`</span><span class="o">:</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">Proxy</span><span class="o">.</span><span class="na">java片段</span>
+</span><span class='line'><span class="o">/&lt;/</span><span class="n">em</span><span class="o">&gt;</span>
+</span><span class='line'> <span class="o">*</span> <span class="n">Look</span> <span class="n">up</span> <span class="n">or</span> <span class="n">generate</span> <span class="n">the</span> <span class="n">designated</span> <span class="n">proxy</span> <span class="n">class</span><span class="o">.</span>
+</span><span class='line'> <span class="o">*/</span>
+</span><span class='line'><span class="nd">@CallerSensitive</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="n">Object</span> <span class="nf">newProxyInstance</span><span class="o">(</span><span class="n">ClassLoader</span> <span class="n">loader</span><span class="o">,</span>
+</span><span class='line'>                                      <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&gt;[]</span> <span class="n">interfaces</span><span class="o">,</span>
+</span><span class='line'>                                      <span class="n">InvocationHandler</span> <span class="n">h</span><span class="o">)</span>
+</span><span class='line'>    <span class="kd">throws</span> <span class="n">IllegalArgumentException</span>
+</span><span class='line'><span class="o">{</span>
+</span><span class='line'>    <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&gt;</span> <span class="n">cl</span> <span class="o">=</span> <span class="n">getProxyClass0</span><span class="o">(</span><span class="n">loader</span><span class="o">,</span> <span class="n">intfs</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">如上代码由此可见</span><span class="err">，</span><span class="n">它调用了</span><span class="err">`</span><span class="n">getProxyClass0</span><span class="err">`</span><span class="n">来获取</span><span class="err">`</span><span class="n">Proxy</span> <span class="n">Class</span><span class="err">`，</span><span class="n">那我们继续往下看</span><span class="err">。</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">Proxy</span><span class="o">.</span><span class="na">java片段</span>
+</span><span class='line'><span class="kd">private</span> <span class="kd">static</span> <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&gt;</span> <span class="n">getProxyClass0</span><span class="o">(</span><span class="n">ClassLoader</span> <span class="n">loader</span><span class="o">,</span>
+</span><span class='line'>                                           <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&gt;&amp;</span><span class="n">hellip</span><span class="o">;</span> <span class="n">interfaces</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">interfaces</span><span class="o">.</span><span class="na">length</span> <span class="o">&gt;</span> <span class="mi">65535</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="kd">interface</span> <span class="nc">limit</span> <span class="n">exceeded</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="c1">//If the proxy class defined by the given loader implementing</span>
+</span><span class='line'>    <span class="c1">//the given interfaces exists, this will simply return the cached copy;</span>
+</span><span class='line'>    <span class="c1">//otherwise, it will create the proxy class via the ProxyClassFactory</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">proxyClassCache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">loader</span><span class="o">,</span> <span class="n">interfaces</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">其实上面写的已经很简单了</span><span class="err">，</span><span class="n">如果存在就在</span><span class="err">`</span><span class="n">proxyClassCache</span><span class="err">`</span><span class="n">里面获取到</span><span class="err">，</span><span class="n">如果不存在就使用</span><span class="err">`</span><span class="n">ProxyClassFactory</span><span class="err">`</span><span class="n">创建一个</span><span class="err">。</span><span class="n">当然我们如果看一下</span><span class="err">`</span><span class="n">proxyClassCache</span><span class="err">`</span><span class="n">变量的话其也是</span><span class="err">`</span><span class="n">ProxyClassFactory</span><span class="err">`</span><span class="n">对象</span><span class="err">。</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span>
+</span><span class='line'>   <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">WeakCache</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">ClassLoader</span><span class="o">,</span> <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&gt;[],</span> <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&gt;&gt;</span>
+</span><span class='line'>        <span class="n">proxyClassCache</span> <span class="o">=</span> <span class="k">new</span> <span class="n">WeakCache</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;(</span><span class="k">new</span> <span class="nf">KeyFactory</span><span class="o">(),</span> <span class="k">new</span> <span class="nf">ProxyClassFactory</span><span class="o">());</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">那么我们直接就去查看</span><span class="err">`</span><span class="n">ProxyClassFactory</span><span class="err">`</span><span class="n">的实现问题不就解决了吗</span><span class="err">？</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">Proxy</span><span class="o">.</span><span class="na">java片段</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">ProxyClassFactory</span>
+</span><span class='line'>        <span class="kd">implements</span> <span class="n">BiFunction</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">ClassLoader</span><span class="o">,</span> <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&gt;[],</span> <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&gt;&gt;</span>
+</span><span class='line'>    <span class="o">{</span>
+</span><span class='line'>        <span class="c1">// prefix for all proxy class names</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">proxyClassNamePrefix</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">$Proxy</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;;</span>
+</span><span class='line'>        <span class="c1">//next number to use for generation of unique proxy class names</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">AtomicLong</span> <span class="n">nextUniqueNumber</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AtomicLong</span><span class="o">();</span>
+</span><span class='line'>        <span class="nd">@Override</span>
+</span><span class='line'>        <span class="kd">public</span> <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&gt;</span> <span class="n">apply</span><span class="o">(</span><span class="n">ClassLoader</span> <span class="n">loader</span><span class="o">,</span> <span class="n">Class</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&gt;[]</span> <span class="n">interfaces</span><span class="o">)</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>        <span class="n">String</span> <span class="n">proxyName</span> <span class="o">=</span> <span class="n">proxyPkg</span> <span class="o">+</span> <span class="n">proxyClassNamePrefix</span> <span class="o">+</span> <span class="n">num</span><span class="o">;</span>
+</span><span class='line'>        <span class="cm">/*</span>
+</span><span class='line'><span class="cm">         * Generate the specified proxy class.</span>
+</span><span class='line'><span class="cm">         */</span>
+</span><span class='line'>        <span class="kt">byte</span><span class="o">[]</span> <span class="n">proxyClassFile</span> <span class="o">=</span> <span class="n">ProxyGenerator</span><span class="o">.</span><span class="na">generateProxyClass</span><span class="o">(</span>
+</span><span class='line'>            <span class="n">proxyName</span><span class="o">,</span> <span class="n">interfaces</span><span class="o">,</span> <span class="n">accessFlags</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">由上代码便一目了然了</span><span class="err">，</span><span class="n">为什么我们</span><span class="err">`</span><span class="n">Debug</span><span class="err">`</span><span class="n">的时候</span><span class="err">`</span><span class="n">Proxy</span><span class="err">`</span><span class="n">对象是</span><span class="err">`</span><span class="n">$Proxy0</span><span class="err">`，</span><span class="n">是因为他通过</span><span class="err">`</span><span class="n">$Proxy</span><span class="err">`</span><span class="n">和</span><span class="err">`</span><span class="n">AtomicLong</span><span class="err">`</span><span class="n">拼起来的类名</span><span class="err">，</span><span class="n">其实这不是重点</span><span class="err">。</span><span class="n">重点是</span><span class="err">`</span><span class="n">ProxyGenerator</span><span class="o">.</span><span class="na">generateProxyClass</span><span class="o">(</span><span class="n">proxyName</span><span class="o">,</span> <span class="n">interfaces</span><span class="o">,</span> <span class="n">accessFlags</span><span class="o">)</span><span class="err">`。</span><span class="n">这就是生成</span><span class="err">`</span><span class="n">class</span><span class="err">`</span><span class="n">的地方</span><span class="err">，</span><span class="n">它把所有的条件组合好</span><span class="err">，</span><span class="n">生成</span><span class="err">`</span><span class="n">class</span><span class="err">`</span><span class="n">文件</span><span class="err">，</span><span class="n">然后再加载到内存里面以供使用</span><span class="err">。</span><span class="n">有兴趣的同学可以继续往深处查看</span><span class="err">。</span><span class="n">而我们需要做的是获取到他生成的字节码</span><span class="err">，</span><span class="n">看一下里面到底是什么</span><span class="err">？</span><span class="n">当</span><span class="err">`</span><span class="n">saveGeneratedFiles</span><span class="err">`</span><span class="n">为</span><span class="err">`</span><span class="kc">true</span><span class="err">`</span><span class="n">的时候会保存</span><span class="err">`</span><span class="n">class</span><span class="err">`</span><span class="n">文件</span><span class="err">，</span><span class="n">所以我们在</span><span class="err">`</span><span class="n">DynamicProxyTest</span><span class="err">`</span><span class="n">的</span><span class="err">`</span><span class="n">main</span><span class="err">`</span><span class="n">函数添加一行即可</span><span class="err">：</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">System</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">sun</span><span class="o">.</span><span class="na">misc</span><span class="o">.</span><span class="na">ProxyGenerator</span><span class="o">.</span><span class="na">saveGeneratedFiles</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="kc">true</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">通过</span><span class="err">`</span><span class="n">Debug</span><span class="err">`</span><span class="n">我们可以发现</span><span class="err">，</span><span class="n">它存储</span><span class="err">`</span><span class="n">class</span><span class="err">`</span><span class="n">文件的路径是</span><span class="err">`</span><span class="n">com</span><span class="o">/</span><span class="n">sun</span><span class="o">/</span><span class="n">proxy</span><span class="o">/</span><span class="n">$Proxy0</span><span class="o">.</span><span class="na">class</span><span class="err">`，</span><span class="n">所以直接在我们项目的目录下面就能找到它</span><span class="err">，</span><span class="n">然后通过</span><span class="err">`</span><span class="n">Idea</span><span class="err">`</span><span class="n">打开便得到如下代码</span><span class="err">：</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">$Proxy0</span><span class="o">.</span><span class="na">class</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">final</span> <span class="kd">class</span> <span class="nc">$Proxy0</span> <span class="kd">extends</span> <span class="n">Proxy</span> <span class="kd">implements</span> <span class="n">User</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Method</span> <span class="n">m1</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Method</span> <span class="n">m2</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Method</span> <span class="n">m3</span><span class="o">;</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Method</span> <span class="n">m0</span><span class="o">;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="nf">$Proxy0</span><span class="o">(</span><span class="n">InvocationHandler</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span>  <span class="o">{</span>
+</span><span class='line'>    <span class="kd">super</span><span class="o">(</span><span class="n">var1</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">final</span> <span class="kt">boolean</span> <span class="nf">equals</span><span class="o">(</span><span class="n">Object</span> <span class="n">var1</span><span class="o">)</span> <span class="kd">throws</span>  <span class="o">{</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="o">((</span><span class="n">Boolean</span><span class="o">)</span><span class="kd">super</span><span class="o">.</span><span class="na">h</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">m1</span><span class="o">,</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]{</span><span class="n">var1</span><span class="o">})).</span><span class="na">booleanValue</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">RuntimeException</span> <span class="o">|</span> <span class="n">Error</span> <span class="n">var3</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="n">var3</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">var4</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">UndeclaredThrowableException</span><span class="o">(</span><span class="n">var4</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">final</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="kd">throws</span>  <span class="o">{</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span><span class="kd">super</span><span class="o">.</span><span class="na">h</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">m2</span><span class="o">,</span> <span class="o">(</span><span class="n">Object</span><span class="o">[])</span><span class="kc">null</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">RuntimeException</span> <span class="o">|</span> <span class="n">Error</span> <span class="n">var2</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="n">var2</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">var3</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">UndeclaredThrowableException</span><span class="o">(</span><span class="n">var3</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">create</span><span class="o">()</span> <span class="kd">throws</span>  <span class="o">{</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">super</span><span class="o">.</span><span class="na">h</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">m3</span><span class="o">,</span> <span class="o">(</span><span class="n">Object</span><span class="o">[])</span><span class="kc">null</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">RuntimeException</span> <span class="o">|</span> <span class="n">Error</span> <span class="n">var2</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="n">var2</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">var3</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">UndeclaredThrowableException</span><span class="o">(</span><span class="n">var3</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">final</span> <span class="kt">int</span> <span class="nf">hashCode</span><span class="o">()</span> <span class="kd">throws</span>  <span class="o">{</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="o">((</span><span class="n">Integer</span><span class="o">)</span><span class="kd">super</span><span class="o">.</span><span class="na">h</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">m0</span><span class="o">,</span> <span class="o">(</span><span class="n">Object</span><span class="o">[])</span><span class="kc">null</span><span class="o">)).</span><span class="na">intValue</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">RuntimeException</span> <span class="o">|</span> <span class="n">Error</span> <span class="n">var2</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="n">var2</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">var3</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">UndeclaredThrowableException</span><span class="o">(</span><span class="n">var3</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">static</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">m1</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&quot;java.lang.Object&quot;</span><span class="o">).</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&quot;equals&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[]{</span><span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&quot;java.lang.Object&quot;</span><span class="o">)});</span>
+</span><span class='line'>        <span class="n">m2</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&quot;java.lang.Object&quot;</span><span class="o">).</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&quot;toString&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+</span><span class='line'>        <span class="n">m3</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&quot;local.dynimicproxy.User&quot;</span><span class="o">).</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&quot;create&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+</span><span class='line'>        <span class="n">m0</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&quot;java.lang.Object&quot;</span><span class="o">).</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&quot;hashCode&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">NoSuchMethodException</span> <span class="n">var2</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NoSuchMethodError</span><span class="o">(</span><span class="n">var2</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ClassNotFoundException</span> <span class="n">var3</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">NoClassDefFoundError</span><span class="o">(</span><span class="n">var3</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">``</span>
+</span><span class='line'><span class="n">这样好多问题就迎刃而解</span><span class="err">。</span>
+</span><span class='line'><span class="n">为什么</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Java动态代理</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">必须是接口</span><span class="err">，</span><span class="n">因为生成的类要去实现这个接口</span><span class="err">。</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">invoke</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">方法的</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">proxy</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">是干嘛的</span><span class="err">，</span><span class="n">通过</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">super</span><span class="o">.</span><span class="na">h</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">m3</span><span class="o">,</span> <span class="o">(</span><span class="n">Object</span><span class="o">[])</span><span class="kc">null</span><span class="o">);&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">我们可以发现传递给</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">invoke</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">方法的就是</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Proxy</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">本身</span><span class="err">。</span>
+</span><span class='line'><span class="n">同时</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Proxy</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">类也通过反射实现了</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">toString</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;,&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">equals</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;,</span><span class="n">和</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">hashcode</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">等方法</span><span class="err">。</span>
+</span><span class='line'><span class="n">自此关于</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Java动态代理</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">的讲解已经告段落</span><span class="err">，</span><span class="n">下面让我们简单看一下</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Spring</span><span class="o">-</span><span class="n">mybatis</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">中关于</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Java动态代理</span><span class="err">`</span><span class="n">的使用</span><span class="err">。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="n">Java动态代理在Spring</span><span class="o">-</span><span class="n">mybatis中的实现</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">关于</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Spring</span><span class="o">-</span><span class="n">mybatis</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">的实现我们得从</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">MapperScannerConfigurer</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">说起</span><span class="err">，</span><span class="n">首先</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">MapperScannerConfigurer</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">实现了</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">BeanDefinitionRegistryPostProcessor</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">接口</span><span class="err">。</span><span class="n">而</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">BeanDefinitionRegistryPostProcessor</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">依赖于</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Spring</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">框架</span><span class="err">，</span><span class="n">简单的说</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">BeanDefinitionRegistryPostProcessor</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">使得我们可以将</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">BeanDefinition</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">添加到</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">BeanDefinitionRegistry</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">中</span><span class="err">，</span><span class="n">而</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">BeanDefinition</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">描述了一个Bean实例所拥有的实例</span><span class="err">、</span><span class="n">结构参数和参数值</span><span class="err">，</span><span class="n">简单点说拥有它就可以实例化</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Bean</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">了</span><span class="err">。</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">BeanDefinitionRegistryPostProcessor</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">的</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">postProcessBeanDefinitionRegistry</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">方法在</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Bean</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">被定义但还没被创建的时候执行</span><span class="err">，</span><span class="n">所以</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Spring</span><span class="o">-</span><span class="n">mybatis</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">也是借助了这一点</span><span class="err">。</span><span class="n">需要想需要更深入的了解可以查看</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Spring</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">的生命周期</span><span class="err">。</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">MapperScannerConfigurer</span><span class="o">.</span><span class="na">java片段</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MapperScannerConfigurer</span> <span class="kd">implements</span> <span class="n">BeanDefinitionRegistryPostProcessor</span><span class="o">,</span> <span class="n">InitializingBean</span><span class="o">,</span> <span class="n">ApplicationContextAware</span><span class="o">,</span> <span class="n">BeanNameAware</span> <span class="o">{</span>
+</span><span class='line'>  <span class="cm">/**</span>
+</span><span class='line'><span class="cm">   * {@inheritDoc}</span>
+</span><span class='line'><span class="cm">   *</span>
+</span><span class='line'><span class="cm">   * @since 1.0.2</span>
+</span><span class='line'><span class="cm">   */</span>
+</span><span class='line'>  <span class="nd">@Override</span>
+</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">postProcessBeanDefinitionRegistry</span><span class="o">(</span><span class="n">BeanDefinitionRegistry</span> <span class="n">registry</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">ClassPathMapperScanner</span> <span class="n">scanner</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ClassPathMapperScanner</span><span class="o">(</span><span class="n">registry</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">scanner</span><span class="o">.</span><span class="na">scan</span><span class="o">(</span><span class="n">StringUtils</span><span class="o">.</span><span class="na">tokenizeToStringArray</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">basePackage</span><span class="o">,</span> <span class="n">ConfigurableApplicationContext</span><span class="o">.</span><span class="na">CONFIG_LOCATION_DELIMITERS</span><span class="o">));</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span>
+</span><span class='line'><span class="n">由上代码我们可以看到在</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">postProcessBeanDefinitionRegistry</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">里面得到</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">registry</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">然后使用</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">ClassPathMapperScanner</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">开始扫描包路径得到的</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Bean</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">并且注册到</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">registry</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">里面</span><span class="err">。</span><span class="n">我们接着往里面看</span><span class="err">。</span>
+</span></code></pre></td></tr></table></div></figure>java ClassPathMapperScanner.java
+@Override
+public Set<BeanDefinitionHolder> doScan(String&hellip; basePackages) {
+Set<BeanDefinitionHolder> beanDefinitions = super.doScan(basePackages);</p>
+
+<p>if (beanDefinitions.isEmpty()) {
+  logger.warn(&ldquo;No MyBatis mapper was found in &lsquo;&rdquo; + Arrays.toString(basePackages) + &ldquo;&rsquo; package. Please check your configuration.&rdquo;);
+} else {
+  processBeanDefinitions(beanDefinitions);
+}</p>
+
+<p>return beanDefinitions;
+}
+<code>
+`ClassPathMapperScanner`继承了`Spring`的`ClassPathBeanDefinitionScanner`所以调用父类的`doScan`方法就可以加载`Bean`然后再通过`processBeanDefinitions`方法加工成`MyBatis`需要的`Bean`。
+</code>java ClassPathMapperScanner.java片段
+private void processBeanDefinitions(Set<BeanDefinitionHolder> beanDefinitions) {
+    GenericBeanDefinition definition;
+    for (BeanDefinitionHolder holder : beanDefinitions) {
+      definition = (GenericBeanDefinition) holder.getBeanDefinition();
+      definition.setBeanClass(this.mapperFactoryBean.getClass());
+    }
+  }
+<code>
+如上代码循环了所有由`Spring`容器解析出来的`beanDefinitions`然后把他们的`BeanClass`修改为`mapperFactoryBean`，这就进入了行文的重点。我们翻看到`MapperFactoryBean`:
+</code>java MapperFactoryBean.java片段
+@Override
+protected void checkDaoConfig() {
+super.checkDaoConfig();</p>
+
+<p>notNull(this.mapperInterface, &ldquo;Property &lsquo;mapperInterface&rsquo; is required&rdquo;);</p>
+
+<p>Configuration configuration = getSqlSession().getConfiguration();
+if (this.addToConfig &amp;&amp; !configuration.hasMapper(this.mapperInterface)) {
+  try {
+    configuration.addMapper(this.mapperInterface);
+  } catch (Exception e) {
+    logger.error(&ldquo;Error while adding the mapper &lsquo;&rdquo; + this.mapperInterface + &ldquo;&rsquo; to configuration.&rdquo;, e);
+    throw new IllegalArgumentException(e);
+  } finally {
+    ErrorContext.instance().reset();
+  }
+}
+}
+<code>
+其调用了`Configuration`的`addMapper`方法，这样就把`Bean`交给`MyBatis`管理了。那么`checkDaoConfig`是什么时候调用的呢？我们翻看其父类`DaoSupport`可以看到:
+</code>java DaoSupport.java片段
+public abstract class DaoSupport implements InitializingBean {
+    @Override
+  public final void afterPropertiesSet() throws IllegalArgumentException, BeanInitializationException {
+    checkDaoConfig();
+  }
+}
+<code>
+因为`DaoSupport`实现了`InitializingBean`并重写`afterPropertiesSet`方法，了解`Spring`生命周期的同学知道`afterPropertiesSet`方法会在资源加载完以后，初始化bean之前执行。我们继续查看`addMapper`方法。
+</code>java MapperRegistry.java片段
+public <T> void addMapper(Class<T> type) {
+    if (type.isInterface()) {
+      if (hasMapper(type)) {
+        throw new BindingException(&ldquo;Type &rdquo; + type + &ldquo; is already known to the MapperRegistry.&rdquo;);
+      }
+      boolean loadCompleted = false;
+      try {
+        knownMappers.put(type, new MapperProxyFactory<T>(type));
+        // It&rsquo;s important that the type is added before the parser is run
+        // otherwise the binding may automatically be attempted by the
+        // mapper parser. If the type is already known, it won&rsquo;t try.
+        MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);
+        parser.parse();
+        loadCompleted = true;
+      } finally {
+        if (!loadCompleted) {
+          knownMappers.remove(type);
+        }
+      }
+    }
+}
+<code>
+`addMapper`方法最终创建了`MapperProxyFactory`对象，在`MapperProxyFactory`里面我们两眼泪汪汪地发现了似曾相识的代码：
+</code>java MapperProxyFactory.java片段
+protected T newInstance(MapperProxy<T> mapperProxy) {
+    return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[] { mapperInterface }, mapperProxy);
+}</p>
+
+<p>public T newInstance(SqlSession sqlSession) {
+    final MapperProxy<T> mapperProxy = new MapperProxy<T>(sqlSession, mapperInterface, methodCache);
+    return newInstance(mapperProxy);
+}
+<code>
+而`MapperProxy`实现了`InvocationHandler`方法，最终实现对`Bean`的代理，同时获取到上下文的`sqlSession`以供使用。具体生成过程我们不再累述，直接通过其源码结束本篇文章：
+</code>java MapperProxy.java片段
+public class MapperProxy<T> implements InvocationHandler, Serializable {</p>
+
+<p>  private static final long serialVersionUID = -6424540398559729838L;
+  private final SqlSession sqlSession;
+  private final Class<T> mapperInterface;
+  private final Map&lt;Method, MapperMethod> methodCache;</p>
+
+<p>  public MapperProxy(SqlSession sqlSession, Class<T> mapperInterface, Map&lt;Method, MapperMethod> methodCache) {
+    this.sqlSession = sqlSession;
+    this.mapperInterface = mapperInterface;
+    this.methodCache = methodCache;
+  }</p>
+
+<p>  @Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    try {
+      if (Object.class.equals(method.getDeclaringClass())) {
+        return method.invoke(this, args);
+      } else if (isDefaultMethod(method)) {
+        return invokeDefaultMethod(proxy, method, args);
+      }
+    } catch (Throwable t) {
+      throw ExceptionUtil.unwrapThrowable(t);
+    }
+    final MapperMethod mapperMethod = cachedMapperMethod(method);
+    return mapperMethod.execute(sqlSession, args);
+  }
+}
+&#8220;`</p>
 
 <h2>参考链接</h2>
 
-<p><a href="http://projects.spring.io/spring-data-redis/">String Date Redis</a></p>
+<p><a href="http://www.mybatis.org/spring/getting-started.html">Spring Mybatis 配置</a>  <br/>
+<a href="http://www.mybatis.org/spring-boot-starter/mybatis-spring-boot-autoconfigure/">Spring Boot Mybatis</a><br/>
+<a href="https://stackoverflow.com/questions/22930195/understanding-proxy-arguments-of-the-invoke-method-of-java-lang-reflect-invoca">InvocationHandler Proxy Parameter</a></p>
 ]]></content>
   </entry>
   

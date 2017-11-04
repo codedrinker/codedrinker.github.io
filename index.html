@@ -165,6 +165,41 @@ enable_page_level_ads: true
       
   <header>
     
+      <h1 class="entry-title"><a href="/blog/spring-mybatis-and-dynamic-proxy/">从 Spring 集成 Mybatis 到 浅析Java动态代理</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-10-15T21:10:30+08:00'><span class='date'>2017-10-15</span> <span class='time'>9:10 pm</span></time>
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>因为 <code>MyBatis</code> 的易上手性和可控性，使得它成为了<code>ORM</code>框架中的首选。近日新起了一个项目，所以重新搭建了一下 <code>Spring-mybatis</code>, 下面是搭建笔记和从<code>Spring-mybatis</code>源码分析其如何使用<code>Java动态代理</code>，希望对大家有帮助。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/spring-mybatis-and-dynamic-proxy/">阅读全文</a>
+    </footer>
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
       <h1 class="entry-title"><a href="/blog/table-of-contents-sidebar-chrome-extension-introduction/">Chrome自动生成网页目录插件的编写和使用</a></h1>
     
     
@@ -498,41 +533,6 @@ enable_page_level_ads: true
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/using-amazon-s3-as-a-private-maven-repository/">基于Amazon S3 搭建 Maven 私有仓库</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-04-23T22:34:22+08:00'><span class='date'>2017-04-23</span> <span class='time'>10:34 pm</span></time>
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>最近项目慢慢变大，从一个模块，变成了十几个模块，有的模块是被其他模块依赖的，有的模块是可以单独部署的。如果继续在一个项目里面太臃肿了，也不方便维护，所以想着借着这个机会把项目分离开来，有一些模块可以直接作为公共组件使用。本身项目就是使用的<code>Maven</code>作为构建工具的，所以想着直接把模块提取出来，构建成可以通过<code>Maven</code>依赖的<code>jar</code>文件。然后发布到<code>Maven</code>仓库就可以轻松使用了。带着这个梦想，我们进入主题：</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/using-amazon-s3-as-a-private-maven-repository/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -570,7 +570,7 @@ enable_page_level_ads: true
 </section>
 <section>
   <h1>标签云</h1>
-    <span id="tag-cloud"><a href='/blog/categories/cache' style='font-size: 120.0%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 120.0%'>chrome extension(1)</a> <a href='/blog/categories/github' style='font-size: 120.0%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 120.0%'>guava(1)</a> <a href='/blog/categories/java' style='font-size: 160.0%'>java(3)</a> <a href='/blog/categories/maven' style='font-size: 120.0%'>maven(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(3)</a> <a href='/blog/categories/project' style='font-size: 120.0%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 120.0%'>redis(1)</a> <a href='/blog/categories/spring' style='font-size: 140.0%'>spring(2)</a> <a href='/blog/categories/spring-boot' style='font-size: 120.0%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 120.0%'>tech(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 120.0%'>threadlocal(1)</a> <a href='/blog/categories/vagrant' style='font-size: 120.0%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 160.0%'>web(3)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/cache' style='font-size: 115.0%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 115.0%'>chrome extension(1)</a> <a href='/blog/categories/github' style='font-size: 115.0%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 115.0%'>guava(1)</a> <a href='/blog/categories/java' style='font-size: 160.0%'>java(4)</a> <a href='/blog/categories/maven' style='font-size: 115.0%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 115.0%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 145.0%'>octopress(3)</a> <a href='/blog/categories/project' style='font-size: 115.0%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 115.0%'>redis(1)</a> <a href='/blog/categories/spring' style='font-size: 145.0%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 115.0%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 115.0%'>tech(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 115.0%'>threadlocal(1)</a> <a href='/blog/categories/vagrant' style='font-size: 115.0%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 145.0%'>web(3)</a> </span>
 </section>
 <section>
   <h1>最新</h1>
@@ -582,6 +582,10 @@ enable_page_level_ads: true
     
       <li class="post">
         <a href="/blog/quick-start-spring-data-redis/">Spring 集成 Redis 扫雷</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/spring-mybatis-and-dynamic-proxy/">从 Spring 集成 Mybatis 到 浅析Java动态代理</a>
       </li>
     
       <li class="post">
@@ -610,10 +614,6 @@ enable_page_level_ads: true
     
       <li class="post">
         <a href="/blog/simple-in-memory-cache-in-java/">构建 Java 应用内存级缓存</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/using-amazon-s3-as-a-private-maven-repository/">基于Amazon S3 搭建 Maven 私有仓库</a>
       </li>
     
   </ul>
