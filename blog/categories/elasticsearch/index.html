@@ -12,12 +12,12 @@ google_ad_client: "ca-pub-9540087096615057",
 enable_page_level_ads: true
 });
 </script>
-  <title>为Octopress 首页添加‘更多’功能 - 码匠笔记</title>
+  <title>Category: Elasticsearch - 码匠笔记</title>
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="Octopress首页的"阅读原文"是怎么实现的">
-  <meta name="keywords" content="octopress index page read more, enable excerpt_link, Octopress 首页 更多,Octopress 首页简介,Octopress 首页文章描述,Octopress 首页显示文章简介,Octopress home display article description">
+  <meta name="description" content="Category: elasticsearch">
+  
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -25,7 +25,7 @@ enable_page_level_ads: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.majiang.life/blog/octopress-index-page-read-more">
+  <link rel="canonical" href="http://www.majiang.life/blog/categories/elasticsearch">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
@@ -88,153 +88,52 @@ enable_page_level_ads: true
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
+    <h1 class="entry-title">
     
-      <h1 class="entry-title">为Octopress 首页添加‘更多’功能</h1>
-    
-    
-      <p class="meta">
         
-
-
-
-
-<time class='entry-date' datetime='2017-06-24T14:32:31+08:00'><span class='date'>2017-06-24</span> <span class='time'>2:32 pm</span></time>
-      </p>
+           Elasticsearch
+        
+    
+    </h1>
     
   </header>
-
-
-
-<style type="text/css">
-  .note {
-    margin: 30px 0;
-    padding: 20px 20px 24px;
-    padding-left: 50px;
-    -webkit-border-radius: 0 5px 5px 0;
-    -moz-border-radius: 0 5px 5px 0;
-    border-radius:8px;
-    position: relative;
-    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
-    -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.2),inset 0 -1px 0 rgba(0,0,0,0.3);
-    box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
-    background-color: #7e6d42;
-    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#7e6d42), to(#5c4e35));
-    background-image: -webkit-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
-    background-image: -moz-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
-    background-image: -o-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
-    background-image: linear-gradient(to bottom, #86847f 0%, #3e3b36 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=&#8217;#7e6d42&#8217;, endColorstr=&#8217;#5c4e35&#8217;,GradientType=0 );
-  }
-  .note h4, .note p {
-    margin: 0;
-    color: #fff;
-  }
-</style>
-<div class="entry-content">
-  <div class="note">
-    <h4>本文内容概要如下：</h4>
-    <p>
-      
-      
-        1, Octopress首页的&#8221;阅读原文&#8221;是怎么实现的<br>
-      
-    </p>
-  </div>
-</div>
-
-<div class="entry-content"><h2>前言</h2>
-
-<p>在使用 <code>Octopress</code> 的过程中随着文章数量的增加，首页越来越臃肿，不仅加载慢而且可读性很差。看到过其他人的 <code>Octopress</code> 首页很简洁，有一个 <code>Read more</code>，这样就非常方便了。查询了一下操作起来也非常简单。</p>
-
-<h2>添加更多</h2>
-
-<p>方法是十分的简单，只是因为不是太熟悉<code>Octopress</code>导致查了很久。直接在 <code>*.markdown</code> 的 <code>post</code> 里面添加<code>&lt;!--more--&gt;</code>，这个标记下面的内容就不会在首页展示出来，并且通过一个<code>Read on</code>替换。原因是因为本身<code>Octopress</code>就支持，只是你没有使用。具体在<code>_config.yml</code>里面。</p>
-
-<figure class='code'><figcaption><span>_.config.yml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="l-Scalar-Plain">//_.config.yml</span>
-</span><span class='line'><span class="l-Scalar-Plain">excerpt_link</span><span class="p-Indicator">:</span> <span class="s">&quot;Read</span><span class="nv"> </span><span class="s">on</span><span class="nv"> </span><span class="s">&amp;rarr;&quot;</span>  <span class="c1"># &quot;Continue reading&quot; link text at the bottom of excerpted articles</span>
-</span><span class='line'><span class="l-Scalar-Plain">excerpt_separator</span><span class="p-Indicator">:</span> <span class="s">&quot;&lt;!--more--&gt;&quot;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如果想修改<code>Read on</code>直接在<code>_config.yml</code>里面修改就可以了。</p>
-
-<h2>作者</h2>
-<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="">为Octopress 首页添加‘更多’功能</a><br/>
-如果兴趣可以关注作者微信订阅号<br/>
-<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
-<h2></h2>
-<p>
-  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-<!-- 文章列表页自适应文字和展示广告 -->
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-9540087096615057"
-     data-ad-slot="2018352322"
-     data-ad-format="auto">
-</ins>
-<script>
-(adsbygoogle = window.adsbygoogle || []).push({});
-</script>
-</p>
-</div>
-
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
-
-      
+  <div id="blog-archives" class="category">
 
 
 
-
-<time class='entry-date' datetime='2017-06-24T14:32:31+08:00'><span class='date'>2017-06-24</span> <span class='time'>2:32 pm</span></time>
-      
-
-<span class="categories">
   
-    <a class='category' href='/blog/categories/octopress/'>octopress</a>
+  <h2>2017</h2>
+
+<article>
   
-</span>
+<h1><a href="/blog/deep-dive-on-elasticsearch-doc-values/">深入理解 ElasticSearch Doc Values</a></h1>
+<time datetime="2017-11-11T00:47:21+08:00" pubdate><span class='month'>11</span>-<span class='day'>11</span> <span class='year'>2017</span></time>
+
+<footer>
+  <span class="categories"><a class='category' href='/blog/categories/elasticsearch/'>elasticsearch</a></span>
+</footer>
 
 
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/octopress-index-page-read-more/" data-via="" data-counturl="http://www.majiang.life/blog/octopress-index-page-read-more/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/spring-boot-get-started/" title="Previous Post: 使用 Idea 创建 Spring Boot 项目">&laquo; 使用 Idea 创建 Spring Boot 项目</a>
-      
-      
-        <a class="basic-alignment right" href="/blog/octopress-tag-cloud/" title="Next Post: Octopress 添加标签云">Octopress 添加标签云 &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
-  <section>
-    <h1>评论</h1>
-    <div id="commenthub_thread" aria-live="polite"></div>
-  </section>
+</div>
+
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+  <!-- 博客列表页面尾部自适应广告 -->
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-9540087096615057"
+       data-ad-slot="3428022322"
+       data-ad-format="auto"></ins>
+  <script>
+  (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
+  
+</article>
 
 </div>
 
@@ -336,9 +235,9 @@ enable_page_level_ads: true
 <script type="text/javascript">
     var commenthub_id = '3821949';
     var commenthub_website = 'http://www.majiang.life';
-    var commenthub_identifier = 'http://www.majiang.life/blog/octopress-index-page-read-more/';
-    var commenthub_url = 'http://www.majiang.life/blog/octopress-index-page-read-more/';
-    var commenthub_title = '为Octopress 首页添加‘更多’功能';
+    var commenthub_identifier = 'http://www.majiang.life/blog/categories/elasticsearch/index.html';
+    var commenthub_url = 'http://www.majiang.life/blog/categories/elasticsearch/index.html';
+    var commenthub_title = 'Category: elasticsearch';
     (function () {
         var dsq = document.createElement('script');
         dsq.type = 'text/javascript';

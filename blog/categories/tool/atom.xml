@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tool | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/tool/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-11-07T09:40:51+08:00</updated>
+  <updated>2017-11-28T01:31:20+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -18,14 +18,14 @@
     <link href="http://www.majiang.life/blog/migrate-evernote-to-youdao-note/"/>
     <updated>2017-11-04T09:28:59+08:00</updated>
     <id>http://www.majiang.life/blog/migrate-evernote-to-youdao-note</id>
-    <content type="html"><![CDATA[<h1>前言</h1>
+    <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>云笔记已经成了每一个开发人员的装机必备，联想到每一个开发人员的折腾也从未停止过，安装各种操作系统，各种IDE，各种博客系统，各种浏览器等等，有过同样经历的同学举手，虽然我也看不到！这次笔者就折腾起来云笔记！</p>
 
 <!-- more -->
 
 
-<h1>为什么放弃？</h1>
+<h2>为什么放弃？</h2>
 
 <p>起初是因为印象笔记不支持Markdown笔记，我就在网上搜罗一番，最终发现就两个方案，马克飞象和有道云笔记。</p>
 
@@ -52,17 +52,17 @@
 <li>免费，虽然它也有收费版本，但是免费版本的功能对于记录笔记来说已经足够了。唯一不足的地方是免费版本会有广告，但是谁都得吃饭嘛，不收费让人家赚点广告费也不伤大雅嘛。</li>
 <li>PDF导出，支持 Markdown导出PDF合适</li>
 <li>快捷收藏，支持微信公共号文章内容一键收藏，微博一键收藏和地址收藏。很方便整理收藏。</li>
-<li>功能，印象笔记拥有的功能有道云笔记都包括。
-
-<h1>迁移印象笔记</h1>
-
-迁移就非常简答了，直接在印象笔记里面导出<code>enex</code>文件，然后在有道云笔记里面直接导入<code>enex</code>即可。只是<code>Mac</code>版本的有道云笔记不支持导入功能，可以选择PC版本或者Web版本导入。
-
-<h1>总结</h1>
-
-<p>虽然说只是一个工具，重点在于内容。但是有一句话说得好，工欲善其事，必先利其器。</p></li>
+<li>功能，印象笔记拥有的功能有道云笔记都包括。</li>
 </ul>
 
+
+<h2>迁移印象笔记</h2>
+
+<p>迁移就非常简答了，直接在印象笔记里面导出<code>enex</code>文件，然后在有道云笔记里面直接导入<code>enex</code>即可。只是<code>Mac</code>版本的有道云笔记不支持导入功能，可以选择PC版本或者Web版本导入。</p>
+
+<h2>总结</h2>
+
+<p>虽然说只是一个工具，重点在于内容。但是有一句话说得好，工欲善其事，必先利其器。</p>
 ]]></content>
   </entry>
   

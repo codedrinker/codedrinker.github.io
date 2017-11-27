@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Elasticsearch | 码匠笔记]]></title>
+  <link href="http://www.majiang.life/blog/categories/elasticsearch/atom.xml" rel="self"/>
+  <link href="http://www.majiang.life/"/>
+  <updated>2017-11-28T01:31:20+08:00</updated>
+  <id>http://www.majiang.life/</id>
+  <author>
+    <name><![CDATA[麻酱]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[深入理解 ElasticSearch Doc Values]]></title>
+    <link href="http://www.majiang.life/blog/deep-dive-on-elasticsearch-doc-values/"/>
+    <updated>2017-11-11T00:47:21+08:00</updated>
+    <id>http://www.majiang.life/blog/deep-dive-on-elasticsearch-doc-values</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>最近在使用 <code>ElasticSearch</code>，于是简单看了一下内部实现，看到 <code>Doc Values</code>的地方发现网上的翻译很是拗口，于是就有了下面的这篇文章。</p>
+
+<!-- more -->
+
+
+<h2>为什么要有 Doc Values</h2>
+
+<p>我们都知道 <code>ElasticSearch</code>之所以搜索这么快速，归功于他的<code>倒排索引</code>的设计，然而它也不是万能的，倒排索引的检索性能是非常快的，但是在字段值排序时却不是理想的结构。下面是一个简单的<code>倒排索引</code>的结构<br/>
+&#8220;`</p>
+
+<h2>Term      Doc_1  Doc_2</h2>
+
+<p>Quick   |       |  X
+The     |   X   |
+brown   |   X   |  X
+dog     |   X   |
+dogs    |       |  X
+fox     |   X   |
+foxes   |       |  X
+in      |       |  X
+jumped  |   X   |
+lazy    |   X   |  X
+leap    |       |  X
+over    |   X   |  X
+quick   |   X   |
+summer  |       |  X</p>
+
+<h2>the     |   X   |</h2>
+
+<pre><code>
+如上表便可以看出，他只有词对应的`doc`，但是并不知道每一个`doc`中的内容，那么如果想要排序的话每一个`doc`都去获取一次文档内容岂不非常耗时？`Doc Values`的出现使得这个问题迎刃而解。  
+## Doc Values 是什么
+其实大部分`NoSQL`在创建多个索引的时候也采用这种方式，就是再使用另一种方式存储一份文本，使得可以增强搜索。`Doc values` 通过转置两者间的关系来解决这个问题。倒排索引将词项映射到包含它们的文档，`Doc values` 将文档映射到它们包含的词项：
+</code></pre>
+
+<h2>Doc      Terms</h2>
+
+<p>Doc_1 | brown, dog, fox, jumped, lazy, over, quick, the
+Doc_2 | brown, dogs, foxes, in, lazy, leap, over, quick, summer</p>
+
+<h2>Doc_3 | dog, dogs, fox, jumped, over, quick, the</h2>
+
+<pre><code>当数据被转置之后，想要收集到每个文档行，获取所有的词项就非常简单了。所以搜索使用倒排索引查找文档，聚合操作收集和聚合 `Doc Values` 里的数据，这就是 `ElasticSearch`。
+
+## 深入理解 ElasticSearch Doc Values
+`Doc Values` 是在索引时与倒排索引同时生成。也就是说 `Doc Values` 和`倒排索引`一样，基于 `Segement` 生成并且是不可变的。同时 `Doc Values` 和`倒排索引`一样序列化到磁盘，这样对性能和扩展性有很大帮助。
+
+`Doc Values` 通过序列化把数据结构持久化到磁盘，我们可以充分利用操作系统的内存，而不是 `JVM` 的 `Heap` 。
+当 `working set` 远小于系统的可用内存，系统会自动将 `Doc Values` 保存在内存中，使得其读写十分高速； 
+不过，当其远大于可用内存时，操作系统会自动把 `Doc Values` 写入磁盘。很显然，这样性能会比在内存中差很多，但是它的大小就不再局限于服务器的内存了。如果是使用 `JVM` 的 `Heap` 来实现那么只能是因为 `OutOfMemory` 导致程序崩溃了。  
+
+## Doc Values 压缩
+
+从广义来说，`Doc Values` 本质上是一个序列化的 _列式存储_，这个结构非常适用于聚合、排序、脚本等操作。而且，这种存储方式也非常便于压缩，特别是数字类型。这样可以减少磁盘空间并且提高访问速度。下面来看一组数字类型的 `Doc Values`：
+</code></pre>
+
+<h2>  Doc      Terms</h2>
+
+<p>  Doc_1 | 100
+  Doc_2 | 1000
+  Doc_3 | 1500
+  Doc_4 | 1200
+  Doc_5 | 300
+  Doc_6 | 1900</p>
+
+<h2>  Doc_7 | 4200</h2>
+
+<pre><code>你会注意到这里每个数字都是 100 的倍数，`Doc Values` 会检测一个段里面的所有数值，并使用一个 _最大公约数_ ，方便做进一步的数据压缩。我们可以对每个数字都除以 100，然后得到：  `[1,10,15,12,3,19,42]` 。现在这些数字变小了，只需要很少的位就可以存储下，也减少了磁盘存放的大小。
+
+`Doc Values` 在压缩过程中使用如下技巧。它会按依次检测以下压缩模式:  
+
+-  如果所有的数值各不相同（或缺失），设置一个标记并记录这些值  
+-  如果这些值小于 256，将使用一个简单的编码表  
+-  如果这些值大于 256，检测是否存在一个最大公约数  
+-  如果没有存在最大公约数，从最小的数值开始，统一计算偏移量进行编码  
+
+当然如果存储`String`类型，其一样可以通过顺序表对`String`类型进行数字编码，然后再把数字类型构建`Doc Values`。
+
+## 禁用 Doc Values
+
+`Doc Values` 默认对所有字段启用，除了 `analyzed strings`。也就是说所有的数字、地理坐标、日期、IP 和不分析（`not_analyzed`）字符类型都会默认开启。
+
+`analyzed strings` 暂时还不能使用 `Doc Values`，是因为经过分析以后的文本会生成大量的`Token`，这样非常影响性能。
+
+虽然`Doc Values`非常好用，但是如果你存储的数据确实不需要这个特性，就不如禁用他，这样不仅节省磁盘空间，也许会提升索引的速度。
+
+要禁用 `Doc Values` ，在字段的映射（mapping）设置 `doc_values: false` 即可。例如，这里我们创建了一个新的索引，字段 `"session_id"` 禁用了  `Doc Values`：
+</code></pre>
+
+<p>PUT my_index
+{
+  &ldquo;mappings&rdquo;: {
+    &ldquo;my_type&rdquo;: {
+      &ldquo;properties&rdquo;: {
+        &ldquo;session_id&rdquo;: {
+          &ldquo;type&rdquo;:       &ldquo;string&rdquo;,
+          &ldquo;index&rdquo;:      &ldquo;not_analyzed&rdquo;,
+          &ldquo;doc_values&rdquo;: false
+        }
+      }
+    }
+  }
+}
+<code>``
+通过设置</code>doc_values: false` ，这个字段将不能被用于聚合、排序以及脚本操作</p>
+
+<p>同样可以禁用倒排索引，使它不能被正常搜索，但是可以排序，例如：
+<code>
+PUT my_index
+{
+  "mappings": {
+    "my_type": {
+      "properties": {
+        "customer_token": {
+          "type":       "string",
+          "index":      "not_analyzed",
+          "doc_values": true,
+          "index": "no"
+        }
+      }
+    }
+  }
+}
+</code>
+通过设置 <code>doc_values: true</code> 和 <code>index: no</code> ，我们得到一个只能被用于聚合/排序/脚本的字段。</p>
+
+<h2>总结</h2>
+
+<p><code>倒排索引</code>和 <code>Doc Values</code> 只是 <code>ElasticSearch</code>的冰山一角，如果有兴趣的同学可以做更深入的研究，本文只是笔者的学习笔记，希望对大家有帮助。</p>
+]]></content>
+  </entry>
+  
+</feed>
