@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "深入理解 ElasticSearch Doc Values"
-date: 2017-11-11 00:47:21 +0800
+date: 2017-11-28 00:47:21 +0800
 comments: true
 categories: [ElasticSearch]
 description: 为什么要有 Doc Values,什么是 Doc Values,深入理解 ElasticSearch Doc Values,Doc Values 压缩原理,禁用 Doc Values
