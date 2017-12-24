@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2017-11-28T01:33:55+08:00</updated>
+  <updated>2017-12-25T03:53:13+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,296 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[细说 Java hashCode]]></title>
+    <link href="http://www.majiang.life/blog/deep-dive-on-java-hashcode/"/>
+    <updated>2017-12-24T01:04:24+08:00</updated>
+    <id>http://www.majiang.life/blog/deep-dive-on-java-hashcode</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>写过 <code>Java</code> 程序的同学一定都知道 <code>hashCode</code> 方法，它是 <code>Object</code> 对象的一个 <code>native</code> 方法。无论是我们平常使用的 <code>HashMap</code> 还是重写 <code>equals</code> 方法的时候，都会接触到 <code>hashCode</code> 方法，那么它究竟是怎么生成的，又有什么作用呢？笔者带着这个疑问开始探寻。</p>
+
+<!-- more -->
+
+
+<h2>hashCode 方法的定义</h2>
+
+<p>在 <a href="https://docs.oracle.com/javase/7/docs/api/"><code>jdk api</code></a> 中 关于 <code>hashCode</code> 有如下说明：</p>
+
+<pre><code class="sh">Returns a hash code value for the object. 
+This method is supported for the benefit of hash tables such as those provided by HashMap.
+The general contract of hashCode is:
+
+Whenever it is invoked on the same object more than once during an execution of a Java application, 
+the hashCode method must consistently return the same integer, 
+provided no information used in equals comparisons on the object is modified. 
+This integer need not remain consistent from one execution of an application to another execution of the same application.
+If two objects are equal according to the equals(Object) method, 
+then calling the hashCode method on each of the two objects must produce the same integer result.
+It is not required that if two objects are unequal according to the equals(java.lang.Object) method, 
+then calling the hashCode method on each of the two objects must produce distinct integer results. 
+However, the programmer should be aware that producing distinct integer results for unequal objects may improve the performance of hash tables.
+As much as is reasonably practical, 
+the hashCode method defined by class Object does return distinct integers for distinct objects. 
+(This is typically implemented by converting the internal address of the object into an integer, 
+    but this implementation technique is not required by the JavaTM programming language.)
+</code></pre>
+
+<p>其大致意思如下</p>
+
+<pre><code class="sh">只要在Java应用程序的执行过程中多次调用同一个对象，
+hashCode方法必须始终返回相同的整数，
+前提是在对象的equals比较中没有使用的信息被修改。  
+从应用程序的一次执行到同一应用程序的另一次执行，此整数不必保持一致。  
+
+如果两个对象按照equals（Object）方法相等，
+那么在两个对象的每一个上调用hashCode方法必须产生相同的整数结果。  
+如果两个对象根据equals（java.lang.Object）方法不相等，
+则不要求对两个对象中的每个对象调用hashCode方法都必须产生不同的整数结果。  
+但是，程序员应该知道，为不相等的对象生成不同的整数结果可以提高散列表的性能。  
+
+尽可能多地合理实用，由类Object定义的hashCode方法确实为不同的对象返回不同的整数。  
+这通常通过将对象的内部地址转换为整数来实现，但JavaTM编程语言不需要此实现技术。 
+</code></pre>
+
+<p>所以由上可以得到两条有用的信息，同一个对象 <code>hashcode</code> 的值在一次运行中一定相等，并且不同对象的 <code>hashcode</code> 一定不同，但是他还备注通常使用内部地址转换，但是 <code>JAVA</code> 不是使用这种方式实现的，那么怎么实现的呢？</p>
+
+<h2>hashCode 实现原理</h2>
+
+<h3>hashcode 源码</h3>
+
+<p><code>OpenJDK</code> 的源码可以直接查看，所以我们就选择查看一下其源码一看究竟。<br/>
+我们可以看到<code>src/share/vm/prims/jvm.h</code>和<code>src/share/vm/prims/jvm.cpp</code>两个文件中有关于 <code>hashcode</code> 的说明如下：
+<code>
+   JVM_ENTRY(jint, JVM_IHashCode(JNIEnv* env, jobject handle))
+   JVMWrapper("JVM_IHashCode");
+   // as implemented in the classic virtual machine; return 0 if object is NULL
+   return handle == NULL ? 0 : ObjectSynchronizer::FastHashCode (THREAD, JNIHandles::resolve_non_null(handle)) ;
+ JVM_END
+</code>
+我们继续进入<code>FashHashCode</code>里面查看，其位于<code>src/share/vm/runtime/synchronizer.cpp</code>文件，相对代码比较多，我们只摘取关键部分：
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'>  <span class="c1">// Inflate the monitor to set hash code</span>
+</span><span class='line'>  <span class="n">monitor</span> <span class="o">=</span> <span class="n">ObjectSynchronizer</span><span class="o">::</span><span class="n">inflate</span><span class="p">(</span><span class="n">Self</span><span class="p">,</span> <span class="n">obj</span><span class="p">);</span>
+</span><span class='line'>  <span class="c1">// Load displaced header and check it has hash code</span>
+</span><span class='line'>  <span class="n">mark</span> <span class="o">=</span> <span class="n">monitor</span><span class="o">-&gt;</span><span class="n">header</span><span class="p">();</span>
+</span><span class='line'>  <span class="n">assert</span> <span class="p">(</span><span class="n">mark</span><span class="o">-&gt;</span><span class="n">is_neutral</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">invariant</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span> <span class="p">;</span>
+</span><span class='line'>  <span class="n">hash</span> <span class="o">=</span> <span class="n">mark</span><span class="o">-&gt;</span><span class="n">hash</span><span class="p">();</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hash</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="n">hash</span> <span class="o">=</span> <span class="n">get_next_hash</span><span class="p">(</span><span class="n">Self</span><span class="p">,</span> <span class="n">obj</span><span class="p">);</span>
+</span><span class='line'>    <span class="n">temp</span> <span class="o">=</span> <span class="n">mark</span><span class="o">-&gt;</span><span class="n">copy_set_hash</span><span class="p">(</span><span class="n">hash</span><span class="p">);</span> <span class="c1">// merge hash code into header</span>
+</span><span class='line'>    <span class="n">assert</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">is_neutral</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">invariant</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span> <span class="p">;</span>
+</span><span class='line'>    <span class="n">test</span> <span class="o">=</span> <span class="p">(</span><span class="n">markOop</span><span class="p">)</span> <span class="n">Atomic</span><span class="o">::</span><span class="n">cmpxchg_ptr</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">mark</span><span class="p">);</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">test</span> <span class="o">!=</span> <span class="n">mark</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// The only update to the header in the monitor (outside GC)</span>
+</span><span class='line'>      <span class="c1">// is install the hash code. If someone add new usage of</span>
+</span><span class='line'>      <span class="c1">// displaced header, please update this code</span>
+</span><span class='line'>      <span class="n">hash</span> <span class="o">=</span> <span class="n">test</span><span class="o">-&gt;</span><span class="n">hash</span><span class="p">();</span>
+</span><span class='line'>      <span class="n">assert</span> <span class="p">(</span><span class="n">test</span><span class="o">-&gt;</span><span class="n">is_neutral</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">invariant</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span> <span class="p">;</span>
+</span><span class='line'>      <span class="n">assert</span> <span class="p">(</span><span class="n">hash</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Trivial</span> <span class="n">unexpected</span> <span class="n">object</span><span class="o">/</span><span class="n">monitor</span> <span class="n">header</span> <span class="n">usage</span><span class="p">.</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="c1">// We finally get the hash</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">hash</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+<code>monitor</code> 相关代码我们先略过不理，通过 <code>if</code> 语句我们可以看出，当 <code>hash</code>为0时候需要调用 <code>get_next_hash</code> 生成一个新的 <code>hash</code>，那么我们便可以继续前行。
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">static</span> <span class="kr">inline</span> <span class="kt">intptr_t</span> <span class="nf">get_next_hash</span><span class="p">(</span><span class="n">Thread</span> <span class="o">*</span> <span class="n">Self</span><span class="p">,</span> <span class="n">oop</span> <span class="n">obj</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>  <span class="kt">intptr_t</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hashCode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>     <span class="c1">// This form uses an unguarded global Park-Miller RNG,</span>
+</span><span class='line'>     <span class="c1">// so it&amp;rsquo;s possible for two threads to race and generate the same RNG.</span>
+</span><span class='line'>     <span class="c1">// On MP system we&amp;rsquo;ll have lots of RW access to a global, so the</span>
+</span><span class='line'>     <span class="c1">// mechanism induces lots of coherency traffic.</span>
+</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="n">os</span><span class="o">::</span><span class="n">random</span><span class="p">()</span> <span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hashCode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>     <span class="c1">// This variation has the property of being stable (idempotent)</span>
+</span><span class='line'>     <span class="c1">// between STW operations.  This can be useful in some of the 1-0</span>
+</span><span class='line'>     <span class="c1">// synchronization schemes.</span>
+</span><span class='line'>     <span class="kt">intptr_t</span> <span class="n">addrBits</span> <span class="o">=</span> <span class="n">cast_from_oop</span><span class="o">&lt;</span><span class="kt">intptr_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span> <span class="p">;</span>
+</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="n">addrBits</span> <span class="o">^</span> <span class="p">(</span><span class="n">addrBits</span> <span class="o">&gt;&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">^</span> <span class="n">GVars</span><span class="p">.</span><span class="n">stwRandom</span> <span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hashCode</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">;</span>            <span class="c1">// for sensitivity testing</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hashCode</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="o">++</span><span class="n">GVars</span><span class="p">.</span><span class="n">hcSequence</span> <span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hashCode</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="n">cast_from_oop</span><span class="o">&lt;</span><span class="kt">intptr_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class='line'>     <span class="c1">// Marsaglia&amp;rsquo;s xor-shift scheme with thread-specific state</span>
+</span><span class='line'>     <span class="c1">// This is probably the best overall implementation &amp;ndash; we&amp;rsquo;ll</span>
+</span><span class='line'>     <span class="c1">// likely make this the default in future releases.</span>
+</span><span class='line'>     <span class="kt">unsigned</span> <span class="n">t</span> <span class="o">=</span> <span class="n">Self</span><span class="o">-&gt;&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateX</span> <span class="p">;</span>
+</span><span class='line'>     <span class="n">t</span> <span class="o">^=</span> <span class="p">(</span><span class="n">t</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">11</span><span class="p">)</span> <span class="p">;</span>
+</span><span class='line'>     <span class="n">Self</span><span class="o">-&gt;&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateX</span> <span class="o">=</span> <span class="n">Self</span><span class="o">-&gt;&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateY</span> <span class="p">;</span>
+</span><span class='line'>     <span class="n">Self</span><span class="o">-&gt;&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateY</span> <span class="o">=</span> <span class="n">Self</span><span class="o">-&gt;&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateZ</span> <span class="p">;</span>
+</span><span class='line'>     <span class="n">Self</span><span class="o">-&gt;&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateZ</span> <span class="o">=</span> <span class="n">Self</span><span class="o">-&gt;&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateW</span> <span class="p">;</span>
+</span><span class='line'>     <span class="kt">unsigned</span> <span class="n">v</span> <span class="o">=</span> <span class="n">Self</span><span class="o">-&gt;&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateW</span> <span class="p">;</span>
+</span><span class='line'>     <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span> <span class="o">^</span> <span class="p">(</span><span class="n">v</span> <span class="o">&gt;&gt;</span> <span class="mi">19</span><span class="p">))</span> <span class="o">^</span> <span class="p">(</span><span class="n">t</span> <span class="o">^</span> <span class="p">(</span><span class="n">t</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">))</span> <span class="p">;</span>
+</span><span class='line'>     <span class="n">Self</span><span class="o">-&gt;</span><span class="n">_hashStateW</span> <span class="o">=</span> <span class="n">v</span> <span class="p">;</span>
+</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="n">v</span> <span class="p">;</span>
+</span><span class='line'>  <span class="p">}</span>
+</span><span class='line'>  <span class="n">value</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">=</span> <span class="n">markOopDesc</span><span class="o">::</span><span class="n">hash_mask</span><span class="p">;</span>
+</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">value</span> <span class="o">=</span> <span class="mh">0xBAD</span> <span class="p">;</span>
+</span><span class='line'>  <span class="n">assert</span> <span class="p">(</span><span class="n">value</span> <span class="o">!=</span> <span class="n">markOopDesc</span><span class="o">::</span><span class="n">no_hash</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">invariant</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span> <span class="p">;</span>
+</span><span class='line'>  <span class="n">TEVENT</span> <span class="p">(</span><span class="nl">hashCode</span><span class="p">:</span> <span class="n">GENERATE</span><span class="p">)</span> <span class="p">;</span>
+</span><span class='line'>  <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+通过上述代码我们看到，其实 <code>hashCode</code> 的生成有6中方式<br/>
+1. 随机数<br/>
+2. 对象的内存地址的函数<br/>
+3. 固定值，这个只是为了进行灵敏度测试<br/>
+4. 递增序列<br/>
+5. int类型的该对象的内存地址 <br/>
+6. 结合当前线程和xorshift生成</p>
+
+<p>通过 <a href="http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/87ee5ee27509/src/share/vm/runtime/globals.hpp#l1127">globals.hpp</a> 我们可以发现，JDK8 默认为5，也就是最后一种。<br/>
+<code>product(intx, hashCode, 5, "(Unstable) select hashCode generation algorithm")</code>  <br/>
+当然，OpenJDK6，7中用的都是第一种方案，那么问题又来了，既然都是随机数，那么怎么确保每次都一样的呢？</p>
+
+<h3>对象头</h3>
+
+<p>这里就需要引入一个<code>对象头</code>的概念，每次对象生成以后，都需要找一个地方存储一下这个对象的hashCode和锁信息，这就是<code>对象头</code>，英文称之为 <code>Mark Word</code>。这样一来我们就明白了，每次生成对象以后都会把它的<code>hashCode</code>存起来，这样无论对象怎么在新生代，老年代之间<code>游走</code>都不会改变其<code>hashCode</code>的值，然而事实并没有那么简单。</p>
+
+<h3>偏向锁</h3>
+
+<p>这时候我们翻回来看刚才略过的内容，<code>ObjectSynchronizer::FastHashCode()</code>里面的其他逻辑。
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">UseBiasedLocking</span><span class="p">)</span> <span class="p">{</span>
+</span><span class='line'>    <span class="c1">// NOTE: many places throughout the JVM do not expect a safepoint</span>
+</span><span class='line'>    <span class="c1">// to be taken here, in particular most operations on perm gen</span>
+</span><span class='line'>    <span class="c1">// objects. However, we only ever bias Java instances and all of</span>
+</span><span class='line'>    <span class="c1">// the call sites of identity_hash that might revoke biases have</span>
+</span><span class='line'>    <span class="c1">// been checked to make sure they can handle a safepoint. The</span>
+</span><span class='line'>    <span class="c1">// added check of the bias pattern is to avoid useless calls to</span>
+</span><span class='line'>    <span class="c1">// thread-local storage.</span>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">obj</span><span class="o">-&gt;</span><span class="n">mark</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">has_bias_pattern</span><span class="p">())</span> <span class="p">{</span>
+</span><span class='line'>      <span class="c1">// Box and unbox the raw reference just in case we cause a STW safepoint.</span>
+</span><span class='line'>      <span class="n">Handle</span> <span class="n">hobj</span> <span class="p">(</span><span class="n">Self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="p">;</span>
+</span><span class='line'>      <span class="c1">// Relaxing assertion for bug 6320749.</span>
+</span><span class='line'>      <span class="n">assert</span> <span class="p">(</span><span class="n">Universe</span><span class="o">::</span><span class="n">verify_in_progress</span><span class="p">()</span> <span class="o">||</span>
+</span><span class='line'>              <span class="o">!</span><span class="n">SafepointSynchronize</span><span class="o">::</span><span class="n">is_at_safepoint</span><span class="p">(),</span>
+</span><span class='line'>             <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">biases</span> <span class="n">should</span> <span class="n">not</span> <span class="n">be</span> <span class="n">seen</span> <span class="n">by</span> <span class="n">VM</span> <span class="kr">thread</span> <span class="n">here</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'>      <span class="n">BiasedLocking</span><span class="o">::</span><span class="n">revoke_and_rebias</span><span class="p">(</span><span class="n">hobj</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">JavaThread</span><span class="o">::</span><span class="n">current</span><span class="p">());</span>
+</span><span class='line'>      <span class="n">obj</span> <span class="o">=</span> <span class="n">hobj</span><span class="p">()</span> <span class="p">;</span>
+</span><span class='line'>      <span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">obj</span><span class="o">-&gt;</span><span class="n">mark</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">has_bias_pattern</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">biases</span> <span class="n">should</span> <span class="n">be</span> <span class="n">revoked</span> <span class="n">by</span> <span class="n">now</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure>
+由上述代码我们可以得知，当前对象处于<code>偏向锁</code>时，会清除<code>偏向锁</code>通过从<code>锁</code>上面取回<code>Mark Word</code> 信息。为什么提到取回呢？之前消失了吗？是的，现在就需要解释一下<code>偏向锁</code>了。<br/>
+<code>Hotspot</code> 的作者经过以往的研究发现大多数情况下锁不仅不存在多线程竞争，而且总是由同一线程多次获得，为了让线程获得锁的代价更低而引入
+了偏向锁。当一个线程访问同步块并获取锁时，会在对象头和栈帧中的锁记录里存储锁偏向的线程 <code>ID</code>，以后该线程在进入和退出同步块时不需要花费 <code>CAS</code> 操作来加锁和解锁，而只需简单的测试一下对象头的 <code>Mark Word</code> 里是否存储着指向当前线程的偏向锁，如果测试成功，表示线程已经获得了锁，如果测试失败，则需要再测试下 <code>Mark Word</code> 中偏向锁的标识是否设置成 1（表示当前是偏向锁），如果没有设置，则使用 <code>CAS</code> 竞争锁，如果设置了，则尝试使用 <code>CAS</code> 将对象头的偏向锁指向当前线程。所以我们便知道为什么有<code>取回</code>这个概念了。然而代码带没有结束。</p>
+
+<h3>轻量级锁</h3>
+
+<p>轻量级锁相对比较简单，<code>JVM</code>会在当前的线程栈桢中创建用于存放锁的空间，同时将对象头中的<code>Mark Word</code>复制到锁记录中，也称作 <code>Displaced Mark Word</code>。比较复杂的是<code>重量级</code>锁。</p>
+
+<h3>重量级锁</h3>
+
+<p>这个时候如果多个线程来竞争资源，就会发生<code>锁膨胀</code>，这样因为需要保存竞争资源需要<code>wait</code>的线程和相关信息，就引入了<code>monitor</code>的概念。于是这时候就把<code>Mark Word</code>存放到了<code>Monitor</code>里面，当然<code>Monitor</code>不仅仅用于存储对象的<code>Mark Word</code>，具体的作用就不是本文的重点了。</p>
+
+<h2>hashCode 的用途</h2>
+
+<p><code>hashCode</code> 的唯一性决定了他可以用来生成<code>HashMap</code>的key，同时也能判断对象是否为同一个对象。另外我们再重写他的时候要多加注意，因为<code>JVM</code>会根据它做一些性能优化。</p>
+
+<h2>总结</h2>
+
+<p>此文为笔者学习 <code>hashCode</code> 的笔记，如有问题欢迎指正。</p>
+
+<h2>参考文献</h2>
+
+<p><a href="http://hg.openjdk.java.net/jdk8u/jdk8u/hotspot/file/87ee5ee27509/src/share/vm">OpenJDK 源码</a><br/>
+<a href="https://docs.oracle.com/javase/7/docs/api/">Oracle JDK Docs</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[从 Spring 集成 Mybatis 到 浅析Java动态代理]]></title>
