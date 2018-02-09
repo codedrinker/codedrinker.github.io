@@ -83,7 +83,14 @@ enable_page_level_ads: true
   <li><a href="/blog/categories/octopress/">Octopress</a></li>
   <li><a href="/blogroll">推荐博客</a></li>
 </ul>
-
+<script type="text/javascript" src="https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/table-of-contents-sidebar.js"></script>
+<script type="text/javascript">
+    window.onload = function(e){ 
+        TableOfContents.init({
+            basePath: "https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/",
+        });
+    }
+</script>
 </nav>
   <div id="main">
     <div id="content">
@@ -556,7 +563,7 @@ color-index: number of entries in the output device&rsquo;s color lookup table, 
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2017 - 麻酱 -
+  Copyright &copy; 2018 - 麻酱 -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> and <a href="https://help.shopify.com/themes/liquid">Liquid</a> | Contact - gwangchunlei at gmail.com</span>
 </p>
 
