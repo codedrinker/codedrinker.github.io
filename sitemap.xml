@@ -94,10 +94,13 @@
 <loc>http://www.majiang.life/search/</loc>
 </url>
 <url>
-<loc>http://www.majiang.life/about/</loc>
+<loc>http://www.majiang.life/blogroll/</loc>
 </url>
 <url>
-<loc>http://www.majiang.life/blogroll/</loc>
+<loc>http://www.majiang.life/project/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/about/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/vagrant/</loc>
