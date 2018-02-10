@@ -1,15 +1,16 @@
 <ul class="main-navigation">
   <li><a href="{{ root_url }}/">首页</a></li>
   <li><a href="{{ root_url }}/blog/archives">归档</a></li>
+  <li><a href="{{ root_url }}/blogroll">博客</a></li>
+  <li><a href="{{ root_url }}/project">项目</a></li>
   <li><a href="{{ root_url }}/blog/categories/spring/">Spring</a></li>
   <li><a href="{{ root_url }}/blog/categories/octopress/">Octopress</a></li>
-  <li><a href="{{ root_url }}/blogroll">推荐博客</a></li>
 </ul>
-<script type="text/javascript" src="https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/table-of-contents-sidebar.js"></script>
+<script type="text/javascript" src="http://localhost:9000/table-of-contents-sidebar.js"></script>
 <script type="text/javascript">
     window.onload = function(e){ 
         TableOfContents.init({
-            basePath: "https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/",
+            basePath: "http://localhost:9000/",
         });
     }
 </script>
