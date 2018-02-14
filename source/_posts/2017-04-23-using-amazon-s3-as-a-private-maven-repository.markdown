@@ -1,9 +1,9 @@
 ---
 layout: post
-title: "基于Amazon S3 搭建 Maven 私有仓库"
+title: "基于 Amazon S3 搭建 Maven 私有仓库"
 date: 2017-04-23 22:34:22 +0800
 comments: true
-categories: Maven
+categories: [Maven,AWS]
 description: 基于Amazon IAM权限认证，使用S3搭建私有Maven中央仓库
 keywords: Using Amazon S3 as a Private Maven Repository, 基于Amazon S3 搭建 Maven 私有仓库, Maven 私有仓库, Maven 仓库, Maven 私服搭建,Maven(创建私有仓库和设置权限)，Maven私有仓库，设置权限，加密，密码
 ---
