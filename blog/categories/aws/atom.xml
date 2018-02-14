@@ -1,0 +1,676 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Aws | 码匠笔记]]></title>
+  <link href="http://www.majiang.life/blog/categories/aws/atom.xml" rel="self"/>
+  <link href="http://www.majiang.life/"/>
+  <updated>2018-02-14T15:08:33+08:00</updated>
+  <id>http://www.majiang.life/</id>
+  <author>
+    <name><![CDATA[麻酱]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[基于 Amazon SES 搭建高可用的邮件系统]]></title>
+    <link href="http://www.majiang.life/blog/how-to-build-email-system-with-amazon-ses/"/>
+    <updated>2018-02-14T14:22:55+08:00</updated>
+    <id>http://www.majiang.life/blog/how-to-build-email-system-with-amazon-ses</id>
+    <content type="html"><![CDATA[<h2>简介</h2>
+
+<p>通常情况下我们使用 smtp 调用第三方的 api 发送邮件，但是 gmail 一天只能发送100封，这对于营销邮件来说无疑是非常大的影响。所以考虑两种方案，第一种自己搭建邮件服务器，这种方案耗费时间并且需要额外的服务器成本。第二种方案使用 Amazon SES 搭建有限服务。简单方便并且 Amazon 本身也做了一些优化。</p>
+
+<!-- more -->
+
+
+<h2>域名准备</h2>
+
+<h3>购买域名</h3>
+
+<p>这一步不在本文的范围只，但是你需要需要准备好一个域名。</p>
+
+<h3>托管域名到 Route53</h3>
+
+<p>Route53 是Aws的 DNS，不托管用自己的也行，用他的一个方便之处是配置SES的时候他会很好的给你继承好，省去好多自己配置的麻烦。不过本身托管域名也需要配置，所以这里自行考虑是否托管域名到Route53。如需配置如下是配置文档。
+<a href="https://docs.aws.amazon.com/zh_cn/Route53/latest/DeveloperGuide/migrate-dns-domain-in-use.html">https://docs.aws.amazon.com/zh_cn/Route53/latest/DeveloperGuide/migrate-dns-domain-in-use.html</a><br/>
+如果是gmail，在gmail的服务里面也会明确的写着怎么迁移。
+通常情况下如下输入记录到Route53作为验证。
+<code>
+ns-***.awsdns-49.net.
+ns-***.awsdns-50.org.
+ns-***.awsdns-22.co.uk.
+ns-***.awsdns-59.com.
+</code></p>
+
+<h2>配置 Amazon SES</h2>
+
+<p>进入aws 控制台，进入Simple Email Service(SES)，点击 domains -> Verify a New Domain。</p>
+
+<h3>Route53 域名配置</h3>
+
+<p>如果是Route53 托管的域名，他会直接提示你是否创建关联到Route53，直接点击关联就好了。关联主要分为几个方便，验证，DKIM，SPF验证。说简单一点就是验证这个域名是你的，验证这个邮箱地址发送是合法的，避免一些成为垃圾邮件的可能性。</p>
+
+<h3>非 Route53 域名配置</h3>
+
+<p>如果是非 Route53 域名也没有关系，他也会按步骤提示你配置一个TXT，和三个CNAME到你的DNS就可以。</p>
+
+<h3>等待验证</h3>
+
+<p>配置完成之后需要有一定的时间验证，等待验证成功之后会标记为验证通过，这个时候就可以进行下面的编码。</p>
+
+<h2>程序实现</h2>
+
+<h3>添加依赖</h3>
+
+<p>首先需要添加两个aws的依赖，一个是通用的一个是ses的，<br/>
+另外需要配置一个把富文本解析成普通文本的工具，下文会有更详细的解释，<br/>
+最后配置一个velocity依赖，用于生成邮件模板。
+<code>xml
+&lt;dependency&gt;
+    &lt;artifactId&gt;aws-java-sdk-ses&lt;/artifactId&gt;
+    &lt;groupId&gt;com.amazonaws&lt;/groupId&gt;
+    &lt;optional&gt;false&lt;/optional&gt;
+    &lt;version&gt;1.11.95&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.amazonaws&lt;/groupId&gt;
+    &lt;artifactId&gt;aws-java-sdk-s3&lt;/artifactId&gt;
+    &lt;version&gt;1.11.95&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;org.jsoup&lt;/groupId&gt;
+    &lt;artifactId&gt;jsoup&lt;/artifactId&gt;
+    &lt;version&gt;1.10.2&lt;/version&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;velocity&lt;/groupId&gt;
+    &lt;artifactId&gt;velocity&lt;/artifactId&gt;
+    &lt;version&gt;1.5&lt;/version&gt;
+&lt;/dependency&gt;
+</code></p>
+
+<h3>创建模板</h3>
+
+<p>本文采用velocity生成邮件模板，好处就不说了。主要使用velocity的模板引擎生成邮件模板。<br/>
+<a href="http://velocity.apache.org/engine/1.7/developer-guide.html">官方文档</a> <a href="https://www.ibm.com/developerworks/cn/java/j-lo-velocity1/">中文文档</a></p>
+
+<h4>创建template.vm</h4>
+
+<p>首先在 resouces下面创建一个 email-template.vm，因为测试内容比较简单，当然这里面可以编写html文档。内容如下
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;table&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>${title}<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>${name}<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>${content}<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;/table&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h4>构建模板</h4>
+
+<p>直接使用 volecity 的模板引擎加载上面的 vm 模板，然后生成即可，具体代码如下。
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmailTemplateUtils</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@Data</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">EmailEntity</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="n">String</span> <span class="n">title</span><span class="o">;</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="n">String</span> <span class="n">content</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">generate</span><span class="o">(</span><span class="n">EmailEntity</span> <span class="n">emailEntity</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">VelocityEngine</span> <span class="n">velocityEngine</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">VelocityEngine</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">velocityEngine</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="n">RuntimeConstants</span><span class="o">.</span><span class="na">RESOURCE_LOADER</span><span class="o">,</span> <span class="s">&quot;classpath&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">velocityEngine</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;classpath.resource.loader.class&quot;</span><span class="o">,</span> <span class="n">ClasspathResourceLoader</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">velocityEngine</span><span class="o">.</span><span class="na">init</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">Template</span> <span class="n">template</span> <span class="o">=</span> <span class="n">velocityEngine</span><span class="o">.</span><span class="na">getTemplate</span><span class="o">(</span><span class="s">&quot;email-template.vm&quot;</span><span class="o">,</span> <span class="s">&quot;UTF-8&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">VelocityContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">VelocityContext</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">context</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;title&quot;</span><span class="o">,</span> <span class="n">emailEntity</span><span class="o">.</span><span class="na">getTitle</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">context</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">,</span> <span class="n">emailEntity</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">context</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;content&quot;</span><span class="o">,</span> <span class="n">emailEntity</span><span class="o">.</span><span class="na">getContent</span><span class="o">());</span>
+</span><span class='line'>        <span class="n">StringWriter</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">StringWriter</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">template</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">writer</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">writer</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">EmailEntity</span> <span class="n">emailEntity</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">EmailEntity</span><span class="o">();</span>
+</span><span class='line'>    <span class="n">emailEntity</span><span class="o">.</span><span class="na">setTitle</span><span class="o">(</span><span class="s">&quot;email title&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">emailEntity</span><span class="o">.</span><span class="na">setContent</span><span class="o">(</span><span class="s">&quot;email content&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">emailEntity</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">&quot;email name&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">String</span> <span class="n">generate</span> <span class="o">=</span> <span class="n">generate</span><span class="o">(</span><span class="n">emailEntity</span><span class="o">);</span>
+</span><span class='line'>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">generate</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure>
+直接运行程序会得到如下，输出表示已经配置成功，稍后将其配置成自己的邮件模板的样子就行了。
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;table&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>email title<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>email name<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>email content<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;/table&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>发送邮件</h3>
+
+<p>发送邮件功能主要是调用 Amazon SES 的工具包发送，代码比较简单，直接阅读代码即可。
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AmazonSESProvider</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="n">EmailResult</span> <span class="nf">sendEmail</span><span class="o">(</span><span class="n">String</span> <span class="n">from</span><span class="o">,</span> <span class="n">String</span> <span class="n">subject</span><span class="o">,</span> <span class="n">String</span> <span class="n">body</span><span class="o">,</span> <span class="n">String</span><span class="o">[]</span> <span class="n">addrs</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Destination</span> <span class="n">destination</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Destination</span><span class="o">().</span><span class="na">withToAddresses</span><span class="o">(</span><span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">Content</span> <span class="n">mailSubject</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Content</span><span class="o">().</span><span class="na">withData</span><span class="o">(</span><span class="n">subject</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">Content</span> <span class="n">html</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Content</span><span class="o">().</span><span class="na">withData</span><span class="o">(</span><span class="n">body</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">textPlain</span> <span class="o">=</span> <span class="n">Jsoup</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">body</span><span class="o">).</span><span class="na">text</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">Body</span> <span class="n">htmlBody</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Body</span><span class="o">().</span><span class="na">withHtml</span><span class="o">(</span><span class="n">html</span><span class="o">).</span><span class="na">withText</span><span class="o">(</span><span class="k">new</span> <span class="nf">Content</span><span class="o">().</span><span class="na">withData</span><span class="o">(</span><span class="n">textPlain</span><span class="o">));</span>
+</span><span class='line'>        <span class="n">Message</span> <span class="n">message</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Message</span><span class="o">().</span><span class="na">withSubject</span><span class="o">(</span><span class="n">mailSubject</span><span class="o">).</span><span class="na">withBody</span><span class="o">(</span><span class="n">htmlBody</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">SendEmailRequest</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SendEmailRequest</span><span class="o">().</span><span class="na">withSource</span><span class="o">(</span><span class="n">from</span><span class="o">).</span><span class="na">withDestination</span><span class="o">(</span><span class="n">destination</span><span class="o">).</span><span class="na">withMessage</span><span class="o">(</span><span class="n">message</span><span class="o">);&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span>    <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">BasicAWSCredentials</span> <span class="n">awsCreds</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BasicAWSCredentials</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;secret&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">AmazonSimpleEmailServiceClient</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AmazonSimpleEmailServiceClient</span><span class="o">(</span><span class="n">awsCreds</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">client</span><span class="o">.</span><span class="na">setRegion</span><span class="o">(</span><span class="n">Region</span><span class="o">.</span><span class="na">getRegion</span><span class="o">(</span><span class="n">Regions</span><span class="o">.</span><span class="na">US_WEST_2</span><span class="o">));</span>
+</span><span class='line'>        <span class="n">client</span><span class="o">.</span><span class="na">sendEmail</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&quot;send:succeed,address-&amp;gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">EmailResult</span><span class="o">.</span><span class="na">success</span><span class="o">();</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">AmazonServiceException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">if</span> <span class="o">(</span><span class="s">&quot;Throttling&quot;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getErrorCode</span><span class="o">()))</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;send:failure,addrs-&amp;gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;error : Max for the rate!&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;send:failure,addrs-&amp;gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;error : &quot;</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">EmailResult</span><span class="o">.</span><span class="na">failure</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;send:failure,addrs-&amp;gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;error : &quot;</span><span class="o">,</span> <span class="n">ex</span><span class="o">);</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">EmailResult</span><span class="o">.</span><span class="na">failure</span><span class="o">(</span><span class="n">ex</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">sendEmail</span><span class="o">(</span><span class="s">&quot;fromaddress@gmail.com&quot;</span><span class="o">,</span> <span class="s">&quot;email subject&quot;</span><span class="o">,</span> <span class="s">&quot;Test email from codedrinker&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="s">&quot;toaddress@gmail.com&quot;</span><span class="o">});</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure>
+主要发送的逻辑就是创建Amazon 的Client，然后调用发送邮件，主要注意的是如下语句</p>
+
+<pre><code class="java">Jsoup.parse(body).text();
+</code></pre>
+
+<p>我们传递过来的body是 html 类型的，我们需要生成一个纯文本类型的，这样可以保证邮件接收者不能预览富文本类型的时候有一个纯文本预览，使用 Jsoup.parse 可以提取出来文本内容，这样可减少了邮件发送到垃圾箱的概率。具体关于邮件发送到垃圾箱的概率可以使用邮件测试网址进行进一步验证。<a href="https://www.mail-tester.com/">测试工具地址</a>。</p>
+
+<h2>参考文献</h2>
+
+<p><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/getting-started.html">Amazon SES 文档</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[基于 Amazon S3 搭建 Maven 私有仓库]]></title>
+    <link href="http://www.majiang.life/blog/using-amazon-s3-as-a-private-maven-repository/"/>
+    <updated>2017-04-23T22:34:22+08:00</updated>
+    <id>http://www.majiang.life/blog/using-amazon-s3-as-a-private-maven-repository</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>最近项目慢慢变大，从一个模块，变成了十几个模块，有的模块是被其他模块依赖的，有的模块是可以单独部署的。如果继续在一个项目里面太臃肿了，也不方便维护，所以想着借着这个机会把项目分离开来，有一些模块可以直接作为公共组件使用。本身项目就是使用的<code>Maven</code>作为构建工具的，所以想着直接把模块提取出来，构建成可以通过<code>Maven</code>依赖的<code>jar</code>文件。然后发布到<code>Maven</code>仓库就可以轻松使用了。带着这个梦想，我们进入主题：</p>
+
+<!-- more -->
+
+
+<h2>方案</h2>
+
+<ul>
+<li><p>直接发布到<code>sonatype</code>的中心仓库<code>http://central.sonatype.org/</code>或者类似公有仓库。 <br/>
+不可行，原因是这样涉及到业务的代码也公开了，所以不能<code>Publish</code>到<code>Maven</code>的公有仓库。</p></li>
+<li><p>搭建自己的<code>sonatype</code>仓库<br/>
+不可行，原因是虽然搭建的<code>Maven</code>仓库是我们自己的，但是下载是公开的，还是不能解决我们的安全问题。</p></li>
+<li><p>基于<code>Amazon S3</code> 搭建<code>Maven</code> 私有仓库<br/>
+可行，使用 <code>Amazon S3</code> 作为<code>Maven</code> 数据的存储中心，安全性依赖于其本身的安全认证，这样我们既有了存储，也有了安全保障。</p></li>
+</ul>
+
+
+<h2>配置<code>Amazon S3</code>秘钥</h2>
+
+<p>正常访问<code>S3</code>我们都需要使用<code>S3</code>的<code>Access key ID</code>和<code>Secret access key</code>，无论是通过<code>CLI</code>还是<code>JAVA</code>。使用<code>Maven</code>也一样，我们需要配置<code>S3</code>的秘钥到<code>Maven</code>的配置文件里面<code>~/.m2/settings.xml</code>，如果还没有创建这个文件，使用系统级别的配置文件<code>$MAVEN_HOME/conf/settings.xml</code>也可以。具体配置如下：
+<code>xml $MAVEN_HOME/conf/settings.xml
+ &lt;servers&gt;
+        &lt;server&gt;
+            &lt;id&gt;aws-release&lt;/id&gt;
+            &lt;username&gt;AKIAJ*******&lt;/username&gt;
+            &lt;password&gt;TyXar*******&lt;/password&gt;
+        &lt;/server&gt;
+        &lt;server&gt;
+            &lt;id&gt;aws-snapshot&lt;/id&gt;
+            &lt;username&gt;AKIAJ*******&lt;/username&gt;
+            &lt;password&gt;TyXar*******&lt;/password&gt;
+        &lt;/server&gt;
+    &lt;/servers&gt;
+</code></p>
+
+<h2>配置要发布到<code>Maven</code>仓库的项目</h2>
+
+<p>配置要发布到<code>Maven</code>仓库的项目，一般直接在<code>POM.xml</code>里面配置到发布的地址就可以了，但是本身<code>Maven</code>是不支持<code>S3</code>，所以这里引入了一个第三方的工具，用来发布<code>jar</code>到<code>S3</code>仓库的。<a href="https://github.com/spring-projects/aws-maven">Spring-Aws-Maven</a>，具体的配置如下：
+&#8220;`xml pom.xml
+&lt;?xml version=&ldquo;1.0&rdquo; encoding=&ldquo;UTF-8&rdquo;?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion></p>
+
+<pre><code>&lt;groupId&gt;com.github.codedrinker&lt;/groupId&gt;
+&lt;artifactId&gt;maven-s3-lib&lt;/artifactId&gt;
+&lt;version&gt;1.0.1&lt;/version&gt;
+
+&lt;distributionManagement&gt;
+    &lt;repository&gt;
+        &lt;id&gt;aws-release&lt;/id&gt;
+        &lt;name&gt;AWS Release Repository&lt;/name&gt;
+        &lt;url&gt;s3://nexus-repository/release&lt;/url&gt;
+    &lt;/repository&gt;
+    &lt;snapshotRepository&gt;
+        &lt;id&gt;aws-snapshot&lt;/id&gt;
+        &lt;name&gt;AWS Snapshot Repository&lt;/name&gt;
+        &lt;url&gt;s3://nexus-repository/snapshot&lt;/url&gt;
+    &lt;/snapshotRepository&gt;
+&lt;/distributionManagement&gt;
+&lt;build&gt;
+    &lt;extensions&gt;
+        &lt;extension&gt;
+            &lt;groupId&gt;org.springframework.build&lt;/groupId&gt;
+            &lt;artifactId&gt;aws-maven&lt;/artifactId&gt;
+            &lt;version&gt;5.0.0.RELEASE&lt;/version&gt;
+        &lt;/extension&gt;
+    &lt;/extensions&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-source-plugin&lt;/artifactId&gt;
+            &lt;version&gt;2.2.1&lt;/version&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;phase&gt;package&lt;/phase&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;jar-no-fork&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;
+            &lt;version&gt;2.9.1&lt;/version&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;phase&gt;package&lt;/phase&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;jar&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+    &lt;sourceDirectory&gt;src/main/java&lt;/sourceDirectory&gt;
+    &lt;resources&gt;
+        &lt;resource&gt;
+            &lt;directory&gt;src/main/resources&lt;/directory&gt;
+            &lt;filtering&gt;true&lt;/filtering&gt;
+        &lt;/resource&gt;
+    &lt;/resources&gt;
+&lt;/build&gt;
+</code></pre>
+
+<p></project>
+<code>
+下面我们逐行进行解释
+</code>xml pom.xml
+<distributionManagement>
+    <repository>
+        <id>aws-release</id>
+        <name>AWS Release Repository</name>
+        <url>s3://nexus-repository/release</url>
+    </repository>
+    <snapshotRepository>
+        <id>aws-snapshot</id>
+        <name>AWS Snapshot Repository</name>
+        <url>s3://nexus-repository/snapshot</url>
+    </snapshotRepository>
+</distributionManagement>
+<code>
+是为了指定发布地址，这里我们指定的是`S3`的`bucket`地址`nexus-repository`，当然我们需要区分`release`和`snapshot`的位置。需要注意的是这里的`id`需要和`server`里面的`id`相对应。
+</code>xml pom.xml
+<extensions>
+    <extension>
+        <groupId>org.springframework.build</groupId>
+        <artifactId>aws-maven</artifactId>
+        <version>5.0.0.RELEASE</version>
+    </extension>
+</extensions>
+<code>``
+这句话是关键，它就是当我们运行</code>mvn deploy<code>的时候，</code>extension<code>会通过调用</code>Amazon S3<code>的</code>SDK<code>把我们的内容自动</code>Build<code>成</code>Maven<code>的格式上传到</code>S3`。</p>
+
+<pre><code class="xml pom.xml">&lt;plugin&gt;
+    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-source-plugin&lt;/artifactId&gt;
+    &lt;version&gt;2.2.1&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;phase&gt;package&lt;/phase&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;jar-no-fork&lt;/goal&gt;
+            &lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+&lt;plugin&gt;
+    &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-javadoc-plugin&lt;/artifactId&gt;
+    &lt;version&gt;2.9.1&lt;/version&gt;
+    &lt;executions&gt;
+        &lt;execution&gt;
+            &lt;phase&gt;package&lt;/phase&gt;
+            &lt;goals&gt;
+                &lt;goal&gt;jar&lt;/goal&gt;
+            &lt;/goals&gt;
+        &lt;/execution&gt;
+    &lt;/executions&gt;
+&lt;/plugin&gt;
+</code></pre>
+
+<p>这两个插件是为了发布代码的时候，构建源码和文档，一起发布上去。这样如果开发人员没有下载原始项目，也可以通过文档和源码做简单的排查。<br/>
+这样我们就配置好了，最后直接在项目目录运行<code>mvn deploy</code>命令，等待运行成功，如果配置没有问题的话，一会儿我们会看到<code>S3</code>的目录有如下结构，这说明我们已经成功发布<code>jar</code>。
+<img src="/images/posts/s3.png" alt="S3" />
+<img src="/images/posts/tree.png" alt="Tree" /></p>
+
+<h2>配置需要依赖<code>jar</code>的项目</h2>
+
+<p>项目已经发布成功，我们这个时候就配置依赖它的项目。使用的时候相对配置就简单多了，具体配置如下：
+<code>xml pom.xml
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;groupId&gt;com.github.codedrinker&lt;/groupId&gt;
+    &lt;artifactId&gt;maven-s3-app&lt;/artifactId&gt;
+    &lt;version&gt;1.0.0&lt;/version&gt;
+    &lt;repositories&gt;
+        &lt;repository&gt;
+            &lt;id&gt;aws-release&lt;/id&gt;
+            &lt;name&gt;AWS Release Repository&lt;/name&gt;
+            &lt;url&gt;s3://nexus-repository/release&lt;/url&gt;
+        &lt;/repository&gt;
+        &lt;repository&gt;
+            &lt;id&gt;aws-snapshot&lt;/id&gt;
+            &lt;name&gt;AWS Snapshot Repository&lt;/name&gt;
+            &lt;url&gt;s3://nexus-repository/snapshot&lt;/url&gt;
+        &lt;/repository&gt;
+    &lt;/repositories&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.github.codedrinker&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-s3-lib&lt;/artifactId&gt;
+            &lt;version&gt;1.0.1&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+    &lt;build&gt;
+        &lt;extensions&gt;
+            &lt;extension&gt;
+                &lt;groupId&gt;org.springframework.build&lt;/groupId&gt;
+                &lt;artifactId&gt;aws-maven&lt;/artifactId&gt;
+                &lt;version&gt;5.0.0.RELEASE&lt;/version&gt;
+            &lt;/extension&gt;
+        &lt;/extensions&gt;
+    &lt;/build&gt;
+&lt;/project&gt;
+</code>
+下面我们逐行进行解释：
+<code>xml pom.xml
+&lt;repositories&gt;
+        &lt;repository&gt;
+            &lt;id&gt;aws-release&lt;/id&gt;
+            &lt;name&gt;AWS Release Repository&lt;/name&gt;
+            &lt;url&gt;s3://nexus-repository/release&lt;/url&gt;
+        &lt;/repository&gt;
+        &lt;repository&gt;
+            &lt;id&gt;aws-snapshot&lt;/id&gt;
+            &lt;name&gt;AWS Snapshot Repository&lt;/name&gt;
+            &lt;url&gt;s3://nexus-repository/snapshot&lt;/url&gt;
+        &lt;/repository&gt;
+&lt;/repositories&gt;
+</code>
+如上是在指定仓库，当然路径也应该是<code>S3</code>的地址，这个时候我们也是需要使用<code>settings.xml</code>里面配置的秘钥的，如果你担心没有秘钥也能下载，可以尝试删除秘钥和存在秘钥两种情况下下载依赖。
+<code>xml pom.xml
+&lt;extensions&gt;
+            &lt;extension&gt;
+                &lt;groupId&gt;org.springframework.build&lt;/groupId&gt;
+                &lt;artifactId&gt;aws-maven&lt;/artifactId&gt;
+                &lt;version&gt;5.0.0.RELEASE&lt;/version&gt;
+            &lt;/extension&gt;
+&lt;/extensions&gt;       
+</code>
+如上，下载的时候也是基于<code>S3</code>在操作，所以一样需要这个第三方工具。到此为止我们已经配置好了，需要注意的是，如果在你本机发布的上面的项目，会在<code>~/.m2</code>目录已经生成了<code>maven-s3-lib</code>的数据，所以我们必须手动删除这个目录，再运行<code>mvn clean compile</code>，看是否重新下载<code>jar</code>并且下载成功。如果不想去<code>~/.m2</code>目录删除的话，直接添加参数也是可以实现不使用本地缓存，重新获取<code>jar</code>的，命令：<code>mvn compile dependency:purge-local-repository</code>。</p>
+
+<blockquote><p><strong>注意：</strong> 单纯运行<code>mvn compile</code>不会下载源码，<code>IDE</code>也没有那么强大知道我们使用的是第三方工具，他会直接去<code>Maven</code>中心仓库去下载，所以我们需要使用命令下载源码<code>mvn dependency:sources</code>，然后<code>reload</code>到项目中。</p></blockquote>
+
+<h2>读写分离</h2>
+
+<p>这里的读写分离并不是环境的读写分离，而是发布，因为不可能每一个人都有发布的权限，如果做细致的话，只有打包的机器有发布的权限，其他人都是只有下载<code>jar</code>的权限，所以我们这里一样可以通过<code>AWS</code>的权限系统做控制。</p>
+
+<p><code>AWS</code>有一个叫做<code>IAM</code>的东西，他是专门用来控制权限的服务，很强大。我们可以直接在<code>IAM</code>里面创建两个<code>Policy</code>，<a href="http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/access_policies.html">文档地址</a>，一个用来写，一个只能读，他可以强大到指定到<code>bucket</code>，这样大大的提高了安全性。下面是具体的配置，如果有不明的的可以参照官方文档，很详细。</p>
+
+<p>读写，关键在于<code>s3:Put*</code>可以做任何更新操作：
+<code>json IAM PUT 配置
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt1492711190***",
+            "Effect": "Allow",
+            "Action": [
+                "s3:Get*",
+                "s3:List*",
+                "s3:Put*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::nexus-repository"
+            ]
+        },
+        {
+            "Sid": "Stmt1492711145***",
+            "Effect": "Allow",
+            "Action": [
+                "s3:Get*",
+                "s3:List*",
+                "s3:Put*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::nexus-repository/*"
+            ]
+        }
+    ]
+}
+</code>
+只读，只有<code>Get</code>和<code>List</code>操作：
+<code>json IAM GET 配置
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "Stmt1492751111***",
+            "Effect": "Allow",
+            "Action": [
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::nexus-repository"
+            ]
+        },
+        {
+            "Sid": "Stmt1492751111***",
+            "Effect": "Allow",
+            "Action": [
+                "s3:Get*",
+                "s3:List*"
+            ],
+            "Resource": [
+                "arn:aws:s3:::nexus-repository/*"
+            ]
+        }
+    ]
+}
+</code>
+同时呢，分别创建两个<code>User</code>，分别为他们创建AppKey，并且分别<code>Attach</code>上面已经创建好的两个<code>Policy</code>，这样就大功告成了。</p>
+
+<h2>总结</h2>
+
+<p>使用<code>Amazon S3</code>搭建<code>Maven</code>中心仓库，方便又安全，有这方面需求的朋友可以试试。</p>
+
+<h2>参考链接</h2>
+
+<p><a href="https://github.com/spring-projects/aws-maven">aws-maven</a>  <br/>
+<a href="https://softwareengineering.stackexchange.com/questions/231175/sharing-classes-or-interfaces-between-different-projects">Sharing classes or interfaces between different projects</a>  <br/>
+<a href="http://jmchung.github.io/blog/2015/03/01/using-amazon-s3-as-a-private-maven-repository/">Using Amazon S3 as a Private Maven Repository</a> <br/>
+<a href="http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/access_policies.html">Aws Policy</a></p>
+]]></content>
+  </entry>
+  
+</feed>

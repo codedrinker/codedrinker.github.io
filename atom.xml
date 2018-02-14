@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-14T13:39:35+08:00</updated>
+  <updated>2018-02-14T15:08:33+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,346 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[基于 Amazon SES 搭建高可用的邮件系统]]></title>
+    <link href="http://www.majiang.life/blog/how-to-build-email-system-with-amazon-ses/"/>
+    <updated>2018-02-14T14:22:55+08:00</updated>
+    <id>http://www.majiang.life/blog/how-to-build-email-system-with-amazon-ses</id>
+    <content type="html"><![CDATA[<h2>简介</h2>
+
+<p>通常情况下我们使用 smtp 调用第三方的 api 发送邮件，但是 gmail 一天只能发送100封，这对于营销邮件来说无疑是非常大的影响。所以考虑两种方案，第一种自己搭建邮件服务器，这种方案耗费时间并且需要额外的服务器成本。第二种方案使用 Amazon SES 搭建有限服务。简单方便并且 Amazon 本身也做了一些优化。</p>
+
+<!-- more -->
+
+
+<h2>域名准备</h2>
+
+<h3>购买域名</h3>
+
+<p>这一步不在本文的范围只，但是你需要需要准备好一个域名。</p>
+
+<h3>托管域名到 Route53</h3>
+
+<p>Route53 是Aws的 DNS，不托管用自己的也行，用他的一个方便之处是配置SES的时候他会很好的给你继承好，省去好多自己配置的麻烦。不过本身托管域名也需要配置，所以这里自行考虑是否托管域名到Route53。如需配置如下是配置文档。
+<a href="https://docs.aws.amazon.com/zh_cn/Route53/latest/DeveloperGuide/migrate-dns-domain-in-use.html">https://docs.aws.amazon.com/zh_cn/Route53/latest/DeveloperGuide/migrate-dns-domain-in-use.html</a><br/>
+如果是gmail，在gmail的服务里面也会明确的写着怎么迁移。
+通常情况下如下输入记录到Route53作为验证。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ns-***.awsdns-49.net.
+</span><span class='line'>ns-***.awsdns-50.org.
+</span><span class='line'>ns-***.awsdns-22.co.uk.
+</span><span class='line'>ns-***.awsdns-59.com.</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>配置 Amazon SES</h2>
+
+<p>进入aws 控制台，进入Simple Email Service(SES)，点击 domains -> Verify a New Domain。</p>
+
+<h3>Route53 域名配置</h3>
+
+<p>如果是Route53 托管的域名，他会直接提示你是否创建关联到Route53，直接点击关联就好了。关联主要分为几个方便，验证，DKIM，SPF验证。说简单一点就是验证这个域名是你的，验证这个邮箱地址发送是合法的，避免一些成为垃圾邮件的可能性。</p>
+
+<h3>非 Route53 域名配置</h3>
+
+<p>如果是非 Route53 域名也没有关系，他也会按步骤提示你配置一个TXT，和三个CNAME到你的DNS就可以。</p>
+
+<h3>等待验证</h3>
+
+<p>配置完成之后需要有一定的时间验证，等待验证成功之后会标记为验证通过，这个时候就可以进行下面的编码。</p>
+
+<h2>程序实现</h2>
+
+<h3>添加依赖</h3>
+
+<p>首先需要添加两个aws的依赖，一个是通用的一个是ses的，<br/>
+另外需要配置一个把富文本解析成普通文本的工具，下文会有更详细的解释，<br/>
+最后配置一个velocity依赖，用于生成邮件模板。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>aws-java-sdk-ses<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>com.amazonaws<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;optional&gt;</span>false<span class="nt">&lt;/optional&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.11.95<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>com.amazonaws<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>aws-java-sdk-s3<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.11.95<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>org.jsoup<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>jsoup<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.10.2<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>velocity<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>velocity<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.5<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>创建模板</h3>
+
+<p>本文采用velocity生成邮件模板，好处就不说了。主要使用velocity的模板引擎生成邮件模板。<br/>
+<a href="http://velocity.apache.org/engine/1.7/developer-guide.html">官方文档</a> <a href="https://www.ibm.com/developerworks/cn/java/j-lo-velocity1/">中文文档</a></p>
+
+<h4>创建template.vm</h4>
+
+<p>首先在 resouces下面创建一个 email-template.vm，因为测试内容比较简单，当然这里面可以编写html文档。内容如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;table&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>${title}<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>${name}<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>${content}<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;/table&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>构建模板</h4>
+
+<p>直接使用 volecity 的模板引擎加载上面的 vm 模板，然后生成即可，具体代码如下。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmailTemplateUtils</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@Data</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">EmailEntity</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="n">String</span> <span class="n">title</span><span class="o">;</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="n">String</span> <span class="n">content</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">generate</span><span class="o">(</span><span class="n">EmailEntity</span> <span class="n">emailEntity</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">VelocityEngine</span> <span class="n">velocityEngine</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">VelocityEngine</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">velocityEngine</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="n">RuntimeConstants</span><span class="o">.</span><span class="na">RESOURCE_LOADER</span><span class="o">,</span> <span class="s">&quot;classpath&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">velocityEngine</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;classpath.resource.loader.class&quot;</span><span class="o">,</span> <span class="n">ClasspathResourceLoader</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">velocityEngine</span><span class="o">.</span><span class="na">init</span><span class="o">();</span>
+</span><span class='line'>            <span class="n">Template</span> <span class="n">template</span> <span class="o">=</span> <span class="n">velocityEngine</span><span class="o">.</span><span class="na">getTemplate</span><span class="o">(</span><span class="s">&quot;email-template.vm&quot;</span><span class="o">,</span> <span class="s">&quot;UTF-8&quot;</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">VelocityContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">VelocityContext</span><span class="o">();</span>
+</span><span class='line'>            <span class="n">context</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;title&quot;</span><span class="o">,</span> <span class="n">emailEntity</span><span class="o">.</span><span class="na">getTitle</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">context</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">,</span> <span class="n">emailEntity</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">context</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;content&quot;</span><span class="o">,</span> <span class="n">emailEntity</span><span class="o">.</span><span class="na">getContent</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">StringWriter</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">StringWriter</span><span class="o">();</span>
+</span><span class='line'>            <span class="n">template</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">writer</span><span class="o">);</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">writer</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">EmailEntity</span> <span class="n">emailEntity</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">EmailEntity</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">emailEntity</span><span class="o">.</span><span class="na">setTitle</span><span class="o">(</span><span class="s">&quot;email title&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">emailEntity</span><span class="o">.</span><span class="na">setContent</span><span class="o">(</span><span class="s">&quot;email content&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">emailEntity</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">&quot;email name&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">generate</span> <span class="o">=</span> <span class="n">generate</span><span class="o">(</span><span class="n">emailEntity</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">generate</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>直接运行程序会得到如下，输出表示已经配置成功，稍后将其配置成自己的邮件模板的样子就行了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;table&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>email title<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>email name<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>email content<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;/table&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>发送邮件</h3>
+
+<p>发送邮件功能主要是调用 Amazon SES 的工具包发送，代码比较简单，直接阅读代码即可。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AmazonSESProvider</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="n">EmailResult</span> <span class="nf">sendEmail</span><span class="o">(</span><span class="n">String</span> <span class="n">from</span><span class="o">,</span> <span class="n">String</span> <span class="n">subject</span><span class="o">,</span> <span class="n">String</span> <span class="n">body</span><span class="o">,</span> <span class="n">String</span><span class="o">[]</span> <span class="n">addrs</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Destination</span> <span class="n">destination</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Destination</span><span class="o">().</span><span class="na">withToAddresses</span><span class="o">(</span><span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">Content</span> <span class="n">mailSubject</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Content</span><span class="o">().</span><span class="na">withData</span><span class="o">(</span><span class="n">subject</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">Content</span> <span class="n">html</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Content</span><span class="o">().</span><span class="na">withData</span><span class="o">(</span><span class="n">body</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">textPlain</span> <span class="o">=</span> <span class="n">Jsoup</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">body</span><span class="o">).</span><span class="na">text</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">Body</span> <span class="n">htmlBody</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Body</span><span class="o">().</span><span class="na">withHtml</span><span class="o">(</span><span class="n">html</span><span class="o">).</span><span class="na">withText</span><span class="o">(</span><span class="k">new</span> <span class="nf">Content</span><span class="o">().</span><span class="na">withData</span><span class="o">(</span><span class="n">textPlain</span><span class="o">));</span>
+</span><span class='line'>        <span class="n">Message</span> <span class="n">message</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Message</span><span class="o">().</span><span class="na">withSubject</span><span class="o">(</span><span class="n">mailSubject</span><span class="o">).</span><span class="na">withBody</span><span class="o">(</span><span class="n">htmlBody</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">SendEmailRequest</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SendEmailRequest</span><span class="o">().</span><span class="na">withSource</span><span class="o">(</span><span class="n">from</span><span class="o">).</span><span class="na">withDestination</span><span class="o">(</span><span class="n">destination</span><span class="o">).</span><span class="na">withMessage</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">BasicAWSCredentials</span> <span class="n">awsCreds</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BasicAWSCredentials</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;secret&quot;</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">AmazonSimpleEmailServiceClient</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AmazonSimpleEmailServiceClient</span><span class="o">(</span><span class="n">awsCreds</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">client</span><span class="o">.</span><span class="na">setRegion</span><span class="o">(</span><span class="n">Region</span><span class="o">.</span><span class="na">getRegion</span><span class="o">(</span><span class="n">Regions</span><span class="o">.</span><span class="na">US_WEST_2</span><span class="o">));</span>
+</span><span class='line'>            <span class="n">client</span><span class="o">.</span><span class="na">sendEmail</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&quot;send:succeed,address-&gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">EmailResult</span><span class="o">.</span><span class="na">success</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">AmazonServiceException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="s">&quot;Throttling&quot;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getErrorCode</span><span class="o">()))</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;send:failure,addrs-&gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>                <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;error : Max for the rate!&quot;</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;send:failure,addrs-&gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>                <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;error : &quot;</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">EmailResult</span><span class="o">.</span><span class="na">failure</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;send:failure,addrs-&gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;error : &quot;</span><span class="o">,</span> <span class="n">ex</span><span class="o">);</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">EmailResult</span><span class="o">.</span><span class="na">failure</span><span class="o">(</span><span class="n">ex</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">sendEmail</span><span class="o">(</span><span class="s">&quot;fromaddress@gmail.com&quot;</span><span class="o">,</span> <span class="s">&quot;email subject&quot;</span><span class="o">,</span> <span class="s">&quot;Test email from codedrinker&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="s">&quot;toaddress@gmail.com&quot;</span><span class="o">});</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>主要发送的逻辑就是创建Amazon 的Client，然后调用发送邮件，主要注意的是如下语句</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Jsoup</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">body</span><span class="o">).</span><span class="na">text</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们传递过来的body是 html 类型的，我们需要生成一个纯文本类型的，这样可以保证邮件接收者不能预览富文本类型的时候有一个纯文本预览，使用 Jsoup.parse 可以提取出来文本内容，这样可减少了邮件发送到垃圾箱的概率。具体关于邮件发送到垃圾箱的概率可以使用邮件测试网址进行进一步验证。<a href="https://www.mail-tester.com/">测试工具地址</a>。</p>
+
+<h2>参考文献</h2>
+
+<p><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/getting-started.html">Amazon SES 文档</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[细说 Java hashCode]]></title>
@@ -2985,7 +3325,7 @@ color-index: number of entries in the output device&rsquo;s color lookup table, 
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[基于Amazon S3 搭建 Maven 私有仓库]]></title>
+    <title type="html"><![CDATA[基于 Amazon S3 搭建 Maven 私有仓库]]></title>
     <link href="http://www.majiang.life/blog/using-amazon-s3-as-a-private-maven-repository/"/>
     <updated>2017-04-23T22:34:22+08:00</updated>
     <id>http://www.majiang.life/blog/using-amazon-s3-as-a-private-maven-repository</id>
@@ -4673,398 +5013,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <p>至此已经全部完成，这样你就可以尽情的，不打断思路的编写代码，任凭浏览器自己的更新文件去吧，等自己觉得差不多了，回过头来看一眼就行了。</p>
 
 <blockquote><p>PS:笔者写这篇文章的时候就是用的这个，一个显示器是编辑器，一个显示器就是Blog的Preview，确实是很方便呢。</p></blockquote>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Vagrant 私有开发环境搭建]]></title>
-    <link href="http://www.majiang.life/blog/set-up-vagrant-environment/"/>
-    <updated>2016-12-15T01:28:27+08:00</updated>
-    <id>http://www.majiang.life/blog/set-up-vagrant-environment</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
-
-<p>服务器端开发工程师的一个痛点就是各种搭建环境，尤其是对于我们这种特别爱捯饬技术，搭建环境，升级应用版本的这类人。这样除了让我们忍受搭建各种版本的环境的繁琐兼容问题，还让自己的开发机变得越来越臃肿，为此本文介绍了一种使用<code>Vagrant</code>搭建一套集成的开发环境(镜像)的方案，不仅可以让团队开发人员的环境保持一致，同时使得开发机保持瘦身。<br/>
-当然也有缺点，不许要做好数据的保密性，不能让所有的开发人员的镜像都有一些生产数据。<br/>
-下面我们就直接进入正题，搭建一个可以升级的本地环境。</p>
-
-<!-- more -->
-
-
-<h2>安装vagrant和virtual box</h2>
-
-<p>访问<code>Vagrant</code>官网(<a href="https://www.vagrantup.com/">https://www.vagrantup.com/</a>)，下载并安装。<br/>
-访问<code>VirtualBox</code>官网(<a href="https://www.virtualbox.org/">https://www.virtualbox.org/</a>)，下载并安装。</p>
-
-<h2>安装开发环境</h2>
-
-<p><code>Vagrant</code>的基本单元叫做box，我们可以理解为镜像，首先我们需要添加一个<code>Vagrant</code>公开的镜像到我们本地，用来搭建环境。<br/>
-我选择的是一个ubuntu镜像，下面的操作我们可以理解为下载镜像。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant box add hashicorp/precise64</span></code></pre></td></tr></table></div></figure>
-
-
-<p>提示选择哪一种方式，我们这里选择的是virtualbox，我们刚刚已经安装了。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>box: URL: https://atlas.hashicorp.com/hashicorp/precise64
-</span><span class='line'>This box can work with multiple providers! The providers that it
-</span><span class='line'>can work with are listed below. Please review the list and choose
-</span><span class='line'>the provider you will be working with.
-</span><span class='line'>
-</span><span class='line'>1) hyperv
-</span><span class='line'>2) virtualbox
-</span><span class='line'>3) vmware_fusion
-</span><span class='line'>
-</span><span class='line'>Enter your choice: 2</span></code></pre></td></tr></table></div></figure>
-
-
-<p>初始化本地开发环境，我们可以理解为安装镜像。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant init hashicorp/precise64</span></code></pre></td></tr></table></div></figure>
-
-
-<p>运行本地开发环境</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant up</span></code></pre></td></tr></table></div></figure>
-
-
-<p>ssh到本地开发环境</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant ssh</span></code></pre></td></tr></table></div></figure>
-
-
-<p>如果能进入刚才安装的系统，那么说明我们安装成功。因为设置了免密钥登录，所以直接输入就可以登录。</p>
-
-<blockquote><p><strong>注意：</strong>切记，是在你的<code>Vagrantfile</code>目录执行<code>Vagrant</code>相关命令),
-如果需要关闭系统，可以输入如下命令</p></blockquote>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant halt</span></code></pre></td></tr></table></div></figure>
-
-
-<blockquote><p><strong>参考文档：</strong> <a href="https://www.vagrantup.com/docs/getting-started/">https://www.vagrantup.com/docs/getting-started/</a></p></blockquote>
-
-<h2>配置开发环境</h2>
-
-<p>具体的搭建环境根据自身的项目决定，我这里只通过安装tomcat举例。
-官方网站下载tomcat，放到指定目录，我这里直接放在了我的<code>~/</code>home目录。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>wget http://apache.fayea.com/tomcat/tomcat-8/v8.5.9/bin/apache-tomcat-8.5.9.tar.gz</span></code></pre></td></tr></table></div></figure>
-
-
-<p>解压tomcat</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>tar -zxvf apache-tomcat-8.5.9.tar.gz</span></code></pre></td></tr></table></div></figure>
-
-
-<p>为了让我们本地开发机也能访问到<code>Vagrant</code>里面的tomcat，我们需要配置转发端口。需要在<code>config.vm.box = "hashicorp/precise64"</code>下面添加：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>config.vm.network "forwarded_port", guest: 8080, host: 8080</span></code></pre></td></tr></table></div></figure>
-
-
-<p>修改了配置文件以后，reload才能生效</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant reload</span></code></pre></td></tr></table></div></figure>
-
-
-<p>运行tomcat</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sh ~/apache-tomcat-8.5.9/bin/catalina.sh start</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在我们开发机打开浏览器，输入<code>http://localhost:8080</code>，我们就能看到Tomcat的欢迎页了，配置环境成功。</p>
-
-<blockquote><p><strong>参考文档：</strong> <a href="https://www.vagrantup.com/docs/getting-started/networking.html">https://www.vagrantup.com/docs/getting-started/networking.html</a></p></blockquote>
-
-<h2>打包开发环境</h2>
-
-<p>截止到目前假设我们自己的开发环境已经搭建完成，那么我们需要把搭建好的开发环境分发给其他开发人员。这个时候就需要打包一个开发环境，主要就是把我们已经处理好的开发环境打包成一个*.box文件，这样便可以使用<code>Vagrant</code>进行安装了。
-在<code>Vagrant</code>目录输入如下命令打包镜像:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant package --output mermaid.box --vagrantfile Vagrantfile</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li><strong>&ndash;output：</strong>打包的名字，做程序需要美人的陪伴，于是我起了一个响亮的名字;</li>
-<li><strong>&ndash;vagrantfile：</strong>设置这个参数以后，就可以把刚才我配置到<code>Vagrantfile</code>里面的配置打近包里面，这样其他开发人员下载镜像的时候就不需要重新配置了。</li>
-</ul>
-
-
-<p>这个时间有点长，我们慢慢的等他结束。</p>
-
-<blockquote><p><strong>参考文档：</strong> <a href="https://www.vagrantup.com/docs/cli/package.html">https://www.vagrantup.com/docs/cli/package.html</a></p></blockquote>
-
-<h2>搭建私有镜像仓库并发布镜像</h2>
-
-<p>我们要找一个大家都能下载并且外人不能访问的地方，所以我们选择搭建一个私有的镜像仓库。我在内网找了一个linux的服务器，IP地址是<code>192.168.1.137</code>，方便下文我们对应。在上面安装一个Nginx，方便我们可以直接通过URL访问相应的资源。
-在Nginx的根目录，创建vagrant文件夹，在vagrant文件夹下面在创建boxes文件夹。在vagrant目录添加mermaid.json文件，用于存放box的metadata信息。同时把我们刚才的mermaid.box放到boxes下面，并命名为mermaid.0.1.0.box，以便稍后的升级测试。
-具体目录结构如下：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>work@dev:/var/www/html$ tree
-</span><span class='line'>.
-</span><span class='line'>|-- index.nginx-debian.html
-</span><span class='line'>`-- vagrant
-</span><span class='line'>    |-- boxes
-</span><span class='line'>    |   |-- mermaid.0.1.0.box
-</span><span class='line'>    `-- mermaid.json</span></code></pre></td></tr></table></div></figure>
-
-
-<p>mermaid.json  里面具体内容如下:</p>
-
-<figure class='code'><figcaption><span>mermaid.json </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid dev environment&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s2">&quot;versions&quot;</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>      <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.1.0&quot;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s2">&quot;providers&quot;</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>        <span class="p">{</span>
-</span><span class='line'>          <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;virtualbox&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="s2">&quot;checksum_type&quot;</span><span class="o">:</span> <span class="s2">&quot;sha1&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="s2">&quot;checksum&quot;</span><span class="o">:</span> <span class="s2">&quot;3badb9acb07992938d6415e67a8291d60f3aafe9&quot;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>      <span class="p">]</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">]</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>基本配置都比较容易理解，注意的是checksum，需要把box上传到服务器的时候，使用
-<code>sha1sum boxes/mermaid.0.1.0.box</code>生成一下checksum值。
-配置都完成之后，我们测试访问<code>http://192.168.1.137/vagrant/mermaid.json</code>ok，那么表示我们配置成功。</p>
-
-<blockquote><p><strong>参考文档：</strong> <a href="http://softwaretester.info/create-private-vagrant-box-repository/">http://softwaretester.info/create-private-vagrant-box-repository/</a></p></blockquote>
-
-<h2>通过私有镜像仓库安装开发环境</h2>
-
-<p>和最开始我们再<code>Vagrant</code>公有仓库安装的方式类似，首先我们准备一个全新的目录，我是使用的这个目录<code>~/mermaid</code>。
-首先指定我们的私有仓库地址，添加一个镜像到本地。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant box add mermaid http://192.168.1.137/vagrant/mermaid.json</span></code></pre></td></tr></table></div></figure>
-
-
-<p>出现如下提示，说明我们在正确的路上，如果是局域网这个步骤会很快。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>==&gt; box: Loading metadata for box 'http://192.168.1.137/vagrant/mermaid.json'
-</span><span class='line'>==&gt; box: Adding box 'mermaid' (v0.1.0) for provider: virtualbox
-</span><span class='line'>    box: Downloading: http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box
-</span><span class='line'>    box: Calculating and comparing box checksum...
-</span><span class='line'>==&gt; box: Successfully added box 'mermaid' (v0.1.0) for 'virtualbox'!</span></code></pre></td></tr></table></div></figure>
-
-
-<p>我们可以通过<code>vagrant box list</code>命令看一下是否安装成功</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant box list
-</span><span class='line'>mermaid        (virtualbox, 0.1.0)</span></code></pre></td></tr></table></div></figure>
-
-
-<p>由此可以看出来我们安装成功，那么进行下一步，安装镜像</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant init mermaid</span></code></pre></td></tr></table></div></figure>
-
-
-<p>重复之前的操作，运行开发环境，并ssh到开发环境</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant up</span></code></pre></td></tr></table></div></figure>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant ssh</span></code></pre></td></tr></table></div></figure>
-
-
-<p>运行Tomcat</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>sh ~/apache-tomcat-8.5.9/bin/catalina.sh start</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在开发机本地访问<code>http://localhost:8080</code>，看到欢迎页，说明我们本地安装成功啦，还不是庆祝的时候，还没有结束，我们接下来看看怎么升级每一个人的镜像。</p>
-
-<blockquote><p><strong>参考文档：</strong> <a href="http://softwaretester.info/create-private-vagrant-box-repository/">http://softwaretester.info/create-private-vagrant-box-repository/</a></p></blockquote>
-
-<h2>添加新版本镜像到私有库</h2>
-
-<p>这个功能主要是我们对开发环境有了修改，需要其他的开发人员同时更新到最新的环境。
-这次我们为开发环境安装一个Nginx，并且设置开机启动(具体步骤不累述)，然后配置<code>Vagrantfile</code>，添加80端口共享：</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>config.vm.network "forwarded_port", guest: 80, host: 80</span></code></pre></td></tr></table></div></figure>
-
-
-<p>按照<code>打包开发环境</code>步骤，重新打包一个新的mermaid.0.1.1.box上传到mermaid.0.1.0.box相同目录，如下图:</p>
-
-<blockquote><p><strong>注意：</strong>这里有一个地方需要注意，如果你第二次打包，不能直接指定<code>Vagrantfile</code>是当目录的，因为它里面不包含你最初的配置，这时候有两种方案：</p>
-
-<p>1.如果你没有做什么配置的修改，需要指定到原来的配置文件，比如
-<code>~/.vagrant.d/boxes/mermaid/0.1.0/virtualbox/include</code>这个目录里面的<code>Vagrantfile</code>，是我上一个0.1.0的内置的vagrantfile。所以我打包的命令是：
-<code>vagrant package --output mermaid.box --vagrantfile ~/.vagrant.d/boxes/mermaid/0.1.0/virtualbox/include/_Vagrantfile</code></p>
-
-<p>2.如果你有修改配置，那么可以考虑把上面的路径的配置拷贝到当前目录的<code>Vagrantfile</code>里面，再进行打包。</p></blockquote>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>work@dev:/var/www/html$ tree
-</span><span class='line'>.
-</span><span class='line'>|-- index.nginx-debian.html
-</span><span class='line'>`-- vagrant
-</span><span class='line'>    |-- boxes
-</span><span class='line'>    |   |-- mermaid.0.1.0.box
-</span><span class='line'>    |   `-- mermaid.0.1.1.box
-</span><span class='line'>    `-- mermaid.json</span></code></pre></td></tr></table></div></figure>
-
-
-<p>修改mermaid.json文件，添加新的版本</p>
-
-<figure class='code'><figcaption><span>mermaid.json </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">{</span>
-</span><span class='line'>  <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s2">&quot;description&quot;</span><span class="o">:</span> <span class="s2">&quot;mermaid dev environment&quot;</span><span class="p">,</span>
-</span><span class='line'>  <span class="s2">&quot;versions&quot;</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>      <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.1.0&quot;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s2">&quot;providers&quot;</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>        <span class="p">{</span>
-</span><span class='line'>          <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;virtualbox&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="s2">&quot;checksum_type&quot;</span><span class="o">:</span> <span class="s2">&quot;sha1&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="s2">&quot;checksum&quot;</span><span class="o">:</span> <span class="s2">&quot;3badb9acb07992938d6415e67a8291d60f3aafe9&quot;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>      <span class="p">]</span>
-</span><span class='line'>    <span class="p">},</span>
-</span><span class='line'>    <span class="p">{</span>
-</span><span class='line'>      <span class="s2">&quot;version&quot;</span><span class="o">:</span> <span class="s2">&quot;0.1.1&quot;</span><span class="p">,</span>
-</span><span class='line'>      <span class="s2">&quot;providers&quot;</span><span class="o">:</span> <span class="p">[</span>
-</span><span class='line'>        <span class="p">{</span>
-</span><span class='line'>          <span class="s2">&quot;name&quot;</span><span class="o">:</span> <span class="s2">&quot;virtualbox&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="s2">&quot;url&quot;</span><span class="o">:</span> <span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.1.box&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="s2">&quot;checksum_type&quot;</span><span class="o">:</span> <span class="s2">&quot;sha1&quot;</span><span class="p">,</span>
-</span><span class='line'>          <span class="s2">&quot;checksum&quot;</span><span class="o">:</span> <span class="s2">&quot;99e6d7fc44cccabdfc6ed9ce178ca65fd9dcbac8&quot;</span>
-</span><span class='line'>        <span class="p">}</span>
-</span><span class='line'>      <span class="p">]</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">]</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>配置完成。</p>
-
-<blockquote><p><strong>参考文档：</strong> <a href="http://softwaretester.info/create-private-vagrant-box-repository/">http://softwaretester.info/create-private-vagrant-box-repository/</a></p></blockquote>
-
-<h2>更新镜像</h2>
-
-<p>进入mermaid目录，输入:</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant box outdated</span></code></pre></td></tr></table></div></figure>
-
-
-<p>提示显示已经有0.1.1版本，可以更新啦，那么我们直接输入如下命令更新，切记需要<code>vagrant halt</code>关闭虚拟机。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>A newer version of the box 'mermaid' is available! You currently
-</span><span class='line'>have version '0.1.0'. The latest is version '0.1.1'. Run
-</span><span class='line'>`vagrant box update` to update.</span></code></pre></td></tr></table></div></figure>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>vagrant box update</span></code></pre></td></tr></table></div></figure>
-
-
-<p>更新以后，访问localhost，出现<code>It’s work</code>字样。
-至此已经全部完成。</p>
 ]]></content>
   </entry>
   

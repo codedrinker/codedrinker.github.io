@@ -1,0 +1,720 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({
+google_ad_client: "ca-pub-9540087096615057",
+enable_page_level_ads: true
+});
+</script>
+  <title>基于 Amazon SES 搭建高可用的邮件系统 - 码匠笔记</title>
+  <meta name="author" content="麻酱">
+
+  
+  <meta name="description" content="基于 Amazon SES 搭建高可用的邮件系统,配置 Route53,使用 volecity 创建邮件模板,避免发送到垃圾箱">
+  <meta name="keywords" content="基于 Amazon SES 搭建高可用的邮件系统,配置 Route53,使用 volecity 创建邮件模板,避免发送到垃圾箱">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://www.majiang.life/blog/how-to-build-email-system-with-amazon-ses">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/libs/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="/javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-89103576-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">码匠笔记</a></h1>
+  
+    <h2>用心雕琢</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+ 
+  <form action="/search" id="cse-search-box">
+     <fieldset role="search">
+      <input type="hidden" name="cx" value="partner-pub-9540087096615057:8024957125" />
+      <input type="hidden" name="cof" value="FORID:10" />
+      <input type="hidden" name="ie" value="UTF-8" />
+      <input class="search" size="55" type="text" name="q" placeholder="Google搜索"/>
+     </fieldset>
+  </form>
+  
+<ul class="main-navigation">
+  <li><a href="/">首页</a></li>
+  <li><a href="/blog/archives">博文归档</a></li>
+  <li><a href="/blogroll">推荐博客</a></li>
+  <li><a href="/project">开源项目</a></li>
+  <li><a href="/blog/categories/java/">Java</a></li>
+  <li><a href="/blog/categories/spring/">Spring</a></li>
+  <li><a href="/blog/categories/aws/">AWS</a></li>
+  <li><a href="/blog/categories/octopress/">Octopress</a></li>
+</ul>
+<script type="text/javascript" src="https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/table-of-contents-sidebar.js"></script>
+<script type="text/javascript">
+    window.onload = function(e){ 
+        TableOfContents.init({
+            basePath: "https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/",
+        });
+    }
+</script>
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">基于 Amazon SES 搭建高可用的邮件系统</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-02-14T14:22:55+08:00'><span class='date'>2018-02-14</span> <span class='time'>2:22 pm</span></time>
+      </p>
+    
+  </header>
+
+
+
+<style type="text/css">
+  .note {
+    margin: 30px 0;
+    padding: 20px 20px 24px;
+    padding-left: 50px;
+    -webkit-border-radius: 0 5px 5px 0;
+    -moz-border-radius: 0 5px 5px 0;
+    border-radius:8px;
+    position: relative;
+    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.2),inset 0 -1px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
+    background-color: #7e6d42;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#7e6d42), to(#5c4e35));
+    background-image: -webkit-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: -moz-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: -o-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: linear-gradient(to bottom, #86847f 0%, #3e3b36 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=&#8217;#7e6d42&#8217;, endColorstr=&#8217;#5c4e35&#8217;,GradientType=0 );
+  }
+  .note h4, .note p {
+    margin: 0;
+    color: #fff;
+  }
+</style>
+<div class="entry-content">
+  <div class="note">
+    <h4>本文内容概要如下：</h4>
+    <p>
+      
+      
+        1, 基于 Amazon SES 搭建高可用的邮件系统<br>
+      
+        2, 配置 Route53<br>
+      
+        3, 使用 volecity 创建邮件模板<br>
+      
+        4, 避免发送到垃圾箱<br>
+      
+    </p>
+  </div>
+</div>
+
+<div class="entry-content"><h2>简介</h2>
+
+<p>通常情况下我们使用 smtp 调用第三方的 api 发送邮件，但是 gmail 一天只能发送100封，这对于营销邮件来说无疑是非常大的影响。所以考虑两种方案，第一种自己搭建邮件服务器，这种方案耗费时间并且需要额外的服务器成本。第二种方案使用 Amazon SES 搭建有限服务。简单方便并且 Amazon 本身也做了一些优化。</p>
+
+<!-- more -->
+
+
+<h2>域名准备</h2>
+
+<h3>购买域名</h3>
+
+<p>这一步不在本文的范围只，但是你需要需要准备好一个域名。</p>
+
+<h3>托管域名到 Route53</h3>
+
+<p>Route53 是Aws的 DNS，不托管用自己的也行，用他的一个方便之处是配置SES的时候他会很好的给你继承好，省去好多自己配置的麻烦。不过本身托管域名也需要配置，所以这里自行考虑是否托管域名到Route53。如需配置如下是配置文档。
+<a href="https://docs.aws.amazon.com/zh_cn/Route53/latest/DeveloperGuide/migrate-dns-domain-in-use.html">https://docs.aws.amazon.com/zh_cn/Route53/latest/DeveloperGuide/migrate-dns-domain-in-use.html</a><br/>
+如果是gmail，在gmail的服务里面也会明确的写着怎么迁移。
+通常情况下如下输入记录到Route53作为验证。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>ns-***.awsdns-49.net.
+</span><span class='line'>ns-***.awsdns-50.org.
+</span><span class='line'>ns-***.awsdns-22.co.uk.
+</span><span class='line'>ns-***.awsdns-59.com.</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>配置 Amazon SES</h2>
+
+<p>进入aws 控制台，进入Simple Email Service(SES)，点击 domains -> Verify a New Domain。</p>
+
+<h3>Route53 域名配置</h3>
+
+<p>如果是Route53 托管的域名，他会直接提示你是否创建关联到Route53，直接点击关联就好了。关联主要分为几个方便，验证，DKIM，SPF验证。说简单一点就是验证这个域名是你的，验证这个邮箱地址发送是合法的，避免一些成为垃圾邮件的可能性。</p>
+
+<h3>非 Route53 域名配置</h3>
+
+<p>如果是非 Route53 域名也没有关系，他也会按步骤提示你配置一个TXT，和三个CNAME到你的DNS就可以。</p>
+
+<h3>等待验证</h3>
+
+<p>配置完成之后需要有一定的时间验证，等待验证成功之后会标记为验证通过，这个时候就可以进行下面的编码。</p>
+
+<h2>程序实现</h2>
+
+<h3>添加依赖</h3>
+
+<p>首先需要添加两个aws的依赖，一个是通用的一个是ses的，<br/>
+另外需要配置一个把富文本解析成普通文本的工具，下文会有更详细的解释，<br/>
+最后配置一个velocity依赖，用于生成邮件模板。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>aws-java-sdk-ses<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>com.amazonaws<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;optional&gt;</span>false<span class="nt">&lt;/optional&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.11.95<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>com.amazonaws<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>aws-java-sdk-s3<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.11.95<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>org.jsoup<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>jsoup<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.10.2<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span><span class='line'><span class="nt">&lt;dependency&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>velocity<span class="nt">&lt;/groupId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>velocity<span class="nt">&lt;/artifactId&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.5<span class="nt">&lt;/version&gt;</span>
+</span><span class='line'><span class="nt">&lt;/dependency&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>创建模板</h3>
+
+<p>本文采用velocity生成邮件模板，好处就不说了。主要使用velocity的模板引擎生成邮件模板。<br/>
+<a href="http://velocity.apache.org/engine/1.7/developer-guide.html">官方文档</a> <a href="https://www.ibm.com/developerworks/cn/java/j-lo-velocity1/">中文文档</a></p>
+
+<h4>创建template.vm</h4>
+
+<p>首先在 resouces下面创建一个 email-template.vm，因为测试内容比较简单，当然这里面可以编写html文档。内容如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;table&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>${title}<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>${name}<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>${content}<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;/table&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>构建模板</h4>
+
+<p>直接使用 volecity 的模板引擎加载上面的 vm 模板，然后生成即可，具体代码如下。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmailTemplateUtils</span> <span class="o">{</span>
+</span><span class='line'>    <span class="nd">@Data</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">EmailEntity</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="n">String</span> <span class="n">title</span><span class="o">;</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>        <span class="kd">private</span> <span class="n">String</span> <span class="n">content</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">generate</span><span class="o">(</span><span class="n">EmailEntity</span> <span class="n">emailEntity</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">VelocityEngine</span> <span class="n">velocityEngine</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">VelocityEngine</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">velocityEngine</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="n">RuntimeConstants</span><span class="o">.</span><span class="na">RESOURCE_LOADER</span><span class="o">,</span> <span class="s">&quot;classpath&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">velocityEngine</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">&quot;classpath.resource.loader.class&quot;</span><span class="o">,</span> <span class="n">ClasspathResourceLoader</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">velocityEngine</span><span class="o">.</span><span class="na">init</span><span class="o">();</span>
+</span><span class='line'>            <span class="n">Template</span> <span class="n">template</span> <span class="o">=</span> <span class="n">velocityEngine</span><span class="o">.</span><span class="na">getTemplate</span><span class="o">(</span><span class="s">&quot;email-template.vm&quot;</span><span class="o">,</span> <span class="s">&quot;UTF-8&quot;</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">VelocityContext</span> <span class="n">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">VelocityContext</span><span class="o">();</span>
+</span><span class='line'>            <span class="n">context</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;title&quot;</span><span class="o">,</span> <span class="n">emailEntity</span><span class="o">.</span><span class="na">getTitle</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">context</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;name&quot;</span><span class="o">,</span> <span class="n">emailEntity</span><span class="o">.</span><span class="na">getName</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">context</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;content&quot;</span><span class="o">,</span> <span class="n">emailEntity</span><span class="o">.</span><span class="na">getContent</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">StringWriter</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">StringWriter</span><span class="o">();</span>
+</span><span class='line'>            <span class="n">template</span><span class="o">.</span><span class="na">merge</span><span class="o">(</span><span class="n">context</span><span class="o">,</span> <span class="n">writer</span><span class="o">);</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">writer</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">EmailEntity</span> <span class="n">emailEntity</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">EmailEntity</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">emailEntity</span><span class="o">.</span><span class="na">setTitle</span><span class="o">(</span><span class="s">&quot;email title&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">emailEntity</span><span class="o">.</span><span class="na">setContent</span><span class="o">(</span><span class="s">&quot;email content&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">emailEntity</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="s">&quot;email name&quot;</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">generate</span> <span class="o">=</span> <span class="n">generate</span><span class="o">(</span><span class="n">emailEntity</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">generate</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>直接运行程序会得到如下，输出表示已经配置成功，稍后将其配置成自己的邮件模板的样子就行了。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;table&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>email title<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>email name<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;tr&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;td&gt;</span>email content<span class="nt">&lt;/td&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/tr&gt;</span>
+</span><span class='line'><span class="nt">&lt;/table&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>发送邮件</h3>
+
+<p>发送邮件功能主要是调用 Amazon SES 的工具包发送，代码比较简单，直接阅读代码即可。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">AmazonSESProvider</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="n">EmailResult</span> <span class="nf">sendEmail</span><span class="o">(</span><span class="n">String</span> <span class="n">from</span><span class="o">,</span> <span class="n">String</span> <span class="n">subject</span><span class="o">,</span> <span class="n">String</span> <span class="n">body</span><span class="o">,</span> <span class="n">String</span><span class="o">[]</span> <span class="n">addrs</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">Destination</span> <span class="n">destination</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Destination</span><span class="o">().</span><span class="na">withToAddresses</span><span class="o">(</span><span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">Content</span> <span class="n">mailSubject</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Content</span><span class="o">().</span><span class="na">withData</span><span class="o">(</span><span class="n">subject</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">Content</span> <span class="n">html</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Content</span><span class="o">().</span><span class="na">withData</span><span class="o">(</span><span class="n">body</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">String</span> <span class="n">textPlain</span> <span class="o">=</span> <span class="n">Jsoup</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">body</span><span class="o">).</span><span class="na">text</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">Body</span> <span class="n">htmlBody</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Body</span><span class="o">().</span><span class="na">withHtml</span><span class="o">(</span><span class="n">html</span><span class="o">).</span><span class="na">withText</span><span class="o">(</span><span class="k">new</span> <span class="nf">Content</span><span class="o">().</span><span class="na">withData</span><span class="o">(</span><span class="n">textPlain</span><span class="o">));</span>
+</span><span class='line'>        <span class="n">Message</span> <span class="n">message</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Message</span><span class="o">().</span><span class="na">withSubject</span><span class="o">(</span><span class="n">mailSubject</span><span class="o">).</span><span class="na">withBody</span><span class="o">(</span><span class="n">htmlBody</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">SendEmailRequest</span> <span class="n">request</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">SendEmailRequest</span><span class="o">().</span><span class="na">withSource</span><span class="o">(</span><span class="n">from</span><span class="o">).</span><span class="na">withDestination</span><span class="o">(</span><span class="n">destination</span><span class="o">).</span><span class="na">withMessage</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">BasicAWSCredentials</span> <span class="n">awsCreds</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BasicAWSCredentials</span><span class="o">(</span><span class="s">&quot;key&quot;</span><span class="o">,</span> <span class="s">&quot;secret&quot;</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">AmazonSimpleEmailServiceClient</span> <span class="n">client</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">AmazonSimpleEmailServiceClient</span><span class="o">(</span><span class="n">awsCreds</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">client</span><span class="o">.</span><span class="na">setRegion</span><span class="o">(</span><span class="n">Region</span><span class="o">.</span><span class="na">getRegion</span><span class="o">(</span><span class="n">Regions</span><span class="o">.</span><span class="na">US_WEST_2</span><span class="o">));</span>
+</span><span class='line'>            <span class="n">client</span><span class="o">.</span><span class="na">sendEmail</span><span class="o">(</span><span class="n">request</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&quot;send:succeed,address-&gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">EmailResult</span><span class="o">.</span><span class="na">success</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">AmazonServiceException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="s">&quot;Throttling&quot;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getErrorCode</span><span class="o">()))</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;send:failure,addrs-&gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>                <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;error : Max for the rate!&quot;</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;send:failure,addrs-&gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>                <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;error : &quot;</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">EmailResult</span><span class="o">.</span><span class="na">failure</span><span class="o">(</span><span class="n">e</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;send:failure,addrs-&gt;{}&quot;</span><span class="o">,</span> <span class="n">addrs</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">&quot;error : &quot;</span><span class="o">,</span> <span class="n">ex</span><span class="o">);</span>
+</span><span class='line'>            <span class="k">return</span> <span class="n">EmailResult</span><span class="o">.</span><span class="na">failure</span><span class="o">(</span><span class="n">ex</span><span class="o">.</span><span class="na">getMessage</span><span class="o">());</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">sendEmail</span><span class="o">(</span><span class="s">&quot;fromaddress@gmail.com&quot;</span><span class="o">,</span> <span class="s">&quot;email subject&quot;</span><span class="o">,</span> <span class="s">&quot;Test email from codedrinker&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="s">&quot;toaddress@gmail.com&quot;</span><span class="o">});</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>主要发送的逻辑就是创建Amazon 的Client，然后调用发送邮件，主要注意的是如下语句</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Jsoup</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="n">body</span><span class="o">).</span><span class="na">text</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>我们传递过来的body是 html 类型的，我们需要生成一个纯文本类型的，这样可以保证邮件接收者不能预览富文本类型的时候有一个纯文本预览，使用 Jsoup.parse 可以提取出来文本内容，这样可减少了邮件发送到垃圾箱的概率。具体关于邮件发送到垃圾箱的概率可以使用邮件测试网址进行进一步验证。<a href="https://www.mail-tester.com/">测试工具地址</a>。</p>
+
+<h2>参考文献</h2>
+
+<p><a href="https://docs.aws.amazon.com/ses/latest/DeveloperGuide/getting-started.html">Amazon SES 文档</a></p>
+
+<h2>作者</h2>
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="">基于 Amazon SES 搭建高可用的邮件系统</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<h2></h2>
+<p>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 文章列表页自适应文字和展示广告 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9540087096615057"
+     data-ad-slot="2018352322"
+     data-ad-format="auto">
+</ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2018-02-14T14:22:55+08:00'><span class='date'>2018-02-14</span> <span class='time'>2:22 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/aws/'>aws</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/how-to-build-email-system-with-amazon-ses/" data-via="" data-counturl="http://www.majiang.life/blog/how-to-build-email-system-with-amazon-ses/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/deep-dive-on-java-hashcode/" title="Previous Post: 细说 Java hashCode">&laquo; 细说 Java hashCode</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="commenthub_thread" aria-live="polite"></div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+    <h1>关于</h1>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;能剒削柱梁谓之木匠，能穴凿穴埳谓之土匠，能雕琢文书谓之史匠，能搬砖摞码谓之码匠。</p>
+</section><section>
+    <h1>订阅</h1>
+    <p>
+        主要用来记录自己的编程经历，学习笔记和心得体会，希望能和大家一起分享和讨论，共同进步，欢迎订阅。
+    </p>
+    <p>
+        <img src="/images/wechat.jpg" width="153px" height="153px">
+    </p>
+</section>
+<section>
+  	<h1>广告</h1>
+  	<br>
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- 博客邮编正方形广告 -->
+	<ins class="adsbygoogle"
+	     style="display:inline-block;width:250px;height:250px"
+	     data-ad-client="ca-pub-9540087096615057"
+	     data-ad-slot="5415909924"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</section>
+<section>
+  <h1>标签云</h1>
+    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 124.0%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 112.0%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 112.0%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 112.0%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 112.0%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 112.0%'>guava(1)</a> <a href='/blog/categories/java' style='font-size: 160.0%'>java(5)</a> <a href='/blog/categories/maven' style='font-size: 112.0%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 112.0%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 136.0%'>octopress(3)</a> <a href='/blog/categories/project' style='font-size: 112.0%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 112.0%'>redis(1)</a> <a href='/blog/categories/spring' style='font-size: 136.0%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 112.0%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 112.0%'>tech(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 112.0%'>threadlocal(1)</a> <a href='/blog/categories/tool' style='font-size: 112.0%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 112.0%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 136.0%'>web(3)</a> </span>
+</section>
+<section>
+  <h1>最新</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/how-to-build-email-system-with-amazon-ses/">基于 Amazon SES 搭建高可用的邮件系统</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/deep-dive-on-java-hashcode/">细说 Java hashCode</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/deep-dive-on-elasticsearch-doc-values/">深入理解 ElasticSearch Doc Values</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/migrate-evernote-to-youdao-note/">是什么让我放弃印象笔记而使用有道云笔记的</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/head-first-responsive-web-design/">总是听别人说响应式布局，原来这么简单</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/quick-start-spring-data-redis/">Spring 集成 Redis 扫雷</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/spring-mybatis-and-dynamic-proxy/">从 Spring 集成 Mybatis 到 浅析Java动态代理</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/table-of-contents-sidebar-chrome-extension-introduction/">Chrome自动生成网页目录插件的编写和使用</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/make-article-more-readable/">阅读模式是如何实现的?</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/octopress-tag-cloud/">Octopress 添加标签云</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/octopress-index-page-read-more/">为Octopress 首页添加‘更多’功能</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/spring-boot-get-started/">使用 Idea 创建 Spring Boot 项目</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/the-smart-way-of-passing-parameter-by-threadlocal/">优雅的使用 ThreadLocal 传递参数</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/simple-in-memory-cache-in-java/">构建 Java 应用内存级缓存</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/using-amazon-s3-as-a-private-maven-repository/">基于 Amazon S3 搭建 Maven 私有仓库</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - 麻酱 -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a> and <a href="https://help.shopify.com/themes/liquid">Liquid</a> | Contact - gwangchunlei at gmail.com</span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+    var commenthub_id = '3821949';
+    var commenthub_website = 'http://www.majiang.life';
+    var commenthub_identifier = 'http://www.majiang.life/blog/how-to-build-email-system-with-amazon-ses/';
+    var commenthub_url = 'http://www.majiang.life/blog/how-to-build-email-system-with-amazon-ses/';
+    var commenthub_title = '基于 Amazon SES 搭建高可用的邮件系统';
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://commenthub.herokuapp.com/js/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>
