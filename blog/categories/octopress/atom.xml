@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-18T20:45:13+08:00</updated>
+  <updated>2018-02-18T21:06:06+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>原生的 Octopress 没有更丰富的阅读体验，只有上一篇下一篇，每次需要为当前文章添加相关文章的时候都需要在 Markdown 里面手动填写，这样非常浪费时间又不全面，于是笔者使用 Category 作为相关性的依据，修改了 Liqiud 代码，使得每一个 post 里面有具有相关的文章。</p>
+
+<!-- more -->
+
 
 <h2>实现</h2>
 
