@@ -7,7 +7,7 @@ categories: [Octopress]
 ---
 ## 前言
 原生的 Octopress 没有更丰富的阅读体验，只有上一篇下一篇，每次需要为当前文章添加相关文章的时候都需要在 Markdown 里面手动填写，这样非常浪费时间又不全面，于是笔者使用 Category 作为相关性的依据，修改了 Liqiud 代码，使得每一个 post 里面有具有相关的文章。
-
+<!-- more -->
 ## 实现
 实现起来也是很简单的，直接把如下代码添加到 `includes/article.html` 里面，跟在下面代码之后即可。
 {% codeblock lang:html %}

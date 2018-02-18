@@ -72,7 +72,7 @@
           {% continue %}
         {% endif %}
         <li>
-          <a href="{{ root_url }}{{ post.url }}">{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}</a>
+          <a href="{{ root_url }}{{ post.url }}{{'?utm_source=rel'}}">{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}</a>
         </li>
         {% endfor %}
       {% endfor %}
