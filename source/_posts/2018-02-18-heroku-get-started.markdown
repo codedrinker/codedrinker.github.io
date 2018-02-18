@@ -3,11 +3,11 @@ layout: post
 title: "Heroku 入门教程之：使用 Heroku 快速搭建站点"
 date: 2018-02-18 17:49:25 +0800
 comments: true
-categories: 
+categories: [Heroku]
 ---
 ## 简介
 Heroku 是 Salesforce 旗下云服务商，提供方便便捷的各种云服务，如服务器，数据库，监控，计算等等。并且他提供了免费版本，这使得我们这些平时想搞一些小东西的人提供了莫大的便捷，虽然他有时长和宕机的限制，但是对于个人小程序来说已经足够了。
-
+<!-- more -->
 ## 快速入门
 ### 注册账号
 进入 [Heroku 官网](https://www.heroku.com)，因为 Heroku 是国外的站点，所以需要提前准备好翻墙。点击 Sign Up，根据要求填写好信息。这里需要注意的是，国内大部分的邮箱不支持，所以这里提前准备好 gmail 邮箱进行注册。
@@ -57,3 +57,6 @@ web: vendor/bin/heroku-php-apache2 web/
 ```
 ### 关联 Github 
 上文说到需要 push 到 heroku 的仓库才能部署，heroku 提供了更强带的功能，直接关联 Github 的仓库的分支，等分支有新内容更新的时候直接部署。这个配置就需要去 web控制台配置了。进入项目，点击 `Deploy`，勾选 `Github`，然后完成配置即可。
+
+## 相关文章
+[Heroku 入门教程之：绑定自定义域名](/blog/heroku-custom-domains/)
