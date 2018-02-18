@@ -12,11 +12,11 @@ google_ad_client: "ca-pub-9540087096615057",
 enable_page_level_ads: true
 });
 </script>
-  <title>Category: Elasticsearch - 码匠笔记</title>
+  <title>为 Octopress 添加 扩展相关阅读 - 码匠笔记</title>
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="Category: elasticsearch">
+  <meta name="description" content="前言 原生的 Octopress 没有更丰富的阅读体验，只有上一篇下一篇，每次需要为当前文章添加相关文章的时候都需要在 Markdown 里面手动填写，这样非常浪费时间又不全面，于是笔者使用 Category 作为相关性的依据，修改了 Liqiud 代码，使得每一个 post 里面有具有相关的文章 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +25,7 @@ enable_page_level_ads: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.majiang.life/blog/categories/elasticsearch">
+  <link rel="canonical" href="http://www.majiang.life/blog/octopress-related-posts">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
@@ -99,52 +99,177 @@ enable_page_level_ads: true
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">
     
-        
-           Elasticsearch
-        
+      <h1 class="entry-title">为 Octopress 添加 扩展相关阅读</h1>
     
-    </h1>
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-02-18T20:24:22+08:00'><span class='date'>2018-02-18</span> <span class='time'>8:24 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
 
-  
-  <h2>2017</h2>
+<div class="entry-content"><h2>前言</h2>
 
-<article>
-  
-<h1><a href="/blog/deep-dive-on-elasticsearch-doc-values/">深入理解 ElasticSearch Doc Values</a></h1>
-<time datetime="2017-11-28T00:47:21+08:00" pubdate><span class='month'>11</span>-<span class='day'>28</span> <span class='year'>2017</span></time>
+<p>原生的 Octopress 没有更丰富的阅读体验，只有上一篇下一篇，每次需要为当前文章添加相关文章的时候都需要在 Markdown 里面手动填写，这样非常浪费时间又不全面，于是笔者使用 Category 作为相关性的依据，修改了 Liqiud 代码，使得每一个 post 里面有具有相关的文章。</p>
 
-<footer>
-  <span class="categories"><a class='category' href='/blog/categories/elasticsearch/'>elasticsearch</a></span>
-</footer>
+<h2>实现</h2>
+
+<p>实现起来也是很简单的，直接把如下代码添加到 <code>includes/article.html</code> 里面，跟在下面代码之后即可。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;entry-content&quot;</span><span class="nt">&gt;</span>{{ content }}
+</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>
+代码如下</p>
 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;h2&gt;</span>扩展阅读<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>{% if page %}
+</span><span class='line'>    <span class="nt">&lt;ol&gt;</span>
+</span><span class='line'>      {% for category in page.categories %}
+</span><span class='line'>        {% for post in site.categories[category] %}
+</span><span class='line'>        {% if  page.url == post.url %}
+</span><span class='line'>          {% continue %}
+</span><span class='line'>        {% endif %}
+</span><span class='line'>        <span class="nt">&lt;li&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ root_url }}{{ post.url }}&quot;</span><span class="nt">&gt;</span>{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}<span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>        {% endfor %}
+</span><span class='line'>      {% endfor %}
+</span><span class='line'>    <span class="nt">&lt;/ol&gt;</span>
+</span><span class='line'>{% endif %}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>原理就比较简单了，取到当前页面的 categories，然后循环遍历得到每一个category下面的 post 展示即可。</p>
+
+<h2>参照</h2>
+
+<p>实际中的应用可以参照如下地址<br/>
+<a href="https://github.com/codedrinker/codedrinker.github.io/blob/source/source/_includes/article.html">参考地址</a></p>
+
+<h2>扩展阅读</h2>
+
+    <ol>
+      
+        
+        
+          
+        
+        <li>
+          <a href="/blog/octopress-tag-cloud/">Octopress 添加标签云</a>
+        </li>
+        
+        
+        <li>
+          <a href="/blog/octopress-index-page-read-more/">为Octopress 首页添加‘更多’功能</a>
+        </li>
+        
+        
+        <li>
+          <a href="/blog/optimize-octopress-blog-seo/">Octopress 博客搜索优化</a>
+        </li>
+        
+      
+    </ol>
+
+<h2>作者</h2>
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="">为 Octopress 添加 扩展相关阅读</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<h2></h2>
+<p>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 文章列表页自适应文字和展示广告 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9540087096615057"
+     data-ad-slot="2018352322"
+     data-ad-format="auto">
+</ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</p>
 </div>
 
-  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <!-- 博客列表页面尾部自适应广告 -->
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-9540087096615057"
-       data-ad-slot="3428022322"
-       data-ad-format="auto"></ins>
-  <script>
-  (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2018-02-18T20:24:22+08:00'><span class='date'>2018-02-18</span> <span class='time'>8:24 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/octopress/'>octopress</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/octopress-related-posts/" data-via="" data-counturl="http://www.majiang.life/blog/octopress-related-posts/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/heroku-custom-domains/" title="Previous Post: Heroku 入门教程之：绑定自定义域名">&laquo; Heroku 入门教程之：绑定自定义域名</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="commenthub_thread" aria-live="polite"></div>
+  </section>
 
 </div>
 
@@ -266,9 +391,9 @@ enable_page_level_ads: true
 <script type="text/javascript">
     var commenthub_id = '3821949';
     var commenthub_website = 'http://www.majiang.life';
-    var commenthub_identifier = '/blog/categories/elasticsearch/index.html';
-    var commenthub_url = 'http://www.majiang.life/blog/categories/elasticsearch/index.html';
-    var commenthub_title = 'Category: elasticsearch';
+    var commenthub_identifier = '/blog/octopress-related-posts/';
+    var commenthub_url = 'http://www.majiang.life/blog/octopress-related-posts/';
+    var commenthub_title = '为 Octopress 添加 扩展相关阅读';
     (function () {
         var dsq = document.createElement('script');
         dsq.type = 'text/javascript';

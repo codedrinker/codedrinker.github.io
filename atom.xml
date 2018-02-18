@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-18T18:55:24+08:00</updated>
+  <updated>2018-02-18T20:45:13+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,69 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[为 Octopress 添加 扩展相关阅读]]></title>
+    <link href="http://www.majiang.life/blog/octopress-related-posts/"/>
+    <updated>2018-02-18T20:24:22+08:00</updated>
+    <id>http://www.majiang.life/blog/octopress-related-posts</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>原生的 Octopress 没有更丰富的阅读体验，只有上一篇下一篇，每次需要为当前文章添加相关文章的时候都需要在 Markdown 里面手动填写，这样非常浪费时间又不全面，于是笔者使用 Category 作为相关性的依据，修改了 Liqiud 代码，使得每一个 post 里面有具有相关的文章。</p>
+
+<h2>实现</h2>
+
+<p>实现起来也是很简单的，直接把如下代码添加到 <code>includes/article.html</code> 里面，跟在下面代码之后即可。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;entry-content&quot;</span><span class="nt">&gt;</span>{{ content }}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+代码如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;h2&gt;</span>扩展阅读<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>{% if page %}
+</span><span class='line'>    <span class="nt">&lt;ol&gt;</span>
+</span><span class='line'>      {% for category in page.categories %}
+</span><span class='line'>        {% for post in site.categories[category] %}
+</span><span class='line'>        {% if  page.url == post.url %}
+</span><span class='line'>          {% continue %}
+</span><span class='line'>        {% endif %}
+</span><span class='line'>        <span class="nt">&lt;li&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ root_url }}{{ post.url }}&quot;</span><span class="nt">&gt;</span>{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}<span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>        {% endfor %}
+</span><span class='line'>      {% endfor %}
+</span><span class='line'>    <span class="nt">&lt;/ol&gt;</span>
+</span><span class='line'>{% endif %}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>原理就比较简单了，取到当前页面的 categories，然后循环遍历得到每一个category下面的 post 展示即可。</p>
+
+<h2>参照</h2>
+
+<p>实际中的应用可以参照如下地址<br/>
+<a href="https://github.com/codedrinker/codedrinker.github.io/blob/source/source/_includes/article.html">参考地址</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Heroku 入门教程之：绑定自定义域名]]></title>
@@ -4504,192 +4567,6 @@ color-index: number of entries in the output device&rsquo;s color lookup table, 
 </code></pre>
 
 <p> 这样以后就可以重新使用<code>rake deploy</code>了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Octopress 博客搜索优化]]></title>
-    <link href="http://www.majiang.life/blog/optimize-octopress-blog-seo/"/>
-    <updated>2017-03-18T22:43:10+08:00</updated>
-    <id>http://www.majiang.life/blog/optimize-octopress-blog-seo</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
-
-<p>尝试在Google, Baidu, Bing 搜索之前写的文章的关键字基本搜不到，甚至使用标题一模一样去搜索也不行，更意外的是第一个出现的是转载的文章。于是就带着这个疑问去网上查了一些资料，尝试去优化一下，下面就是这次优化的笔记。<br/>
-PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
-
-<!-- more -->
-
-
-<h2>搜索引擎优化</h2>
-
-<p>优化中包括文章链接的变动，已经提交的链接变得无法检索，所以先进行一些优化，需要再次提交链接。</p>
-
-<ul>
-<li><h4>手动提交</h4>
-
-<p>在Google搜索的时候发现搜索不到，可以手动添加到Google，这样可以主动收录，具体的地址<br/>
-<a href="https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1">https://www.google.com/webmasters/tools/home?hl=en&amp;pli=1</a><br/>
-里面包含搜索状态，搜索分析，网站优化等一些Google的调试工具可以使用，以提高网站的搜索效果。</p></li>
-<li><h4>为Octopress提交baidusitemap.xml</h4>
-
-<p>Octopress会默认创建sitemap.xml但是不会创建baidusitemap.xml，但是他们的内容基本一样，所以需要我们想办法每次重新生成博客的时候，复制一份sitemap.xml到baidusitemap.xml里面去。作者的实现方案比较简单粗暴，直接在<code>Rakefile</code>里面的<code>generate</code>的<code>task</code>后面添加了一行拷贝：</p></li>
-</ul>
-
-
-<figure class='code'><figcaption><span>robots.txt</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>desc <span class="s2">&quot;Generate jekyll site&quot;</span>
-</span><span class='line'>task :generate <span class="k">do</span>
-</span><span class='line'>  raise <span class="s2">&quot;### You haven&#39;t set anything up yet. First run `rake install` to set up an Octopress theme.&quot;</span> unless File.directory?<span class="o">(</span>source_dir<span class="o">)</span>
-</span><span class='line'>  puts <span class="s2">&quot;## Generating Site with Jekyll&quot;</span>
-</span><span class='line'>  system <span class="s2">&quot;compass compile --css-dir #{source_dir}/stylesheets&quot;</span>
-</span><span class='line'>  system <span class="s2">&quot;jekyll build&quot;</span>
-</span><span class='line'>  cp_r <span class="s2">&quot;#{public_dir}/sitemap.xml&quot;</span>, <span class="s2">&quot;#{public_dir}/baidusitemap.xml&quot;</span>
-</span><span class='line'>end
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>同时在robots.txt追加如下内容：</p>
-
-<figure class='code'><figcaption><span>robots.txt</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>Sitemap: <span class="o">{{</span> site.url <span class="o">}}</span>/baidusitemap.xml
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>内容优化</h2>
-
-<ul>
-<li><h4>修改post的url</h4>
-
-<p>因为Octpopress Jeklly的默认post路径带着日期，分级较多，造成URL较长，不利于搜索引擎检索，我们可以自己缩短URL。直接在<code>_config.yml</code>里面修改<code>permalink: /blog/:year/:month/:day/:title/</code> 为 <code>permalink: /blog/:title/</code>即可。<br/>
-接下来又出现问题了，因为之前已经发表的post，被搜索引擎索引了，或者是其他地方有引用就不能访问了。所以我们需要处理一下原来的文章地址，我的做法是把 <code>public</code>里面已经生成好的内容直接拷贝到<code>source/blog</code>目录下面，这样再次<code>generate</code>的时候就会把原来的目录生成在<code>public</code>里面。</p></li>
-</ul>
-
-
-<figure class='code'><figcaption><span>博客目录</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="nb">source</span>/blog/
-</span><span class='line'>├── 2015
-</span><span class='line'>│   └── 01
-</span><span class='line'>│       └── 10
-</span><span class='line'>│           └── begininng-and-summary
-</span><span class='line'>│               └── index.html
-</span><span class='line'>├── 2016
-</span><span class='line'>│   └── 12
-</span><span class='line'>│       ├── 15
-</span><span class='line'>│       │   └── <span class="nb">set</span>-up-vagrant-environment
-</span><span class='line'>│       │       └── index.html
-</span><span class='line'>│       └── 24
-</span><span class='line'>│           └── auto-preview-front-end-changes
-</span><span class='line'>│               └── index.html
-</span><span class='line'>├── 2017
-</span><span class='line'>│   └── 03
-</span><span class='line'>│       └── 11
-</span><span class='line'>│           └── the-smart-way-of-styling-and-customizing-file-input
-</span><span class='line'>│               └── index.html
-</span><span class='line'>└── archives
-</span><span class='line'>    └── index.html
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>切记不能复制<code>archives/index.html</code>，因为里面包含一些动态代码，并不是我们曾经发表的博文。然后把每一个<code>html</code>文件里面的内容删除，添加如下代码即可：</p>
-
-<figure class='code'><figcaption><span>/blog/:year/:month/:day/:title/index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">&quot;refresh&quot;</span> <span class="na">content=</span><span class="s">&quot;0; url=/blog/begininng-and-summary&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;canonical&quot;</span> <span class="na">href=</span><span class="s">&quot;http://majiang.life/blog/begininng-and-summary&quot;</span> <span class="nt">/&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p><code>...http-equiv=“refresh...</code>是为了再次访问这个网页的时候可以自动跳转到相应的网页，<code>...rel="canonical" href=...</code>就相当于301，这样搜索引擎会重新索引指定的网址，这样久的post可以正常使用， 新发布的post的地址也可以自动变成短链接了。</p>
-
-<ul>
-<li><h4>提高文章内容的检索</h4>
-
-<p>页面最前面用一个段落的文字，通常就是一句话，简洁明确回答“xxx是什么“，或者说给出xxx的定义。我觉得更好的是概括文章大意，一方面可以直接告诉用户你观看我的文章可以得到什么，另一个能起到搜索优化的效果。<br/>
-后面的内容小标题尽量靠拢文章中心(提炼于参考链接)，突然觉得搜索引擎也是一个人，他更喜欢好的文章，全文围绕一个中心思想。</p></li>
-<li><h4>添加description和keywords</h4>
-
-<p>类似于这篇文章，以便于搜索引擎检索</p></li>
-</ul>
-
-
-<figure class='code'><figcaption><span>/blog/:year/:month/:day/:title/index.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>description:优化octopress blog的搜索SEO
-</span><span class='line'>keywords:Octopress，博客搜索优化，博客SEO，Octopress SEO
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>版权</h2>
-
-<p>因为好多转载的文章或者类似最近比较火的<code>阅读模式</code>处理过的文章只包含正文，为了解决这个问题，所以把原来签名等相关信息放在了正文里面，内容的最下面，这样就可以和正文同样处理了，直接把内容添加到模板页面即可。找到<code>_includes/article.html</code>，找到如下内容，<code>content</code>表示文章的正文。</p>
-
-<figure class='code'><figcaption><span>/source/_includes/article.html</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;entry-content&quot;</span><span class="nt">&gt;</span>{{{ content }}
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>把我们预先准备好的版权的格式写入得到如下即可：</p>
-
-<figure class='code'><figcaption><span>/source/_includes/article.html</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;entry-content&quot;</span><span class="nt">&gt;</span>{{ content }}
-</span><span class='line'><span class="nt">&lt;h2&gt;</span>作者<span class="nt">&lt;/h2&gt;</span>
-</span><span class='line'><span class="nt">&lt;p&gt;</span>本文作者<span class="nt">&lt;code&gt;</span>麻酱<span class="nt">&lt;/code&gt;</span>，欢迎讨论，指正和转载，转载请注明出处。<span class="nt">&lt;br/&gt;</span>
-</span><span class='line'>原文地址：<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{% if index %}{{ root_url }}{{ post.url }}{% endif %}&quot;</span><span class="nt">&gt;</span>{% if site.titlecase %}{{ page.title | titlecase }}{% else %}{{ page.title }}{% endif %}<span class="nt">&lt;/a&gt;&lt;br/&gt;</span>
-</span><span class='line'>如果兴趣可以关注作者微信订阅号<span class="nt">&lt;br/&gt;</span>
-</span><span class='line'><span class="nt">&lt;img</span> <span class="na">src=</span><span class="s">&quot;/images/wechat.jpg&quot;</span> <span class="na">height=</span><span class="s">&quot;150&quot;</span> <span class="na">width=</span><span class="s">&quot;150&quot;</span> <span class="na">alt=</span><span class="s">&quot;majiangbiji&quot;</span> <span class="nt">/&gt;&lt;/p&gt;</span>
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>示例如下文:</p>
-
-<h2>未完待续。。。</h2>
-
-<h2>参考链接</h2>
-
-<p><a href="http://www.yuan-ji.me/Hexo-%E4%BC%98%E5%8C%96%EF%BC%9A%E6%8F%90%E4%BA%A4sitemap%E5%8F%8A%E8%A7%A3%E5%86%B3%E7%99%BE%E5%BA%A6%E7%88%AC%E8%99%AB%E6%8A%93%E5%8F%96-GitHub-Pages-%E9%97%AE%E9%A2%98/">Hexo-优化：提交sitemap及解决百度爬虫抓取-GitHub-Pages-问题</a><br/>
-<a href="https://bblove.me/2015/11/25/how-to-solve-the-problem-that-github-blocks-the-baidu-spider/">解决 Github Pages 禁止百度爬虫的方法</a><br/>
-<a href="http://konradpodgorski.com/blog/2013/10/21/how-i-migrated-my-blog-from-wordpress-to-octopress/#redirect-301-on-github-pages">How I migrated my blog from Wordpress to Octopress</a><br/>
-<a href="https://www.seozac.com/google/featured-snippet-how/">怎样把Google排名优化到第0位？</a></p>
 ]]></content>
   </entry>
   

@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="简介 Heroku 会提供一个默认的域名，即[name of app].herokuapp.com，如果你不喜欢可以绑定自己的域名。 ">
+  <meta name="description" content="前言 原生的 Octopress 没有更丰富的阅读体验，只有上一篇下一篇，每次需要为当前文章添加相关文章的时候都需要在 Markdown 里面手动填写，这样非常浪费时间又不全面，于是笔者使用 Category 作为相关性的依据，修改了 Liqiud 代码，使得每一个 post 里面有具有相关的文章 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -100,6 +100,90 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/octopress-related-posts/">为 Octopress 添加 扩展相关阅读</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-02-18T20:24:22+08:00'><span class='date'>2018-02-18</span> <span class='time'>8:24 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>原生的 Octopress 没有更丰富的阅读体验，只有上一篇下一篇，每次需要为当前文章添加相关文章的时候都需要在 Markdown 里面手动填写，这样非常浪费时间又不全面，于是笔者使用 Category 作为相关性的依据，修改了 Liqiud 代码，使得每一个 post 里面有具有相关的文章。</p>
+
+<h2>实现</h2>
+
+<p>实现起来也是很简单的，直接把如下代码添加到 <code>includes/article.html</code> 里面，跟在下面代码之后即可。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;entry-content&quot;</span><span class="nt">&gt;</span>{{ content }}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>
+代码如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;h2&gt;</span>扩展阅读<span class="nt">&lt;/h2&gt;</span>
+</span><span class='line'>{% if page %}
+</span><span class='line'>    <span class="nt">&lt;ol&gt;</span>
+</span><span class='line'>      {% for category in page.categories %}
+</span><span class='line'>        {% for post in site.categories[category] %}
+</span><span class='line'>        {% if  page.url == post.url %}
+</span><span class='line'>          {% continue %}
+</span><span class='line'>        {% endif %}
+</span><span class='line'>        <span class="nt">&lt;li&gt;</span>
+</span><span class='line'>          <span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">&quot;{{ root_url }}{{ post.url }}&quot;</span><span class="nt">&gt;</span>{% if site.titlecase %}{{ post.title | titlecase }}{% else %}{{ post.title }}{% endif %}<span class="nt">&lt;/a&gt;</span>
+</span><span class='line'>        <span class="nt">&lt;/li&gt;</span>
+</span><span class='line'>        {% endfor %}
+</span><span class='line'>      {% endfor %}
+</span><span class='line'>    <span class="nt">&lt;/ol&gt;</span>
+</span><span class='line'>{% endif %}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>原理就比较简单了，取到当前页面的 categories，然后循环遍历得到每一个category下面的 post 展示即可。</p>
+
+<h2>参照</h2>
+
+<p>实际中的应用可以参照如下地址<br/>
+<a href="https://github.com/codedrinker/codedrinker.github.io/blob/source/source/_includes/article.html">参考地址</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -434,43 +518,6 @@ enable_page_level_ads: true
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/table-of-contents-sidebar-chrome-extension-introduction/">Chrome自动生成网页目录插件的编写和使用</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-08-13T00:16:06+08:00'><span class='date'>2017-08-13</span> <span class='time'>12:16 am</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>虽然移动设备已经很普遍了，但是大家使用电脑阅读网页的时间还是很长，尤其是做我们这个行业，除了阅读博客，通过网页搜索资料的时间也是比其他行业要多出来很多的。每次遇到特别长的文章的时候，从上到下的翻阅查找重点内容，肉眼的分离段落实在是比较费劲。但是有的网站这方面比较人性化，<code>Hexo</code>的博客系统或者是最近比较火的<code>segmentfault</code>，他们的文章目录就很方便，便于我们快速的定位(如下图)。但是大部分博客或者是贴吧还是没有目录的，于是笔者就突发奇想，自己写一个<code>Chrome</code>的插件，能自动的识别出来文章的目录，于是就有了这篇文章：</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/table-of-contents-sidebar-chrome-extension-introduction/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -508,11 +555,15 @@ enable_page_level_ads: true
 </section>
 <section>
   <h1>标签云</h1>
-    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 124.0%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 112.0%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 112.0%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 112.0%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 112.0%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 112.0%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 124.0%'>heroku(2)</a> <a href='/blog/categories/java' style='font-size: 160.0%'>java(5)</a> <a href='/blog/categories/maven' style='font-size: 112.0%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 112.0%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 136.0%'>octopress(3)</a> <a href='/blog/categories/project' style='font-size: 112.0%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 112.0%'>redis(1)</a> <a href='/blog/categories/spring' style='font-size: 136.0%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 112.0%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 112.0%'>tech(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 112.0%'>threadlocal(1)</a> <a href='/blog/categories/tool' style='font-size: 112.0%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 112.0%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 136.0%'>web(3)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 124.0%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 112.0%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 112.0%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 112.0%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 112.0%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 112.0%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 124.0%'>heroku(2)</a> <a href='/blog/categories/java' style='font-size: 160.0%'>java(5)</a> <a href='/blog/categories/maven' style='font-size: 112.0%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 112.0%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 148.0%'>octopress(4)</a> <a href='/blog/categories/project' style='font-size: 112.0%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 112.0%'>redis(1)</a> <a href='/blog/categories/spring' style='font-size: 136.0%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 112.0%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 112.0%'>tech(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 112.0%'>threadlocal(1)</a> <a href='/blog/categories/tool' style='font-size: 112.0%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 112.0%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 136.0%'>web(3)</a> </span>
 </section>
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/octopress-related-posts/">为 Octopress 添加 扩展相关阅读</a>
+      </li>
     
       <li class="post">
         <a href="/blog/heroku-custom-domains/">Heroku 入门教程之：绑定自定义域名</a>
@@ -568,10 +619,6 @@ enable_page_level_ads: true
     
       <li class="post">
         <a href="/blog/spring-boot-get-started/">使用 Idea 创建 Spring Boot 项目</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/the-smart-way-of-passing-parameter-by-threadlocal/">优雅的使用 ThreadLocal 传递参数</a>
       </li>
     
   </ul>
