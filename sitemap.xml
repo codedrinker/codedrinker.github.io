@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://www.majiang.life/blog/heroku-get-started/</loc>
+<lastmod>2018-02-18T17:49:25+08:00</lastmod>
+</url>
+<url>
 <loc>http://www.majiang.life/blog/how-to-build-email-system-with-amazon-ses/</loc>
 <lastmod>2018-02-14T14:22:55+08:00</lastmod>
 </url>
@@ -162,12 +166,6 @@
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/elasticsearch/</loc>
-</url>
-<url>
-<loc>http://www.majiang.life/posts/2/</loc>
-</url>
-<url>
-<loc>http://www.majiang.life/posts/3/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/2015/01/10/begininng-and-summary/index.html</loc>

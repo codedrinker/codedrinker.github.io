@@ -12,11 +12,11 @@ google_ad_client: "ca-pub-9540087096615057",
 enable_page_level_ads: true
 });
 </script>
-  <title>Category: Cache - 码匠笔记</title>
+  <title>Heroku 入门教程之：使用 Heroku 快速搭建站点 - 码匠笔记</title>
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="Category: cache">
+  <meta name="description" content="简介 Heroku 是 Salesforce 旗下云服务商，提供方便便捷的各种云服务，如服务器，数据库，监控，计算等等。并且他提供了免费版本，这使得我们这些平时想搞一些小东西的人提供了莫大的便捷，虽然他有时长和宕机的限制，但是对于个人小程序来说已经足够了。 快速入门 注册账号 进入 Heroku &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +25,7 @@ enable_page_level_ads: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.majiang.life/blog/categories/cache">
+  <link rel="canonical" href="http://www.majiang.life/blog/heroku-get-started">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
@@ -98,52 +98,178 @@ enable_page_level_ads: true
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">
     
-        
-           Cache
-        
+      <h1 class="entry-title">Heroku 入门教程之：使用 Heroku 快速搭建站点</h1>
     
-    </h1>
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-02-18T17:49:25+08:00'><span class='date'>2018-02-18</span> <span class='time'>5:49 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
 
-  
-  <h2>2017</h2>
+<div class="entry-content"><h2>简介</h2>
 
-<article>
-  
-<h1><a href="/blog/simple-in-memory-cache-in-java/">构建 Java 应用内存级缓存</a></h1>
-<time datetime="2017-04-30T10:49:21+08:00" pubdate><span class='month'>04</span>-<span class='day'>30</span> <span class='year'>2017</span></time>
+<p>Heroku 是 Salesforce 旗下云服务商，提供方便便捷的各种云服务，如服务器，数据库，监控，计算等等。并且他提供了免费版本，这使得我们这些平时想搞一些小东西的人提供了莫大的便捷，虽然他有时长和宕机的限制，但是对于个人小程序来说已经足够了。</p>
 
-<footer>
-  <span class="categories"><a class='category' href='/blog/categories/cache/'>cache</a>, <a class='category' href='/blog/categories/guava/'>guava</a>, <a class='category' href='/blog/categories/java/'>java</a></span>
-</footer>
+<h2>快速入门</h2>
+
+<h3>注册账号</h3>
+
+<p>进入 <a href="https://www.heroku.com">Heroku 官网</a>，因为 Heroku 是国外的站点，所以需要提前准备好翻墙。点击 Sign Up，根据要求填写好信息。这里需要注意的是，国内大部分的邮箱不支持，所以这里提前准备好 gmail 邮箱进行注册。</p>
+
+<h3>创建 App</h3>
+
+<p>Heroku 提供了便捷的网页控制台和终端，登录成功后我们直接进入 Heroku 的网页控制台，选择我们熟悉的语言进行创建，我们这里选择两种方式进行介绍，PHP 和 Java。</p>
+
+<h4>PHP</h4>
+
+<h5>准备</h5>
+
+<p>点击按钮以后进入开始界面，界面提示我们需要提前安装好 <a href="http://php.net/">PHP</a> 和 <a href="https://getcomposer.org/doc/00-intro.md">Composer</a>，使用 PHP 的朋友就不需要更多的介绍了，直接点击 <code>I'm ready to start</code>。</p>
+
+<h5>Set up</h5>
+
+<p>下载 Heroku CLI，这是 Heroku 的命令行工具，下载以后可以使用命令行直接进行代码更新和部署等操作，当然下文也会介绍更方便的部署方式。下载成功以后使用 <code>heroku login</code> 命令，输入邮箱和密码进行登录。</p>
+
+<h5>准备项目</h5>
+
+<p>如果我们没有项目，可以直接使用如下命令下载项目源码，然后部署项目。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone https://github.com/heroku/php-getting-started.git sesamepaste</span></code></pre></td></tr></table></div></figure>
 
 
-</article>
+<p>后面跟随的 sesamepaste 是我将来的项目名称，然后进入项目</p>
 
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd sesamepaste</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>创建App</h5>
+
+<p>这里说的 App 不再是我们本地的项目，我们目前可以简单理解为 Heroku 的一个用来存放我们项目的容器，只有先有了这个容器才能部署我们的项目。运行如下命令创建，其中 sesamepaste 是项目的名称，也是 Heroku 的唯一标识，后面我们运行成功了，也需要使用 sesamepaste.herokuapp.com 来访问 App。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'> heroku create sesamepaste
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>创建成功以后运行如下命令部署，其实就是把代码push 到 Heroku 的仓库，它会帮助我们自动化部署。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>git push heroku master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后使用 <code>heroku open</code> 命令就可以打开我们部署好的网站了。</p>
+
+<h4>Java</h4>
+
+<p>其他步骤和上面一样，除了项目地址，如下地址不是官方的例子，是笔者添加了一些spring，mybatis，flyway等集成的版本。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>https://github.com/codedrinker/heroku-spring-boot-mybatis-mysql-flyway-example.git sesamepaste
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>其他</h4>
+
+<p>如果是其他语言直接访问 Heroku帮助页面，<a href="https://devcenter.heroku.com">https://devcenter.heroku.com</a></p>
+
+<h2>简单介绍</h2>
+
+<h3>日志</h3>
+
+<p>每次运行命令需要进入当前项目的目录，必要的时候需要输入 <code>heroku login</code>，使用 <code>heroku logs --tail</code> 命令实施查看输出日志。</p>
+
+<h3>Procfile</h3>
+
+<p>你会发现拉取下来的代码里面有名字是 Procfile 的文件，这文件是用来定义运行项目时候的命令，默认如下，表示使用apache 运行 web项目，目录是web。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>web: vendor/bin/heroku-php-apache2 web/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>关联 Github</h3>
+
+<p>上文说到需要 push 到 heroku 的仓库才能部署，heroku 提供了更强带的功能，直接关联 Github 的仓库的分支，等分支有新内容更新的时候直接部署。这个配置就需要去 web控制台配置了。进入项目，点击 <code>Deploy</code>，勾选 <code>Github</code>，然后完成配置即可。</p>
+
+<h2>作者</h2>
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="">Heroku 入门教程之：使用 Heroku 快速搭建站点</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<h2></h2>
+<p>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 文章列表页自适应文字和展示广告 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9540087096615057"
+     data-ad-slot="2018352322"
+     data-ad-format="auto">
+</ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</p>
 </div>
 
-  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <!-- 博客列表页面尾部自适应广告 -->
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-9540087096615057"
-       data-ad-slot="3428022322"
-       data-ad-format="auto"></ins>
-  <script>
-  (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2018-02-18T17:49:25+08:00'><span class='date'>2018-02-18</span> <span class='time'>5:49 pm</span></time>
+      
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/heroku-get-started/" data-via="" data-counturl="http://www.majiang.life/blog/heroku-get-started/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/how-to-build-email-system-with-amazon-ses/" title="Previous Post: 基于 Amazon SES 搭建高可用的邮件系统">&laquo; 基于 Amazon SES 搭建高可用的邮件系统</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="commenthub_thread" aria-live="polite"></div>
+  </section>
 
 </div>
 
@@ -265,9 +391,9 @@ enable_page_level_ads: true
 <script type="text/javascript">
     var commenthub_id = '3821949';
     var commenthub_website = 'http://www.majiang.life';
-    var commenthub_identifier = '/blog/categories/cache/index.html';
-    var commenthub_url = 'http://www.majiang.life/blog/categories/cache/index.html';
-    var commenthub_title = 'Category: cache';
+    var commenthub_identifier = '/blog/heroku-get-started/';
+    var commenthub_url = 'http://www.majiang.life/blog/heroku-get-started/';
+    var commenthub_title = 'Heroku 入门教程之：使用 Heroku 快速搭建站点';
     (function () {
         var dsq = document.createElement('script');
         dsq.type = 'text/javascript';

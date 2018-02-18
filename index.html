@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="简介 通常情况下我们使用 smtp 调用第三方的 api 发送邮件，但是 gmail 一天只能发送100封，这对于营销邮件来说无疑是非常大的影响。所以考虑两种方案，第一种自己搭建邮件服务器，这种方案耗费时间并且需要额外的服务器成本。第二种方案使用 Amazon SES 搭建有限服务。简单方便并且 &hellip;">
+  <meta name="description" content="简介 Heroku 是 Salesforce 旗下云服务商，提供方便便捷的各种云服务，如服务器，数据库，监控，计算等等。并且他提供了免费版本，这使得我们这些平时想搞一些小东西的人提供了莫大的便捷，虽然他有时长和宕机的限制，但是对于个人小程序来说已经足够了。 快速入门 注册账号 进入 Heroku &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -99,6 +99,122 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/heroku-get-started/">Heroku 入门教程之：使用 Heroku 快速搭建站点</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-02-18T17:49:25+08:00'><span class='date'>2018-02-18</span> <span class='time'>5:49 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>简介</h2>
+
+<p>Heroku 是 Salesforce 旗下云服务商，提供方便便捷的各种云服务，如服务器，数据库，监控，计算等等。并且他提供了免费版本，这使得我们这些平时想搞一些小东西的人提供了莫大的便捷，虽然他有时长和宕机的限制，但是对于个人小程序来说已经足够了。</p>
+
+<h2>快速入门</h2>
+
+<h3>注册账号</h3>
+
+<p>进入 <a href="https://www.heroku.com">Heroku 官网</a>，因为 Heroku 是国外的站点，所以需要提前准备好翻墙。点击 Sign Up，根据要求填写好信息。这里需要注意的是，国内大部分的邮箱不支持，所以这里提前准备好 gmail 邮箱进行注册。</p>
+
+<h3>创建 App</h3>
+
+<p>Heroku 提供了便捷的网页控制台和终端，登录成功后我们直接进入 Heroku 的网页控制台，选择我们熟悉的语言进行创建，我们这里选择两种方式进行介绍，PHP 和 Java。</p>
+
+<h4>PHP</h4>
+
+<h5>准备</h5>
+
+<p>点击按钮以后进入开始界面，界面提示我们需要提前安装好 <a href="http://php.net/">PHP</a> 和 <a href="https://getcomposer.org/doc/00-intro.md">Composer</a>，使用 PHP 的朋友就不需要更多的介绍了，直接点击 <code>I'm ready to start</code>。</p>
+
+<h5>Set up</h5>
+
+<p>下载 Heroku CLI，这是 Heroku 的命令行工具，下载以后可以使用命令行直接进行代码更新和部署等操作，当然下文也会介绍更方便的部署方式。下载成功以后使用 <code>heroku login</code> 命令，输入邮箱和密码进行登录。</p>
+
+<h5>准备项目</h5>
+
+<p>如果我们没有项目，可以直接使用如下命令下载项目源码，然后部署项目。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone https://github.com/heroku/php-getting-started.git sesamepaste</span></code></pre></td></tr></table></div></figure>
+
+
+<p>后面跟随的 sesamepaste 是我将来的项目名称，然后进入项目</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>cd sesamepaste</span></code></pre></td></tr></table></div></figure>
+
+
+<h5>创建App</h5>
+
+<p>这里说的 App 不再是我们本地的项目，我们目前可以简单理解为 Heroku 的一个用来存放我们项目的容器，只有先有了这个容器才能部署我们的项目。运行如下命令创建，其中 sesamepaste 是项目的名称，也是 Heroku 的唯一标识，后面我们运行成功了，也需要使用 sesamepaste.herokuapp.com 来访问 App。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'> heroku create sesamepaste
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>创建成功以后运行如下命令部署，其实就是把代码push 到 Heroku 的仓库，它会帮助我们自动化部署。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>git push heroku master
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>最后使用 <code>heroku open</code> 命令就可以打开我们部署好的网站了。</p>
+
+<h4>Java</h4>
+
+<p>其他步骤和上面一样，除了项目地址，如下地址不是官方的例子，是笔者添加了一些spring，mybatis，flyway等集成的版本。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>https://github.com/codedrinker/heroku-spring-boot-mybatis-mysql-flyway-example.git sesamepaste
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h4>其他</h4>
+
+<p>如果是其他语言直接访问 Heroku帮助页面，<a href="https://devcenter.heroku.com">https://devcenter.heroku.com</a></p>
+
+<h2>简单介绍</h2>
+
+<h3>日志</h3>
+
+<p>每次运行命令需要进入当前项目的目录，必要的时候需要输入 <code>heroku login</code>，使用 <code>heroku logs --tail</code> 命令实施查看输出日志。</p>
+
+<h3>Procfile</h3>
+
+<p>你会发现拉取下来的代码里面有名字是 Procfile 的文件，这文件是用来定义运行项目时候的命令，默认如下，表示使用apache 运行 web项目，目录是web。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>web: vendor/bin/heroku-php-apache2 web/
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>关联 Github</h3>
+
+<p>上文说到需要 push 到 heroku 的仓库才能部署，heroku 提供了更强带的功能，直接关联 Github 的仓库的分支，等分支有新内容更新的时候直接部署。这个配置就需要去 web控制台配置了。进入项目，点击 <code>Deploy</code>，勾选 <code>Github</code>，然后完成配置即可。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -433,47 +549,6 @@ enable_page_level_ads: true
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/octopress-tag-cloud/">Octopress 添加标签云</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-06-24T15:11:51+08:00'><span class='date'>2017-06-24</span> <span class='time'>3:11 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>随着文章数量越来越多，分类也越来越多，不是很方便归类和查找，于是就有了<code>标签云</code>这个概念。简单明了的展示了标签和每一个标签下面的文章数量。这个功能可以自己编写，也非常简单。不过反正已经有轮子了，如果不喜欢重新造轮子，直接使用一个网上已经写好的就行了。下面直接进入正题：</p>
-
-<h2>使用轮子</h2>
-
-<p>直接<code>clone</code>轮子<code>https://github.com/tokkonopapa/octopress-tagcloud.git</code>到本地，如果不想<code>clone</code>直接点击<a href="/assets/octopress-tagcloud-master.zip">下载</a>，然后把对应的资源拷贝到相应的目录：</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/octopress-tag-cloud/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -516,6 +591,10 @@ enable_page_level_ads: true
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/heroku-get-started/">Heroku 入门教程之：使用 Heroku 快速搭建站点</a>
+      </li>
     
       <li class="post">
         <a href="/blog/how-to-build-email-system-with-amazon-ses/">基于 Amazon SES 搭建高可用的邮件系统</a>
@@ -571,10 +650,6 @@ enable_page_level_ads: true
     
       <li class="post">
         <a href="/blog/simple-in-memory-cache-in-java/">构建 Java 应用内存级缓存</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/using-amazon-s3-as-a-private-maven-repository/">基于 Amazon S3 搭建 Maven 私有仓库</a>
       </li>
     
   </ul>

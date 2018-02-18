@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 服务器端开发工程师的一个痛点就是各种搭建环境，尤其是对于我们这种特别爱捯饬技术，搭建环境，升级应用版本的这类人。这样除了让我们忍受搭建各种版本的环境的繁琐兼容问题，还让自己的开发机变得越来越臃肿，为此本文介绍了一种使用Vagrant搭建一套集成的开发环境(镜像)的方案， &hellip;">
+  <meta name="description" content="前言 有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -99,6 +99,43 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/auto-preview-front-end-changes/">Browsersync 前端实时预览工程搭建</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2016-12-24T20:46:37+08:00'><span class='date'>2016-12-24</span> <span class='time'>8:46 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话，还需要处理项目的热部署。所以笔者在网上查了查，同时咨询了一下身边的朋友<a href="https://github.com/HelloJacky">小马</a>，就有了下面这篇文章：通过<code>Browsersync</code>把文件变化实时更新到浏览器端，不同的前端技术架构体现的效果不一样，有的是不刷新页面的更新样式和布局，有的是刷新页面更新，效果更像是点击“F5”。无论做前端还是后端，使用它将提高30%的工作效率，下面我们就直接进入正题。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/auto-preview-front-end-changes/">阅读全文</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -221,6 +258,10 @@ enable_page_level_ads: true
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/heroku-get-started/">Heroku 入门教程之：使用 Heroku 快速搭建站点</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/how-to-build-email-system-with-amazon-ses/">基于 Amazon SES 搭建高可用的邮件系统</a>
       </li>
     
@@ -274,10 +315,6 @@ enable_page_level_ads: true
     
       <li class="post">
         <a href="/blog/simple-in-memory-cache-in-java/">构建 Java 应用内存级缓存</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/using-amazon-s3-as-a-private-maven-repository/">基于 Amazon S3 搭建 Maven 私有仓库</a>
       </li>
     
   </ul>
