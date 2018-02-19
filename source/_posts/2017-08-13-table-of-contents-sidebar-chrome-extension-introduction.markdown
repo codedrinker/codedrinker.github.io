@@ -3,7 +3,7 @@ layout: post
 title: "Chrome自动生成网页目录插件的编写和使用"
 date: 2017-08-13 00:16:06 +0800
 comments: true
-categories: ["Chrome Extension","Project"]
+categories: ["Chrome Extension","Project","toc"]
 description: 怎么样编写Chrome Extension,Chrome Extension的项目目录和简单说明,自动生成文章目录的Chrome Extension讲解,编写Chrome Extension过程中遇到的坑,如何为插件编写主题,下载地址
 keywords: Chrome插件的编写,Chrome Extension 编写,Chrome Extension setIcon, Chrome Extension LocalStorage,自己动手写Chrome Extension
 ---
