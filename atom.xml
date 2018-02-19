@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-18T23:59:24+08:00</updated>
+  <updated>2018-02-19T18:05:29+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,50 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[给博客添加目录]]></title>
+    <link href="http://www.majiang.life/blog/blog-table-of-contents/"/>
+    <updated>2018-02-19T12:11:10+08:00</updated>
+    <id>http://www.majiang.life/blog/blog-table-of-contents</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>Hexo 模板的博客都带了文章目录[toc]，但是作者当前使用的是 Octopress 博客系统，所以不支持目录。这样给阅读的人带来了很大的不便捷。所以作者使用了 Table of contents sidebar 为 Octopress 添加了目录，并且可以快速定位。过程很简单，内容如下。</p>
+
+<!-- more -->
+
+
+<h2>添加插件</h2>
+
+<p>直接添加到如下代码到博客通用的文件即可，其中 querySelector 可以定义生成目录的区域。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/table-of-contents-sidebar.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">TableOfContents</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+</span><span class='line'>            <span class="nx">basePath</span><span class="o">:</span> <span class="s2">&quot;https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nx">querySelector</span><span class="o">:</span> <span class="s2">&quot;body&quot;</span> <span class="c1">// or other css querySelector</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>插件</h2>
+
+<p>这样仅仅是看自己的博客有了目录，如果想看别人的博客也有目录，可以安装 Table of contents sidebar 的插件，这样只要能识别的文章都能查看目录并且快速定位了。<br/>
+<a href="https://chrome.google.com/webstore/detail/table-of-contents-sidebar/ohohkfheangmbedkgechjkmbepeikkej">https://chrome.google.com/webstore/detail/table-of-contents-sidebar/ohohkfheangmbedkgechjkmbepeikkej</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[为 Octopress 添加 扩展相关阅读]]></title>
@@ -4473,103 +4517,6 @@ color-index: number of entries in the output device&rsquo;s color lookup table, 
 <a href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html">Profile</a><br/>
 <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/howto-properties-and-configuration.html">howto-properties-and-configuration</a> <br/>
 <a href="https://maven.apache.org/settings.html">Settings.xml</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Github Pages配置域名]]></title>
-    <link href="http://www.majiang.life/blog/github-and-godaddy/"/>
-    <updated>2017-04-03T00:32:47+08:00</updated>
-    <id>http://www.majiang.life/blog/github-and-godaddy</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
-
-<p>一个“码农”基本都有一个自己的域名，有的人说是因为逼格，有的人说是因为有钱，无论怎么样都有自己的原因，我觉得是因为情节。 <br/>
-因为我的博客是通过Octopress搭建在Github Pages上面的，所以我需要让我的域名的DNS解析到Github Pages上面。</p>
-
-<h2>Github</h2>
-
-<p>首先在<code>codedrinker.github.io</code>这个<code>repository</code>的<code>gh-pages</code>指向的分支根目录添加一个<code>CNAME</code>，里面写<code>majiang.life</code>，不需要添加<code>http</code>或者<code>www</code>。因为博客采用的Octopress，所以直接在<code>source</code>目录添加一个<code>CNAME</code>文件，然后<code>rake gen_deploy</code>就可以自动生成到<code>gh-pages</code>分支<code>master</code>了。</p>
-
-<!-- more -->
-
-
-<h2>DNS</h2>
-
-<p>我是在Godaddy上面买的域名，不过DNS配置都大同小异，需要配置一个A记录，<code>host</code>是<code>@</code>,<code>Points to</code>是<code>192.30.252.153</code>；和一个CNAME记录<code>host</code>是<code>www</code>，<code>Points to</code>是<code>codedrinker.github.io</code>。<code>TTL</code>可以选择一个<code>CUSTOME</code>，比如<code>600S</code>。</p>
-
-<h2>DIG</h2>
-
-<p>等过一会DNS更新了以后，运行如下命令，看是否域名指向成功</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>dig majiang.life +nostats +nocomments +nocmd
-</span></code></pre></td></tr></table></div></figure>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'><span class="p">;</span> &lt;&lt;&gt;&gt; DiG 9.8.3-P1 &lt;&lt;&gt;&gt; majiang.life +nostats +nocomments +nocmd
-</span><span class='line'><span class="p">;;</span> global options: +cmd
-</span><span class='line'><span class="p">;</span>majiang.life.         IN  A
-</span><span class='line'>majiang.life.     600 IN  A   192.30.252.154
-</span><span class='line'>majiang.life.     600 IN  A   192.30.252.153
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>表示已经成功了。</p>
-
-<h2>意外</h2>
-
-<ul>
-<li><h5>不能访问</h5>
-
-<p>但是不幸的事情发生了，访问<code>majiang.life</code>的时候偶尔就会跳转到一个莫名其妙的网址，上面显示着</p></li>
-</ul>
-
-
-<pre><code class="`"> The domain majiang.life is no longer parked by GoDaddy.
-</code></pre>
-
-<p> <img src="http://www.majiang.life/images/posts/godaddy.jpg" alt="Error" />
- 于是在网上查了一下这个原因众说纷纭，有的说多配置了，有的说得等等，但是从我配置<code>DNS</code>到现在已经一天了。于是我有仔细排查了一下<code>DNS</code>的配置，发现还有一条默认的<code>GoDaddy 的A记录</code>(我通过IP反查域名，发现是GoDaddy自己的)，问题便解开了，因为如果同样配置两个一样的<code>A</code>记录，DNS会轮询访问者两个<code>Points to</code>，随后我把这个<code>A</code>记录删除了，这个问题也就迎刃而解，所以配置域名的时候还是需要谨慎一些。</p>
-
-<ul>
-<li><h5>不能提交</h5>
-
-<p>一切都搞定了，域名也能访问了，但是我本地<code>rake deploy</code>命令不工作了。</p></li>
-</ul>
-
-
-<pre><code class="`"> To https://github.com/codedrinker/codedrinker.github.io
-  ! [rejected]        master -&gt; master (non-fast-forward)
-  error: failed to push some refs to 'https://github.com/codedrinker/codedrinker.github.io'
-  hint: Updates were rejected because the tip of your current branch is behind
-  hint: its remote counterpart. Merge the remote changes (e.g. 'git pull')
-  hint: before pushing again.
-  hint: See the 'Note about fast-forwards' in 'git push --help' for details.
-
- ## Github Pages deploy complete
- cd -
-</code></pre>
-
-<p> 回想起来是因为我手贱，嫌麻烦开始直接在<code>Github</code>网页上面添加的CNAME，这样就没有办法更新博文了。看了一下<code>Rakefile</code>里面，他每次都是拷贝生成好的<code>public</code>目录到<code>_deploy</code>目录，然后执行<code>git push</code>，所以我更新<code>codedrinker.github.io</code>的代码没有用，如果是这样问题就好解决了：</p>
-
-<ul>
-<li>直接去<code>_deploy</code>目录，运行<code>git pull</code>，把<code>_deploy</code>代码更新到最新就可以了。</li>
-<li>如果还是不工作，反正原理就是<code>Octopress</code>会把<code>_deploy</code>目录当做更新生成好资源的目录，我们直接重新创建<code>_deploy</code>，然后把它和<code>master</code>关联就好了。</li>
-</ul>
-
-
-<pre><code class="`"> mkdir _deploy
- cd _deploy
- git init
- git remote add -t master -f origin https://github.com/codedrinker/codedrinker.github.io.git
-</code></pre>
-
-<p> 这样以后就可以重新使用<code>rake deploy</code>了。</p>
 ]]></content>
   </entry>
   

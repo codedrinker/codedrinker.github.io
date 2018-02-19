@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Category: Project | 码匠笔记]]></title>
-  <link href="http://www.majiang.life/blog/categories/project/atom.xml" rel="self"/>
+  <title><![CDATA[Category: Toc | 码匠笔记]]></title>
+  <link href="http://www.majiang.life/blog/categories/toc/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
   <updated>2018-02-19T18:05:29+08:00</updated>
   <id>http://www.majiang.life/</id>
@@ -12,6 +12,62 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[给博客添加目录]]></title>
+    <link href="http://www.majiang.life/blog/blog-table-of-contents/"/>
+    <updated>2018-02-19T12:11:10+08:00</updated>
+    <id>http://www.majiang.life/blog/blog-table-of-contents</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>Hexo 模板的博客都带了文章目录[toc]，但是作者当前使用的是 Octopress 博客系统，所以不支持目录。这样给阅读的人带来了很大的不便捷。所以作者使用了 Table of contents sidebar 为 Octopress 添加了目录，并且可以快速定位。过程很简单，内容如下。</p>
+
+<!-- more -->
+
+
+<h2>添加插件</h2>
+
+<p>直接添加到如下代码到博客通用的文件即可，其中 querySelector 可以定义生成目录的区域。
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/table-of-contents-sidebar.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">TableOfContents</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+</span><span class='line'>            <span class="nx">basePath</span><span class="o">:</span> <span class="s2">&quot;https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nx">querySelector</span><span class="o">:</span> <span class="s2">&quot;body&quot;</span> <span class="c1">// or other css querySelector</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>插件</h2>
+
+<p>这样仅仅是看自己的博客有了目录，如果想看别人的博客也有目录，可以安装 Table of contents sidebar 的插件，这样只要能识别的文章都能查看目录并且快速定位了。<br/>
+<a href="https://chrome.google.com/webstore/detail/table-of-contents-sidebar/ohohkfheangmbedkgechjkmbepeikkej">https://chrome.google.com/webstore/detail/table-of-contents-sidebar/ohohkfheangmbedkgechjkmbepeikkej</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Chrome自动生成网页目录插件的编写和使用]]></title>

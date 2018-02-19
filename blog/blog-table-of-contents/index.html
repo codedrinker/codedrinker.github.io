@@ -12,11 +12,11 @@ google_ad_client: "ca-pub-9540087096615057",
 enable_page_level_ads: true
 });
 </script>
-  <title>Category: Guava - 码匠笔记</title>
+  <title>给博客添加目录 - 码匠笔记</title>
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="Category: guava">
+  <meta name="description" content="前言 Hexo 模板的博客都带了文章目录[toc]，但是作者当前使用的是 Octopress 博客系统，所以不支持目录。这样给阅读的人带来了很大的不便捷。所以作者使用了 Table of contents sidebar 为 Octopress 添加了目录，并且可以快速定位。过程很简单，内容如下 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -25,7 +25,7 @@ enable_page_level_ads: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.majiang.life/blog/categories/guava">
+  <link rel="canonical" href="http://www.majiang.life/blog/blog-table-of-contents">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
@@ -100,52 +100,172 @@ enable_page_level_ads: true
   <div id="main">
     <div id="content">
       <div>
-<article role="article">
+<article class="hentry" role="article">
   
   <header>
-    <h1 class="entry-title">
     
-        
-           Guava
-        
+      <h1 class="entry-title">给博客添加目录</h1>
     
-    </h1>
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-02-19T12:11:10+08:00'><span class='date'>2018-02-19</span> <span class='time'>12:11 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
     
   </header>
-  
-  <div id="blog-archives" class="category">
 
 
 
-  
-  <h2>2017</h2>
+<div class="entry-content"><h2>前言</h2>
 
-<article>
-  
-<h1><a href="/blog/simple-in-memory-cache-in-java/">构建 Java 应用内存级缓存</a></h1>
-<time datetime="2017-04-30T10:49:21+08:00" pubdate><span class='month'>04</span>-<span class='day'>30</span> <span class='year'>2017</span></time>
+<p>Hexo 模板的博客都带了文章目录[toc]，但是作者当前使用的是 Octopress 博客系统，所以不支持目录。这样给阅读的人带来了很大的不便捷。所以作者使用了 Table of contents sidebar 为 Octopress 添加了目录，并且可以快速定位。过程很简单，内容如下。</p>
 
-<footer>
-  <span class="categories"><a class='category' href='/blog/categories/cache/'>cache</a>, <a class='category' href='/blog/categories/guava/'>guava</a>, <a class='category' href='/blog/categories/java/'>java</a></span>
-</footer>
+<!-- more -->
 
 
-</article>
+<h2>添加插件</h2>
 
+<p>直接添加到如下代码到博客通用的文件即可，其中 querySelector 可以定义生成目录的区域。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span> <span class="na">src=</span><span class="s">&quot;https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/table-of-contents-sidebar.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+</span><span class='line'>        <span class="nx">TableOfContents</span><span class="p">.</span><span class="nx">init</span><span class="p">({</span>
+</span><span class='line'>            <span class="nx">basePath</span><span class="o">:</span> <span class="s2">&quot;https://table-of-contents-sidebar.github.io/table-of-contents-sidebar-lib/&quot;</span><span class="p">,</span>
+</span><span class='line'>            <span class="nx">querySelector</span><span class="o">:</span> <span class="s2">&quot;body&quot;</span> <span class="c1">// or other css querySelector</span>
+</span><span class='line'>        <span class="p">});</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>插件</h2>
+
+<p>这样仅仅是看自己的博客有了目录，如果想看别人的博客也有目录，可以安装 Table of contents sidebar 的插件，这样只要能识别的文章都能查看目录并且快速定位了。<br/>
+<a href="https://chrome.google.com/webstore/detail/table-of-contents-sidebar/ohohkfheangmbedkgechjkmbepeikkej">https://chrome.google.com/webstore/detail/table-of-contents-sidebar/ohohkfheangmbedkgechjkmbepeikkej</a></p>
+
+<h2>扩展阅读</h2>
+
+    <ol>
+      
+        
+        
+          
+        
+        <li>
+          <a href="/blog/octopress-related-posts/?utm_source=rel">为 Octopress 添加 扩展相关阅读</a>
+        </li>
+        
+        
+        <li>
+          <a href="/blog/octopress-tag-cloud/?utm_source=rel">Octopress 添加标签云</a>
+        </li>
+        
+        
+        <li>
+          <a href="/blog/octopress-index-page-read-more/?utm_source=rel">为Octopress 首页添加‘更多’功能</a>
+        </li>
+        
+        
+        <li>
+          <a href="/blog/optimize-octopress-blog-seo/?utm_source=rel">Octopress 博客搜索优化</a>
+        </li>
+        
+      
+        
+        
+          
+        
+        <li>
+          <a href="/blog/table-of-contents-sidebar-chrome-extension-introduction/?utm_source=rel">Chrome自动生成网页目录插件的编写和使用</a>
+        </li>
+        
+      
+    </ol>
+
+<h2>作者</h2>
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="">给博客添加目录</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<h2></h2>
+<p>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 文章列表页自适应文字和展示广告 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9540087096615057"
+     data-ad-slot="2018352322"
+     data-ad-format="auto">
+</ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</p>
 </div>
 
-  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-  <!-- 博客列表页面尾部自适应广告 -->
-  <ins class="adsbygoogle"
-       style="display:block"
-       data-ad-client="ca-pub-9540087096615057"
-       data-ad-slot="3428022322"
-       data-ad-format="auto"></ins>
-  <script>
-  (adsbygoogle = window.adsbygoogle || []).push({});
-  </script>
+
+  <footer>
+    <p class="meta">
+      
   
+
+<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
+
+      
+
+
+
+
+<time class='entry-date' datetime='2018-02-19T12:11:10+08:00'><span class='date'>2018-02-19</span> <span class='time'>12:11 pm</span></time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/octopress/'>octopress</a>, <a class='category' href='/blog/categories/toc/'>toc</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/blog-table-of-contents/" data-via="" data-counturl="http://www.majiang.life/blog/blog-table-of-contents/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/octopress-related-posts/" title="Previous Post: 为 Octopress 添加 扩展相关阅读">&laquo; 为 Octopress 添加 扩展相关阅读</a>
+      
+      
+    </p>
+  </footer>
 </article>
+
+  <section>
+    <h1>评论</h1>
+    <div id="commenthub_thread" aria-live="polite"></div>
+  </section>
 
 </div>
 
@@ -267,9 +387,9 @@ enable_page_level_ads: true
 <script type="text/javascript">
     var commenthub_id = '3821949';
     var commenthub_website = 'http://www.majiang.life';
-    var commenthub_identifier = '/blog/categories/guava/index.html';
-    var commenthub_url = 'http://www.majiang.life/blog/categories/guava/index.html';
-    var commenthub_title = 'Category: guava';
+    var commenthub_identifier = '/blog/blog-table-of-contents/';
+    var commenthub_url = 'http://www.majiang.life/blog/blog-table-of-contents/';
+    var commenthub_title = '给博客添加目录';
     (function () {
         var dsq = document.createElement('script');
         dsq.type = 'text/javascript';
