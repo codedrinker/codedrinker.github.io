@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Hexo | 码匠笔记]]></title>
+  <link href="http://www.majiang.life/blog/categories/hexo/atom.xml" rel="self"/>
+  <link href="http://www.majiang.life/"/>
+  <updated>2018-02-19T22:25:52+08:00</updated>
+  <id>http://www.majiang.life/</id>
+  <author>
+    <name><![CDATA[麻酱]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Commenthub: 使用 GitHub Issues 搭建评论系统]]></title>
+    <link href="http://www.majiang.life/blog/octopress-and-hexo-comments-widget/"/>
+    <updated>2018-02-19T20:57:35+08:00</updated>
+    <id>http://www.majiang.life/blog/octopress-and-hexo-comments-widget</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>“多说”和“网易云跟帖”相继不维护了，每一次给大家带来了希望又带来了失望，于是 <a href="https://github.com/codedrinker/commenthub">Commenthub</a> 出现了。Commenthub 是作者使用免费的服务 Heroku 和 Github Issues 结合起来做的一套开源的评论系统。其灵感源于 Gitment，但是 Gitment 的 Key 和 Secret 都存在浏览器端，这样对于安全也是一个问题，于是作者使用 Heroku 搭建后端服务用于处理业务和存储证书，通过 iframe 实现评论功能。</p>
+
+<h2>效果图</h2>
+
+<p><img src="/images/posts/commenthub1.png" alt="Demo" /></p>
+
+<h2>演示地址</h2>
+
+<p><a href="http://commenthub.github.io/">http://commenthub.github.io/</a></p>
+
+<h2>功能介绍</h2>
+
+<p>Commenthub 目前只支持 Github 用户登录评论，同时也只支持 Github 用户为自己的博客添加评论功能。目前 Commenthub 支持 Markdown 语法，表情，手机和PC响应式布局。</p>
+
+<h2>Octopress 接入</h2>
+
+<h3>注册 commenthub 账号</h3>
+
+<p>访问 <a href="http://commenthub.herokuapp.com/">Commenthub官网</a>，点击 Sign up，使用 Github 账号登录成功以后，点击 Set up，填写博客地址。同时记住 ID，后面需要使用。</p>
+
+<h3>配置 config.yml</h3>
+
+<p>在 config.yml 里面填写 commenthub_id，其内容就是上面说的ID，用于标记作者是谁。
+<code>
+commenthub_id: 3821949
+</code></p>
+
+<h3>配置显示位置</h3>
+
+<p>在 <code>_layouts/post.html</code> 的 article 标签下面添加如下代码，用来告诉 Commenthub，在什么地方显示评论功能。
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% if site.commenthub_id and page.comments == true %}
+</span><span class='line'>  <span class="nt">&lt;section&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;h1&gt;</span>评论<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;commenthub_thread&quot;</span> <span class="na">aria-live=</span><span class="s">&quot;polite&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/section&gt;</span>
+</span><span class='line'>{% endif %}
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>创建 commenthub.html</h3>
+
+<p>创建 <code>includes/commenthub.html</code>，填入如下内容
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% comment %} Load script if commenthub comments are enabled and <span class="nt">&lt;code&gt;</span>page.comments<span class="nt">&lt;/code&gt;</span> is either empty (index) or set to true {% endcomment %}
+</span><span class='line'>{% if site.commenthub_id and page.comments != false %}<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_id</span> <span class="o">=</span> <span class="s1">&#39;{{ site.commenthub_id }}&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_website</span> <span class="o">=</span> <span class="s1">&#39;{{ site.url }}&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_identifier</span> <span class="o">=</span> <span class="s1">&#39;{{ page.url }}&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_url</span> <span class="o">=</span> <span class="s1">&#39;{{ site.url }}{{ page.url }}&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_title</span> <span class="o">=</span> <span class="s1">&#39;{{ page.title }}&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">dsq</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">dsq</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">dsq</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">dsq</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;https://commenthub.herokuapp.com/js/embed.js&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">dsq</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}());</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>{% endif %}
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>引入 commenthub.html</h3>
+
+<p>在 <code>includes/after_foot.html</code> 里面添加一行如下内容，用于引入 commenthub.html 文件
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% include commenthub.html %}
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>完成</h3>
+
+<p>这样 Octopress 的配置就结束了，如果配置中遇到问题，可以在当前博客中评论留言，或者到 Github Issue 中留言。</p>
+
+<h2>Hexo 接入</h2>
+
+<p>Hexo 使用的是比较热门的主题 Next。</p>
+
+<h3>注册 commenthub 账号</h3>
+
+<p>同上</p>
+
+<h3>配置 config.yml</h3>
+
+<p>配置 <code>themes/next/_config.yml</code> 文件，在里面的 Disqus 后面配置如下内容
+<code>
+commenthub:
+  enable: true
+  id: your_id
+  site: your_website_url
+</code></p>
+
+<h3>配置显示位置</h3>
+
+<p>在<code>themes/next/layout/_partials/comments.swig</code>里面添加一行代码，记得注意看<code>elseif</code>的位置
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>  {% elseif theme.commenthub.enable %}
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;comments&quot;</span> <span class="na">id=</span><span class="s">&quot;comments&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;commenthub_thread&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>创建 commenthub.swig</h3>
+
+<p>创建新文件<code>themes/next/layout/_third-party/comments/commenthub.swig</code>并贴入如下代码，如下代码主要是用于加载和生成评论的逻辑。
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% if not (theme.duoshuo and theme.duoshuo.shortname) and not theme.duoshuo_shortname %}
+</span><span class='line'>  {% if theme.commenthub.enable %}
+</span><span class='line'>      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_id</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;{{</span> <span class="nx">theme</span><span class="p">.</span><span class="nx">commenthub</span><span class="p">.</span><span class="nx">id</span> <span class="p">}}</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_website</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;{{</span> <span class="nx">theme</span><span class="p">.</span><span class="nx">commenthub</span><span class="p">.</span><span class="nx">site</span> <span class="p">}}</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_identifier</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;{{</span> <span class="nx">page</span><span class="p">.</span><span class="nx">path</span> <span class="p">}}</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_url</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;{{</span> <span class="nx">page</span><span class="p">.</span><span class="nx">permalink</span> <span class="p">}}</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_title</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;{{</span> <span class="nx">page</span><span class="p">.</span><span class="nx">title</span><span class="o">|</span> <span class="nx">addslashes</span> <span class="p">}}</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">dsq</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">script</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
+</span><span class='line'>            <span class="nx">dsq</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">text</span><span class="o">/</span><span class="nx">javascript</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
+</span><span class='line'>            <span class="nx">dsq</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>            <span class="nx">dsq</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;https://commenthub.herokuapp.com/js/embed.js&quot;</span><span class="o">&gt;</span><span class="nx">https</span><span class="o">:</span><span class="c1">//commenthub.herokuapp.com/js/embed.js&lt;/a&gt;&amp;rsquo;;</span>
+</span><span class='line'>            <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">head</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">body</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;)[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">dsq</span><span class="p">);</span>
+</span><span class='line'>      <span class="nt">&lt;/script&gt;</span>
+</span><span class='line'>  {% endif %}
+</span><span class='line'>{% endif %}
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>引入 commenthub.swig</h3>
+
+<p>在<code>themes/next/layout/_third-party/comments/index.swig</code>文件添加如下代码：
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% include <span class="ni">&amp;lsquo;</span>commenthub.swig<span class="ni">&amp;rsquo;</span> %}<span class="nt">&lt;/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nt">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>完成</h3>
+
+<p>这样 Hexo 的配置就结束了，如果配置中遇到问题，可以在当前博客中评论留言，或者到 Github Issue 中留言。</p>
+
+<h2>建议与反馈</h2>
+
+<p>如果在使用过程中有任何问题欢迎建议和反馈到 <a href="https://github.com/codedrinker/commenthub">Commenthub</a>。</p>
+]]></content>
+  </entry>
+  
+</feed>

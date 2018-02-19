@@ -12,7 +12,7 @@ google_ad_client: "ca-pub-9540087096615057",
 enable_page_level_ads: true
 });
 </script>
-  <title>码匠笔记</title>
+  <title>Commenthub: 使用 GitHub Issues 搭建评论系统 - 码匠笔记</title>
   <meta name="author" content="麻酱">
 
   
@@ -25,7 +25,7 @@ enable_page_level_ads: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.majiang.life">
+  <link rel="canonical" href="http://www.majiang.life/blog/octopress-and-hexo-comments-widget">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
@@ -99,15 +99,12 @@ enable_page_level_ads: true
 </nav>
   <div id="main">
     <div id="content">
-      <div class="blog-index">
+      <div>
+<article class="hentry" role="article">
   
-  
-  
-    <article>
-      
   <header>
     
-      <h1 class="entry-title"><a href="/blog/octopress-and-hexo-comments-widget/">Commenthub: 使用 GitHub Issues 搭建评论系统</a></h1>
+      <h1 class="entry-title">Commenthub: 使用 GitHub Issues 搭建评论系统</h1>
     
     
       <p class="meta">
@@ -124,7 +121,8 @@ enable_page_level_ads: true
   </header>
 
 
-  <div class="entry-content"><h2>前言</h2>
+
+<div class="entry-content"><h2>前言</h2>
 
 <p>“多说”和“网易云跟帖”相继不维护了，每一次给大家带来了希望又带来了失望，于是 <a href="https://github.com/codedrinker/commenthub">Commenthub</a> 出现了。Commenthub 是作者使用免费的服务 Heroku 和 Github Issues 结合起来做的一套开源的评论系统。其灵感源于 Gitment，但是 Gitment 的 Key 和 Secret 都存在浏览器端，这样对于安全也是一个问题，于是作者使用 Heroku 搭建后端服务用于处理业务和存储证书，通过 iframe 实现评论功能。</p>
 
@@ -319,354 +317,117 @@ enable_page_level_ads: true
 <h2>建议与反馈</h2>
 
 <p>如果在使用过程中有任何问题欢迎建议和反馈到 <a href="https://github.com/codedrinker/commenthub">Commenthub</a>。</p>
-</div>
-  
-  
 
+<h2>扩展阅读</h2>
 
-    </article>
-  
-  
-    <article>
+    <ol>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/blog-table-of-contents/">给博客添加目录</a></h1>
-    
-    
-      <p class="meta">
         
-
-
-
-
-<time class='entry-date' datetime='2018-02-19T12:11:10+08:00'><span class='date'>2018-02-19</span> <span class='time'>12:11 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>Hexo 模板的博客都带了文章目录[toc]，但是作者当前使用的是 Octopress 博客系统，所以不支持目录。这样给阅读的人带来了很大的不便捷。所以作者使用了 Table of contents sidebar 为 Octopress 添加了目录，并且可以快速定位。过程很简单，内容如下。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/blog-table-of-contents/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+        
+          
+        
+        <li>
+          <a href="/blog/blog-table-of-contents/?utm_source=rel">给博客添加目录</a>
+        </li>
+        
+        
+        <li>
+          <a href="/blog/octopress-related-posts/?utm_source=rel">为 Octopress 添加 扩展相关阅读</a>
+        </li>
+        
+        
+        <li>
+          <a href="/blog/octopress-tag-cloud/?utm_source=rel">Octopress 添加标签云</a>
+        </li>
+        
+        
+        <li>
+          <a href="/blog/octopress-index-page-read-more/?utm_source=rel">为Octopress 首页添加‘更多’功能</a>
+        </li>
+        
+        
+        <li>
+          <a href="/blog/optimize-octopress-blog-seo/?utm_source=rel">Octopress 博客搜索优化</a>
+        </li>
+        
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/octopress-related-posts/">为 Octopress 添加 扩展相关阅读</a></h1>
-    
-    
-      <p class="meta">
         
-
-
-
-
-<time class='entry-date' datetime='2018-02-18T20:24:22+08:00'><span class='date'>2018-02-18</span> <span class='time'>8:24 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>原生的 Octopress 没有更丰富的阅读体验，只有上一篇下一篇，每次需要为当前文章添加相关文章的时候都需要在 Markdown 里面手动填写，这样非常浪费时间又不全面，于是笔者使用 Category 作为相关性的依据，修改了 Liqiud 代码，使得每一个 post 里面有具有相关的文章。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/octopress-related-posts/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+        
+          
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/heroku-custom-domains/">Heroku 入门教程之：绑定自定义域名</a></h1>
-    
-    
-      <p class="meta">
-        
+    </ol>
 
-
-
-
-<time class='entry-date' datetime='2018-02-18T18:50:38+08:00'><span class='date'>2018-02-18</span> <span class='time'>6:50 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>简介</h2>
-
-<p>Heroku 会提供一个默认的域名，即[name of app].herokuapp.com，如果你不喜欢可以绑定自己的域名。</p>
-
+<h2>作者</h2>
+<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
+原文地址：<a href="">Commenthub: 使用 GitHub Issues 搭建评论系统</a><br/>
+如果兴趣可以关注作者微信订阅号<br/>
+<img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
+<h2></h2>
+<p>
+  <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<!-- 文章列表页自适应文字和展示广告 -->
+<ins class="adsbygoogle"
+     style="display:block"
+     data-ad-client="ca-pub-9540087096615057"
+     data-ad-slot="2018352322"
+     data-ad-format="auto">
+</ins>
+<script>
+(adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+</p>
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/heroku-custom-domains/">阅读全文</a>
-    </footer>
-  
 
 
-    </article>
-  
-  
-    <article>
+  <footer>
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/heroku-get-started/">Heroku 入门教程之：使用 Heroku 快速搭建站点</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2018-02-18T17:49:25+08:00'><span class='date'>2018-02-18</span> <span class='time'>5:49 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>简介</h2>
-
-<p>Heroku 是 Salesforce 旗下云服务商，提供方便便捷的各种云服务，如服务器，数据库，监控，计算等等。并且他提供了免费版本，这使得我们这些平时想搞一些小东西的人提供了莫大的便捷，虽然他有时长和宕机的限制，但是对于个人小程序来说已经足够了。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/heroku-get-started/">阅读全文</a>
-    </footer>
   
 
+<span class="byline author vcard">Posted by <span class="fn">麻酱</span></span>
 
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/how-to-build-email-system-with-amazon-ses/">基于 Amazon SES 搭建高可用的邮件系统</a></h1>
-    
-    
-      <p class="meta">
-        
 
 
 
 
-<time class='entry-date' datetime='2018-02-14T14:22:55+08:00'><span class='date'>2018-02-14</span> <span class='time'>2:22 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>简介</h2>
-
-<p>通常情况下我们使用 smtp 调用第三方的 api 发送邮件，但是 gmail 一天只能发送100封，这对于营销邮件来说无疑是非常大的影响。所以考虑两种方案，第一种自己搭建邮件服务器，这种方案耗费时间并且需要额外的服务器成本。第二种方案使用 Amazon SES 搭建有限服务。简单方便并且 Amazon 本身也做了一些优化。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/how-to-build-email-system-with-amazon-ses/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+<time class='entry-date' datetime='2018-02-19T20:57:35+08:00'><span class='date'>2018-02-19</span> <span class='time'>8:57 pm</span></time>
       
-  <header>
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/hexo/'>hexo</a>, <a class='category' href='/blog/categories/octopress/'>octopress</a>
+  
+</span>
+
+
+    </p>
     
-      <h1 class="entry-title"><a href="/blog/deep-dive-on-java-hashcode/">细说 Java hashCode</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-12-24T01:04:24+08:00'><span class='date'>2017-12-24</span> <span class='time'>1:04 am</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>写过 <code>Java</code> 程序的同学一定都知道 <code>hashCode</code> 方法，它是 <code>Object</code> 对象的一个 <code>native</code> 方法。无论是我们平常使用的 <code>HashMap</code> 还是重写 <code>equals</code> 方法的时候，都会接触到 <code>hashCode</code> 方法，那么它究竟是怎么生成的，又有什么作用呢？笔者带着这个疑问开始探寻。</p>
-
+      <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/octopress-and-hexo-comments-widget/" data-via="" data-counturl="http://www.majiang.life/blog/octopress-and-hexo-comments-widget/" >Tweet</a>
+  
+  
+  
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/deep-dive-on-java-hashcode/">阅读全文</a>
-    </footer>
-  
 
-
-    </article>
-  
-  
-    <article>
+    
+    <p class="meta">
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/deep-dive-on-elasticsearch-doc-values/">深入理解 ElasticSearch Doc Values</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-11-28T00:47:21+08:00'><span class='date'>2017-11-28</span> <span class='time'>12:47 am</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>最近在使用 <code>ElasticSearch</code>，于是简单看了一下内部实现，看到 <code>Doc Values</code>的地方发现网上的翻译很是拗口，于是就有了下面的这篇文章。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/deep-dive-on-elasticsearch-doc-values/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
+        <a class="basic-alignment left" href="/blog/blog-table-of-contents/" title="Previous Post: 给博客添加目录">&laquo; 给博客添加目录</a>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/migrate-evernote-to-youdao-note/">是什么让我放弃印象笔记而使用有道云笔记的</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-11-04T09:28:59+08:00'><span class='date'>2017-11-04</span> <span class='time'>9:28 am</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>云笔记已经成了每一个开发人员的装机必备，联想到每一个开发人员的折腾也从未停止过，安装各种操作系统，各种IDE，各种博客系统，各种浏览器等等，有过同样经历的同学举手，虽然我也看不到！这次笔者就折腾起来云笔记！</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/migrate-evernote-to-youdao-note/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
-  
-    <article>
       
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/head-first-responsive-web-design/">总是听别人说响应式布局，原来这么简单</a></h1>
-    
-    
-      <p class="meta">
-        
+    </p>
+  </footer>
+</article>
 
-
-
-
-<time class='entry-date' datetime='2017-10-28T10:37:55+08:00'><span class='date'>2017-10-28</span> <span class='time'>10:37 am</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>总听别人说响应式布局，觉得是一个很高大上的东西，近日做的一个项目需要适配不同的屏幕尺寸，于是就简单研究了一下<code>Web响应式布局</code>，其实原理很简单，下面就简单整理了一下分享给大家。</p>
+  <section>
+    <h1>评论</h1>
+    <div id="commenthub_thread" aria-live="polite"></div>
+  </section>
 
 </div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/head-first-responsive-web-design/">阅读全文</a>
-    </footer>
-  
 
-
-    </article>
-  
-  <div class="pagination">
-    
-      <a class="prev" href="/posts/2">&larr; Older</a>
-    
-    <a href="/blog/archives">更多博文</a>
-    
-  </div>
-</div>
 <aside class="sidebar">
   
     <section>
@@ -771,6 +532,7 @@ enable_page_level_ads: true
   
 </aside>
 
+
     </div>
   </div>
   <footer role="contentinfo"><p>
@@ -784,9 +546,9 @@ enable_page_level_ads: true
 <script type="text/javascript">
     var commenthub_id = '3821949';
     var commenthub_website = 'http://www.majiang.life';
-    var commenthub_identifier = '/index.html';
-    var commenthub_url = 'http://www.majiang.life/index.html';
-    var commenthub_title = '';
+    var commenthub_identifier = '/blog/octopress-and-hexo-comments-widget/';
+    var commenthub_url = 'http://www.majiang.life/blog/octopress-and-hexo-comments-widget/';
+    var commenthub_title = 'Commenthub: 使用 GitHub Issues 搭建评论系统';
     (function () {
         var dsq = document.createElement('script');
         dsq.type = 'text/javascript';

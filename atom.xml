@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-19T18:05:29+08:00</updated>
+  <updated>2018-02-19T22:25:52+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,209 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Commenthub: 使用 GitHub Issues 搭建评论系统]]></title>
+    <link href="http://www.majiang.life/blog/octopress-and-hexo-comments-widget/"/>
+    <updated>2018-02-19T20:57:35+08:00</updated>
+    <id>http://www.majiang.life/blog/octopress-and-hexo-comments-widget</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>“多说”和“网易云跟帖”相继不维护了，每一次给大家带来了希望又带来了失望，于是 <a href="https://github.com/codedrinker/commenthub">Commenthub</a> 出现了。Commenthub 是作者使用免费的服务 Heroku 和 Github Issues 结合起来做的一套开源的评论系统。其灵感源于 Gitment，但是 Gitment 的 Key 和 Secret 都存在浏览器端，这样对于安全也是一个问题，于是作者使用 Heroku 搭建后端服务用于处理业务和存储证书，通过 iframe 实现评论功能。</p>
+
+<h2>效果图</h2>
+
+<p><img src="http://www.majiang.life/images/posts/commenthub1.png" alt="Demo" /></p>
+
+<h2>演示地址</h2>
+
+<p><a href="http://commenthub.github.io/">http://commenthub.github.io/</a></p>
+
+<h2>功能介绍</h2>
+
+<p>Commenthub 目前只支持 Github 用户登录评论，同时也只支持 Github 用户为自己的博客添加评论功能。目前 Commenthub 支持 Markdown 语法，表情，手机和PC响应式布局。</p>
+
+<h2>Octopress 接入</h2>
+
+<h3>注册 commenthub 账号</h3>
+
+<p>访问 <a href="http://commenthub.herokuapp.com/">Commenthub官网</a>，点击 Sign up，使用 Github 账号登录成功以后，点击 Set up，填写博客地址。同时记住 ID，后面需要使用。</p>
+
+<h3>配置 config.yml</h3>
+
+<p>在 config.yml 里面填写 commenthub_id，其内容就是上面说的ID，用于标记作者是谁。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>commenthub_id: 3821949</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>配置显示位置</h3>
+
+<p>在 <code>_layouts/post.html</code> 的 article 标签下面添加如下代码，用来告诉 Commenthub，在什么地方显示评论功能。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% if site.commenthub_id and page.comments == true %}
+</span><span class='line'>  <span class="nt">&lt;section&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;h1&gt;</span>评论<span class="nt">&lt;/h1&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;commenthub_thread&quot;</span> <span class="na">aria-live=</span><span class="s">&quot;polite&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>  <span class="nt">&lt;/section&gt;</span>
+</span><span class='line'>{% endif %}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>创建 commenthub.html</h3>
+
+<p>创建 <code>includes/commenthub.html</code>，填入如下内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% comment %} Load script if commenthub comments are enabled and `page.comments` is either empty (index) or set to true {% endcomment %}
+</span><span class='line'>{% if site.commenthub_id and page.comments != false %}
+</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_id</span> <span class="o">=</span> <span class="s1">&#39;{{ site.commenthub_id }}&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_website</span> <span class="o">=</span> <span class="s1">&#39;{{ site.url }}&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_identifier</span> <span class="o">=</span> <span class="s1">&#39;{{ page.url }}&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_url</span> <span class="o">=</span> <span class="s1">&#39;{{ site.url }}{{ page.url }}&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_title</span> <span class="o">=</span> <span class="s1">&#39;{{ page.title }}&#39;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">dsq</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+</span><span class='line'>        <span class="nx">dsq</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">dsq</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>        <span class="nx">dsq</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;https://commenthub.herokuapp.com/js/embed.js&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">dsq</span><span class="p">);</span>
+</span><span class='line'>    <span class="p">}());</span>
+</span><span class='line'><span class="nt">&lt;/script&gt;</span>
+</span><span class='line'>{% endif %}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>引入 commenthub.html</h3>
+
+<p>在 <code>includes/after_foot.html</code> 里面添加一行如下内容，用于引入 commenthub.html 文件</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% include commenthub.html %}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>完成</h3>
+
+<p>这样 Octopress 的配置就结束了，如果配置中遇到问题，可以在当前博客中评论留言，或者到 Github Issue 中留言。</p>
+
+<h2>Hexo 接入</h2>
+
+<p>Hexo 使用的是比较热门的主题 Next。</p>
+
+<h3>注册 commenthub 账号</h3>
+
+<p>同上</p>
+
+<h3>配置 config.yml</h3>
+
+<p>配置 <code>themes/next/_config.yml</code> 文件，在里面的 Disqus 后面配置如下内容</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>commenthub:
+</span><span class='line'>  enable: true
+</span><span class='line'>  id: your_id
+</span><span class='line'>  site: your_website_url</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>配置显示位置</h3>
+
+<p>在<code>themes/next/layout/_partials/comments.swig</code>里面添加一行代码，记得注意看<code>elseif</code>的位置</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>  {% elseif theme.commenthub.enable %}
+</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;comments&quot;</span> <span class="na">id=</span><span class="s">&quot;comments&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;commenthub_thread&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>创建 commenthub.swig</h3>
+
+<p>创建新文件<code>themes/next/layout/_third-party/comments/commenthub.swig</code>并贴入如下代码，如下代码主要是用于加载和生成评论的逻辑。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% if not (theme.duoshuo and theme.duoshuo.shortname) and not theme.duoshuo_shortname %}
+</span><span class='line'>  {% if theme.commenthub.enable %}
+</span><span class='line'>      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_id</span> <span class="o">=</span> <span class="s1">&#39;{{ theme.commenthub.id }}&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_website</span> <span class="o">=</span> <span class="s1">&#39;{{ theme.commenthub.site }}&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_identifier</span> <span class="o">=</span> <span class="s1">&#39;{{ page.path }}&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_url</span> <span class="o">=</span> <span class="s1">&#39;{{ page.permalink }}&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_title</span> <span class="o">=</span> <span class="s1">&#39;{{ page.title| addslashes }}&#39;</span><span class="p">;</span>
+</span><span class='line'>        <span class="kd">var</span> <span class="nx">dsq</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
+</span><span class='line'>            <span class="nx">dsq</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="nx">dsq</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+</span><span class='line'>            <span class="nx">dsq</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;https://commenthub.herokuapp.com/js/embed.js&#39;</span><span class="p">;</span>
+</span><span class='line'>            <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">dsq</span><span class="p">);</span>
+</span><span class='line'>      <span class="nt">&lt;/script&gt;</span>
+</span><span class='line'>  {% endif %}
+</span><span class='line'>{% endif %}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>引入 commenthub.swig</h3>
+
+<p>在<code>themes/next/layout/_third-party/comments/index.swig</code>文件添加如下代码：</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='html'><span class='line'>{% include &#39;commenthub.swig&#39; %}
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>完成</h3>
+
+<p>这样 Hexo 的配置就结束了，如果配置中遇到问题，可以在当前博客中评论留言，或者到 Github Issue 中留言。</p>
+
+<h2>建议与反馈</h2>
+
+<p>如果在使用过程中有任何问题欢迎建议和反馈到 <a href="https://github.com/codedrinker/commenthub">Commenthub</a>。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[给博客添加目录]]></title>
@@ -4145,378 +4348,6 @@ color-index: number of entries in the output device&rsquo;s color lookup table, 
 <a href="https://softwareengineering.stackexchange.com/questions/231175/sharing-classes-or-interfaces-between-different-projects">Sharing classes or interfaces between different projects</a>  <br/>
 <a href="http://jmchung.github.io/blog/2015/03/01/using-amazon-s3-as-a-private-maven-repository/">Using Amazon S3 as a Private Maven Repository</a> <br/>
 <a href="http://docs.aws.amazon.com/zh_cn/IAM/latest/UserGuide/access_policies.html">Aws Policy</a></p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[安全的使用Maven实现不同环境配置文件的部署]]></title>
-    <link href="http://www.majiang.life/blog/using-maven-for-multiple-environment/"/>
-    <updated>2017-04-15T19:30:35+08:00</updated>
-    <id>http://www.majiang.life/blog/using-maven-for-multiple-environment</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
-
-<p>每一个项目都有许多部署环境，诸如开发环境，测试环境，沙盒环境，线上环境，有的项目还会更多。每一个环境都有自己独有的配置文件，比如数据库连接地址，静态资源的访问地址等等。那么如何优雅的分离这些配置文件是首要任务。目前已有的技术可以轻松的搞定这件事情，比如 Spring 的 <a href="https://docs.spring.io/spring-boot/docs/current/reference/html/boot-features-profiles.html">Profile</a>，Maven 的 <a href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html">Profile</a>，但是有的时候我们为了方便，直接把这些配置文件都放在了<code>Project</code>里面，这样增加了项目的风险，也不便于管理。那么接下来我们就想来一个优雅的方法使用 <code>Maven Profile</code> 安全分离配置文件。</p>
-
-<!-- more -->
-
-
-<h2>Filter</h2>
-
-<p><code>Maven Filter</code>可以支持将写到 <code>settings.xml</code>, <code>pom.xml</code>, 或是自定义 <code>*.properties</code> 文件里面的 <code>properties</code> 在 <code>build</code> 的时候自动替换指定目录配置文件里面的<code>占位符</code>，以实现动态指定配置。基本配置如下： <br/>
-我们在<code>resources</code> 目录有一配置文件 <code>src/main/resources/config.properties</code> 包含如下内容(<em>如果使用<code>Spring-boot</code>需要把 <code>${username}</code> 替换为 <code>@username@</code></em>)</p>
-
-<figure class='code'><figcaption><span>src/main/resources/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">GitHub</span> <span class="o">:</span> <span class="s">${username}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>POM文件如下，用来指定资源的存放路径和是否使用<code>filter</code>：</p>
-
-<figure class='code'><figcaption><span>${project}/pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-</span><span class='line'><span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0&quot;</span>
-</span><span class='line'>         <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
-</span><span class='line'>         <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>com.github.codedrinker<span class="nt">&lt;/groupId&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>maven-env-deploy<span class="nt">&lt;/artifactId&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nt">&lt;name&gt;</span>My Resources Plugin Practice Project<span class="nt">&lt;/name&gt;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nt">&lt;properties&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;username&gt;</span>codedrinker<span class="nt">&lt;/username&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/properties&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;build&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;resources&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;resource&gt;</span>
-</span><span class='line'>                <span class="nt">&lt;directory&gt;</span>src/main/resources<span class="nt">&lt;/directory&gt;</span>
-</span><span class='line'>                <span class="nt">&lt;filtering&gt;</span>true<span class="nt">&lt;/filtering&gt;</span><span class="c">&lt;!--至关重要--&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;/resource&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;/resources&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/build&gt;</span>
-</span><span class='line'><span class="nt">&lt;/project&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>运行命令</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>mvn resources:resources
-</span><span class='line'><span class="c">#这里同样可以使用 mvn clean compile，只是resources不会编译代码，只会构建资源文件，这样更方便我们调试</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在 <code>target/classes/config.properties</code> 查看文件内容，已经变化了。</p>
-
-<figure class='code'><figcaption><span>target/classes/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">GitHub</span> <span class="o">:</span> <span class="s">codedrinker</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>Profile</h2>
-
-<p><code>Profile</code> 可以让我们根据不同的环境，定义不同的 <code>properties</code>。配置如下：</p>
-
-<figure class='code'><figcaption><span>${project}/pom.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-</span><span class='line'><span class="nt">&lt;project</span> <span class="na">xmlns=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0&quot;</span>
-</span><span class='line'>         <span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
-</span><span class='line'>         <span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;modelVersion&gt;</span>4.0.0<span class="nt">&lt;/modelVersion&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;groupId&gt;</span>com.github.codedrinker<span class="nt">&lt;/groupId&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;artifactId&gt;</span>maven-env-deploy<span class="nt">&lt;/artifactId&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;version&gt;</span>1.0-SNAPSHOT<span class="nt">&lt;/version&gt;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nt">&lt;name&gt;</span>My Resources Plugin Practice Project<span class="nt">&lt;/name&gt;</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="nt">&lt;profiles&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;profile&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;id&gt;</span>sandbox<span class="nt">&lt;/id&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;properties&gt;</span>
-</span><span class='line'>                <span class="nt">&lt;username&gt;</span>codedrinker<span class="nt">&lt;/username&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;/properties&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;/profile&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;profile&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;id&gt;</span>dev<span class="nt">&lt;/id&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;properties&gt;</span>
-</span><span class='line'>                <span class="nt">&lt;username&gt;</span>majiang<span class="nt">&lt;/username&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;/properties&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;/profile&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/profiles&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;build&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;resources&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;resource&gt;</span>
-</span><span class='line'>                <span class="nt">&lt;directory&gt;</span>src/main/resources<span class="nt">&lt;/directory&gt;</span>
-</span><span class='line'>                <span class="nt">&lt;filtering&gt;</span>true<span class="nt">&lt;/filtering&gt;</span><span class="c">&lt;!--至关重要--&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;/resource&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;/resources&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/build&gt;</span>
-</span><span class='line'><span class="nt">&lt;/project&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>运行</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>mvn resources:resources -P sandbox
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>结果如下</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>GitHub : codedrinker
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>运行</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>mvn resources:resources -P dev
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>结果如下</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>GitHub : majiang
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>这样就实现了在不同环境部署不同的配置文件了。但是接下来问题来了，这样如果我们存储了用户名密码等信息，也会随着项目一起提交。这时候 <code>Maven</code> 的 <code>settings.xml</code> 就派上用场了。</p>
-
-<h2>Settings.xml</h2>
-
-<p>正好 <code>settings.xml</code> 可以包含<code>profiles</code>，那么我们直接把对应的配置放进来不就可以了吗？有两个地方包含<code>settings.xml</code>：</p>
-
-<ul>
-<li>Maven的安装目录 <code>${maven.home}/conf/settings.xml</code></li>
-<li>用户的目录 <code>${user.home}/.m2/settings.xml</code></li>
-</ul>
-
-
-<p>前者是全局的设置，后者是用户的设置，官方文档中指出如果两个都有设置，会以用户为主进行合并。但是我并不清楚它的合并力度，于是做了如下实验</p>
-
-<p>系统配置</p>
-
-<figure class='code'><figcaption><span>${maven.home}/conf/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- 系统配置 --&gt;</span>
-</span><span class='line'><span class="nt">&lt;profile&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;id&gt;</span>sandbox<span class="nt">&lt;/id&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;properties&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;username&gt;</span>majiang<span class="nt">&lt;/username&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;password&gt;</span>majiang<span class="nt">&lt;/password&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;website&gt;</span>http://www.majiang.life<span class="nt">&lt;/website&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/properties&gt;</span>
-</span><span class='line'><span class="nt">&lt;/profile&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>用户配置</p>
-
-<figure class='code'><figcaption><span>${user.home}/.m2/settings.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="c">&lt;!-- 用户配置 --&gt;</span>
-</span><span class='line'><span class="nt">&lt;profile&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;id&gt;</span>sandbox<span class="nt">&lt;/id&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;properties&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;username&gt;</span>codedrinker<span class="nt">&lt;/username&gt;</span>
-</span><span class='line'>            <span class="nt">&lt;password&gt;</span>codedrinker<span class="nt">&lt;/password&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;/properties&gt;</span>
-</span><span class='line'><span class="nt">&lt;/profile&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>config.properties</p>
-
-<figure class='code'><figcaption><span>src/main/resources/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">username</span> <span class="o">:</span> <span class="s">${username}</span>
-</span><span class='line'><span class="na">password</span> <span class="o">:</span> <span class="s">${password}</span>
-</span><span class='line'><span class="na">website</span> <span class="o">:</span> <span class="s">${website}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>再次运行命令以后的结果</p>
-
-<figure class='code'><figcaption><span>target/classes/config.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">username</span> <span class="o">:</span> <span class="s">codedrinker</span>
-</span><span class='line'><span class="na">password</span> <span class="o">:</span> <span class="s">password</span>
-</span><span class='line'><span class="na">website</span> <span class="o">:</span> <span class="s">${website}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>令人奇怪的事情发生了，编译的结果确实以<code>用户级settings.xml</code>为准，但是<code>系统级settings.xml</code>里面额外配置的<code>website</code>并没有编译。于是我就带着这个疑问看了一下Maven的源码：
-本身 <code>Maven</code> 定义了一个 <code>Profile</code> 类用来映射每一个<code>profile</code>，该类有一个<code>properties</code>属性，用来存放当前<code>profile</code>的配置：</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="cm">/**</span>
-</span><span class='line'><span class="cm"> * Field properties.</span>
-</span><span class='line'><span class="cm"> */</span>
-</span><span class='line'><span class="kd">private</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">Properties</span> <span class="n">properties</span><span class="o">;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>在读取配置文件的时候，直接读取<code>properties</code>，没有其他处理</p>
-
-<figure class='code'><figcaption><span>SettingsXpp3Reader.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="k">else</span> <span class="nf">if</span> <span class="o">(</span> <span class="n">checkFieldWithDuplicate</span><span class="o">(</span> <span class="n">parser</span><span class="o">,</span> <span class="s">&quot;properties&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="n">parsed</span> <span class="o">)</span> <span class="o">)</span>
-</span><span class='line'>            <span class="o">{</span>
-</span><span class='line'>                <span class="k">while</span> <span class="o">(</span> <span class="n">parser</span><span class="o">.</span><span class="na">nextTag</span><span class="o">()</span> <span class="o">==</span> <span class="n">XmlPullParser</span><span class="o">.</span><span class="na">START_TAG</span> <span class="o">)</span>
-</span><span class='line'>                <span class="o">{</span>
-</span><span class='line'>                    <span class="n">String</span> <span class="n">key</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="na">getName</span><span class="o">();</span>
-</span><span class='line'>                    <span class="n">String</span> <span class="n">value</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="na">nextText</span><span class="o">().</span><span class="na">trim</span><span class="o">();</span>
-</span><span class='line'>                    <span class="n">profile</span><span class="o">.</span><span class="na">addProperty</span><span class="o">(</span> <span class="n">key</span><span class="o">,</span> <span class="n">value</span> <span class="o">);</span>
-</span><span class='line'>                <span class="o">}</span>
-</span><span class='line'>            <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>关键在于<code>以用户的settings为主，合并配置的逻辑</code>，他的逻辑是如果<code>profile.id</code>不相同才会合并到<code>用户级别的settings</code>，不会深度的比较。于是这个问题是无解的，他所说的<code>以用户级settings.xml</code>为主指的是每一个配置，里面的每一个<code>property</code>是不被合并的。</p>
-
-<figure class='code'><figcaption><span>MavenSettingsMerger.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span> <span class="kd">extends</span> <span class="n">IdentifiableBase</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="nf">shallowMergeById</span><span class="o">(</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">dominant</span><span class="o">,</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">recessive</span><span class="o">,</span>
-</span><span class='line'>                                                                       <span class="n">String</span> <span class="n">recessiveSourceLevel</span> <span class="o">)</span>
-</span><span class='line'>    <span class="o">{</span>
-</span><span class='line'>        <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">dominantById</span> <span class="o">=</span> <span class="n">mapById</span><span class="o">(</span> <span class="n">dominant</span> <span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">for</span> <span class="o">(</span> <span class="n">T</span> <span class="n">identifiable</span> <span class="o">:</span> <span class="n">recessive</span> <span class="o">)</span>
-</span><span class='line'>        <span class="o">{</span>
-</span><span class='line'>            <span class="k">if</span> <span class="o">(</span> <span class="o">!</span><span class="n">dominantById</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span> <span class="n">identifiable</span><span class="o">.</span><span class="na">getId</span><span class="o">()</span> <span class="o">)</span> <span class="o">)</span>
-</span><span class='line'>            <span class="o">{</span>
-</span><span class='line'>                <span class="n">identifiable</span><span class="o">.</span><span class="na">setSourceLevel</span><span class="o">(</span> <span class="n">recessiveSourceLevel</span> <span class="o">);</span>
-</span><span class='line'>
-</span><span class='line'>                <span class="n">dominant</span><span class="o">.</span><span class="na">add</span><span class="o">(</span> <span class="n">identifiable</span> <span class="o">);</span>
-</span><span class='line'>            <span class="o">}</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>所以我们想同时使用系统和用户级别的<code>settings</code>的时候，需要格外注意这一点。</p>
-
-<h2>POM.xml</h2>
-
-<p>文档中并没有明确说明项目中的<code>pom.xml</code>文件和<code>系统</code>，<code>用户</code>级别的<code>settings.xml</code>的优先级，但是经测试写在项目里面的配置文件，会直接编译到指定的<code>config.properties</code>里面，并且他会把独有的属性也编译到文件。</p>
-
-<h2>总结</h2>
-
-<p>所以最终的结果</p>
-
-<ul>
-<li>非安全性的配置文件，直接配置到项目的<code>pom.xml</code>里面。</li>
-<li>安全性质的配置文件，配置到<code>用户级别的settings.xml</code>。</li>
-<li><code>系统级别的settings.xml</code>做一些系统级别的配置，不轻易使用，和用户区分开来。</li>
-</ul>
-
-
-<h2>参考链接</h2>
-
-<p><a href="https://maven.apache.org/plugins/maven-resources-plugin/examples/filter.html">Filter</a><br/>
-<a href="http://maven.apache.org/guides/introduction/introduction-to-profiles.html">Profile</a><br/>
-<a href="https://docs.spring.io/spring-boot/docs/current/reference/html/howto-properties-and-configuration.html">howto-properties-and-configuration</a> <br/>
-<a href="https://maven.apache.org/settings.html">Settings.xml</a></p>
 ]]></content>
   </entry>
   

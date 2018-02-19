@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://www.majiang.life/blog/octopress-and-hexo-comments-widget/</loc>
+<lastmod>2018-02-19T20:57:35+08:00</lastmod>
+</url>
+<url>
 <loc>http://www.majiang.life/blog/blog-table-of-contents/</loc>
 <lastmod>2018-02-19T12:11:10+08:00</lastmod>
 </url>
@@ -184,6 +188,15 @@
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/heroku/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/blog/categories/hexo/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/posts/2/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/posts/3/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/2015/01/10/begininng-and-summary/index.html</loc>
