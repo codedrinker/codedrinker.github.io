@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-19T22:25:52+08:00</updated>
+  <updated>2018-02-19T22:26:50+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<h2>前言</h2>
 
 <p>“多说”和“网易云跟帖”相继不维护了，每一次给大家带来了希望又带来了失望，于是 <a href="https://github.com/codedrinker/commenthub">Commenthub</a> 出现了。Commenthub 是作者使用免费的服务 Heroku 和 Github Issues 结合起来做的一套开源的评论系统。其灵感源于 Gitment，但是 Gitment 的 Key 和 Secret 都存在浏览器端，这样对于安全也是一个问题，于是作者使用 Heroku 搭建后端服务用于处理业务和存储证书，通过 iframe 实现评论功能。</p>
+
+<!-- more -->
+
 
 <h2>效果图</h2>
 
