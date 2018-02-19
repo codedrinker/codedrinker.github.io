@@ -8,7 +8,7 @@ categories: [Octopress,Hexo]
 
 ## 前言
 “多说”和“网易云跟帖”相继不维护了，每一次给大家带来了希望又带来了失望，于是 [Commenthub](https://github.com/codedrinker/commenthub) 出现了。Commenthub 是作者使用免费的服务 Heroku 和 Github Issues 结合起来做的一套开源的评论系统。其灵感源于 Gitment，但是 Gitment 的 Key 和 Secret 都存在浏览器端，这样对于安全也是一个问题，于是作者使用 Heroku 搭建后端服务用于处理业务和存储证书，通过 iframe 实现评论功能。
-
+<!-- more -->
 ## 效果图
 ![Demo](/images/posts/commenthub1.png) 
 
