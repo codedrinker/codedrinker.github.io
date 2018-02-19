@@ -3,7 +3,7 @@ layout: post
 title: "Commenthub: 使用 GitHub Issues 搭建评论系统"
 date: 2018-02-19 20:57:35 +0800
 comments: true
-categories: [Octopress,Hexo]
+categories: [Heroku,Octopress,Hexo]
 ---
 
 ## 前言
