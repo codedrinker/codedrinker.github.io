@@ -4,6 +4,7 @@ title: "这是一个开始，也是一个总结"
 date: 2015-01-10 21:27
 comments: true
 sharing: true
+categories: [skill]
 footer: true
 ---
 
