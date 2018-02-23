@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Guava | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/guava/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-23T11:46:09+08:00</updated>
+  <updated>2018-02-23T22:34:40+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -125,59 +125,99 @@
 <h2>CacheLoader</h2>
 
 <p>预先准备好一个<code>MockDB</code>类，用来模拟缓存中没有的时候在数据库中获取
-{% codeblock lang:java MockDB.java%}
-{% raw %}
-public class MockDB {
-    private static Map&lt;String, String> mockPersistence = new HashMap&lt;String, String>() {{
-        this.put(&ldquo;github&rdquo;, &ldquo;codedrinker&rdquo;);
-    }};</p>
-
-<pre><code>public static String loadFromPersistence(String key) {
-    System.out.println("load key from persistence : " + key);
-    return mockPersistence.get(key);
-}
-</code></pre>
-
-<p>}
-{% endraw %}
-{% endcodeblock %}
+<figure class='code'><figcaption><span>MockDB.java</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MockDB</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">mockPersistence</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;()</span> <span class="o">{{</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">put</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">codedrinker</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
+</span><span class='line'>    <span class="o">}};&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">loadFromPersistence</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;load key from persistence : &quot;</span> <span class="o">+</span> <span class="n">key</span><span class="o">);</span>
+</span><span class='line'>    <span class="k">return</span> <span class="n">mockPersistence</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure>
 下面是使用<code>CacheLoader</code>的代码
-{% codeblock lang:java GuavaLoadingCache.java%}
-{% raw %}
-public class GuavaLoadingCache {
-    public static void main(String[] args) {
-        LoadingCache&lt;String, Optional<String>> loadingCache = CacheBuilder
-                .newBuilder()
-                .expireAfterWrite(3, TimeUnit.SECONDS)
-                .removalListener(new RemovalListener&lt;String, Optional<String>>() {
-                    @Override
-                    public void onRemoval(RemovalNotification&lt;String, Optional<String>> notification) {
-                        System.out.println(&ldquo;cache expired, remove key : &rdquo; + notification.getKey());
-                    }
-                })
-                .build(new CacheLoader&lt;String, Optional<String>>() {
-                    @Override
-                    public Optional<String> load(String key) throws Exception {
-                        return Optional.fromNullable(MockDB.loadFromPersistence(key));
-                    }
-                });
-        try {
-            System.out.println(&ldquo;load from cache once : &rdquo; + loadingCache.get(&ldquo;github&rdquo;).orNull());
-            Thread.sleep(2000);
-            System.out.println(&ldquo;load from cache twice : &rdquo; + loadingCache.get(&ldquo;github&rdquo;).orNull());
-            Thread.sleep(2000);
-            System.out.println(&ldquo;load from cache third : &rdquo; + loadingCache.get(&ldquo;github&rdquo;).orNull());
-            Thread.sleep(2000);
-            System.out.println(&ldquo;load not exist key from cache : &rdquo; + loadingCache.get(&ldquo;email&rdquo;).orNull());
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-{% endraw %}
-{% endcodeblock %}
+<figure class='code'><figcaption><span>GuavaLoadingCache.java</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">GuavaLoadingCache</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">LoadingCache</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">loadingCache</span> <span class="o">=</span> <span class="n">CacheBuilder</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">newBuilder</span><span class="o">()</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">expireAfterWrite</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">removalListener</span><span class="o">(</span><span class="k">new</span> <span class="n">RemovalListener</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="nd">@Override</span>
+</span><span class='line'>                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRemoval</span><span class="o">(</span><span class="n">RemovalNotification</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">notification</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">cache</span> <span class="n">expired</span><span class="o">,</span> <span class="n">remove</span> <span class="n">key</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">notification</span><span class="o">.</span><span class="na">getKey</span><span class="o">());</span>
+</span><span class='line'>                    <span class="o">}</span>
+</span><span class='line'>                <span class="o">})</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">CacheLoader</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="nd">@Override</span>
+</span><span class='line'>                    <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">load</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>                        <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
+</span><span class='line'>                    <span class="o">}</span>
+</span><span class='line'>                <span class="o">});</span>
+</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">once</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">twice</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">third</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">not</span> <span class="n">exist</span> <span class="n">key</span> <span class="n">from</span> <span class="n">cache</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">email</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ExecutionException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 我们逐行进行解释：</p>
 
 <ul>
@@ -203,59 +243,106 @@ load not exist key from cache : null
 <h2>Callable</h2>
 
 <p>这里我们依然需要使用上面的<code>MockDB</code>类，具体代码如下。
-{% codeblock lang:java GuavaCallableCache.java%}
-{% raw %}
-public class GuavaCallableCache {
-    public static void main(String[] args) {
-        final String key = &ldquo;github&rdquo;;
-        Cache&lt;String, Optional<String>> cache = CacheBuilder.newBuilder()
-                .expireAfterWrite(3, TimeUnit.SECONDS)
-                .removalListener(new RemovalListener&lt;String, Optional<String>>() {
-                    @Override
-                    public void onRemoval(RemovalNotification&lt;String, Optional<String>> notification) {
-                        System.out.println(&ldquo;cache expired, remove key : &rdquo; + notification.getKey());
-                    }
-                }).build();
-        try {
-            Optional<String> optional;
-            System.out.println(&ldquo;load from cache once : &rdquo; + cache.get(key, new Callable&lt;Optional<String>>() {
-                @Override
-                public Optional<String> call() throws Exception {
-                    return Optional.fromNullable(MockDB.loadFromPersistence(key));
-                }
-            }).orNull());
-            Thread.sleep(2000);
-            System.out.println(&ldquo;load from cache twice : &rdquo; + cache.get(key, new Callable&lt;Optional<String>>() {
-                @Override
-                public Optional<String> call() throws Exception {
-                    return Optional.fromNullable(MockDB.loadFromPersistence(key));
-                }
-            }).orNull());
-            Thread.sleep(2000);
-            System.out.println(&ldquo;load from cache third : &rdquo; + cache.get(key, new Callable&lt;Optional<String>>() {
-                @Override
-                public Optional<String> call() throws Exception {
-                    return Optional.fromNullable(MockDB.loadFromPersistence(key));
-                }
-            }).orNull());
-            Thread.sleep(2000);
-            final String nullKey = &ldquo;email&rdquo;;
-            optional = cache.get(nullKey, new Callable&lt;Optional<String>>() {
-                @Override
-                public Optional<String> call() throws Exception {
-                    return Optional.fromNullable(MockDB.loadFromPersistence(nullKey));
-                }
-            });
-            System.out.println(&ldquo;load not exist key from cache : &rdquo; + optional.orNull());
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}
-{% endraw %}
-{% endcodeblock %}
+<figure class='code'><figcaption><span>GuavaCallableCache.java</span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">GuavaCallableCache</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kd">final</span> <span class="n">String</span> <span class="n">key</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;;</span>
+</span><span class='line'>        <span class="n">Cache</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">CacheBuilder</span><span class="o">.</span><span class="na">newBuilder</span><span class="o">()</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">expireAfterWrite</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
+</span><span class='line'>                <span class="o">.</span><span class="na">removalListener</span><span class="o">(</span><span class="k">new</span> <span class="n">RemovalListener</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="nd">@Override</span>
+</span><span class='line'>                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRemoval</span><span class="o">(</span><span class="n">RemovalNotification</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">notification</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>                        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">cache</span> <span class="n">expired</span><span class="o">,</span> <span class="n">remove</span> <span class="n">key</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">notification</span><span class="o">.</span><span class="na">getKey</span><span class="o">());</span>
+</span><span class='line'>                    <span class="o">}</span>
+</span><span class='line'>                <span class="o">}).</span><span class="na">build</span><span class="o">();</span>
+</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">optional</span><span class="o">;</span>
+</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">once</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
+</span><span class='line'>                <span class="nd">@Override</span>
+</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>            <span class="o">}).</span><span class="na">orNull</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">twice</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
+</span><span class='line'>                <span class="nd">@Override</span>
+</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>            <span class="o">}).</span><span class="na">orNull</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">third</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
+</span><span class='line'>                <span class="nd">@Override</span>
+</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>            <span class="o">}).</span><span class="na">orNull</span><span class="o">());</span>
+</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+</span><span class='line'>            <span class="kd">final</span> <span class="n">String</span> <span class="n">nullKey</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">email</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;;</span>
+</span><span class='line'>            <span class="n">optional</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">nullKey</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
+</span><span class='line'>                <span class="nd">@Override</span>
+</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">nullKey</span><span class="o">));</span>
+</span><span class='line'>                <span class="o">}</span>
+</span><span class='line'>            <span class="o">});</span>
+</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">not</span> <span class="n">exist</span> <span class="n">key</span> <span class="n">from</span> <span class="n">cache</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">optional</span><span class="o">.</span><span class="na">orNull</span><span class="o">());</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ExecutionException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 下面我们对程序进行解释，与上面例子唯一的不同就是没有在<code>build</code>的时候传入<code>CacheLoader</code>，而是在<code>cache.get</code>使用<code>Cache</code>的时候用传入<code>Callable</code>对象。这样做可以灵活配置每次获取的缓存源不一样，但是两种方案都各有好处，还是在使用的时候斟酌。
 运行程序数据结果如下：
 <code>sh

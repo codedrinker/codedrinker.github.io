@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Vagrant | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/vagrant/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-23T11:46:09+08:00</updated>
+  <updated>2018-02-23T22:34:40+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -40,30 +40,50 @@
 vagrant box add hashicorp/precise64
 </code>
 提示选择哪一种方式，我们这里选择的是virtualbox，我们刚刚已经安装了。
-&#8220;`
-box: URL: <a href="https://atlas.hashicorp.com/hashicorp/precise64">https://atlas.hashicorp.com/hashicorp/precise64</a>
-This box can work with multiple providers! The providers that it
-can work with are listed below. Please review the list and choose
-the provider you will be working with.</p>
-
-<p>1) hyperv
-2) virtualbox
-3) vmware_fusion</p>
-
-<p>Enter your choice: 2
-<code>
-初始化本地开发环境，我们可以理解为安装镜像。
-</code>
-vagrant init hashicorp/precise64
-<code>
-运行本地开发环境
-</code>
-vagrant up
-<code>
-ssh到本地开发环境
-</code>
-vagrant ssh
-&#8220;`
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>box: URL: &lt;a href="https://atlas.hashicorp.com/hashicorp/precise64"&gt;https://atlas.hashicorp.com/hashicorp/precise64&lt;/a&gt;
+</span><span class='line'>This box can work with multiple providers! The providers that it
+</span><span class='line'>can work with are listed below. Please review the list and choose
+</span><span class='line'>the provider you will be working with.&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;1) hyperv
+</span><span class='line'>2) virtualbox
+</span><span class='line'>3) vmware_fusion&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;Enter your choice: 2
+</span><span class='line'>&lt;code&gt;
+</span><span class='line'>初始化本地开发环境，我们可以理解为安装镜像。
+</span><span class='line'>&lt;/code&gt;
+</span><span class='line'>vagrant init hashicorp/precise64
+</span><span class='line'>&lt;code&gt;
+</span><span class='line'>运行本地开发环境
+</span><span class='line'>&lt;/code&gt;
+</span><span class='line'>vagrant up
+</span><span class='line'>&lt;code&gt;
+</span><span class='line'>ssh到本地开发环境
+</span><span class='line'>&lt;/code&gt;
+</span><span class='line'>vagrant ssh</span></code></pre></td></tr></table></div></figure>
 如果能进入刚才安装的系统，那么说明我们安装成功。因为设置了免密钥登录，所以直接输入就可以登录。</p>
 
 <blockquote><p><strong>注意：</strong>切记，是在你的<code>Vagrantfile</code>目录执行<code>Vagrant</code>相关命令),
@@ -129,25 +149,42 @@ work@dev:/var/www/html$ tree
     `-- mermaid.json
 </code>
 mermaid.json  里面具体内容如下:
-{% codeblock lang:js mermaid.json %}
-{
-  &ldquo;name&rdquo;: &ldquo;mermaid&rdquo;,
-  &ldquo;description&rdquo;: &ldquo;mermaid dev environment&rdquo;,
-  &ldquo;versions&rdquo;: [
-    {
-      &ldquo;version&rdquo;: &ldquo;0.1.0&rdquo;,
-      &ldquo;providers&rdquo;: [
-        {
-          &ldquo;name&rdquo;: &ldquo;virtualbox&rdquo;,
-          &ldquo;url&rdquo;: &ldquo;<a href="http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box">http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box</a>&rdquo;,
-          &ldquo;checksum_type&rdquo;: &ldquo;sha1&rdquo;,
-          &ldquo;checksum&rdquo;: &ldquo;3badb9acb07992938d6415e67a8291d60f3aafe9&rdquo;
-        }
-      ]
-    }
-  ]
-}
-{% endcodeblock %}</p>
+<figure class='code'><figcaption><span>mermaid.json </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">name</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">mermaid</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">description</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">mermaid</span> <span class="nx">dev</span> <span class="nx">environment</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">versions</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">version</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="mf">0.1</span><span class="p">.</span><span class="mi">0</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>      <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">providers</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">name</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">virtualbox</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">url</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box&quot;</span><span class="o">&gt;</span><span class="nx">http</span><span class="o">:</span><span class="c1">//192.168.1.137/vagrant/boxes/mermaid.0.1.0.box&lt;/a&gt;&amp;rdquo;,</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">checksum_type</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">sha1</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">checksum</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="mi">3</span><span class="nx">badb9acb07992938d6415e67a8291d60f3aafe9</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>基本配置都比较容易理解，注意的是checksum，需要把box上传到服务器的时候，使用
 <code>sha1sum boxes/mermaid.0.1.0.box</code>生成一下checksum值。
@@ -224,36 +261,64 @@ config.vm.network "forwarded_port", guest: 80, host: 80
 
 <p>修改mermaid.json文件，添加新的版本</p>
 
-<p>{% codeblock lang:js mermaid.json %}
-{
-  &ldquo;name&rdquo;: &ldquo;mermaid&rdquo;,
-  &ldquo;description&rdquo;: &ldquo;mermaid dev environment&rdquo;,
-  &ldquo;versions&rdquo;: [
-    {
-      &ldquo;version&rdquo;: &ldquo;0.1.0&rdquo;,
-      &ldquo;providers&rdquo;: [
-        {
-          &ldquo;name&rdquo;: &ldquo;virtualbox&rdquo;,
-          &ldquo;url&rdquo;: &ldquo;<a href="http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box">http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box</a>&rdquo;,
-          &ldquo;checksum_type&rdquo;: &ldquo;sha1&rdquo;,
-          &ldquo;checksum&rdquo;: &ldquo;3badb9acb07992938d6415e67a8291d60f3aafe9&rdquo;
-        }
-      ]
-    },
-    {
-      &ldquo;version&rdquo;: &ldquo;0.1.1&rdquo;,
-      &ldquo;providers&rdquo;: [
-        {
-          &ldquo;name&rdquo;: &ldquo;virtualbox&rdquo;,
-          &ldquo;url&rdquo;: &ldquo;<a href="http://192.168.1.137/vagrant/boxes/mermaid.0.1.1.box">http://192.168.1.137/vagrant/boxes/mermaid.0.1.1.box</a>&rdquo;,
-          &ldquo;checksum_type&rdquo;: &ldquo;sha1&rdquo;,
-          &ldquo;checksum&rdquo;: &ldquo;99e6d7fc44cccabdfc6ed9ce178ca65fd9dcbac8&rdquo;
-        }
-      ]
-    }
-  ]
-}
-{% endcodeblock %}</p>
+<p><figure class='code'><figcaption><span>mermaid.json </span></figcaption>
+<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+</pre></td><td class='code'><pre><code class='js'><span class='line'><span class="p">{</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">name</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">mermaid</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">description</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">mermaid</span> <span class="nx">dev</span> <span class="nx">environment</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>  <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">versions</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">version</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="mf">0.1</span><span class="p">.</span><span class="mi">0</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>      <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">providers</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">name</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">virtualbox</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">url</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.0.box&quot;</span><span class="o">&gt;</span><span class="nx">http</span><span class="o">:</span><span class="c1">//192.168.1.137/vagrant/boxes/mermaid.0.1.0.box&lt;/a&gt;&amp;rdquo;,</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">checksum_type</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">sha1</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">checksum</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="mi">3</span><span class="nx">badb9acb07992938d6415e67a8291d60f3aafe9</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">},</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>      <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">version</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="mf">0.1</span><span class="p">.</span><span class="mi">1</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>      <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">providers</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class='line'>        <span class="p">{</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">name</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">virtualbox</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">url</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;http://192.168.1.137/vagrant/boxes/mermaid.0.1.1.box&quot;</span><span class="o">&gt;</span><span class="nx">http</span><span class="o">:</span><span class="c1">//192.168.1.137/vagrant/boxes/mermaid.0.1.1.box&lt;/a&gt;&amp;rdquo;,</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">checksum_type</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">sha1</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;,</span>
+</span><span class='line'>          <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="nx">checksum</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span><span class="o">:</span> <span class="o">&amp;</span><span class="nx">ldquo</span><span class="p">;</span><span class="mi">99</span><span class="nx">e6d7fc44cccabdfc6ed9ce178ca65fd9dcbac8</span><span class="o">&amp;</span><span class="nx">rdquo</span><span class="p">;</span>
+</span><span class='line'>        <span class="p">}</span>
+</span><span class='line'>      <span class="p">]</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>  <span class="p">]</span>
+</span><span class='line'><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></p>
 
 <p>配置完成。</p>
 

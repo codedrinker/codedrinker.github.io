@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://www.majiang.life/blog/how-to-manage-your-time-effectively/</loc>
+<lastmod>2018-02-23T22:57:57+08:00</lastmod>
+</url>
+<url>
 <loc>http://www.majiang.life/blog/octopress-and-hexo-comments-widget/</loc>
 <lastmod>2018-02-19T20:57:35+08:00</lastmod>
 </url>
@@ -127,6 +131,9 @@
 <loc>http://www.majiang.life/about/</loc>
 </url>
 <url>
+<loc>http://www.majiang.life/blog/categories/skill/</loc>
+</url>
+<url>
 <loc>http://www.majiang.life/blog/categories/vagrant/</loc>
 </url>
 <url>
@@ -142,13 +149,10 @@
 <loc>http://www.majiang.life/blog/categories/maven/</loc>
 </url>
 <url>
-<loc>http://www.majiang.life/blog/categories/java/</loc>
-</url>
-<url>
-<loc>http://www.majiang.life/blog/categories/spring/</loc>
-</url>
-<url>
 <loc>http://www.majiang.life/blog/categories/aws/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/blog/categories/java/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/cache/</loc>
@@ -161,6 +165,9 @@
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/spring-boot/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/blog/categories/spring/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/tech/</loc>
