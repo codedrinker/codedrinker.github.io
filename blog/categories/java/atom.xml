@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-22T15:56:57+08:00</updated>
+  <updated>2018-02-23T11:46:09+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -81,141 +81,80 @@ hashCode方法必须始终返回相同的整数，
  JVM_END
 </code>
 我们继续进入<code>FashHashCode</code>里面查看，其位于<code>src/share/vm/runtime/synchronizer.cpp</code>文件，相对代码比较多，我们只摘取关键部分：
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'>  <span class="c1">// Inflate the monitor to set hash code</span>
-</span><span class='line'>  <span class="n">monitor</span> <span class="o">=</span> <span class="n">ObjectSynchronizer</span><span class="o">::</span><span class="n">inflate</span><span class="p">(</span><span class="n">Self</span><span class="p">,</span> <span class="n">obj</span><span class="p">);</span>
-</span><span class='line'>  <span class="c1">// Load displaced header and check it has hash code</span>
-</span><span class='line'>  <span class="n">mark</span> <span class="o">=</span> <span class="n">monitor</span><span class="o">-&gt;</span><span class="n">header</span><span class="p">();</span>
-</span><span class='line'>  <span class="n">assert</span> <span class="p">(</span><span class="n">mark</span><span class="o">-&gt;</span><span class="n">is_neutral</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">invariant</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span> <span class="p">;</span>
-</span><span class='line'>  <span class="n">hash</span> <span class="o">=</span> <span class="n">mark</span><span class="o">-&gt;</span><span class="n">hash</span><span class="p">();</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hash</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="n">hash</span> <span class="o">=</span> <span class="n">get_next_hash</span><span class="p">(</span><span class="n">Self</span><span class="p">,</span> <span class="n">obj</span><span class="p">);</span>
-</span><span class='line'>    <span class="n">temp</span> <span class="o">=</span> <span class="n">mark</span><span class="o">-&gt;</span><span class="n">copy_set_hash</span><span class="p">(</span><span class="n">hash</span><span class="p">);</span> <span class="c1">// merge hash code into header</span>
-</span><span class='line'>    <span class="n">assert</span> <span class="p">(</span><span class="n">temp</span><span class="o">-&gt;</span><span class="n">is_neutral</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">invariant</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span> <span class="p">;</span>
-</span><span class='line'>    <span class="n">test</span> <span class="o">=</span> <span class="p">(</span><span class="n">markOop</span><span class="p">)</span> <span class="n">Atomic</span><span class="o">::</span><span class="n">cmpxchg_ptr</span><span class="p">(</span><span class="n">temp</span><span class="p">,</span> <span class="n">monitor</span><span class="p">,</span> <span class="n">mark</span><span class="p">);</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">test</span> <span class="o">!=</span> <span class="n">mark</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>      <span class="c1">// The only update to the header in the monitor (outside GC)</span>
-</span><span class='line'>      <span class="c1">// is install the hash code. If someone add new usage of</span>
-</span><span class='line'>      <span class="c1">// displaced header, please update this code</span>
-</span><span class='line'>      <span class="n">hash</span> <span class="o">=</span> <span class="n">test</span><span class="o">-&gt;</span><span class="n">hash</span><span class="p">();</span>
-</span><span class='line'>      <span class="n">assert</span> <span class="p">(</span><span class="n">test</span><span class="o">-&gt;</span><span class="n">is_neutral</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">invariant</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span> <span class="p">;</span>
-</span><span class='line'>      <span class="n">assert</span> <span class="p">(</span><span class="n">hash</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">Trivial</span> <span class="n">unexpected</span> <span class="n">object</span><span class="o">/</span><span class="n">monitor</span> <span class="n">header</span> <span class="n">usage</span><span class="p">.</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="c1">// We finally get the hash</span>
-</span><span class='line'>  <span class="k">return</span> <span class="n">hash</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock lang:cpp %}
+{% raw %}
+  // Inflate the monitor to set hash code
+  monitor = ObjectSynchronizer::inflate(Self, obj);
+  // Load displaced header and check it has hash code
+  mark = monitor->header();
+  assert (mark->is_neutral(), &ldquo;invariant&rdquo;) ;
+  hash = mark->hash();
+  if (hash == 0) {
+    hash = get_next_hash(Self, obj);
+    temp = mark->copy_set_hash(hash); // merge hash code into header
+    assert (temp->is_neutral(), &ldquo;invariant&rdquo;) ;
+    test = (markOop) Atomic::cmpxchg_ptr(temp, monitor, mark);
+    if (test != mark) {
+      // The only update to the header in the monitor (outside GC)
+      // is install the hash code. If someone add new usage of
+      // displaced header, please update this code
+      hash = test->hash();
+      assert (test->is_neutral(), &ldquo;invariant&rdquo;) ;
+      assert (hash != 0, &ldquo;Trivial unexpected object/monitor header usage.&rdquo;);
+    }
+  }
+  // We finally get the hash
+  return hash;
+{% endraw %}
+{% endcodeblock %}
 <code>monitor</code> 相关代码我们先略过不理，通过 <code>if</code> 语句我们可以看出，当 <code>hash</code>为0时候需要调用 <code>get_next_hash</code> 生成一个新的 <code>hash</code>，那么我们便可以继续前行。
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">static</span> <span class="kr">inline</span> <span class="kt">intptr_t</span> <span class="nf">get_next_hash</span><span class="p">(</span><span class="n">Thread</span> <span class="o">*</span> <span class="n">Self</span><span class="p">,</span> <span class="n">oop</span> <span class="n">obj</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>  <span class="kt">intptr_t</span> <span class="n">value</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hashCode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>     <span class="c1">// This form uses an unguarded global Park-Miller RNG,</span>
-</span><span class='line'>     <span class="c1">// so it&amp;rsquo;s possible for two threads to race and generate the same RNG.</span>
-</span><span class='line'>     <span class="c1">// On MP system we&amp;rsquo;ll have lots of RW access to a global, so the</span>
-</span><span class='line'>     <span class="c1">// mechanism induces lots of coherency traffic.</span>
-</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="n">os</span><span class="o">::</span><span class="n">random</span><span class="p">()</span> <span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hashCode</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>     <span class="c1">// This variation has the property of being stable (idempotent)</span>
-</span><span class='line'>     <span class="c1">// between STW operations.  This can be useful in some of the 1-0</span>
-</span><span class='line'>     <span class="c1">// synchronization schemes.</span>
-</span><span class='line'>     <span class="kt">intptr_t</span> <span class="n">addrBits</span> <span class="o">=</span> <span class="n">cast_from_oop</span><span class="o">&lt;</span><span class="kt">intptr_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="o">&gt;&gt;</span> <span class="mi">3</span> <span class="p">;</span>
-</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="n">addrBits</span> <span class="o">^</span> <span class="p">(</span><span class="n">addrBits</span> <span class="o">&gt;&gt;</span> <span class="mi">5</span><span class="p">)</span> <span class="o">^</span> <span class="n">GVars</span><span class="p">.</span><span class="n">stwRandom</span> <span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hashCode</span> <span class="o">==</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="mi">1</span> <span class="p">;</span>            <span class="c1">// for sensitivity testing</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hashCode</span> <span class="o">==</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="o">++</span><span class="n">GVars</span><span class="p">.</span><span class="n">hcSequence</span> <span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">hashCode</span> <span class="o">==</span> <span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="n">cast_from_oop</span><span class="o">&lt;</span><span class="kt">intptr_t</span><span class="o">&gt;</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span> <span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-</span><span class='line'>     <span class="c1">// Marsaglia&amp;rsquo;s xor-shift scheme with thread-specific state</span>
-</span><span class='line'>     <span class="c1">// This is probably the best overall implementation &amp;ndash; we&amp;rsquo;ll</span>
-</span><span class='line'>     <span class="c1">// likely make this the default in future releases.</span>
-</span><span class='line'>     <span class="kt">unsigned</span> <span class="n">t</span> <span class="o">=</span> <span class="n">Self</span><span class="o">-&gt;&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateX</span> <span class="p">;</span>
-</span><span class='line'>     <span class="n">t</span> <span class="o">^=</span> <span class="p">(</span><span class="n">t</span> <span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span><span class="o">&amp;</span><span class="n">lt</span><span class="p">;</span> <span class="mi">11</span><span class="p">)</span> <span class="p">;</span>
-</span><span class='line'>     <span class="n">Self</span><span class="o">-&gt;&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateX</span> <span class="o">=</span> <span class="n">Self</span><span class="o">-&gt;&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateY</span> <span class="p">;</span>
-</span><span class='line'>     <span class="n">Self</span><span class="o">-&gt;&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateY</span> <span class="o">=</span> <span class="n">Self</span><span class="o">-&gt;&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateZ</span> <span class="p">;</span>
-</span><span class='line'>     <span class="n">Self</span><span class="o">-&gt;&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateZ</span> <span class="o">=</span> <span class="n">Self</span><span class="o">-&gt;&lt;</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateW</span> <span class="p">;</span>
-</span><span class='line'>     <span class="kt">unsigned</span> <span class="n">v</span> <span class="o">=</span> <span class="n">Self</span><span class="o">-&gt;&lt;/</span><span class="n">em</span><span class="o">&gt;</span><span class="n">hashStateW</span> <span class="p">;</span>
-</span><span class='line'>     <span class="n">v</span> <span class="o">=</span> <span class="p">(</span><span class="n">v</span> <span class="o">^</span> <span class="p">(</span><span class="n">v</span> <span class="o">&gt;&gt;</span> <span class="mi">19</span><span class="p">))</span> <span class="o">^</span> <span class="p">(</span><span class="n">t</span> <span class="o">^</span> <span class="p">(</span><span class="n">t</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span><span class="p">))</span> <span class="p">;</span>
-</span><span class='line'>     <span class="n">Self</span><span class="o">-&gt;</span><span class="n">_hashStateW</span> <span class="o">=</span> <span class="n">v</span> <span class="p">;</span>
-</span><span class='line'>     <span class="n">value</span> <span class="o">=</span> <span class="n">v</span> <span class="p">;</span>
-</span><span class='line'>  <span class="p">}</span>
-</span><span class='line'>  <span class="n">value</span> <span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="o">=</span> <span class="n">markOopDesc</span><span class="o">::</span><span class="n">hash_mask</span><span class="p">;</span>
-</span><span class='line'>  <span class="k">if</span> <span class="p">(</span><span class="n">value</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="n">value</span> <span class="o">=</span> <span class="mh">0xBAD</span> <span class="p">;</span>
-</span><span class='line'>  <span class="n">assert</span> <span class="p">(</span><span class="n">value</span> <span class="o">!=</span> <span class="n">markOopDesc</span><span class="o">::</span><span class="n">no_hash</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">invariant</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;)</span> <span class="p">;</span>
-</span><span class='line'>  <span class="n">TEVENT</span> <span class="p">(</span><span class="nl">hashCode</span><span class="p">:</span> <span class="n">GENERATE</span><span class="p">)</span> <span class="p">;</span>
-</span><span class='line'>  <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock lang:cpp %}
+{% raw %}
+static inline intptr_t get_next_hash(Thread * Self, oop obj) {
+  intptr_t value = 0 ;
+  if (hashCode == 0) {
+     // This form uses an unguarded global Park-Miller RNG,
+     // so it&rsquo;s possible for two threads to race and generate the same RNG.
+     // On MP system we&rsquo;ll have lots of RW access to a global, so the
+     // mechanism induces lots of coherency traffic.
+     value = os::random() ;
+  } else
+  if (hashCode == 1) {
+     // This variation has the property of being stable (idempotent)
+     // between STW operations.  This can be useful in some of the 1-0
+     // synchronization schemes.
+     intptr_t addrBits = cast_from_oop<intptr_t>(obj) >> 3 ;
+     value = addrBits ^ (addrBits >> 5) ^ GVars.stwRandom ;
+  } else
+  if (hashCode == 2) {
+     value = 1 ;            // for sensitivity testing
+  } else
+  if (hashCode == 3) {
+     value = ++GVars.hcSequence ;
+  } else
+  if (hashCode == 4) {
+     value = cast_from_oop<intptr_t>(obj) ;
+  } else {
+     // Marsaglia&rsquo;s xor-shift scheme with thread-specific state
+     // This is probably the best overall implementation &ndash; we&rsquo;ll
+     // likely make this the default in future releases.
+     unsigned t = Self-><em>hashStateX ;
+     t ^= (t &lt;&lt; 11) ;
+     Self-></em>hashStateX = Self-><em>hashStateY ;
+     Self-></em>hashStateY = Self-><em>hashStateZ ;
+     Self-></em>hashStateZ = Self-><em>hashStateW ;
+     unsigned v = Self-></em>hashStateW ;
+     v = (v ^ (v >> 19)) ^ (t ^ (t >> 8)) ;
+     Self->_hashStateW = v ;
+     value = v ;
+  }
+  value &amp;= markOopDesc::hash_mask;
+  if (value == 0) value = 0xBAD ;
+  assert (value != markOopDesc::no_hash, &ldquo;invariant&rdquo;) ;
+  TEVENT (hashCode: GENERATE) ;
+  return value;
+}{% endraw %}
+{% endcodeblock %}
 通过上述代码我们看到，其实 <code>hashCode</code> 的生成有6中方式<br/>
 1. 随机数<br/>
 2. 对象的内存地址的函数<br/>
@@ -235,47 +174,30 @@ hashCode方法必须始终返回相同的整数，
 <h3>偏向锁</h3>
 
 <p>这时候我们翻回来看刚才略过的内容，<code>ObjectSynchronizer::FastHashCode()</code>里面的其他逻辑。
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='cpp'><span class='line'><span class="k">if</span> <span class="p">(</span><span class="n">UseBiasedLocking</span><span class="p">)</span> <span class="p">{</span>
-</span><span class='line'>    <span class="c1">// NOTE: many places throughout the JVM do not expect a safepoint</span>
-</span><span class='line'>    <span class="c1">// to be taken here, in particular most operations on perm gen</span>
-</span><span class='line'>    <span class="c1">// objects. However, we only ever bias Java instances and all of</span>
-</span><span class='line'>    <span class="c1">// the call sites of identity_hash that might revoke biases have</span>
-</span><span class='line'>    <span class="c1">// been checked to make sure they can handle a safepoint. The</span>
-</span><span class='line'>    <span class="c1">// added check of the bias pattern is to avoid useless calls to</span>
-</span><span class='line'>    <span class="c1">// thread-local storage.</span>
-</span><span class='line'>    <span class="k">if</span> <span class="p">(</span><span class="n">obj</span><span class="o">-&gt;</span><span class="n">mark</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">has_bias_pattern</span><span class="p">())</span> <span class="p">{</span>
-</span><span class='line'>      <span class="c1">// Box and unbox the raw reference just in case we cause a STW safepoint.</span>
-</span><span class='line'>      <span class="n">Handle</span> <span class="n">hobj</span> <span class="p">(</span><span class="n">Self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="p">;</span>
-</span><span class='line'>      <span class="c1">// Relaxing assertion for bug 6320749.</span>
-</span><span class='line'>      <span class="n">assert</span> <span class="p">(</span><span class="n">Universe</span><span class="o">::</span><span class="n">verify_in_progress</span><span class="p">()</span> <span class="o">||</span>
-</span><span class='line'>              <span class="o">!</span><span class="n">SafepointSynchronize</span><span class="o">::</span><span class="n">is_at_safepoint</span><span class="p">(),</span>
-</span><span class='line'>             <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">biases</span> <span class="n">should</span> <span class="n">not</span> <span class="n">be</span> <span class="n">seen</span> <span class="n">by</span> <span class="n">VM</span> <span class="kr">thread</span> <span class="n">here</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
-</span><span class='line'>      <span class="n">BiasedLocking</span><span class="o">::</span><span class="n">revoke_and_rebias</span><span class="p">(</span><span class="n">hobj</span><span class="p">,</span> <span class="nb">false</span><span class="p">,</span> <span class="n">JavaThread</span><span class="o">::</span><span class="n">current</span><span class="p">());</span>
-</span><span class='line'>      <span class="n">obj</span> <span class="o">=</span> <span class="n">hobj</span><span class="p">()</span> <span class="p">;</span>
-</span><span class='line'>      <span class="n">assert</span><span class="p">(</span><span class="o">!</span><span class="n">obj</span><span class="o">-&gt;</span><span class="n">mark</span><span class="p">()</span><span class="o">-&gt;</span><span class="n">has_bias_pattern</span><span class="p">(),</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="p">;</span><span class="n">biases</span> <span class="n">should</span> <span class="n">be</span> <span class="n">revoked</span> <span class="n">by</span> <span class="n">now</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="p">;);</span>
-</span><span class='line'>    <span class="p">}</span>
-</span><span class='line'>  <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock lang:cpp %}
+{% raw %}
+if (UseBiasedLocking) {
+    // NOTE: many places throughout the JVM do not expect a safepoint
+    // to be taken here, in particular most operations on perm gen
+    // objects. However, we only ever bias Java instances and all of
+    // the call sites of identity_hash that might revoke biases have
+    // been checked to make sure they can handle a safepoint. The
+    // added check of the bias pattern is to avoid useless calls to
+    // thread-local storage.
+    if (obj->mark()->has_bias_pattern()) {
+      // Box and unbox the raw reference just in case we cause a STW safepoint.
+      Handle hobj (Self, obj) ;
+      // Relaxing assertion for bug 6320749.
+      assert (Universe::verify_in_progress() ||
+              !SafepointSynchronize::is_at_safepoint(),
+             &ldquo;biases should not be seen by VM thread here&rdquo;);
+      BiasedLocking::revoke_and_rebias(hobj, false, JavaThread::current());
+      obj = hobj() ;
+      assert(!obj->mark()->has_bias_pattern(), &ldquo;biases should be revoked by now&rdquo;);
+    }
+  }
+{% endraw %}
+{% endcodeblock %}
 由上述代码我们可以得知，当前对象处于<code>偏向锁</code>时，会清除<code>偏向锁</code>通过从<code>锁</code>上面取回<code>Mark Word</code> 信息。为什么提到取回呢？之前消失了吗？是的，现在就需要解释一下<code>偏向锁</code>了。<br/>
 <code>Hotspot</code> 的作者经过以往的研究发现大多数情况下锁不仅不存在多线程竞争，而且总是由同一线程多次获得，为了让线程获得锁的代价更低而引入
 了偏向锁。当一个线程访问同步块并获取锁时，会在对象头和栈帧中的锁记录里存储锁偏向的线程 <code>ID</code>，以后该线程在进入和退出同步块时不需要花费 <code>CAS</code> 操作来加锁和解锁，而只需简单的测试一下对象头的 <code>Mark Word</code> 里是否存储着指向当前线程的偏向锁，如果测试成功，表示线程已经获得了锁，如果测试失败，则需要再测试下 <code>Mark Word</code> 中偏向锁的标识是否设置成 1（表示当前是偏向锁），如果没有设置，则使用 <code>CAS</code> 竞争锁，如果设置了，则尝试使用 <code>CAS</code> 将对象头的偏向锁指向当前线程。所以我们便知道为什么有<code>取回</code>这个概念了。然而代码带没有结束。</p>
@@ -377,91 +299,50 @@ public interface UserMapper {
 &lt;/bean&gt;
 </code>
 这样我们已经完成了90%，就差调用了，前提是你<code>Spring</code>环境是OK的。调用 <code>MyBatis</code> 数据方法现在只需一行代码:
-<figure class='code'><figcaption><span>FooServiceImpl.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FooServiceImpl</span> <span class="kd">implements</span> <span class="n">FooService</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kd">private</span> <span class="n">UserMapper</span> <span class="n">userMapper</span><span class="o">;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kt">void</span> <span class="nf">setUserMapper</span><span class="o">(</span><span class="n">UserMapper</span> <span class="n">userMapper</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>  <span class="k">this</span><span class="o">.</span><span class="na">userMapper</span> <span class="o">=</span> <span class="n">userMapper</span><span class="o">;</span>
-</span><span class='line'><span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kd">public</span> <span class="n">User</span> <span class="nf">doSomeBusinessStuff</span><span class="o">(</span><span class="n">String</span> <span class="n">userId</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>  <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">userMapper</span><span class="o">.</span><span class="na">getUser</span><span class="o">(</span><span class="n">userId</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">那么问题又来了</span><span class="err">，</span><span class="n">每次写一个DAO都需要为其写一个</span><span class="err">`</span><span class="n">Bean</span><span class="err">`</span><span class="n">配置</span><span class="err">，</span><span class="n">那不是累死</span><span class="err">？</span><span class="n">于是我们又寻找另一种方案</span><span class="err">，</span><span class="n">代替手动声明</span><span class="err">`</span><span class="o">*</span><span class="n">Mapper</span><span class="err">`。`</span><span class="n">MapperScannerConfigurer</span><span class="err">`</span><span class="n">的出现解决了这个问题</span><span class="err">，</span> <span class="n">它会根据你配置的包路径自动的扫描类文件并自动将它们创建成</span><span class="err">`</span><span class="n">MapperFactoryBean</span><span class="err">`，</span><span class="n">可以在</span> <span class="n">Spring</span> <span class="nl">的配置中添加如下代码:</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">xml</span> <span class="n">applicationContext</span><span class="o">.</span><span class="na">xml</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">bean</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;org.mybatis.spring.mapper.MapperScannerConfigurer&quot;</span><span class="o">&gt;</span>
-</span><span class='line'>  <span class="o">&lt;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;basePackage&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s">&quot;com.github.codedrinker.mapper&quot;</span> <span class="o">/&gt;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">bean</span><span class="o">&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">`</span><span class="n">basePackage</span><span class="err">`</span><span class="n">属性是让你为映射器接口文件设置基本的包路径</span><span class="err">。</span><span class="n">你可以使用分号或逗号作为分隔符设置多于一个的包路径</span><span class="err">。</span><span class="n">这个时候如果想自定义</span><span class="err">`</span><span class="n">sqlSessionFactory</span><span class="err">`</span><span class="n">可以添加如下配置</span><span class="err">：</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">xml</span> <span class="n">applicationContext</span><span class="o">.</span><span class="na">xml</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;sqlSessionFactoryBeanName&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s">&quot;sqlSessionFactory&quot;</span> <span class="o">/&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="err">``</span>
-</span><span class='line'><span class="n">这样以后还有一点点小瑕疵</span><span class="err">，</span><span class="n">如果我们数据的</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">column</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">名字是</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">_</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">连接的</span><span class="err">，</span><span class="n">那么它不会那么聪明自动转换为驼峰的变量</span><span class="err">，</span><span class="n">所以我们需要对</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">SqlSessionFactoryBean</span><span class="err">`</span><span class="n">做如下配置</span><span class="err">，</span><span class="n">但是在1</span><span class="o">.</span><span class="mf">3.0</span><span class="n">以后才可以通过xml配置</span><span class="err">，</span><span class="n">如果用早起版本的需要注意了</span><span class="err">。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;xml applicationContext.xml&quot;</span><span class="o">&gt;&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">bean</span> <span class="n">id</span><span class="o">=</span><span class="s">&quot;sqlSessionFactory&quot;</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;org.mybatis.spring.SqlSessionFactoryBean&quot;</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;dataSource&quot;</span> <span class="n">ref</span><span class="o">=</span><span class="s">&quot;dataSource&quot;</span> <span class="o">/&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;configuration&quot;</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">bean</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;org.apache.ibatis.session.Configuration&quot;</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'>      <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">property</span> <span class="n">name</span><span class="o">=</span><span class="s">&quot;mapUnderscoreToCamelCase&quot;</span> <span class="n">value</span><span class="o">=</span><span class="s">&quot;true&quot;</span><span class="o">/&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="n">bean</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'>  <span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="n">property</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'><span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="n">bean</span><span class="o">&amp;</span><span class="n">gt</span><span class="o">;</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">至此关于</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Spring</span> <span class="n">MyBatis</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">的配置已经全部结束</span><span class="err">，</span><span class="n">后面我们会简单说下</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Spring</span> <span class="n">MyBatis</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">中的动态代理</span><span class="err">。</span><span class="o">&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">h2</span><span class="o">&gt;</span><span class="n">浅析</span> <span class="n">Java</span> <span class="n">动态代理</span><span class="o">&lt;/</span><span class="n">h2</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">JDK</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">自带的动态代理需要了解InvocationHandler接口和Proxy类</span><span class="err">，</span><span class="n">他们都是在java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">reflect包下</span><span class="err">。</span><span class="o">&lt;</span><span class="n">br</span><span class="o">/&gt;</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">InvocationHandler</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">是代理实例的调用处理程序实现的接口</span><span class="err">。</span><span class="n">每个代理实例都具有一个关联的</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">InvocationHandler</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">。</span><span class="n">对代理实例调用方法时</span><span class="err">，</span><span class="n">这个方法会调用</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">InvocationHandler</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">的</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">invoke</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">方法</span><span class="err">。</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Proxy</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">提供静态方法用于创建动态代理类和实例</span><span class="o">,</span><span class="n">同时后面自动生成的代理类都是</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Proxy</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">对象</span><span class="err">。</span><span class="n">下面我们直接通过代码来分析</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">Java动态代理</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="err">：</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">InvocationInterceptor</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">实现</span><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="n">InvocationHandler</span><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">接口</span><span class="err">，</span><span class="n">用于处理具体的代理逻辑</span><span class="err">。</span>
-</span></code></pre></td></tr></table></div></figure>java InvocationInterceptor.java
+&#8220;`java FooServiceImpl.java
+public class FooServiceImpl implements FooService {</p>
+
+<p>private UserMapper userMapper;</p>
+
+<p>public void setUserMapper(UserMapper userMapper) {
+  this.userMapper = userMapper;
+}</p>
+
+<p>public User doSomeBusinessStuff(String userId) {
+  return this.userMapper.getUser(userId);
+}
+<code>
+那么问题又来了，每次写一个DAO都需要为其写一个`Bean`配置，那不是累死？于是我们又寻找另一种方案，代替手动声明`*Mapper`。`MapperScannerConfigurer`的出现解决了这个问题， 它会根据你配置的包路径自动的扫描类文件并自动将它们创建成`MapperFactoryBean`，可以在 Spring 的配置中添加如下代码:
+</code>xml applicationContext.xml
+<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+  <property name="basePackage" value="com.github.codedrinker.mapper" />
+</bean>
+<code>
+`basePackage`属性是让你为映射器接口文件设置基本的包路径。你可以使用分号或逗号作为分隔符设置多于一个的包路径。这个时候如果想自定义`sqlSessionFactory`可以添加如下配置：
+</code>xml applicationContext.xml
+<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+<code>``
+这样以后还有一点点小瑕疵，如果我们数据的</code>column<code>名字是</code>_<code>连接的，那么它不会那么聪明自动转换为驼峰的变量，所以我们需要对</code>SqlSessionFactoryBean`做如下配置，但是在1.3.0以后才可以通过xml配置，如果用早起版本的需要注意了。</p>
+
+<pre><code class="xml applicationContext.xml">&lt;bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"&gt;
+  &lt;property name="dataSource" ref="dataSource" /&gt;
+  &lt;property name="configuration"&gt;
+    &lt;bean class="org.apache.ibatis.session.Configuration"&gt;
+      &lt;property name="mapUnderscoreToCamelCase" value="true"/&gt;
+    &lt;/bean&gt;
+  &lt;/property&gt;
+&lt;/bean&gt;
+</code></pre>
+
+<p>至此关于<code>Spring MyBatis</code>的配置已经全部结束，后面我们会简单说下<code>Spring MyBatis</code>中的动态代理。</p>
+
+<h2>浅析 Java 动态代理</h2>
+
+<p><code>JDK</code>自带的动态代理需要了解InvocationHandler接口和Proxy类，他们都是在java.lang.reflect包下。<br/>
+<code>InvocationHandler</code>是代理实例的调用处理程序实现的接口。每个代理实例都具有一个关联的<code>InvocationHandler</code>。对代理实例调用方法时，这个方法会调用<code>InvocationHandler</code>的<code>invoke</code>方法。
+<code>Proxy</code>提供静态方法用于创建动态代理类和实例,同时后面自动生成的代理类都是<code>Proxy</code>对象。下面我们直接通过代码来分析<code>Java动态代理</code>：
+<code>InvocationInterceptor</code>实现<code>InvocationHandler</code>接口，用于处理具体的代理逻辑。
+&#8220;`java InvocationInterceptor.java
 /<em>*
  * Created by codedrinker on 12/10/2017.
  </em>/
@@ -676,243 +557,126 @@ public class MapperScannerConfigurer implements BeanDefinitionRegistryPostProces
   }
 </code>
 由上代码我们可以看到在<code>postProcessBeanDefinitionRegistry</code>里面得到<code>registry</code>然后使用<code>ClassPathMapperScanner</code>开始扫描包路径得到的<code>Bean</code>并且注册到<code>registry</code>里面。我们接着往里面看。
-<figure class='code'><figcaption><span>ClassPathMapperScanner.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-<span class='line-number'>59</span>
-<span class='line-number'>60</span>
-<span class='line-number'>61</span>
-<span class='line-number'>62</span>
-<span class='line-number'>63</span>
-<span class='line-number'>64</span>
-<span class='line-number'>65</span>
-<span class='line-number'>66</span>
-<span class='line-number'>67</span>
-<span class='line-number'>68</span>
-<span class='line-number'>69</span>
-<span class='line-number'>70</span>
-<span class='line-number'>71</span>
-<span class='line-number'>72</span>
-<span class='line-number'>73</span>
-<span class='line-number'>74</span>
-<span class='line-number'>75</span>
-<span class='line-number'>76</span>
-<span class='line-number'>77</span>
-<span class='line-number'>78</span>
-<span class='line-number'>79</span>
-<span class='line-number'>80</span>
-<span class='line-number'>81</span>
-<span class='line-number'>82</span>
-<span class='line-number'>83</span>
-<span class='line-number'>84</span>
-<span class='line-number'>85</span>
-<span class='line-number'>86</span>
-<span class='line-number'>87</span>
-<span class='line-number'>88</span>
-<span class='line-number'>89</span>
-<span class='line-number'>90</span>
-<span class='line-number'>91</span>
-<span class='line-number'>92</span>
-<span class='line-number'>93</span>
-<span class='line-number'>94</span>
-<span class='line-number'>95</span>
-<span class='line-number'>96</span>
-<span class='line-number'>97</span>
-<span class='line-number'>98</span>
-<span class='line-number'>99</span>
-<span class='line-number'>100</span>
-<span class='line-number'>101</span>
-<span class='line-number'>102</span>
-<span class='line-number'>103</span>
-<span class='line-number'>104</span>
-<span class='line-number'>105</span>
-<span class='line-number'>106</span>
-<span class='line-number'>107</span>
-<span class='line-number'>108</span>
-<span class='line-number'>109</span>
-<span class='line-number'>110</span>
-<span class='line-number'>111</span>
-<span class='line-number'>112</span>
-<span class='line-number'>113</span>
-<span class='line-number'>114</span>
-<span class='line-number'>115</span>
-<span class='line-number'>116</span>
-<span class='line-number'>117</span>
-<span class='line-number'>118</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span> <span class="nf">doScan</span><span class="o">(</span><span class="n">String</span><span class="o">&amp;</span><span class="n">hellip</span><span class="o">;</span> <span class="n">basePackages</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span> <span class="n">beanDefinitions</span> <span class="o">=</span> <span class="kd">super</span><span class="o">.</span><span class="na">doScan</span><span class="o">(</span><span class="n">basePackages</span><span class="o">);&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">if</span> <span class="o">(</span><span class="n">beanDefinitions</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">())</span> <span class="o">{</span>
-</span><span class='line'>  <span class="n">logger</span><span class="o">.</span><span class="na">warn</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">No</span> <span class="n">MyBatis</span> <span class="n">mapper</span> <span class="n">was</span> <span class="n">found</span> <span class="n">in</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="o">;&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">basePackages</span><span class="o">)</span> <span class="o">+</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;&amp;</span><span class="n">rsquo</span><span class="o">;</span> <span class="n">package</span><span class="o">.</span> <span class="n">Please</span> <span class="n">check</span> <span class="n">your</span> <span class="n">configuration</span><span class="o">.&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
-</span><span class='line'><span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-</span><span class='line'>  <span class="n">processBeanDefinitions</span><span class="o">(</span><span class="n">beanDefinitions</span><span class="o">);</span>
-</span><span class='line'><span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="k">return</span> <span class="n">beanDefinitions</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">`</span><span class="n">ClassPathMapperScanner</span><span class="err">`</span><span class="n">继承了</span><span class="err">`</span><span class="n">Spring</span><span class="err">`</span><span class="n">的</span><span class="err">`</span><span class="n">ClassPathBeanDefinitionScanner</span><span class="err">`</span><span class="n">所以调用父类的</span><span class="err">`</span><span class="n">doScan</span><span class="err">`</span><span class="n">方法就可以加载</span><span class="err">`</span><span class="n">Bean</span><span class="err">`</span><span class="n">然后再通过</span><span class="err">`</span><span class="n">processBeanDefinitions</span><span class="err">`</span><span class="n">方法加工成</span><span class="err">`</span><span class="n">MyBatis</span><span class="err">`</span><span class="n">需要的</span><span class="err">`</span><span class="n">Bean</span><span class="err">`。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">ClassPathMapperScanner</span><span class="o">.</span><span class="na">java片段</span>
-</span><span class='line'><span class="kd">private</span> <span class="kt">void</span> <span class="nf">processBeanDefinitions</span><span class="o">(</span><span class="n">Set</span><span class="o">&lt;</span><span class="n">BeanDefinitionHolder</span><span class="o">&gt;</span> <span class="n">beanDefinitions</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">GenericBeanDefinition</span> <span class="n">definition</span><span class="o">;</span>
-</span><span class='line'>    <span class="k">for</span> <span class="o">(</span><span class="n">BeanDefinitionHolder</span> <span class="n">holder</span> <span class="o">:</span> <span class="n">beanDefinitions</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">definition</span> <span class="o">=</span> <span class="o">(</span><span class="n">GenericBeanDefinition</span><span class="o">)</span> <span class="n">holder</span><span class="o">.</span><span class="na">getBeanDefinition</span><span class="o">();</span>
-</span><span class='line'>      <span class="n">definition</span><span class="o">.</span><span class="na">setBeanClass</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">mapperFactoryBean</span><span class="o">.</span><span class="na">getClass</span><span class="o">());</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">如上代码循环了所有由</span><span class="err">`</span><span class="n">Spring</span><span class="err">`</span><span class="n">容器解析出来的</span><span class="err">`</span><span class="n">beanDefinitions</span><span class="err">`</span><span class="n">然后把他们的</span><span class="err">`</span><span class="n">BeanClass</span><span class="err">`</span><span class="n">修改为</span><span class="err">`</span><span class="n">mapperFactoryBean</span><span class="err">`，</span><span class="n">这就进入了行文的重点</span><span class="err">。</span><span class="n">我们翻看到</span><span class="err">`</span><span class="n">MapperFactoryBean</span><span class="err">`</span><span class="o">:</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">MapperFactoryBean</span><span class="o">.</span><span class="na">java片段</span>
-</span><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">protected</span> <span class="kt">void</span> <span class="nf">checkDaoConfig</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'><span class="kd">super</span><span class="o">.</span><span class="na">checkDaoConfig</span><span class="o">();&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">notNull</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">mapperInterface</span><span class="o">,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">Property</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="o">;</span><span class="n">mapperInterface</span><span class="o">&amp;</span><span class="n">rsquo</span><span class="o">;</span> <span class="n">is</span> <span class="n">required</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="n">Configuration</span> <span class="n">configuration</span> <span class="o">=</span> <span class="n">getSqlSession</span><span class="o">().</span><span class="na">getConfiguration</span><span class="o">();</span>
-</span><span class='line'><span class="k">if</span> <span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">addToConfig</span> <span class="o">&amp;</span><span class="n">amp</span><span class="o">;&amp;</span><span class="n">amp</span><span class="o">;</span> <span class="o">!</span><span class="n">configuration</span><span class="o">.</span><span class="na">hasMapper</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">mapperInterface</span><span class="o">))</span> <span class="o">{</span>
-</span><span class='line'>  <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">configuration</span><span class="o">.</span><span class="na">addMapper</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">mapperInterface</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">Error</span> <span class="k">while</span> <span class="n">adding</span> <span class="n">the</span> <span class="n">mapper</span> <span class="o">&amp;</span><span class="n">lsquo</span><span class="o">;&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="k">this</span><span class="o">.</span><span class="na">mapperInterface</span> <span class="o">+</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;&amp;</span><span class="n">rsquo</span><span class="o">;</span> <span class="n">to</span> <span class="n">configuration</span><span class="o">.&amp;</span><span class="n">rdquo</span><span class="o">;,</span> <span class="n">e</span><span class="o">);</span>
-</span><span class='line'>    <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">ErrorContext</span><span class="o">.</span><span class="na">instance</span><span class="o">().</span><span class="na">reset</span><span class="o">();</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">其调用了</span><span class="err">`</span><span class="n">Configuration</span><span class="err">`</span><span class="n">的</span><span class="err">`</span><span class="n">addMapper</span><span class="err">`</span><span class="n">方法</span><span class="err">，</span><span class="n">这样就把</span><span class="err">`</span><span class="n">Bean</span><span class="err">`</span><span class="n">交给</span><span class="err">`</span><span class="n">MyBatis</span><span class="err">`</span><span class="n">管理了</span><span class="err">。</span><span class="n">那么</span><span class="err">`</span><span class="n">checkDaoConfig</span><span class="err">`</span><span class="n">是什么时候调用的呢</span><span class="err">？</span><span class="n">我们翻看其父类</span><span class="err">`</span><span class="n">DaoSupport</span><span class="err">`</span><span class="nl">可以看到:</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">DaoSupport</span><span class="o">.</span><span class="na">java片段</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">DaoSupport</span> <span class="kd">implements</span> <span class="n">InitializingBean</span> <span class="o">{</span>
-</span><span class='line'>    <span class="nd">@Override</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="kd">final</span> <span class="kt">void</span> <span class="nf">afterPropertiesSet</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IllegalArgumentException</span><span class="o">,</span> <span class="n">BeanInitializationException</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">checkDaoConfig</span><span class="o">();</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">因为</span><span class="err">`</span><span class="n">DaoSupport</span><span class="err">`</span><span class="n">实现了</span><span class="err">`</span><span class="n">InitializingBean</span><span class="err">`</span><span class="n">并重写</span><span class="err">`</span><span class="n">afterPropertiesSet</span><span class="err">`</span><span class="n">方法</span><span class="err">，</span><span class="n">了解</span><span class="err">`</span><span class="n">Spring</span><span class="err">`</span><span class="n">生命周期的同学知道</span><span class="err">`</span><span class="n">afterPropertiesSet</span><span class="err">`</span><span class="n">方法会在资源加载完以后</span><span class="err">，</span><span class="n">初始化bean之前执行</span><span class="err">。</span><span class="n">我们继续查看</span><span class="err">`</span><span class="n">addMapper</span><span class="err">`</span><span class="n">方法</span><span class="err">。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">MapperRegistry</span><span class="o">.</span><span class="na">java片段</span>
-</span><span class='line'><span class="kd">public</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="nf">addMapper</span><span class="o">(</span><span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">type</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">if</span> <span class="o">(</span><span class="n">type</span><span class="o">.</span><span class="na">isInterface</span><span class="o">())</span> <span class="o">{</span>
-</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">hasMapper</span><span class="o">(</span><span class="n">type</span><span class="o">))</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">throw</span> <span class="k">new</span> <span class="nf">BindingException</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">Type</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">type</span> <span class="o">+</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span> <span class="n">is</span> <span class="n">already</span> <span class="n">known</span> <span class="n">to</span> <span class="n">the</span> <span class="n">MapperRegistry</span><span class="o">.&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
-</span><span class='line'>      <span class="o">}</span>
-</span><span class='line'>      <span class="kt">boolean</span> <span class="n">loadCompleted</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
-</span><span class='line'>      <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">knownMappers</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="k">new</span> <span class="n">MapperProxyFactory</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;(</span><span class="n">type</span><span class="o">));</span>
-</span><span class='line'>        <span class="c1">// It&amp;rsquo;s important that the type is added before the parser is run</span>
-</span><span class='line'>        <span class="c1">// otherwise the binding may automatically be attempted by the</span>
-</span><span class='line'>        <span class="c1">// mapper parser. If the type is already known, it won&amp;rsquo;t try.</span>
-</span><span class='line'>        <span class="n">MapperAnnotationBuilder</span> <span class="n">parser</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MapperAnnotationBuilder</span><span class="o">(</span><span class="n">config</span><span class="o">,</span> <span class="n">type</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">parser</span><span class="o">.</span><span class="na">parse</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">loadCompleted</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'>      <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">if</span> <span class="o">(!</span><span class="n">loadCompleted</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>          <span class="n">knownMappers</span><span class="o">.</span><span class="na">remove</span><span class="o">(</span><span class="n">type</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>      <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="err">`</span><span class="n">addMapper</span><span class="err">`</span><span class="n">方法最终创建了</span><span class="err">`</span><span class="n">MapperProxyFactory</span><span class="err">`</span><span class="n">对象</span><span class="err">，</span><span class="n">在</span><span class="err">`</span><span class="n">MapperProxyFactory</span><span class="err">`</span><span class="n">里面我们两眼泪汪汪地发现了似曾相识的代码</span><span class="err">：</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">MapperProxyFactory</span><span class="o">.</span><span class="na">java片段</span>
-</span><span class='line'><span class="kd">protected</span> <span class="n">T</span> <span class="nf">newInstance</span><span class="o">(</span><span class="n">MapperProxy</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">mapperProxy</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="o">(</span><span class="n">T</span><span class="o">)</span> <span class="n">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="n">mapperInterface</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">(),</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[]</span> <span class="o">{</span> <span class="n">mapperInterface</span> <span class="o">},</span> <span class="n">mapperProxy</span><span class="o">);</span>
-</span><span class='line'><span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span><span class="kd">public</span> <span class="n">T</span> <span class="nf">newInstance</span><span class="o">(</span><span class="n">SqlSession</span> <span class="n">sqlSession</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">final</span> <span class="n">MapperProxy</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">mapperProxy</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MapperProxy</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;(</span><span class="n">sqlSession</span><span class="o">,</span> <span class="n">mapperInterface</span><span class="o">,</span> <span class="n">methodCache</span><span class="o">);</span>
-</span><span class='line'>    <span class="k">return</span> <span class="nf">newInstance</span><span class="o">(</span><span class="n">mapperProxy</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">而</span><span class="err">`</span><span class="n">MapperProxy</span><span class="err">`</span><span class="n">实现了</span><span class="err">`</span><span class="n">InvocationHandler</span><span class="err">`</span><span class="n">方法</span><span class="err">，</span><span class="n">最终实现对</span><span class="err">`</span><span class="n">Bean</span><span class="err">`</span><span class="n">的代理</span><span class="err">，</span><span class="n">同时获取到上下文的</span><span class="err">`</span><span class="n">sqlSession</span><span class="err">`</span><span class="n">以供使用</span><span class="err">。</span><span class="n">具体生成过程我们不再累述</span><span class="err">，</span><span class="n">直接通过其源码结束本篇文章</span><span class="err">：</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">MapperProxy</span><span class="o">.</span><span class="na">java片段</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MapperProxy</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">InvocationHandler</span><span class="o">,</span> <span class="n">Serializable</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="kt">long</span> <span class="n">serialVersionUID</span> <span class="o">=</span> <span class="o">-</span><span class="mi">6424540398559729838L</span><span class="o">;</span>
-</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">SqlSession</span> <span class="n">sqlSession</span><span class="o">;</span>
-</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">mapperInterface</span><span class="o">;</span>
-</span><span class='line'>  <span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Method</span><span class="o">,</span> <span class="n">MapperMethod</span><span class="o">&gt;</span> <span class="n">methodCache</span><span class="o">;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="kd">public</span> <span class="nf">MapperProxy</span><span class="o">(</span><span class="n">SqlSession</span> <span class="n">sqlSession</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">mapperInterface</span><span class="o">,</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Method</span><span class="o">,</span> <span class="n">MapperMethod</span><span class="o">&gt;</span> <span class="n">methodCache</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">sqlSession</span> <span class="o">=</span> <span class="n">sqlSession</span><span class="o">;</span>
-</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">mapperInterface</span> <span class="o">=</span> <span class="n">mapperInterface</span><span class="o">;</span>
-</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">methodCache</span> <span class="o">=</span> <span class="n">methodCache</span><span class="o">;</span>
-</span><span class='line'>  <span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;</span>  <span class="nd">@Override</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="n">Object</span> <span class="nf">invoke</span><span class="o">(</span><span class="n">Object</span> <span class="n">proxy</span><span class="o">,</span> <span class="n">Method</span> <span class="n">method</span><span class="o">,</span> <span class="n">Object</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Throwable</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>      <span class="k">if</span> <span class="o">(</span><span class="n">Object</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">method</span><span class="o">.</span><span class="na">getDeclaringClass</span><span class="o">()))</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="n">method</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="k">this</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
-</span><span class='line'>      <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">isDefaultMethod</span><span class="o">(</span><span class="n">method</span><span class="o">))</span> <span class="o">{</span>
-</span><span class='line'>        <span class="k">return</span> <span class="nf">invokeDefaultMethod</span><span class="o">(</span><span class="n">proxy</span><span class="o">,</span> <span class="n">method</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
-</span><span class='line'>      <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">t</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>      <span class="k">throw</span> <span class="n">ExceptionUtil</span><span class="o">.</span><span class="na">unwrapThrowable</span><span class="o">(</span><span class="n">t</span><span class="o">);</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'>    <span class="kd">final</span> <span class="n">MapperMethod</span> <span class="n">mapperMethod</span> <span class="o">=</span> <span class="n">cachedMapperMethod</span><span class="o">(</span><span class="n">method</span><span class="o">);</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">mapperMethod</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">sqlSession</span><span class="o">,</span> <span class="n">args</span><span class="o">);</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+&#8220;`java ClassPathMapperScanner.java
+@Override
+public Set<BeanDefinitionHolder> doScan(String&hellip; basePackages) {
+Set<BeanDefinitionHolder> beanDefinitions = super.doScan(basePackages);</p>
+
+<p>if (beanDefinitions.isEmpty()) {
+  logger.warn(&ldquo;No MyBatis mapper was found in &lsquo;&rdquo; + Arrays.toString(basePackages) + &ldquo;&rsquo; package. Please check your configuration.&rdquo;);
+} else {
+  processBeanDefinitions(beanDefinitions);
+}</p>
+
+<p>return beanDefinitions;
+}
+<code>
+`ClassPathMapperScanner`继承了`Spring`的`ClassPathBeanDefinitionScanner`所以调用父类的`doScan`方法就可以加载`Bean`然后再通过`processBeanDefinitions`方法加工成`MyBatis`需要的`Bean`。
+</code>java ClassPathMapperScanner.java片段
+private void processBeanDefinitions(Set<BeanDefinitionHolder> beanDefinitions) {
+    GenericBeanDefinition definition;
+    for (BeanDefinitionHolder holder : beanDefinitions) {
+      definition = (GenericBeanDefinition) holder.getBeanDefinition();
+      definition.setBeanClass(this.mapperFactoryBean.getClass());
+    }
+  }
+<code>
+如上代码循环了所有由`Spring`容器解析出来的`beanDefinitions`然后把他们的`BeanClass`修改为`mapperFactoryBean`，这就进入了行文的重点。我们翻看到`MapperFactoryBean`:
+</code>java MapperFactoryBean.java片段
+@Override
+protected void checkDaoConfig() {
+super.checkDaoConfig();</p>
+
+<p>notNull(this.mapperInterface, &ldquo;Property &lsquo;mapperInterface&rsquo; is required&rdquo;);</p>
+
+<p>Configuration configuration = getSqlSession().getConfiguration();
+if (this.addToConfig &amp;&amp; !configuration.hasMapper(this.mapperInterface)) {
+  try {
+    configuration.addMapper(this.mapperInterface);
+  } catch (Exception e) {
+    logger.error(&ldquo;Error while adding the mapper &lsquo;&rdquo; + this.mapperInterface + &ldquo;&rsquo; to configuration.&rdquo;, e);
+    throw new IllegalArgumentException(e);
+  } finally {
+    ErrorContext.instance().reset();
+  }
+}
+}
+<code>
+其调用了`Configuration`的`addMapper`方法，这样就把`Bean`交给`MyBatis`管理了。那么`checkDaoConfig`是什么时候调用的呢？我们翻看其父类`DaoSupport`可以看到:
+</code>java DaoSupport.java片段
+public abstract class DaoSupport implements InitializingBean {
+    @Override
+  public final void afterPropertiesSet() throws IllegalArgumentException, BeanInitializationException {
+    checkDaoConfig();
+  }
+}
+<code>
+因为`DaoSupport`实现了`InitializingBean`并重写`afterPropertiesSet`方法，了解`Spring`生命周期的同学知道`afterPropertiesSet`方法会在资源加载完以后，初始化bean之前执行。我们继续查看`addMapper`方法。
+</code>java MapperRegistry.java片段
+public <T> void addMapper(Class<T> type) {
+    if (type.isInterface()) {
+      if (hasMapper(type)) {
+        throw new BindingException(&ldquo;Type &rdquo; + type + &ldquo; is already known to the MapperRegistry.&rdquo;);
+      }
+      boolean loadCompleted = false;
+      try {
+        knownMappers.put(type, new MapperProxyFactory<T>(type));
+        // It&rsquo;s important that the type is added before the parser is run
+        // otherwise the binding may automatically be attempted by the
+        // mapper parser. If the type is already known, it won&rsquo;t try.
+        MapperAnnotationBuilder parser = new MapperAnnotationBuilder(config, type);
+        parser.parse();
+        loadCompleted = true;
+      } finally {
+        if (!loadCompleted) {
+          knownMappers.remove(type);
+        }
+      }
+    }
+}
+<code>
+`addMapper`方法最终创建了`MapperProxyFactory`对象，在`MapperProxyFactory`里面我们两眼泪汪汪地发现了似曾相识的代码：
+</code>java MapperProxyFactory.java片段
+protected T newInstance(MapperProxy<T> mapperProxy) {
+    return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[] { mapperInterface }, mapperProxy);
+}</p>
+
+<p>public T newInstance(SqlSession sqlSession) {
+    final MapperProxy<T> mapperProxy = new MapperProxy<T>(sqlSession, mapperInterface, methodCache);
+    return newInstance(mapperProxy);
+}
+<code>
+而`MapperProxy`实现了`InvocationHandler`方法，最终实现对`Bean`的代理，同时获取到上下文的`sqlSession`以供使用。具体生成过程我们不再累述，直接通过其源码结束本篇文章：
+</code>java MapperProxy.java片段
+public class MapperProxy<T> implements InvocationHandler, Serializable {</p>
+
+<p>  private static final long serialVersionUID = -6424540398559729838L;
+  private final SqlSession sqlSession;
+  private final Class<T> mapperInterface;
+  private final Map&lt;Method, MapperMethod> methodCache;</p>
+
+<p>  public MapperProxy(SqlSession sqlSession, Class<T> mapperInterface, Map&lt;Method, MapperMethod> methodCache) {
+    this.sqlSession = sqlSession;
+    this.mapperInterface = mapperInterface;
+    this.methodCache = methodCache;
+  }</p>
+
+<p>  @Override
+  public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+    try {
+      if (Object.class.equals(method.getDeclaringClass())) {
+        return method.invoke(this, args);
+      } else if (isDefaultMethod(method)) {
+        return invokeDefaultMethod(proxy, method, args);
+      }
+    } catch (Throwable t) {
+      throw ExceptionUtil.unwrapThrowable(t);
+    }
+    final MapperMethod mapperMethod = cachedMapperMethod(method);
+    return mapperMethod.execute(sqlSession, args);
+  }
+}
+&#8220;`</p>
 
 <h2>参考链接</h2>
 
@@ -1069,123 +833,66 @@ GET api/users?device=ios
 <h2>实现</h2>
 
 <p>首先准备一个<code>BaseSigntureRequest</code>类用来存放公共参数
-<figure class='code'><figcaption><span>BaseSignatureRequest.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BaseSignatureRequest</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="n">String</span> <span class="n">device</span><span class="o">;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="n">String</span> <span class="nf">getDevice</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">device</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">setDevice</span><span class="o">(</span><span class="n">String</span> <span class="n">device</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">device</span> <span class="o">=</span> <span class="n">device</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">然后准备一个</span><span class="err">`</span><span class="kd">static</span><span class="err">`</span><span class="n">的</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span><span class="n">类用来存放</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`，</span><span class="n">以便存储和获取时候的</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span><span class="n">一致</span><span class="err">。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">ThreadLocalCache</span><span class="o">.</span><span class="na">java</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThreadLocalCache</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ThreadLocal</span><span class="o">&lt;</span><span class="n">BaseSignatureRequest</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="n">baseSignatureRequestThreadLocal</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ThreadLocal</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;();</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">然后编写一个</span><span class="err">`</span><span class="n">Interceptor</span><span class="err">`，</span><span class="n">在请求的时候获取</span><span class="err">`</span><span class="n">device</span><span class="err">`</span><span class="n">参数</span><span class="err">，</span><span class="n">存入当前线程的</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span><span class="n">中</span><span class="err">。</span><span class="n">这里需要注意的是</span><span class="err">，</span><span class="n">重写了</span><span class="err">`</span><span class="n">afterCompletion</span><span class="err">`</span><span class="n">方法</span><span class="err">，</span><span class="n">当请求结束的时候把</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span> <span class="err">`</span><span class="n">remove</span><span class="err">`，</span><span class="n">移除不必须要键值对</span><span class="err">。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">ParameterInterceptor</span><span class="o">.</span><span class="na">java</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ParameterInterceptor</span> <span class="kd">implements</span> <span class="n">HandlerInterceptor</span> <span class="o">{</span>
-</span><span class='line'>    <span class="nd">@Override</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">preHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span>
-</span><span class='line'>                             <span class="n">Object</span> <span class="n">handler</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">String</span> <span class="n">device</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">device</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
-</span><span class='line'>        <span class="n">BaseSignatureRequest</span> <span class="n">baseSignatureRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BaseSignatureRequest</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">baseSignatureRequest</span><span class="o">.</span><span class="na">setDevice</span><span class="o">(</span><span class="n">device</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">ThreadLocalCache</span><span class="o">.</span><span class="na">baseSignatureRequestThreadLocal</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">baseSignatureRequest</span><span class="o">);</span>
-</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">afterCompletion</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span>
-</span><span class='line'>                            <span class="n">Object</span> <span class="n">handler</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">ThreadLocalCache</span><span class="o">.</span><span class="na">baseSignatureRequestThreadLocal</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">postHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">httpServletRequest</span><span class="o">,</span>
-</span><span class='line'>                       <span class="n">HttpServletResponse</span> <span class="n">httpServletResponse</span><span class="o">,</span>
-</span><span class='line'>                       <span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">ModelAndView</span> <span class="n">modelAndView</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">当然需要在</span><span class="err">`</span><span class="n">spring</span><span class="err">`</span><span class="n">里面配置</span><span class="err">`</span><span class="n">interceptor</span><span class="err">`</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">xml</span> <span class="n">applicationContext</span><span class="o">.</span><span class="na">xml</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="nl">mvc:</span><span class="n">interceptors</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="nl">mvc:</span><span class="n">interceptor</span><span class="o">&gt;</span>
-</span><span class='line'>            <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="nl">mvc:</span><span class="n">mapping</span> <span class="n">path</span><span class="o">=&amp;</span><span class="n">ldquo</span><span class="o">;/</span><span class="n">api</span><span class="o">/**&amp;</span><span class="n">rdquo</span><span class="o">;/&gt;</span>
-</span><span class='line'>            <span class="o">&lt;</span><span class="n">bean</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;life.majiang.ParameterInterceptor&quot;</span><span class="o">&gt;&lt;/</span><span class="n">bean</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="nl">mvc:</span><span class="n">interceptor</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="nl">mvc:</span><span class="n">interceptors</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+&#8220;`java BaseSignatureRequest.java
+public class BaseSignatureRequest {
+    private String device;</p>
+
+<pre><code>public String getDevice() {
+    return device;
+}
+
+public void setDevice(String device) {
+    this.device = device;
+}
+</code></pre>
+
+<p>}
+<code>
+然后准备一个`static`的`ThreadLocal`类用来存放`ThreadLocal`，以便存储和获取时候的`ThreadLocal`一致。
+</code>java ThreadLocalCache.java
+public class ThreadLocalCache {
+    public static ThreadLocal<BaseSignatureRequest>
+        baseSignatureRequestThreadLocal = new ThreadLocal&lt;>();
+}
+<code>
+然后编写一个`Interceptor`，在请求的时候获取`device`参数，存入当前线程的`ThreadLocal`中。这里需要注意的是，重写了`afterCompletion`方法，当请求结束的时候把`ThreadLocal` `remove`，移除不必须要键值对。
+</code>java ParameterInterceptor.java
+public class ParameterInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+                             Object handler) throws Exception {
+        String device = request.getParameter(&ldquo;device&rdquo;);
+        BaseSignatureRequest baseSignatureRequest = new BaseSignatureRequest();
+        baseSignatureRequest.setDevice(device);
+        ThreadLocalCache.baseSignatureRequestThreadLocal.set(baseSignatureRequest);
+        return true;
+    }</p>
+
+<pre><code>@Override
+public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                            Object handler, Exception ex) throws Exception {
+    ThreadLocalCache.baseSignatureRequestThreadLocal.remove();
+}
+
+@Override
+public void postHandle(HttpServletRequest httpServletRequest,
+                       HttpServletResponse httpServletResponse, 
+                       Object o, ModelAndView modelAndView) throws Exception {
+
+}
+</code></pre>
+
+<p>}
+<code>
+当然需要在`spring`里面配置`interceptor`
+</code>xml applicationContext.xml
+    &lt;mvc:interceptors>
+        &lt;mvc:interceptor>
+            &lt;mvc:mapping path=&ldquo;/api/**&rdquo;/>
+            <bean class="life.majiang.ParameterInterceptor"></bean>
+        &lt;/mvc:interceptor>
+    &lt;/mvc:interceptors>
+&#8220;`</p>
 
 <p>最后在<code>Converter</code>里面转换实体的时候直接使用即可，这样就大功告成了。
 <code>java UserConverter.java
@@ -1322,99 +1029,59 @@ public class UserConverter {
 <h2>CacheLoader</h2>
 
 <p>预先准备好一个<code>MockDB</code>类，用来模拟缓存中没有的时候在数据库中获取
-<figure class='code'><figcaption><span>MockDB.java</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MockDB</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">mockPersistence</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;()</span> <span class="o">{{</span>
-</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">put</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">codedrinker</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
-</span><span class='line'>    <span class="o">}};&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">loadFromPersistence</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;load key from persistence : &quot;</span> <span class="o">+</span> <span class="n">key</span><span class="o">);</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">mockPersistence</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock lang:java MockDB.java%}
+{% raw %}
+public class MockDB {
+    private static Map&lt;String, String> mockPersistence = new HashMap&lt;String, String>() {{
+        this.put(&ldquo;github&rdquo;, &ldquo;codedrinker&rdquo;);
+    }};</p>
+
+<pre><code>public static String loadFromPersistence(String key) {
+    System.out.println("load key from persistence : " + key);
+    return mockPersistence.get(key);
+}
+</code></pre>
+
+<p>}
+{% endraw %}
+{% endcodeblock %}
 下面是使用<code>CacheLoader</code>的代码
-<figure class='code'><figcaption><span>GuavaLoadingCache.java</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">GuavaLoadingCache</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">LoadingCache</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">loadingCache</span> <span class="o">=</span> <span class="n">CacheBuilder</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">newBuilder</span><span class="o">()</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">expireAfterWrite</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">removalListener</span><span class="o">(</span><span class="k">new</span> <span class="n">RemovalListener</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="nd">@Override</span>
-</span><span class='line'>                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRemoval</span><span class="o">(</span><span class="n">RemovalNotification</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">notification</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>                        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">cache</span> <span class="n">expired</span><span class="o">,</span> <span class="n">remove</span> <span class="n">key</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">notification</span><span class="o">.</span><span class="na">getKey</span><span class="o">());</span>
-</span><span class='line'>                    <span class="o">}</span>
-</span><span class='line'>                <span class="o">})</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">CacheLoader</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="nd">@Override</span>
-</span><span class='line'>                    <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">load</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>                        <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
-</span><span class='line'>                    <span class="o">}</span>
-</span><span class='line'>                <span class="o">});</span>
-</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">once</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">twice</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">third</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">not</span> <span class="n">exist</span> <span class="n">key</span> <span class="n">from</span> <span class="n">cache</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">email</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ExecutionException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock lang:java GuavaLoadingCache.java%}
+{% raw %}
+public class GuavaLoadingCache {
+    public static void main(String[] args) {
+        LoadingCache&lt;String, Optional<String>> loadingCache = CacheBuilder
+                .newBuilder()
+                .expireAfterWrite(3, TimeUnit.SECONDS)
+                .removalListener(new RemovalListener&lt;String, Optional<String>>() {
+                    @Override
+                    public void onRemoval(RemovalNotification&lt;String, Optional<String>> notification) {
+                        System.out.println(&ldquo;cache expired, remove key : &rdquo; + notification.getKey());
+                    }
+                })
+                .build(new CacheLoader&lt;String, Optional<String>>() {
+                    @Override
+                    public Optional<String> load(String key) throws Exception {
+                        return Optional.fromNullable(MockDB.loadFromPersistence(key));
+                    }
+                });
+        try {
+            System.out.println(&ldquo;load from cache once : &rdquo; + loadingCache.get(&ldquo;github&rdquo;).orNull());
+            Thread.sleep(2000);
+            System.out.println(&ldquo;load from cache twice : &rdquo; + loadingCache.get(&ldquo;github&rdquo;).orNull());
+            Thread.sleep(2000);
+            System.out.println(&ldquo;load from cache third : &rdquo; + loadingCache.get(&ldquo;github&rdquo;).orNull());
+            Thread.sleep(2000);
+            System.out.println(&ldquo;load not exist key from cache : &rdquo; + loadingCache.get(&ldquo;email&rdquo;).orNull());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+{% endraw %}
+{% endcodeblock %}
 我们逐行进行解释：</p>
 
 <ul>
@@ -1440,106 +1107,59 @@ load not exist key from cache : null
 <h2>Callable</h2>
 
 <p>这里我们依然需要使用上面的<code>MockDB</code>类，具体代码如下。
-<figure class='code'><figcaption><span>GuavaCallableCache.java</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">GuavaCallableCache</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="kd">final</span> <span class="n">String</span> <span class="n">key</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;;</span>
-</span><span class='line'>        <span class="n">Cache</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">CacheBuilder</span><span class="o">.</span><span class="na">newBuilder</span><span class="o">()</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">expireAfterWrite</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">removalListener</span><span class="o">(</span><span class="k">new</span> <span class="n">RemovalListener</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="nd">@Override</span>
-</span><span class='line'>                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRemoval</span><span class="o">(</span><span class="n">RemovalNotification</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">notification</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>                        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">cache</span> <span class="n">expired</span><span class="o">,</span> <span class="n">remove</span> <span class="n">key</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">notification</span><span class="o">.</span><span class="na">getKey</span><span class="o">());</span>
-</span><span class='line'>                    <span class="o">}</span>
-</span><span class='line'>                <span class="o">}).</span><span class="na">build</span><span class="o">();</span>
-</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">optional</span><span class="o">;</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">once</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                <span class="nd">@Override</span>
-</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
-</span><span class='line'>                <span class="o">}</span>
-</span><span class='line'>            <span class="o">}).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">twice</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                <span class="nd">@Override</span>
-</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
-</span><span class='line'>                <span class="o">}</span>
-</span><span class='line'>            <span class="o">}).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">third</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                <span class="nd">@Override</span>
-</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
-</span><span class='line'>                <span class="o">}</span>
-</span><span class='line'>            <span class="o">}).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="kd">final</span> <span class="n">String</span> <span class="n">nullKey</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">email</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;;</span>
-</span><span class='line'>            <span class="n">optional</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">nullKey</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                <span class="nd">@Override</span>
-</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">nullKey</span><span class="o">));</span>
-</span><span class='line'>                <span class="o">}</span>
-</span><span class='line'>            <span class="o">});</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">not</span> <span class="n">exist</span> <span class="n">key</span> <span class="n">from</span> <span class="n">cache</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">optional</span><span class="o">.</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ExecutionException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock lang:java GuavaCallableCache.java%}
+{% raw %}
+public class GuavaCallableCache {
+    public static void main(String[] args) {
+        final String key = &ldquo;github&rdquo;;
+        Cache&lt;String, Optional<String>> cache = CacheBuilder.newBuilder()
+                .expireAfterWrite(3, TimeUnit.SECONDS)
+                .removalListener(new RemovalListener&lt;String, Optional<String>>() {
+                    @Override
+                    public void onRemoval(RemovalNotification&lt;String, Optional<String>> notification) {
+                        System.out.println(&ldquo;cache expired, remove key : &rdquo; + notification.getKey());
+                    }
+                }).build();
+        try {
+            Optional<String> optional;
+            System.out.println(&ldquo;load from cache once : &rdquo; + cache.get(key, new Callable&lt;Optional<String>>() {
+                @Override
+                public Optional<String> call() throws Exception {
+                    return Optional.fromNullable(MockDB.loadFromPersistence(key));
+                }
+            }).orNull());
+            Thread.sleep(2000);
+            System.out.println(&ldquo;load from cache twice : &rdquo; + cache.get(key, new Callable&lt;Optional<String>>() {
+                @Override
+                public Optional<String> call() throws Exception {
+                    return Optional.fromNullable(MockDB.loadFromPersistence(key));
+                }
+            }).orNull());
+            Thread.sleep(2000);
+            System.out.println(&ldquo;load from cache third : &rdquo; + cache.get(key, new Callable&lt;Optional<String>>() {
+                @Override
+                public Optional<String> call() throws Exception {
+                    return Optional.fromNullable(MockDB.loadFromPersistence(key));
+                }
+            }).orNull());
+            Thread.sleep(2000);
+            final String nullKey = &ldquo;email&rdquo;;
+            optional = cache.get(nullKey, new Callable&lt;Optional<String>>() {
+                @Override
+                public Optional<String> call() throws Exception {
+                    return Optional.fromNullable(MockDB.loadFromPersistence(nullKey));
+                }
+            });
+            System.out.println(&ldquo;load not exist key from cache : &rdquo; + optional.orNull());
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
+{% endraw %}
+{% endcodeblock %}
 下面我们对程序进行解释，与上面例子唯一的不同就是没有在<code>build</code>的时候传入<code>CacheLoader</code>，而是在<code>cache.get</code>使用<code>Cache</code>的时候用传入<code>Callable</code>对象。这样做可以灵活配置每次获取的缓存源不一样，但是两种方案都各有好处，还是在使用的时候斟酌。
 运行程序数据结果如下：
 <code>sh

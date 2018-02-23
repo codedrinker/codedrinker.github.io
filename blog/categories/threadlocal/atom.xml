@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Threadlocal | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/threadlocal/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-22T15:56:57+08:00</updated>
+  <updated>2018-02-23T11:46:09+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -126,123 +126,66 @@ GET api/users?device=ios
 <h2>实现</h2>
 
 <p>首先准备一个<code>BaseSigntureRequest</code>类用来存放公共参数
-<figure class='code'><figcaption><span>BaseSignatureRequest.java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-<span class='line-number'>50</span>
-<span class='line-number'>51</span>
-<span class='line-number'>52</span>
-<span class='line-number'>53</span>
-<span class='line-number'>54</span>
-<span class='line-number'>55</span>
-<span class='line-number'>56</span>
-<span class='line-number'>57</span>
-<span class='line-number'>58</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BaseSignatureRequest</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="n">String</span> <span class="n">device</span><span class="o">;&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="n">String</span> <span class="nf">getDevice</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">device</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">setDevice</span><span class="o">(</span><span class="n">String</span> <span class="n">device</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="k">this</span><span class="o">.</span><span class="na">device</span> <span class="o">=</span> <span class="n">device</span><span class="o">;</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">然后准备一个</span><span class="err">`</span><span class="kd">static</span><span class="err">`</span><span class="n">的</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span><span class="n">类用来存放</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`，</span><span class="n">以便存储和获取时候的</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span><span class="n">一致</span><span class="err">。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">ThreadLocalCache</span><span class="o">.</span><span class="na">java</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ThreadLocalCache</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="n">ThreadLocal</span><span class="o">&lt;</span><span class="n">BaseSignatureRequest</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="n">baseSignatureRequestThreadLocal</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ThreadLocal</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&gt;();</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">然后编写一个</span><span class="err">`</span><span class="n">Interceptor</span><span class="err">`，</span><span class="n">在请求的时候获取</span><span class="err">`</span><span class="n">device</span><span class="err">`</span><span class="n">参数</span><span class="err">，</span><span class="n">存入当前线程的</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span><span class="n">中</span><span class="err">。</span><span class="n">这里需要注意的是</span><span class="err">，</span><span class="n">重写了</span><span class="err">`</span><span class="n">afterCompletion</span><span class="err">`</span><span class="n">方法</span><span class="err">，</span><span class="n">当请求结束的时候把</span><span class="err">`</span><span class="n">ThreadLocal</span><span class="err">`</span> <span class="err">`</span><span class="n">remove</span><span class="err">`，</span><span class="n">移除不必须要键值对</span><span class="err">。</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">java</span> <span class="n">ParameterInterceptor</span><span class="o">.</span><span class="na">java</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ParameterInterceptor</span> <span class="kd">implements</span> <span class="n">HandlerInterceptor</span> <span class="o">{</span>
-</span><span class='line'>    <span class="nd">@Override</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">preHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span>
-</span><span class='line'>                             <span class="n">Object</span> <span class="n">handler</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">String</span> <span class="n">device</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">device</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
-</span><span class='line'>        <span class="n">BaseSignatureRequest</span> <span class="n">baseSignatureRequest</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BaseSignatureRequest</span><span class="o">();</span>
-</span><span class='line'>        <span class="n">baseSignatureRequest</span><span class="o">.</span><span class="na">setDevice</span><span class="o">(</span><span class="n">device</span><span class="o">);</span>
-</span><span class='line'>        <span class="n">ThreadLocalCache</span><span class="o">.</span><span class="na">baseSignatureRequestThreadLocal</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">baseSignatureRequest</span><span class="o">);</span>
-</span><span class='line'>        <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'>    <span class="o">}&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">afterCompletion</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">,</span>
-</span><span class='line'>                            <span class="n">Object</span> <span class="n">handler</span><span class="o">,</span> <span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">ThreadLocalCache</span><span class="o">.</span><span class="na">baseSignatureRequestThreadLocal</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="nd">@Override</span>
-</span><span class='line'><span class="kd">public</span> <span class="kt">void</span> <span class="nf">postHandle</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">httpServletRequest</span><span class="o">,</span>
-</span><span class='line'>                       <span class="n">HttpServletResponse</span> <span class="n">httpServletResponse</span><span class="o">,</span>
-</span><span class='line'>                       <span class="n">Object</span> <span class="n">o</span><span class="o">,</span> <span class="n">ModelAndView</span> <span class="n">modelAndView</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span><span class='line'><span class="o">&lt;</span><span class="n">code</span><span class="o">&gt;</span>
-</span><span class='line'><span class="n">当然需要在</span><span class="err">`</span><span class="n">spring</span><span class="err">`</span><span class="n">里面配置</span><span class="err">`</span><span class="n">interceptor</span><span class="err">`</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;</span><span class="n">xml</span> <span class="n">applicationContext</span><span class="o">.</span><span class="na">xml</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="nl">mvc:</span><span class="n">interceptors</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="nl">mvc:</span><span class="n">interceptor</span><span class="o">&gt;</span>
-</span><span class='line'>            <span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="nl">mvc:</span><span class="n">mapping</span> <span class="n">path</span><span class="o">=&amp;</span><span class="n">ldquo</span><span class="o">;/</span><span class="n">api</span><span class="o">/**&amp;</span><span class="n">rdquo</span><span class="o">;/&gt;</span>
-</span><span class='line'>            <span class="o">&lt;</span><span class="n">bean</span> <span class="n">class</span><span class="o">=</span><span class="s">&quot;life.majiang.ParameterInterceptor&quot;</span><span class="o">&gt;&lt;/</span><span class="n">bean</span><span class="o">&gt;</span>
-</span><span class='line'>        <span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="nl">mvc:</span><span class="n">interceptor</span><span class="o">&gt;</span>
-</span><span class='line'>    <span class="o">&amp;</span><span class="n">lt</span><span class="o">;/</span><span class="nl">mvc:</span><span class="n">interceptors</span><span class="o">&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+&#8220;`java BaseSignatureRequest.java
+public class BaseSignatureRequest {
+    private String device;</p>
+
+<pre><code>public String getDevice() {
+    return device;
+}
+
+public void setDevice(String device) {
+    this.device = device;
+}
+</code></pre>
+
+<p>}
+<code>
+然后准备一个`static`的`ThreadLocal`类用来存放`ThreadLocal`，以便存储和获取时候的`ThreadLocal`一致。
+</code>java ThreadLocalCache.java
+public class ThreadLocalCache {
+    public static ThreadLocal<BaseSignatureRequest>
+        baseSignatureRequestThreadLocal = new ThreadLocal&lt;>();
+}
+<code>
+然后编写一个`Interceptor`，在请求的时候获取`device`参数，存入当前线程的`ThreadLocal`中。这里需要注意的是，重写了`afterCompletion`方法，当请求结束的时候把`ThreadLocal` `remove`，移除不必须要键值对。
+</code>java ParameterInterceptor.java
+public class ParameterInterceptor implements HandlerInterceptor {
+    @Override
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response,
+                             Object handler) throws Exception {
+        String device = request.getParameter(&ldquo;device&rdquo;);
+        BaseSignatureRequest baseSignatureRequest = new BaseSignatureRequest();
+        baseSignatureRequest.setDevice(device);
+        ThreadLocalCache.baseSignatureRequestThreadLocal.set(baseSignatureRequest);
+        return true;
+    }</p>
+
+<pre><code>@Override
+public void afterCompletion(HttpServletRequest request, HttpServletResponse response,
+                            Object handler, Exception ex) throws Exception {
+    ThreadLocalCache.baseSignatureRequestThreadLocal.remove();
+}
+
+@Override
+public void postHandle(HttpServletRequest httpServletRequest,
+                       HttpServletResponse httpServletResponse, 
+                       Object o, ModelAndView modelAndView) throws Exception {
+
+}
+</code></pre>
+
+<p>}
+<code>
+当然需要在`spring`里面配置`interceptor`
+</code>xml applicationContext.xml
+    &lt;mvc:interceptors>
+        &lt;mvc:interceptor>
+            &lt;mvc:mapping path=&ldquo;/api/**&rdquo;/>
+            <bean class="life.majiang.ParameterInterceptor"></bean>
+        &lt;/mvc:interceptor>
+    &lt;/mvc:interceptors>
+&#8220;`</p>
 
 <p>最后在<code>Converter</code>里面转换实体的时候直接使用即可，这样就大功告成了。
 <code>java UserConverter.java

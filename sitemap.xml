@@ -142,10 +142,13 @@
 <loc>http://www.majiang.life/blog/categories/maven/</loc>
 </url>
 <url>
-<loc>http://www.majiang.life/blog/categories/aws/</loc>
+<loc>http://www.majiang.life/blog/categories/java/</loc>
 </url>
 <url>
-<loc>http://www.majiang.life/blog/categories/java/</loc>
+<loc>http://www.majiang.life/blog/categories/spring/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/blog/categories/aws/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/cache/</loc>
@@ -158,9 +161,6 @@
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/spring-boot/</loc>
-</url>
-<url>
-<loc>http://www.majiang.life/blog/categories/spring/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/tech/</loc>

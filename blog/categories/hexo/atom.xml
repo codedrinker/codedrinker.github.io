@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Hexo | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/hexo/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-22T15:56:57+08:00</updated>
+  <updated>2018-02-23T11:46:09+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -53,71 +53,53 @@ commenthub_id: 3821949
 <h3>配置显示位置</h3>
 
 <p>在 <code>_layouts/post.html</code> 的 article 标签下面添加如下代码，用来告诉 Commenthub，在什么地方显示评论功能。
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>{% if site.commenthub_id and page.comments == true %}
-</span><span class='line'>  <span class="nt">&lt;section&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;h1&gt;</span>评论<span class="nt">&lt;/h1&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;commenthub_thread&quot;</span> <span class="na">aria-live=</span><span class="s">&quot;polite&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/section&gt;</span>
-</span><span class='line'>{% endif %}
-</span></code></pre></td></tr></table></div></figure></p>
+{% codeblock lang:html %}
+{% raw %}
+{% if site.commenthub_id and page.comments == true %}
+  <section>
+    <h1>评论</h1>
+    <div id="commenthub_thread" aria-live="polite"></div>
+  </section>
+{% endif %}
+{% endraw %}
+{% endcodeblock %}</p>
 
 <h3>创建 commenthub.html</h3>
 
 <p>创建 <code>includes/commenthub.html</code>，填入如下内容
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>{% comment %} Load script if commenthub comments are enabled and <span class="nt">&lt;code&gt;</span>page.comments<span class="nt">&lt;/code&gt;</span> is either empty (index) or set to true {% endcomment %}
-</span><span class='line'>{% if site.commenthub_id and page.comments != false %}<span class="nt">&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_id</span> <span class="o">=</span> <span class="s1">&#39;{{ site.commenthub_id }}&#39;</span><span class="p">;</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_website</span> <span class="o">=</span> <span class="s1">&#39;{{ site.url }}&#39;</span><span class="p">;</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_identifier</span> <span class="o">=</span> <span class="s1">&#39;{{ page.url }}&#39;</span><span class="p">;</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_url</span> <span class="o">=</span> <span class="s1">&#39;{{ site.url }}{{ page.url }}&#39;</span><span class="p">;</span>
-</span><span class='line'>    <span class="kd">var</span> <span class="nx">commenthub_title</span> <span class="o">=</span> <span class="s1">&#39;{{ page.title }}&#39;</span><span class="p">;</span>
-</span><span class='line'>    <span class="p">(</span><span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">dsq</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;script&#39;</span><span class="p">);</span>
-</span><span class='line'>        <span class="nx">dsq</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;text/javascript&#39;</span><span class="p">;</span>
-</span><span class='line'>        <span class="nx">dsq</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-</span><span class='line'>        <span class="nx">dsq</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s1">&#39;https://commenthub.herokuapp.com/js/embed.js&#39;</span><span class="p">;</span>
-</span><span class='line'>        <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;head&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="s1">&#39;body&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">dsq</span><span class="p">);</span>
-</span><span class='line'>    <span class="p">}());</span>
-</span><span class='line'><span class="nt">&lt;/script&gt;</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;p&gt;</span>{% endif %}
-</span></code></pre></td></tr></table></div></figure></p>
+{% codeblock lang:html %}
+{% raw %}
+{% comment %} Load script if commenthub comments are enabled and <code>page.comments</code> is either empty (index) or set to true {% endcomment %}
+{% if site.commenthub_id and page.comments != false %}</p>
+
+<script type="text/javascript">
+    var commenthub_id = '{{ site.commenthub_id }}';
+    var commenthub_website = '{{ site.url }}';
+    var commenthub_identifier = '{{ page.url }}';
+    var commenthub_url = '{{ site.url }}{{ page.url }}';
+    var commenthub_title = '{{ page.title }}';
+    (function () {
+        var dsq = document.createElement('script');
+        dsq.type = 'text/javascript';
+        dsq.async = true;
+        dsq.src = 'https://commenthub.herokuapp.com/js/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+<p>{% endif %}
+{% endraw %}
+{% endcodeblock %}</p>
 
 <h3>引入 commenthub.html</h3>
 
 <p>在 <code>includes/after_foot.html</code> 里面添加一行如下内容，用于引入 commenthub.html 文件
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>{% include commenthub.html %}
-</span></code></pre></td></tr></table></div></figure></p>
+{% codeblock lang:html %}
+{% raw %}
+{% include commenthub.html %}
+{% endraw %}
+{% endcodeblock %}</p>
 
 <h3>完成</h3>
 
@@ -144,63 +126,48 @@ commenthub:
 <h3>配置显示位置</h3>
 
 <p>在<code>themes/next/layout/_partials/comments.swig</code>里面添加一行代码，记得注意看<code>elseif</code>的位置
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>  {% elseif theme.commenthub.enable %}
-</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;comments&quot;</span> <span class="na">id=</span><span class="s">&quot;comments&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>      <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;commenthub_thread&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+{% codeblock lang:html %}
+{% raw %}
+  {% elseif theme.commenthub.enable %}
+    <div class="comments" id="comments">
+      <div id="commenthub_thread"></div>
+    </div>
+{% endraw %}
+{% endcodeblock %}</p>
 
 <h3>创建 commenthub.swig</h3>
 
 <p>创建新文件<code>themes/next/layout/_third-party/comments/commenthub.swig</code>并贴入如下代码，如下代码主要是用于加载和生成评论的逻辑。
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>{% if not (theme.duoshuo and theme.duoshuo.shortname) and not theme.duoshuo_shortname %}
-</span><span class='line'>  {% if theme.commenthub.enable %}
-</span><span class='line'>      <span class="nt">&lt;script </span><span class="na">type=</span><span class="s">&quot;text/javascript&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_id</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;{{</span> <span class="nx">theme</span><span class="p">.</span><span class="nx">commenthub</span><span class="p">.</span><span class="nx">id</span> <span class="p">}}</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_website</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;{{</span> <span class="nx">theme</span><span class="p">.</span><span class="nx">commenthub</span><span class="p">.</span><span class="nx">site</span> <span class="p">}}</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_identifier</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;{{</span> <span class="nx">page</span><span class="p">.</span><span class="nx">path</span> <span class="p">}}</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_url</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;{{</span> <span class="nx">page</span><span class="p">.</span><span class="nx">permalink</span> <span class="p">}}</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">commenthub_title</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;{{</span> <span class="nx">page</span><span class="p">.</span><span class="nx">title</span><span class="o">|</span> <span class="nx">addslashes</span> <span class="p">}}</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
-</span><span class='line'>        <span class="kd">var</span> <span class="nx">dsq</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">script</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;);</span>
-</span><span class='line'>            <span class="nx">dsq</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">text</span><span class="o">/</span><span class="nx">javascript</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;;</span>
-</span><span class='line'>            <span class="nx">dsq</span><span class="p">.</span><span class="nx">async</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
-</span><span class='line'>            <span class="nx">dsq</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="o">&lt;</span><span class="nx">a</span> <span class="nx">href</span><span class="o">=</span><span class="s2">&quot;https://commenthub.herokuapp.com/js/embed.js&quot;</span><span class="o">&gt;</span><span class="nx">https</span><span class="o">:</span><span class="c1">//commenthub.herokuapp.com/js/embed.js&lt;/a&gt;&amp;rsquo;;</span>
-</span><span class='line'>            <span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">head</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">||</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByTagName</span><span class="p">(</span><span class="o">&amp;</span><span class="nx">lsquo</span><span class="p">;</span><span class="nx">body</span><span class="o">&amp;</span><span class="nx">rsquo</span><span class="p">;)[</span><span class="mi">0</span><span class="p">]).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">dsq</span><span class="p">);</span>
-</span><span class='line'>      <span class="nt">&lt;/script&gt;</span>
-</span><span class='line'>  {% endif %}
-</span><span class='line'>{% endif %}
-</span></code></pre></td></tr></table></div></figure></p>
+{% codeblock lang:html %}
+{% raw %}
+{% if not (theme.duoshuo and theme.duoshuo.shortname) and not theme.duoshuo_shortname %}
+  {% if theme.commenthub.enable %}
+      <script type="text/javascript">
+        var commenthub_id = &lsquo;{{ theme.commenthub.id }}&rsquo;;
+        var commenthub_website = &lsquo;{{ theme.commenthub.site }}&rsquo;;
+        var commenthub_identifier = &lsquo;{{ page.path }}&rsquo;;
+        var commenthub_url = &lsquo;{{ page.permalink }}&rsquo;;
+        var commenthub_title = &lsquo;{{ page.title| addslashes }}&rsquo;;
+        var dsq = document.createElement(&lsquo;script&rsquo;);
+            dsq.type = &lsquo;text/javascript&rsquo;;
+            dsq.async = true;
+            dsq.src = &lsquo;<a href="https://commenthub.herokuapp.com/js/embed.js">https://commenthub.herokuapp.com/js/embed.js</a>&rsquo;;
+            (document.getElementsByTagName(&lsquo;head&rsquo;)[0] || document.getElementsByTagName(&lsquo;body&rsquo;)[0]).appendChild(dsq);
+      </script>
+  {% endif %}
+{% endif %}
+{% endraw %}
+{% endcodeblock %}</p>
 
 <h3>引入 commenthub.swig</h3>
 
 <p>在<code>themes/next/layout/_third-party/comments/index.swig</code>文件添加如下代码：
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'>{% include <span class="ni">&amp;lsquo;</span>commenthub.swig<span class="ni">&amp;rsquo;</span> %}<span class="nt">&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure></p>
+{% codeblock lang:html %}
+{% raw %}
+{% include &lsquo;commenthub.swig&rsquo; %}</p>
+
+<p>{% endraw %}
+{% endcodeblock %}</p>
 
 <h3>完成</h3>
 

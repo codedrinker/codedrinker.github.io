@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tech | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/tech/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-22T15:56:57+08:00</updated>
+  <updated>2018-02-23T11:46:09+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -32,15 +32,12 @@
 <h2>使用轮子</h2>
 
 <p>使用第三方<code>API</code>，<a href="https://mercury.postlight.com/">Mercury</a>。这是一个免费的非常强大的<code>API</code>，他提供在线的把文章转换为便于阅读的文章。官方给的解释是：
-<figure class='code'><figcaption><span>官方文档 </span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Make your content work anywhere. Free.
-</span><span class='line'>Mercury transforms web pages into clean text.
-</span><span class='line'>Publishers and programmers use it to make the web make sense,
-</span><span class='line'>and readers use it to read any web article comfortably.</span></code></pre></td></tr></table></div></figure></p>
+{% codeblock 官方文档 %}
+Make your content work anywhere. Free.
+Mercury transforms web pages into clean text.
+Publishers and programmers use it to make the web make sense,
+and readers use it to read any web article comfortably.
+{% endcodeblock %}</p>
 
 <p>我们只需要注册一个账号，然后使用它的<code>api-key</code>调用接口就可以了。下面是预览效果：</p>
 

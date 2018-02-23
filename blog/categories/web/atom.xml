@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Web | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/web/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-22T15:56:57+08:00</updated>
+  <updated>2018-02-23T11:46:09+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -36,62 +36,35 @@
 <h2>如何快速实现<code>web响应式布局</code></h2>
 
 <p>我们通过一个例子来具体说明，首先使用<code>@media</code>关键字为不同的屏幕尺寸设置不同样式，关于<code>@media</code>我们下文有更详细的介绍
-<figure class='code'><figcaption><span>代码片段</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;/p&gt;</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;container&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-12 col-sm-12 row&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-6 col-sm-12 col-1 col&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-</span><span class='line'>            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-</span><span class='line'>            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-</span><span class='line'>            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-</span><span class='line'>            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-</span><span class='line'>            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-</span><span class='line'>        <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;col-md-6 col-sm-12 col-2 col&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-</span><span class='line'>            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-</span><span class='line'>            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-</span><span class='line'>            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-</span><span class='line'>            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-</span><span class='line'>            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-</span><span class='line'>        <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;/div&gt;</span>
-</span><span class='line'><span class="nt">&lt;/div&gt;</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;p&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
+{% codeblock lang:html 代码片段%}
+{% raw %}</p>
+
+
+
+<div class="container">
+    <div class="col-md-12 col-sm-12 row">
+        <div class="col-md-6 col-sm-12 col-1 col">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+        <div class="col-md-6 col-sm-12 col-2 col">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+            tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+            consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+            cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+            proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        </div>
+    </div>  
+</div>
+
+
+<p>{% endraw %}
+{% endcodeblock %}
 我们简单解释一下上述代码片段<br/>
 <code>min-width</code>指的是当屏幕尺寸大于当前值的时候样式生效。<br/>
 外层的<code>div</code>包裹内层的两个<code>div</code>。<br/>
@@ -269,31 +242,20 @@ color-index: number of entries in the output device&rsquo;s color lookup table, 
 <h2>修饰<code>&lt;label&gt;</code></h2>
 
 <p>我们现在需要把<code>&lt;label&gt;</code>打造成一个按钮，所以你可以发挥你的想象绘制它，我现在先简单把它实现：
-<figure class='code'><figcaption><span>component.css</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.inputfile</span> <span class="o">+</span> <span class="nt">label</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">font-size</span><span class="o">:</span> <span class="m">1.25em</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">font-weight</span><span class="o">:</span> <span class="m">700</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">color</span><span class="o">:</span> <span class="nb">white</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">background-color</span><span class="o">:</span> <span class="nb">black</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">display</span><span class="o">:</span> <span class="k">inline</span><span class="o">-</span><span class="k">block</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nt">p</span><span class="o">&gt;</span><span class="nc">.inputfile</span><span class="nd">:focus</span> <span class="o">+</span> <span class="nt">label</span><span class="o">,</span>
-</span><span class='line'><span class="nc">.inputfile</span> <span class="o">+</span> <span class="nt">label</span><span class="nd">:hover</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">background-color</span><span class="o">:</span> <span class="nb">red</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+&#8220;`css component.css
+.inputfile + label {
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
+}</p>
+
+<p>.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: red;
+}
+&#8220;`</p>
 
 <h2>鼠标效果</h2>
 
@@ -401,31 +363,20 @@ Array.prototype.forEach.call( inputs, function( input )
     &lt;/head&gt;
 &lt;/html&gt;
 </code>
-<figure class='code'><figcaption><span>component.css</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='css'><span class='line'><span class="nc">.js</span> <span class="nc">.inputfile</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">width</span><span class="o">:</span> <span class="m">0.1px</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">height</span><span class="o">:</span> <span class="m">0.1px</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">opacity</span><span class="o">:</span> <span class="m">0</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">overflow</span><span class="o">:</span> <span class="k">hidden</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">position</span><span class="o">:</span> <span class="k">absolute</span><span class="p">;</span>
-</span><span class='line'>    <span class="k">z-index</span><span class="o">:</span> <span class="m">-1</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span><span class="o">&lt;/</span><span class="nt">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="nt">p</span><span class="o">&gt;</span><span class="nc">.no-js</span> <span class="nc">.inputfile</span> <span class="o">+</span> <span class="nt">label</span> <span class="p">{</span>
-</span><span class='line'>    <span class="k">display</span><span class="o">:</span> <span class="k">none</span><span class="p">;</span>
-</span><span class='line'><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></p>
+&#8220;`css component.css
+.js .inputfile {
+    width: 0.1px;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    z-index: -1;
+}</p>
+
+<p>.no-js .inputfile + label {
+    display: none;
+}
+&#8220;`</p>
 
 <p><img src="/images/posts/smart-custom-file-input-6.gif" alt="Demo" /></p>
 

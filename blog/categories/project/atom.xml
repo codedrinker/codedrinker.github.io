@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Project | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/project/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-22T15:56:57+08:00</updated>
+  <updated>2018-02-23T11:46:09+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -78,15 +78,13 @@
 </code>
 <code>table-of-contents-sidebar.css</code>文件是插件的样式文件，如果需要在修改网页样式的时候使用，需要通过<code>chrome.extension.getURL("table-of-contents-sidebar.css");</code>的方式获取到他的绝对路径，然后写到页面里面使用。<br/>
 <code>options.css</code>这个是设置页面需要使用的样式，不需要上面那么复杂，因为配置页面就是直接的网页了，可以直接引用：
-<figure class='code'><figcaption><span>options.html</p></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;options.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
-</span><span class='line'>
-</span><span class='line'>
-</span><span class='line'><span class="nt">&lt;p&gt;&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;options.css&quot;</span><span class="nt">&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
+&#8220;`html options.html</p>
+
+<script src="options.js"></script>
+
+
+<p><link rel="stylesheet" href="options.css">
+&#8220;`
 其他的都是一起图片或者是样式资源，没有特别要说的，只要路径对应好就可以了。</p>
 
 <h2>插件的实现思路</h2>
