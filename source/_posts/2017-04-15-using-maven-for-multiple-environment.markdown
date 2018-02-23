@@ -3,7 +3,7 @@ layout: post
 title: 安全的使用Maven实现不同环境配置文件的部署
 date: 2017-04-15 19:30:35 +0800
 comments: true
-categories: 
+categories: [Maven,Java,Spring]
 description: Maven Filter介绍和用法,Maven Profile介绍和用法,使用Maven的Filter和Profile实现项目的多环境部署,Maven的Profile优先级源码分析
 keywords: 安全的使用Maven实现不同环境配置文件的部署,安全的使用Maven实现生产环境和测试环境配置分离,Maven 打包实现生产环境与测试环境配置分离,maven打包,Maven针对不同的环境使用Profile完成打包部署,Maven 区分开发环境和测试环境配置,maven profile实现多环境打包,maven profile实现机制,使用maven profile properties 实现环境配置文件分离,maven settings.xml 优先级,maven settings.xml 安全打包,maven settings.xml 实现生产环境分离
 ---
