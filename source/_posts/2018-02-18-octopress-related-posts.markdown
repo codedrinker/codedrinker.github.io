@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "为 Octopress 添加 扩展相关阅读"
+title: "Octopress 添加 扩展相关阅读"
 date: 2018-02-18 20:24:22 +0800
 comments: true
 categories: [Octopress]
