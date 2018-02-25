@@ -12,12 +12,17 @@ google_ad_client: "ca-pub-9540087096615057",
 enable_page_level_ads: true
 });
 </script>
-  <title>Octopress 添加标签云 - 码匠笔记</title>
+  <title>修复 Octopress Table 样式 - 码匠笔记</title>
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="如何为Octopress博客添加标签云,如何自己为Octopress博客编写标签云">
-  <meta name="keywords" content="octopress tag cloud,Octopress 标签云,Octopress标签,Octopress右侧标签,为Octopress侧边栏添加标签云,标签云,为Octopress 添加标签云,为 Octopress 添加 tag cloud,为Octopress 侧边栏添加tag cloud">
+  <meta name="description" content="起因 Octopress 自带的 Table 样式太丑了，于是自己自定义一个，方法非常简单，操作如下。 效果 key value1 value2 a apple aardvark b banana bonobo c clementine cat 源码如下： 1
+2
+3
+4
+5
+key | &hellip;">
+  
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -25,7 +30,7 @@ enable_page_level_ads: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.majiang.life/blog/octopress-tag-cloud">
+  <link rel="canonical" href="http://www.majiang.life/blog/fixing-octopress-table-rendering">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
@@ -104,7 +109,7 @@ enable_page_level_ads: true
   
   <header>
     
-      <h1 class="entry-title">Octopress 添加标签云</h1>
+      <h1 class="entry-title">修复 Octopress Table 样式</h1>
     
     
       <p class="meta">
@@ -113,7 +118,7 @@ enable_page_level_ads: true
 
 
 
-<time class='entry-date' datetime='2017-06-24T15:11:51+08:00'><span class='date'>2017-06-24</span> <span class='time'>3:11 pm</span></time>
+<time class='entry-date' datetime='2018-02-24T20:19:39+08:00'><span class='date'>2018-02-24</span> <span class='time'>8:19 pm</span></time>
         <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
          访问 <span id="busuanzi_value_page_pv"></span> 次
       </p>
@@ -122,85 +127,62 @@ enable_page_level_ads: true
 
 
 
-<style type="text/css">
-  .note {
-    margin: 30px 0;
-    padding: 20px 20px 24px;
-    padding-left: 50px;
-    -webkit-border-radius: 0 5px 5px 0;
-    -moz-border-radius: 0 5px 5px 0;
-    border-radius:8px;
-    position: relative;
-    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
-    -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.2),inset 0 -1px 0 rgba(0,0,0,0.3);
-    box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
-    background-color: #7e6d42;
-    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#7e6d42), to(#5c4e35));
-    background-image: -webkit-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
-    background-image: -moz-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
-    background-image: -o-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
-    background-image: linear-gradient(to bottom, #86847f 0%, #3e3b36 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=&#8217;#7e6d42&#8217;, endColorstr=&#8217;#5c4e35&#8217;,GradientType=0 );
-  }
-  .note h4, .note p {
-    margin: 0;
-    color: #fff;
-  }
-</style>
-<div class="entry-content">
-  <div class="note">
-    <h4>本文内容概要如下：</h4>
-    <p>
-      
-      
-        1, 如何为Octopress博客添加标签云<br>
-      
-        2, 如何自己为Octopress博客编写标签云<br>
-      
-    </p>
-  </div>
-</div>
+<div class="entry-content"><h2>起因</h2>
 
-<div class="entry-content"><h2>前言</h2>
-
-<p>随着文章数量越来越多，分类也越来越多，不是很方便归类和查找，于是就有了<code>标签云</code>这个概念。简单明了的展示了标签和每一个标签下面的文章数量。这个功能可以自己编写，也非常简单。不过反正已经有轮子了，如果不喜欢重新造轮子，直接使用一个网上已经写好的就行了。下面直接进入正题：</p>
-
-<h2>使用轮子</h2>
-
-<p>直接<code>clone</code>轮子<code>https://github.com/tokkonopapa/octopress-tagcloud.git</code>到本地，如果不想<code>clone</code>直接点击<a href="/assets/octopress-tagcloud-master.zip">下载</a>，然后把对应的资源拷贝到相应的目录：</p>
+<p>Octopress 自带的 Table 样式太丑了，于是自己自定义一个，方法非常简单，操作如下。</p>
 
 <!-- more -->
 
+
+<h2>效果</h2>
+
+<table>
+<thead>
+<tr>
+<th>key </th>
+<th> value1 </th>
+<th> value2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a   </td>
+<td> apple  </td>
+<td> aardvark</td>
+</tr>
+<tr>
+<td>b   </td>
+<td> banana </td>
+<td> bonobo</td>
+</tr>
+<tr>
+<td>c   </td>
+<td> clementine </td>
+<td> cat</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>源码如下：</p>
 
 <figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>.
-</span><span class='line'>├─ plugins/
-</span><span class='line'>│  └── tag_cloud.rb
-</span><span class='line'>└─ source/
-</span><span class='line'>   └─ _includes/
-</span><span class='line'>      └─ custom/
-</span><span class='line'>         └─ asides/
-</span><span class='line'>            ├─ category_list.html
-</span><span class='line'>            └─ tag_cloud.html</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class=''><span class='line'>key | value1 | value2
+</span><span class='line'>----|--------|----------
+</span><span class='line'>a   | apple  | aardvark
+</span><span class='line'>b   | banana | bonobo
+</span><span class='line'>c   | clementine | cat</span></code></pre></td></tr></table></div></figure>
 
 
-<p>然后修改 <code>_config.yml</code>，添加 <code>tag_cloud.html</code> 到 <code>default_asides</code> 数组，重新<code>rake preview</code>即可。</p>
+<h2>编码</h2>
 
-<h2>造轮子</h2>
+<p>在 sass/custom 目录创建 _better_tables.scss，填写如下内容</p>
 
-<p>造轮子原理也是很简单，遍历所有的<code>category</code>和每一个<code>category</code>下面的<code>posts</code>，然后编写好样式做输出就可以了。<code>plugins</code>这个目录用户存放一些<code>Ruby</code>的<code>plugins</code>文件，所以我们直接写一个脚本到这个目录:</p>
-
-<figure class='code'><figcaption><span>plugins/tag_cloud.rb</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -218,64 +200,66 @@ enable_page_level_ads: true
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
 <span class='line-number'>18</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="c1"># plugins/tag_cloud.rb</span>
-</span><span class='line'><span class="k">module</span> <span class="nn">Jekyll</span>
-</span><span class='line'>  <span class="k">class</span> <span class="nc">CategoryListTag</span> <span class="o">&lt;</span> <span class="no">Liquid</span><span class="o">::</span><span class="no">Tag</span>
-</span><span class='line'>    <span class="k">def</span> <span class="nf">render</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
-</span><span class='line'>      <span class="n">html</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-</span><span class='line'>      <span class="n">categories</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">registers</span><span class="o">[</span><span class="ss">:site</span><span class="o">].</span><span class="n">categories</span><span class="o">.</span><span class="n">keys</span>
-</span><span class='line'>      <span class="n">categories</span><span class="o">.</span><span class="n">sort</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">category</span><span class="o">|</span>
-</span><span class='line'>        <span class="n">posts_in_category</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">registers</span><span class="o">[</span><span class="ss">:site</span><span class="o">].</span><span class="n">categories</span><span class="o">[</span><span class="n">category</span><span class="o">].</span><span class="n">size</span>
-</span><span class='line'>        <span class="n">category_dir</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="n">registers</span><span class="o">[</span><span class="ss">:site</span><span class="o">].</span><span class="n">config</span><span class="o">[</span><span class="s1">&#39;category_dir&#39;</span><span class="o">]</span>
-</span><span class='line'>        <span class="n">category_url</span> <span class="o">=</span> <span class="no">File</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">category_dir</span><span class="p">,</span> <span class="n">category</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/_|\P{Word}/</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">gsub</span><span class="p">(</span><span class="sr">/-{2,}/</span><span class="p">,</span> <span class="s1">&#39;-&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">downcase</span><span class="p">)</span>
-</span><span class='line'>        <span class="n">html</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;&lt;li class=&#39;category&#39;&gt;&lt;a href=&#39;/</span><span class="si">#{</span><span class="n">category_url</span><span class="si">}</span><span class="s2">/&#39;&gt;</span><span class="si">#{</span><span class="n">category</span><span class="si">}</span><span class="s2"> (</span><span class="si">#{</span><span class="n">posts_in_category</span><span class="si">}</span><span class="s2">)&lt;/a&gt;&lt;/li&gt;</span><span class="se">\n</span><span class="s2">&quot;</span>
-</span><span class='line'>      <span class="k">end</span>
-</span><span class='line'>      <span class="n">html</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="c1">// make the text for the header row bold and centered.</span>
+</span><span class='line'><span class="c1">// (I have not been able to figure out where jekyll/octopress are overriding</span>
+</span><span class='line'><span class="c1">//  the text-align and setting it to `left`)</span>
+</span><span class='line'><span class="nc">.entry-content</span> <span class="nt">th</span> <span class="p">{</span> <span class="na">font-weight</span><span class="o">:</span> <span class="no">bold</span><span class="p">;</span> <span class="na">text-align</span><span class="o">:</span> <span class="no">center</span> <span class="p">}</span>
 </span><span class='line'>
-</span><span class='line'><span class="no">Liquid</span><span class="o">::</span><span class="no">Template</span><span class="o">.</span><span class="n">register_tag</span><span class="p">(</span><span class="s1">&#39;tag_cloud&#39;</span><span class="p">,</span> <span class="no">Jekyll</span><span class="o">::</span><span class="no">CategoryListTag</span><span class="p">)</span>
+</span><span class='line'><span class="c1">// typography for p/blockquote/ul/ol puts a 1.5em margin below those elements,</span>
+</span><span class='line'><span class="c1">// so do the same for our tables ...</span>
+</span><span class='line'><span class="nc">.entry-content</span> <span class="nt">table</span> <span class="p">{</span> <span class="na">margin-bottom</span><span class="o">:</span> <span class="mi">1</span><span class="mf">.5</span><span class="kt">em</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ... but undo that for tables for pygments-generated code</span>
+</span><span class='line'><span class="nc">.entry-content</span> <span class="nc">.code</span> <span class="nt">table</span> <span class="p">{</span> <span class="na">margin-bottom</span><span class="o">:</span> <span class="no">inherit</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// add a border around each cell and padding around its content ...</span>
+</span><span class='line'><span class="nc">.entry-content</span> <span class="nt">th</span><span class="o">,</span> <span class="nc">.entry-content</span> <span class="nt">td</span> <span class="p">{</span>
+</span><span class='line'>  <span class="na">border</span><span class="o">:</span> <span class="mi">1</span><span class="kt">px</span> <span class="no">solid</span> <span class="mh">#ddd</span><span class="p">;</span>
+</span><span class='line'>  <span class="na">padding</span><span class="o">:</span> <span class="mi">6</span><span class="kt">px</span> <span class="mi">13</span><span class="kt">px</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ... but undo that for tables for pygments-generated code</span>
+</span><span class='line'><span class="nc">.entry-content</span> <span class="nc">.code</span> <span class="nt">th</span><span class="o">,</span> <span class="nc">.entry-content</span> <span class="nc">.code</span> <span class="nt">td</span> <span class="p">{</span>
+</span><span class='line'>  <span class="na">border</span><span class="o">:</span> <span class="no">inherit</span><span class="p">;</span> <span class="na">padding</span><span class="o">:</span> <span class="no">inherit</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// zebra-stripe the rows (N.B. `nth-child(2n)` works too) ...</span>
+</span><span class='line'><span class="nc">.entry-content</span> <span class="nt">tr</span>                 <span class="p">{</span> <span class="na">background-color</span><span class="o">:</span> <span class="mh">#FFFFFF</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.entry-content</span> <span class="nt">tr</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">even</span><span class="o">)</span> <span class="p">{</span> <span class="na">background-color</span><span class="o">:</span> <span class="mh">#F8F8F8</span> <span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">// ... but undo that for tables for pygments-generated code</span>
+</span><span class='line'><span class="nc">.entry-content</span> <span class="nc">.code</span> <span class="nt">tr</span>                 <span class="p">{</span> <span class="na">background-color</span><span class="o">:</span> <span class="no">inherit</span> <span class="p">}</span>
+</span><span class='line'><span class="nc">.entry-content</span> <span class="nc">.code</span> <span class="nt">tr</span><span class="nd">:nth-child</span><span class="o">(</span><span class="nt">even</span><span class="o">)</span> <span class="p">{</span> <span class="na">background-color</span><span class="o">:</span> <span class="no">inherit</span> <span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<p><code>entry-content</code> 是为了限制这个样式只在博文中生效。<br/>
+然后在 <code>_styles.scss</code> 文件中添加一行内容即可完成：</p>
 
-
-<figure class='code'><figcaption><span>source/_includes/custom/asides/tag_cloud.html</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='html'><span class='line'><span class="c">&lt;!-- source/_includes/custom/asides/tag_cloud.html--&gt;</span>
-</span><span class='line'><span class="nt">&lt;section&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;h1&gt;</span>Categories<span class="nt">&lt;/h1&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;ul</span> <span class="na">id=</span><span class="s">&quot;categories&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    {% tag_cloud %}
-</span><span class='line'>  <span class="nt">&lt;/ul&gt;</span>
-</span><span class='line'><span class="nt">&lt;/section&gt;</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='scss'><span class='line'><span class="k">@import</span> <span class="s2">&quot;better_tables&quot;</span>
 </span></code></pre></td></tr></table></div></figure>
 
 
+<h2>参考文档</h2>
 
-
-<figure class='code'><figcaption><span>_.config.yml</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='yaml'><span class='line'><span class="c1">#_config.yml</span>
-</span><span class='line'><span class="l-Scalar-Plain">default_asides</span><span class="p-Indicator">:</span> <span class="p-Indicator">[</span><span class="nv">...</span><span class="p-Indicator">,</span><span class="nv">custom/asides/tag_cloud.html</span><span class="p-Indicator">]</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>下面我们逐行解释： <br/>
-<code>context</code>会传递传递静态博客需要的上下文,<code>category</code>和<code>posts</code>都可以在里面获取。<br/>
-<code>Liquid::Template.register_tag</code> 最后生成<code>tag_cloud</code>标签，以便在<code>html</code>里面可以直接使用。<br/>
-<code>tag_cloud.html</code> 直接在<code>html</code>里面使用<code>tag_cloud</code>标签<br/>
-<code>_config.yml</code> 最后再里面配置就可以了</p>
-
-<p>笔者前端不是很好，如果想把轮子造的好看一点，直接自定义<code>tag_cloud.rb</code>里面的<code>html</code>样式即可。</p>
+<p><a href="http://blog.pnkfx.org/blog/2015/12/18/fixing-octopress-table-rendering/">http://blog.pnkfx.org/blog/2015/12/18/fixing-octopress-table-rendering/</a></p>
 
 <h2>扩展阅读</h2>
 
@@ -283,10 +267,7 @@ enable_page_level_ads: true
       
         
         
-        <li>
-          <a href="/blog/fixing-octopress-table-rendering/?utm_source=rel">修复 Octopress Table 样式</a>
-        </li>
-        
+          
         
         <li>
           <a href="/blog/octopress-and-hexo-comments-widget/?utm_source=rel">Commenthub —— 多说、网易云跟帖的替代品</a>
@@ -303,7 +284,10 @@ enable_page_level_ads: true
         </li>
         
         
-          
+        <li>
+          <a href="/blog/octopress-tag-cloud/?utm_source=rel">Octopress 添加标签云</a>
+        </li>
+        
         
         <li>
           <a href="/blog/octopress-index-page-read-more/?utm_source=rel">Octopress 首页添加‘更多’功能</a>
@@ -319,7 +303,7 @@ enable_page_level_ads: true
 
 <h2>作者</h2>
 <p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="">Octopress 添加标签云</a><br/>
+原文地址：<a href="">修复 Octopress Table 样式</a><br/>
 如果兴趣可以关注作者微信订阅号<br/>
 <img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 <h2></h2>
@@ -351,7 +335,7 @@ enable_page_level_ads: true
 
 
 
-<time class='entry-date' datetime='2017-06-24T15:11:51+08:00'><span class='date'>2017-06-24</span> <span class='time'>3:11 pm</span></time>
+<time class='entry-date' datetime='2018-02-24T20:19:39+08:00'><span class='date'>2018-02-24</span> <span class='time'>8:19 pm</span></time>
       
 
 <span class="categories">
@@ -365,7 +349,7 @@ enable_page_level_ads: true
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/octopress-tag-cloud/" data-via="" data-counturl="http://www.majiang.life/blog/octopress-tag-cloud/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/fixing-octopress-table-rendering/" data-via="" data-counturl="http://www.majiang.life/blog/fixing-octopress-table-rendering/" >Tweet</a>
   
   
   
@@ -374,10 +358,8 @@ enable_page_level_ads: true
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/octopress-index-page-read-more/" title="Previous Post: Octopress 首页添加‘更多’功能">&laquo; Octopress 首页添加‘更多’功能</a>
+        <a class="basic-alignment left" href="/blog/how-to-manage-your-time-effectively/" title="Previous Post: 程序员的成功首先需要从规划时间开始">&laquo; 程序员的成功首先需要从规划时间开始</a>
       
-      
-        <a class="basic-alignment right" href="/blog/make-article-more-readable/" title="Next Post: 阅读模式是如何实现的?">阅读模式是如何实现的? &raquo;</a>
       
     </p>
   </footer>
@@ -508,9 +490,9 @@ enable_page_level_ads: true
 <script type="text/javascript">
     var commenthub_id = '3821949';
     var commenthub_website = 'http://www.majiang.life';
-    var commenthub_identifier = '/blog/octopress-tag-cloud/';
-    var commenthub_url = 'http://www.majiang.life/blog/octopress-tag-cloud/';
-    var commenthub_title = 'Octopress 添加标签云';
+    var commenthub_identifier = '/blog/fixing-octopress-table-rendering/';
+    var commenthub_url = 'http://www.majiang.life/blog/fixing-octopress-table-rendering/';
+    var commenthub_title = '修复 Octopress Table 样式';
     (function () {
         var dsq = document.createElement('script');
         dsq.type = 'text/javascript';

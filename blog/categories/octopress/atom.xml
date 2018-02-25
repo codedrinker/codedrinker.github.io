@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Octopress | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/octopress/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-24T06:12:12+08:00</updated>
+  <updated>2018-02-25T19:57:37+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,107 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[修复 Octopress Table 样式]]></title>
+    <link href="http://www.majiang.life/blog/fixing-octopress-table-rendering/"/>
+    <updated>2018-02-24T20:19:39+08:00</updated>
+    <id>http://www.majiang.life/blog/fixing-octopress-table-rendering</id>
+    <content type="html"><![CDATA[<h2>起因</h2>
+
+<p>Octopress 自带的 Table 样式太丑了，于是自己自定义一个，方法非常简单，操作如下。</p>
+
+<!-- more -->
+
+
+<h2>效果</h2>
+
+<table>
+<thead>
+<tr>
+<th>key </th>
+<th> value1 </th>
+<th> value2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a   </td>
+<td> apple  </td>
+<td> aardvark</td>
+</tr>
+<tr>
+<td>b   </td>
+<td> banana </td>
+<td> bonobo</td>
+</tr>
+<tr>
+<td>c   </td>
+<td> clementine </td>
+<td> cat</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>源码如下：</p>
+
+<pre><code>key | value1 | value2
+----|--------|----------
+a   | apple  | aardvark
+b   | banana | bonobo
+c   | clementine | cat
+</code></pre>
+
+<h2>编码</h2>
+
+<p>在 sass/custom 目录创建 _better_tables.scss，填写如下内容</p>
+
+<pre><code class="scss">// make the text for the header row bold and centered.
+// (I have not been able to figure out where jekyll/octopress are overriding
+//  the text-align and setting it to `left`)
+.entry-content th { font-weight: bold; text-align: center }
+
+// typography for p/blockquote/ul/ol puts a 1.5em margin below those elements,
+// so do the same for our tables ...
+.entry-content table { margin-bottom: 1.5em }
+
+// ... but undo that for tables for pygments-generated code
+.entry-content .code table { margin-bottom: inherit }
+
+
+// add a border around each cell and padding around its content ...
+.entry-content th, .entry-content td {
+  border: 1px solid #ddd;
+  padding: 6px 13px;
+}
+
+// ... but undo that for tables for pygments-generated code
+.entry-content .code th, .entry-content .code td {
+  border: inherit; padding: inherit;
+}
+
+
+// zebra-stripe the rows (N.B. `nth-child(2n)` works too) ...
+.entry-content tr                 { background-color: #FFFFFF }
+.entry-content tr:nth-child(even) { background-color: #F8F8F8 }
+
+// ... but undo that for tables for pygments-generated code
+.entry-content .code tr                 { background-color: inherit }
+.entry-content .code tr:nth-child(even) { background-color: inherit }
+</code></pre>
+
+<p><code>entry-content</code> 是为了限制这个样式只在博文中生效。<br/>
+然后在 <code>_styles.scss</code> 文件中添加一行内容即可完成：
+<code>
+@import "better_tables"
+</code></p>
+
+<h2>参考文档</h2>
+
+<p><a href="http://blog.pnkfx.org/blog/2015/12/18/fixing-octopress-table-rendering/">http://blog.pnkfx.org/blog/2015/12/18/fixing-octopress-table-rendering/</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Commenthub —— 多说、网易云跟帖的替代品]]></title>
@@ -269,7 +370,7 @@ commenthub:
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[为 Octopress 添加 扩展相关阅读]]></title>
+    <title type="html"><![CDATA[Octopress 添加 扩展相关阅读]]></title>
     <link href="http://www.majiang.life/blog/octopress-related-posts/"/>
     <updated>2018-02-18T20:24:22+08:00</updated>
     <id>http://www.majiang.life/blog/octopress-related-posts</id>
@@ -453,27 +554,6 @@ commenthub:
 <code>_config.yml</code> 最后再里面配置就可以了</p>
 
 <p>笔者前端不是很好，如果想把轮子造的好看一点，直接自定义<code>tag_cloud.rb</code>里面的<code>html</code>样式即可。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[为Octopress 首页添加‘更多’功能]]></title>
-    <link href="http://www.majiang.life/blog/octopress-index-page-read-more/"/>
-    <updated>2017-06-24T14:32:31+08:00</updated>
-    <id>http://www.majiang.life/blog/octopress-index-page-read-more</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
-
-<p>在使用 <code>Octopress</code> 的过程中随着文章数量的增加，首页越来越臃肿，不仅加载慢而且可读性很差。看到过其他人的 <code>Octopress</code> 首页很简洁，有一个 <code>Read more</code>，这样就非常方便了。查询了一下操作起来也非常简单。</p>
-
-<h2>添加更多</h2>
-
-<p>方法是十分的简单，只是因为不是太熟悉<code>Octopress</code>导致查了很久。直接在 <code>*.markdown</code> 的 <code>post</code> 里面添加<code>&lt;!--more--&gt;</code>，这个标记下面的内容就不会在首页展示出来，并且通过一个<code>Read on</code>替换。原因是因为本身<code>Octopress</code>就支持，只是你没有使用。具体在<code>_config.yml</code>里面。
-<code>yml _.config.yml
-//_.config.yml
-excerpt_link: "Read on &amp;rarr;"  # "Continue reading" link text at the bottom of excerpted articles
-excerpt_separator: "&lt;!--more--&gt;"
-</code>
-如果想修改<code>Read on</code>直接在<code>_config.yml</code>里面修改就可以了。</p>
 ]]></content>
   </entry>
   
