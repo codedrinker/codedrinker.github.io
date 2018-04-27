@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-02-25T19:57:37+08:00</updated>
+  <updated>2018-04-28T00:55:47+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,112 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[JUC系列之-ThreadPoolExecutor]]></title>
+    <link href="http://www.majiang.life/blog/juc-threadpoolexecutor/"/>
+    <updated>2018-04-28T00:22:21+08:00</updated>
+    <id>http://www.majiang.life/blog/juc-threadpoolexecutor</id>
+    <content type="html"><![CDATA[<h2>简介</h2>
+
+<p>ThreadPoolExecutor 是 JUC 里面的成员，我们可以使用他轻松的创建线程池。<br/>
+当然我们可以自己创建线程，但是有 ThreadPoolExecutor，他的好处还是很多的，比如可以帮我们管理线程，不需要我们手动的关闭线程，同时可以通过各种不同的线程创建和销毁策略应对不同的多线程场景。合理的使用 ThreadPoolExecutor 会让我们的开发效率和性能事半功倍。</p>
+
+<!-- more -->
+
+
+<h2>使用</h2>
+
+<h3>创建</h3>
+
+<p>我们可以通过ThreadPoolExecutor来创建一个线程池。</p>
+
+<pre><code>new  ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, milliseconds,runnableTaskQueue, handler);
+</code></pre>
+
+<p>创建一个线程池需要输入几个参数，需要简单的讲解一下。
+corePoolSize：当提交一个任务到线程池时，线程池会创建一个线程来执行任务，即使其他空闲的基本线程能够执行新任务也会创建线程，等到需要执行的任务数大于线程池基本大小时就不再创建。这个时候新的线程会放到阻塞队列里面。也就是下面的参数。</p>
+
+<p>runnableTaskQueue：阻塞队列有很多种，分别使用不同的场景。
+ArrayBlockingQueue</p>
+
+<ul>
+<li>ArrayBlockingQueue：是一个基于数组结构的有界阻塞队列，此队列按 FIFO（先进先出）原则对元素进行排序。</li>
+<li>LinkedBlockingQueue：一个基于链表结构的阻塞队列，此队列按FIFO （先进先出）排序元素，吞吐量通常要高于ArrayBlockingQueue。静态工厂方法Executors.newFixedThreadPool()使用了这个队列。</li>
+<li>SynchronousQueue：一个不存储元素的阻塞队列。每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于LinkedBlockingQueue，静态工厂方法Executors.newCachedThreadPool使用了这个队列。</li>
+<li>PriorityBlockingQueue：一个具有优先级得无限阻塞队列。</li>
+</ul>
+
+
+<p>maximumPoolSize：线程池允许创建的最大线程数。如果队列满了，并且已创建的线程数小于最大线程数，则线程池会再创建新的线程执行任务。值得注意的是如果使用了无界的任务队列这个参数就没什么效果。</p>
+
+<p>ThreadFactory：用于设置创建线程的工厂，可以创建线程的时候指定名字和一些其他配置，方便记录和调试。</p>
+
+<p>RejectedExecutionHandler：当队列和线程池都满了，这个时候线程池已经出现负载问题，不能处理新的任务了，所以需要一个策略来处理。可选的策略如下，当然我们可以实现RejectedExecutionHandler接口自定义策略。</p>
+
+<ul>
+<li>AbortPolicy：直接抛出异常。</li>
+<li>CallerRunsPolicy：只用调用者所在线程来运行任务。</li>
+<li>DiscardOldestPolicy：丢弃队列里最近的一个任务，并执行当前任务。</li>
+<li>DiscardPolicy：不处理，丢弃掉。</li>
+</ul>
+
+
+<p>keepAliveTime：线程池的工作线程空闲后，保持存活的时间。所以如果任务很多，并且每个任务执行的时间比较短，可以调大这个时间，提高线程的利用率。减少因频繁创建线程消耗的时间。<br/>
+TimeUnit：可选的单位有天（DAYS），小时（HOURS），分钟（MINUTES），毫秒(MILLISECONDS)，微秒(MICROSECONDS, 千分之一毫秒)和毫微秒(NANOSECONDS, 千分之一微秒)。</p>
+
+<h2>使用</h2>
+
+<p>使用方式很简单，有两种方式，一种是直接execute，这样直接可以运营一个 Runnable的类，但是不能获得返回值，另一种方式是使用submit，调用成功以后会获得一个future，这样就可以通过这个future查看当前线程的运行状态。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TheadPoolTest</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">ThreadPoolExecutor</span> <span class="n">threadPoolExecutor</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ThreadPoolExecutor</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="mi">50</span><span class="o">,</span> <span class="mi">60</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">,</span> <span class="k">new</span> <span class="n">LinkedBlockingQueue</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&amp;</span><span class="n">gt</span><span class="o">;());</span>
+</span><span class='line'>    <span class="n">threadPoolExecutor</span><span class="o">.</span><span class="na">execute</span><span class="o">(()</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()));</span>
+</span><span class='line'>    <span class="n">Future</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">future</span> <span class="o">=</span> <span class="n">threadPoolExecutor</span><span class="o">.</span><span class="na">submit</span><span class="o">(()</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()));</span>
+</span><span class='line'>    <span class="k">while</span> <span class="o">(!</span><span class="n">future</span><span class="o">.</span><span class="na">isDone</span><span class="o">()){</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Doing&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">future</span><span class="o">.</span><span class="na">isDone</span><span class="o">());</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>配置</h2>
+
+<p>主要的配置参数就是coreSize了，其他的参数主要还是在配置coreSize使用。通常情况下任务分为CPU密集型任务和IO密集型任务
+CPU密集型任务配置尽可能少的线程数量，如配置Ncpu+1个线程的线程池，可以使用Executors.newFixedThreadPool()创建。
+IO密集型任务则由于需要等待IO操作，线程并不是一直在执行任务，则配置尽可能多的线程，如2*Ncpu。混合型的任务，可以使用 Executors.newCachedThreadPool 创建。</p>
+
+<h2>关闭</h2>
+
+<h3>shutdown</h3>
+
+<p>将线程池的状态设置成SHUTDOWN状态，然后中断所有没有正在执行任务的线程。</p>
+
+<h3>shutdownNow</h3>
+
+<p>遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程，所以无法响应中断的任务可能永远无法终止。</p>
+
+<p>当调用上述任何一个方式，isShutdown方法就会返回true。当所有任务直接完成以后，isTermined方法会返回true。至于我们应该调用哪一种方法来关闭线程池，应该由提交到线程池的任务特性决定，通常调用shutdown来关闭线程池，如果任务不一定要执行完，则可以调用shutdownNow。</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[细说 Java hashCode]]></title>
@@ -1207,359 +1313,6 @@ public class UserConverter {
 <h2>总结</h2>
 
 <p>这种机制很方便，因为他避免了在调用每一个方法时都要传递执行上下文信息，合理的使用<code>ThreadLocal</code>可以起到事倍功半的效果，但是需要避免滥用，例如将所有的全局变量作为<code>ThreadLocal</code>对象，<code>ThreadLocal</code>类似全局变量，他能降低代码的可重用性，并在类之间引入隐含的耦合性，所以再使用前需要格外小心。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[构建 Java 应用内存级缓存]]></title>
-    <link href="http://www.majiang.life/blog/simple-in-memory-cache-in-java/"/>
-    <updated>2017-04-30T10:49:21+08:00</updated>
-    <id>http://www.majiang.life/blog/simple-in-memory-cache-in-java</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
-
-<p>缓存是我们日常开发中是必不可少的一种解决性能问题的方法。早期Cache只应用在CPU和内存之间，现在遍布在每一个角落，内存和磁盘，磁盘和网路都存在Cache。Cache同样是做Java应用必不可少的元素。缓存在各种用例中非常有用。例如，当一个值计算或检索成本高昂时，应该考虑使用高速缓存，并且需要在某个输入上多次使用它的值。通常我们使用的缓存有<code>分布式的缓存数据库</code>,<code>本机的缓存数据库</code>,<code>本地的内存缓存</code>，当然也有直接使用数据库的。无论我们选择哪一种实现，都需要结合自身的机器配置和网路情况考虑，毕竟内存，网路带宽都是量化的。下面的表格来源于<a href="https://research.google.com/pubs/jeff.html"> Jeff Dean</a>的一个PPT，里面罗列了不同级别的IO时间，这正是我们评估如何设计我们系统的必要因素。
-<br></p>
-
-<table>
-<thead>
-<tr>
-<th style="text-align:left;">                                   </th>
-<th style="text-align:left;">               </th>
-<th style="text-align:left;">         </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left;">L1 cache reference                 </td>
-<td style="text-align:left;"> 0.5 ns        </td>
-<td style="text-align:left;">         </td>
-</tr>
-<tr>
-<td style="text-align:left;">Branch mispredict                  </td>
-<td style="text-align:left;"> 5 ns          </td>
-<td style="text-align:left;">         </td>
-</tr>
-<tr>
-<td style="text-align:left;">L2 cache reference                 </td>
-<td style="text-align:left;"> 7 ns          </td>
-<td style="text-align:left;">         </td>
-</tr>
-<tr>
-<td style="text-align:left;">Mutex lock/unlock                  </td>
-<td style="text-align:left;"> 100 ns        </td>
-<td style="text-align:left;">         </td>
-</tr>
-<tr>
-<td style="text-align:left;">Main memory reference              </td>
-<td style="text-align:left;"> 100 ns        </td>
-<td style="text-align:left;">         </td>
-</tr>
-<tr>
-<td style="text-align:left;">Compress 1K bytes with Zippy       </td>
-<td style="text-align:left;"> 10,000 ns     </td>
-<td style="text-align:left;"> 0.01 ms </td>
-</tr>
-<tr>
-<td style="text-align:left;">Send 1K bytes over 1 Gbps network  </td>
-<td style="text-align:left;"> 10,000 ns     </td>
-<td style="text-align:left;"> 0.01 ms </td>
-</tr>
-<tr>
-<td style="text-align:left;">Read 1 MB sequentially from memory </td>
-<td style="text-align:left;"> 250,000 ns    </td>
-<td style="text-align:left;"> 0.25 ms </td>
-</tr>
-<tr>
-<td style="text-align:left;">Round trip within same datacenter  </td>
-<td style="text-align:left;"> 500,000 ns    </td>
-<td style="text-align:left;"> 0.5 ms  </td>
-</tr>
-<tr>
-<td style="text-align:left;">Disk seek                          </td>
-<td style="text-align:left;"> 10,000,000 ns </td>
-<td style="text-align:left;"> 10 ms   </td>
-</tr>
-<tr>
-<td style="text-align:left;">Read 1 MB sequentially from network</td>
-<td style="text-align:left;"> 10,000,000 ns </td>
-<td style="text-align:left;"> 10 ms   </td>
-</tr>
-<tr>
-<td style="text-align:left;">Read 1 MB sequentially from disk   </td>
-<td style="text-align:left;"> 30,000,000 ns </td>
-<td style="text-align:left;"> 30 ms   </td>
-</tr>
-<tr>
-<td style="text-align:left;">Send packet CA->Netherlands->CA    </td>
-<td style="text-align:left;"> 150,000,000 ns</td>
-<td style="text-align:left;"> 150 ms  </td>
-</tr>
-</tbody>
-</table>
-
-
-<!-- more -->
-
-
-<p><br><br/>
-由上面表格，我们可以清楚的看出从网络上面获取1M数据和从内存中读取1M数据的差别。为什么说到这里呢，因为随着我们的用户的增加，集群的扩展，很少的情况下是把缓存数据库或者其他缓存中间件和应用程序放在一台服务器上，大部分情况都是分布式的应用系统和缓存系统，所以避免不了的我们需要考虑网络而的开销。然后网络的读取和本地的读取差别如此之大，进而引出了今天的话题，适当的使用Java应用内存级别的缓存。针对一些基本不变的数据，或者是变化不大，使用非常频繁的数据可以考虑采用Java应用内存级别缓存。</p>
-
-<h2>Guava Cache</h2>
-
-<p>这篇文章讲的是如何使用<code>Guava Cache</code>构建Java内存基本的缓存，<code>Guava Cache</code>缓存类似于<code>ConcurrentMap</code>，但不完全相同。 最根本的区别是，ConcurrentMap会持续添加到其中的所有元素，如果你不手动删除它们会一直存在。然而<code>Guava Cache</code>可以通过缓存的大小，过期时间，或者其他策略自动地移除元素，来限制其内存占用。<code>Guava Cache</code>有两种方式实现，一种是<code>CacheLoader</code>在定义的时候就设置好缓存的源，另一种是<code>Callable</code>在调用缓存的时候指定如果缓存中没有的获取的方式，长话短说，我们直接进入正题。</p>
-
-<h2>依赖</h2>
-
-<p>笔者项目使用<code>Maven</code>构建，直接使用如下配合文件
-<code>xml pom.xml
-&lt;dependency&gt;
-    &lt;groupId&gt;com.google.guava&lt;/groupId&gt;
-    &lt;artifactId&gt;guava&lt;/artifactId&gt;
-    &lt;version&gt;19.0&lt;/version&gt;
-&lt;/dependency&gt;
-</code></p>
-
-<h2>CacheLoader</h2>
-
-<p>预先准备好一个<code>MockDB</code>类，用来模拟缓存中没有的时候在数据库中获取
-<figure class='code'><figcaption><span>MockDB.java</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MockDB</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">private</span> <span class="kd">static</span> <span class="n">Map</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">mockPersistence</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;()</span> <span class="o">{{</span>
-</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">put</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;,</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">codedrinker</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;);</span>
-</span><span class='line'>    <span class="o">}};&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">loadFromPersistence</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;load key from persistence : &quot;</span> <span class="o">+</span> <span class="n">key</span><span class="o">);</span>
-</span><span class='line'>    <span class="k">return</span> <span class="n">mockPersistence</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
-</span><span class='line'>
-</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
-</span></code></pre></td></tr></table></div></figure>
-下面是使用<code>CacheLoader</code>的代码
-<figure class='code'><figcaption><span>GuavaLoadingCache.java</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">GuavaLoadingCache</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="n">LoadingCache</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">loadingCache</span> <span class="o">=</span> <span class="n">CacheBuilder</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">newBuilder</span><span class="o">()</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">expireAfterWrite</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">removalListener</span><span class="o">(</span><span class="k">new</span> <span class="n">RemovalListener</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="nd">@Override</span>
-</span><span class='line'>                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRemoval</span><span class="o">(</span><span class="n">RemovalNotification</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">notification</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>                        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">cache</span> <span class="n">expired</span><span class="o">,</span> <span class="n">remove</span> <span class="n">key</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">notification</span><span class="o">.</span><span class="na">getKey</span><span class="o">());</span>
-</span><span class='line'>                    <span class="o">}</span>
-</span><span class='line'>                <span class="o">})</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">build</span><span class="o">(</span><span class="k">new</span> <span class="n">CacheLoader</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="nd">@Override</span>
-</span><span class='line'>                    <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">load</span><span class="o">(</span><span class="n">String</span> <span class="n">key</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>                        <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
-</span><span class='line'>                    <span class="o">}</span>
-</span><span class='line'>                <span class="o">});</span>
-</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">once</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">twice</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">third</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">not</span> <span class="n">exist</span> <span class="n">key</span> <span class="n">from</span> <span class="n">cache</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">loadingCache</span><span class="o">.</span><span class="na">get</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">email</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ExecutionException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-我们逐行进行解释：</p>
-
-<ul>
-<li><code>expireAfterWrite(3, TimeUnit.SECONDS)</code>定义缓存3秒过期</li>
-<li><code>removalListener</code>用来监听当缓存里面的<code>key</code>被移除时候触发的事件</li>
-<li><code>build(new CacheLoader&lt;String, Optional&lt;String&gt;&gt;()</code>传入一个<code>CacheLoader</code>类，指定缓存中没有的时候调用如下方法.</li>
-<li><code>Optional</code>当<code>CacheLoader</code>尝试获取数据库中不存在的数据会抛出异常，所以我们这里使用<code>Optional</code>可空对象处理一下。</li>
-<li><code>Thread.sleep(2000);</code>缓存我们设置3秒过期，所以两次<code>Sleep</code>以后就会重新获取数据库。
-运行输出结果如下，证明了再第三次获取的时候因为缓存过期了，所以需要重新在<code>MockDB</code>获取数据：
-<code>sh
-load key from persistence : github
-load from cache once : codedrinker
-load from cache twice : codedrinker
-cache expired, remove key : github
-load key from persistence : github
-load from cache third : codedrinker
-load key from persistence : email
-load not exist key from cache : null
-</code></li>
-</ul>
-
-
-<h2>Callable</h2>
-
-<p>这里我们依然需要使用上面的<code>MockDB</code>类，具体代码如下。
-<figure class='code'><figcaption><span>GuavaCallableCache.java</span></figcaption>
-<div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-<span class='line-number'>25</span>
-<span class='line-number'>26</span>
-<span class='line-number'>27</span>
-<span class='line-number'>28</span>
-<span class='line-number'>29</span>
-<span class='line-number'>30</span>
-<span class='line-number'>31</span>
-<span class='line-number'>32</span>
-<span class='line-number'>33</span>
-<span class='line-number'>34</span>
-<span class='line-number'>35</span>
-<span class='line-number'>36</span>
-<span class='line-number'>37</span>
-<span class='line-number'>38</span>
-<span class='line-number'>39</span>
-<span class='line-number'>40</span>
-<span class='line-number'>41</span>
-<span class='line-number'>42</span>
-<span class='line-number'>43</span>
-<span class='line-number'>44</span>
-<span class='line-number'>45</span>
-<span class='line-number'>46</span>
-<span class='line-number'>47</span>
-<span class='line-number'>48</span>
-<span class='line-number'>49</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">GuavaCallableCache</span> <span class="o">{</span>
-</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>        <span class="kd">final</span> <span class="n">String</span> <span class="n">key</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">github</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;;</span>
-</span><span class='line'>        <span class="n">Cache</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">cache</span> <span class="o">=</span> <span class="n">CacheBuilder</span><span class="o">.</span><span class="na">newBuilder</span><span class="o">()</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">expireAfterWrite</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">)</span>
-</span><span class='line'>                <span class="o">.</span><span class="na">removalListener</span><span class="o">(</span><span class="k">new</span> <span class="n">RemovalListener</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="nd">@Override</span>
-</span><span class='line'>                    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onRemoval</span><span class="o">(</span><span class="n">RemovalNotification</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">String</span><span class="o">,</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;</span> <span class="n">notification</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>                        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">cache</span> <span class="n">expired</span><span class="o">,</span> <span class="n">remove</span> <span class="n">key</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">notification</span><span class="o">.</span><span class="na">getKey</span><span class="o">());</span>
-</span><span class='line'>                    <span class="o">}</span>
-</span><span class='line'>                <span class="o">}).</span><span class="na">build</span><span class="o">();</span>
-</span><span class='line'>        <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">optional</span><span class="o">;</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">once</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                <span class="nd">@Override</span>
-</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
-</span><span class='line'>                <span class="o">}</span>
-</span><span class='line'>            <span class="o">}).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">twice</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                <span class="nd">@Override</span>
-</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
-</span><span class='line'>                <span class="o">}</span>
-</span><span class='line'>            <span class="o">}).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">from</span> <span class="n">cache</span> <span class="n">third</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                <span class="nd">@Override</span>
-</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
-</span><span class='line'>                <span class="o">}</span>
-</span><span class='line'>            <span class="o">}).</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>            <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
-</span><span class='line'>            <span class="kd">final</span> <span class="n">String</span> <span class="n">nullKey</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">email</span><span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;;</span>
-</span><span class='line'>            <span class="n">optional</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">nullKey</span><span class="o">,</span> <span class="k">new</span> <span class="n">Callable</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;</span><span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;&gt;()</span> <span class="o">{</span>
-</span><span class='line'>                <span class="nd">@Override</span>
-</span><span class='line'>                <span class="kd">public</span> <span class="n">Optional</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="nf">call</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-</span><span class='line'>                    <span class="k">return</span> <span class="n">Optional</span><span class="o">.</span><span class="na">fromNullable</span><span class="o">(</span><span class="n">MockDB</span><span class="o">.</span><span class="na">loadFromPersistence</span><span class="o">(</span><span class="n">nullKey</span><span class="o">));</span>
-</span><span class='line'>                <span class="o">}</span>
-</span><span class='line'>            <span class="o">});</span>
-</span><span class='line'>            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(&amp;</span><span class="n">ldquo</span><span class="o">;</span><span class="n">load</span> <span class="n">not</span> <span class="n">exist</span> <span class="n">key</span> <span class="n">from</span> <span class="n">cache</span> <span class="o">:</span> <span class="o">&amp;</span><span class="n">rdquo</span><span class="o">;</span> <span class="o">+</span> <span class="n">optional</span><span class="o">.</span><span class="na">orNull</span><span class="o">());</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">ExecutionException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>    <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-下面我们对程序进行解释，与上面例子唯一的不同就是没有在<code>build</code>的时候传入<code>CacheLoader</code>，而是在<code>cache.get</code>使用<code>Cache</code>的时候用传入<code>Callable</code>对象。这样做可以灵活配置每次获取的缓存源不一样，但是两种方案都各有好处，还是在使用的时候斟酌。
-运行程序数据结果如下：
-<code>sh
-load key from persistence : github
-load from cache once : codedrinker
-load from cache twice : codedrinker
-cache expired, remove key : github
-load key from persistence : github
-load from cache third : codedrinker
-load key from persistence : email
-load not exist key from cache : null
-</code></p>
-
-<h2>总结</h2>
-
-<p>在设计Java分布式应用程序的时候，针对一些基本不变的数据，或者是变化不大然而使用非常频繁的数据可以考虑采用<code>Guava Cache</code>实现Java应用内存级别缓存。</p>
-
-<h2>参考链接</h2>
-
-<p><a href="https://github.com/google/guava/wiki/CachesExplained">Guava Cache</a></p>
 ]]></content>
   </entry>
   

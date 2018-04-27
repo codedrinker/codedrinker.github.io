@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 缓存是我们日常开发中是必不可少的一种解决性能问题的方法。早期Cache只应用在CPU和内存之间，现在遍布在每一个角落，内存和磁盘，磁盘和网路都存在Cache。Cache同样是做Java应用必不可少的元素。缓存在各种用例中非常有用。例如，当一个值计算或检索成本高昂时，应该考虑使用高速缓存， &hellip;">
+  <meta name="description" content="前言 在我们日常 Web 开发中难免遇到需要把一个参数层层的传递到最内层，然后中间层根本不需要使用这个参数，或者是仅仅在特定的工具类中使用，这样我们完全没有必要在每一个方法里面都传递这样一个通用的参数。如果有一个办法能够在任何一个类里面想用的时候直接拿来使用就太好了。 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,11 +79,11 @@ enable_page_level_ads: true
 <ul class="main-navigation">
   <li><a href="/">首页</a></li>
   <li><a href="/blog/archives">博文归档</a></li>
-  <li><a href="/blogroll">推荐博客</a></li>
   <li><a href="/project">开源项目</a></li>
   <li><a href="/blog/categories/java/">Java</a></li>
-  <li><a href="/blog/categories/heroku/">Heroku</a></li>
+  <li><a href="/blog/categories/thread/">多线程</a></li>
   <li><a href="/blog/categories/spring/">Spring</a></li>
+  <li><a href="/blog/categories/heroku/">Heroku</a></li>
   <li><a href="/blog/categories/aws/">AWS</a></li>
   <li><a href="/blog/categories/octopress/">Octopress</a></li>
 </ul>
@@ -101,6 +101,43 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/the-smart-way-of-passing-parameter-by-threadlocal/">优雅的使用 ThreadLocal 传递参数</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-05-20T18:04:38+08:00'><span class='date'>2017-05-20</span> <span class='time'>6:04 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>在我们日常 <code>Web</code> 开发中难免遇到需要把一个参数层层的传递到最内层，然后中间层根本不需要使用这个参数，或者是仅仅在特定的工具类中使用，这样我们完全没有必要在每一个方法里面都传递这样一个<code>通用</code>的参数。如果有一个办法能够在任何一个类里面想用的时候直接拿来使用就太好了。<code>Java</code>的<code>Web</code>项目大部分都是基于<code>Tomcat</code>，每次访问都是一个新的线程，这样让我们联想到了<code>ThreadLocal</code>，每一个线程都独享一个<code>ThreadLocal</code>，在接收请求的时候<code>set</code>特定内容，在需要的时候<code>get</code>这个值。下面我们就进入主题。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/the-smart-way-of-passing-parameter-by-threadlocal/">阅读全文</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -569,11 +606,15 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </section>
 <section>
   <h1>标签云</h1>
-    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 125.71428571428572%'>heroku(3)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/java' style='font-size: 142.85714285714286%'>java(5)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 125.71428571428572%'>heroku(3)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/java' style='font-size: 151.42857142857144%'>java(6)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/thread' style='font-size: 108.57142857142857%'>thread(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> </span>
 </section>
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/juc-threadpoolexecutor/">JUC系列之-ThreadPoolExecutor</a>
+      </li>
     
       <li class="post">
         <a href="/blog/fixing-octopress-table-rendering/">修复 Octopress Table 样式</a>
@@ -629,10 +670,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
     
       <li class="post">
         <a href="/blog/spring-mybatis-and-dynamic-proxy/">从 Spring 集成 Mybatis 到 浅析Java动态代理</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/table-of-contents-sidebar-chrome-extension-introduction/">Chrome自动生成网页目录插件的编写和使用</a>
       </li>
     
   </ul>

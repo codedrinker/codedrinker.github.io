@@ -16,7 +16,8 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="起因 Octopress 自带的 Table 样式太丑了，于是自己自定义一个，方法非常简单，操作如下。 ">
+  <meta name="description" content="简介 ThreadPoolExecutor 是 JUC 里面的成员，我们可以使用他轻松的创建线程池。
+当然我们可以自己创建线程，但是有 ThreadPoolExecutor，他的好处还是很多的，比如可以帮我们管理线程，不需要我们手动的关闭线程， &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -79,11 +80,11 @@ enable_page_level_ads: true
 <ul class="main-navigation">
   <li><a href="/">首页</a></li>
   <li><a href="/blog/archives">博文归档</a></li>
-  <li><a href="/blogroll">推荐博客</a></li>
   <li><a href="/project">开源项目</a></li>
   <li><a href="/blog/categories/java/">Java</a></li>
-  <li><a href="/blog/categories/heroku/">Heroku</a></li>
+  <li><a href="/blog/categories/thread/">多线程</a></li>
   <li><a href="/blog/categories/spring/">Spring</a></li>
+  <li><a href="/blog/categories/heroku/">Heroku</a></li>
   <li><a href="/blog/categories/aws/">AWS</a></li>
   <li><a href="/blog/categories/octopress/">Octopress</a></li>
 </ul>
@@ -101,6 +102,44 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/juc-threadpoolexecutor/">JUC系列之-ThreadPoolExecutor</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-04-28T00:22:21+08:00'><span class='date'>2018-04-28</span> <span class='time'>12:22 am</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>简介</h2>
+
+<p>ThreadPoolExecutor 是 JUC 里面的成员，我们可以使用他轻松的创建线程池。<br/>
+当然我们可以自己创建线程，但是有 ThreadPoolExecutor，他的好处还是很多的，比如可以帮我们管理线程，不需要我们手动的关闭线程，同时可以通过各种不同的线程创建和销毁策略应对不同的多线程场景。合理的使用 ThreadPoolExecutor 会让我们的开发效率和性能事半功倍。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/juc-threadpoolexecutor/">阅读全文</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -439,43 +478,6 @@ enable_page_level_ads: true
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/deep-dive-on-elasticsearch-doc-values/">深入理解 ElasticSearch Doc Values</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-11-28T00:47:21+08:00'><span class='date'>2017-11-28</span> <span class='time'>12:47 am</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>最近在使用 <code>ElasticSearch</code>，于是简单看了一下内部实现，看到 <code>Doc Values</code>的地方发现网上的翻译很是拗口，于是就有了下面的这篇文章。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/deep-dive-on-elasticsearch-doc-values/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -513,11 +515,15 @@ enable_page_level_ads: true
 </section>
 <section>
   <h1>标签云</h1>
-    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 125.71428571428572%'>heroku(3)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/java' style='font-size: 142.85714285714286%'>java(5)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 125.71428571428572%'>heroku(3)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/java' style='font-size: 151.42857142857144%'>java(6)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/thread' style='font-size: 108.57142857142857%'>thread(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> </span>
 </section>
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/juc-threadpoolexecutor/">JUC系列之-ThreadPoolExecutor</a>
+      </li>
     
       <li class="post">
         <a href="/blog/fixing-octopress-table-rendering/">修复 Octopress Table 样式</a>
@@ -573,10 +579,6 @@ enable_page_level_ads: true
     
       <li class="post">
         <a href="/blog/spring-mybatis-and-dynamic-proxy/">从 Spring 集成 Mybatis 到 浅析Java动态代理</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/table-of-contents-sidebar-chrome-extension-introduction/">Chrome自动生成网页目录插件的编写和使用</a>
       </li>
     
   </ul>

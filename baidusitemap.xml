@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://www.majiang.life/blog/juc-threadpoolexecutor/</loc>
+<lastmod>2018-04-28T00:22:21+08:00</lastmod>
+</url>
+<url>
 <loc>http://www.majiang.life/blog/fixing-octopress-table-rendering/</loc>
 <lastmod>2018-02-24T20:19:39+08:00</lastmod>
 </url>
@@ -202,6 +206,9 @@
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/hexo/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/blog/categories/thread/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/2015/01/10/begininng-and-summary/index.html</loc>

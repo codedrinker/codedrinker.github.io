@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Thread | 码匠笔记]]></title>
+  <link href="http://www.majiang.life/blog/categories/thread/atom.xml" rel="self"/>
+  <link href="http://www.majiang.life/"/>
+  <updated>2018-04-28T00:55:47+08:00</updated>
+  <id>http://www.majiang.life/</id>
+  <author>
+    <name><![CDATA[麻酱]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[JUC系列之-ThreadPoolExecutor]]></title>
+    <link href="http://www.majiang.life/blog/juc-threadpoolexecutor/"/>
+    <updated>2018-04-28T00:22:21+08:00</updated>
+    <id>http://www.majiang.life/blog/juc-threadpoolexecutor</id>
+    <content type="html"><![CDATA[<h2>简介</h2>
+
+<p>ThreadPoolExecutor 是 JUC 里面的成员，我们可以使用他轻松的创建线程池。<br/>
+当然我们可以自己创建线程，但是有 ThreadPoolExecutor，他的好处还是很多的，比如可以帮我们管理线程，不需要我们手动的关闭线程，同时可以通过各种不同的线程创建和销毁策略应对不同的多线程场景。合理的使用 ThreadPoolExecutor 会让我们的开发效率和性能事半功倍。</p>
+
+<!-- more -->
+
+
+<h2>使用</h2>
+
+<h3>创建</h3>
+
+<p>我们可以通过ThreadPoolExecutor来创建一个线程池。</p>
+
+<pre><code>new  ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, milliseconds,runnableTaskQueue, handler);
+</code></pre>
+
+<p>创建一个线程池需要输入几个参数，需要简单的讲解一下。
+corePoolSize：当提交一个任务到线程池时，线程池会创建一个线程来执行任务，即使其他空闲的基本线程能够执行新任务也会创建线程，等到需要执行的任务数大于线程池基本大小时就不再创建。这个时候新的线程会放到阻塞队列里面。也就是下面的参数。</p>
+
+<p>runnableTaskQueue：阻塞队列有很多种，分别使用不同的场景。
+ArrayBlockingQueue</p>
+
+<ul>
+<li>ArrayBlockingQueue：是一个基于数组结构的有界阻塞队列，此队列按 FIFO（先进先出）原则对元素进行排序。</li>
+<li>LinkedBlockingQueue：一个基于链表结构的阻塞队列，此队列按FIFO （先进先出）排序元素，吞吐量通常要高于ArrayBlockingQueue。静态工厂方法Executors.newFixedThreadPool()使用了这个队列。</li>
+<li>SynchronousQueue：一个不存储元素的阻塞队列。每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于LinkedBlockingQueue，静态工厂方法Executors.newCachedThreadPool使用了这个队列。</li>
+<li>PriorityBlockingQueue：一个具有优先级得无限阻塞队列。</li>
+</ul>
+
+
+<p>maximumPoolSize：线程池允许创建的最大线程数。如果队列满了，并且已创建的线程数小于最大线程数，则线程池会再创建新的线程执行任务。值得注意的是如果使用了无界的任务队列这个参数就没什么效果。</p>
+
+<p>ThreadFactory：用于设置创建线程的工厂，可以创建线程的时候指定名字和一些其他配置，方便记录和调试。</p>
+
+<p>RejectedExecutionHandler：当队列和线程池都满了，这个时候线程池已经出现负载问题，不能处理新的任务了，所以需要一个策略来处理。可选的策略如下，当然我们可以实现RejectedExecutionHandler接口自定义策略。</p>
+
+<ul>
+<li>AbortPolicy：直接抛出异常。</li>
+<li>CallerRunsPolicy：只用调用者所在线程来运行任务。</li>
+<li>DiscardOldestPolicy：丢弃队列里最近的一个任务，并执行当前任务。</li>
+<li>DiscardPolicy：不处理，丢弃掉。</li>
+</ul>
+
+
+<p>keepAliveTime：线程池的工作线程空闲后，保持存活的时间。所以如果任务很多，并且每个任务执行的时间比较短，可以调大这个时间，提高线程的利用率。减少因频繁创建线程消耗的时间。<br/>
+TimeUnit：可选的单位有天（DAYS），小时（HOURS），分钟（MINUTES），毫秒(MILLISECONDS)，微秒(MICROSECONDS, 千分之一毫秒)和毫微秒(NANOSECONDS, 千分之一微秒)。</p>
+
+<h2>使用</h2>
+
+<p>使用方式很简单，有两种方式，一种是直接execute，这样直接可以运营一个 Runnable的类，但是不能获得返回值，另一种方式是使用submit，调用成功以后会获得一个future，这样就可以通过这个future查看当前线程的运行状态。
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TheadPoolTest</span> <span class="o">{&lt;/</span><span class="n">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">ThreadPoolExecutor</span> <span class="n">threadPoolExecutor</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ThreadPoolExecutor</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="mi">50</span><span class="o">,</span> <span class="mi">60</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">,</span> <span class="k">new</span> <span class="n">LinkedBlockingQueue</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;&amp;</span><span class="n">gt</span><span class="o">;());</span>
+</span><span class='line'>    <span class="n">threadPoolExecutor</span><span class="o">.</span><span class="na">execute</span><span class="o">(()</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()));</span>
+</span><span class='line'>    <span class="n">Future</span><span class="o">&amp;</span><span class="n">lt</span><span class="o">;?&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">future</span> <span class="o">=</span> <span class="n">threadPoolExecutor</span><span class="o">.</span><span class="na">submit</span><span class="o">(()</span> <span class="o">-&amp;</span><span class="n">gt</span><span class="o">;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">Thread</span><span class="o">.</span><span class="na">currentThread</span><span class="o">().</span><span class="na">getName</span><span class="o">()));</span>
+</span><span class='line'>    <span class="k">while</span> <span class="o">(!</span><span class="n">future</span><span class="o">.</span><span class="na">isDone</span><span class="o">()){</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Doing&quot;</span><span class="o">);</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">future</span><span class="o">.</span><span class="na">isDone</span><span class="o">());</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="o">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">p</span><span class="o">&gt;}</span>
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h2>配置</h2>
+
+<p>主要的配置参数就是coreSize了，其他的参数主要还是在配置coreSize使用。通常情况下任务分为CPU密集型任务和IO密集型任务
+CPU密集型任务配置尽可能少的线程数量，如配置Ncpu+1个线程的线程池，可以使用Executors.newFixedThreadPool()创建。
+IO密集型任务则由于需要等待IO操作，线程并不是一直在执行任务，则配置尽可能多的线程，如2*Ncpu。混合型的任务，可以使用 Executors.newCachedThreadPool 创建。</p>
+
+<h2>关闭</h2>
+
+<h3>shutdown</h3>
+
+<p>将线程池的状态设置成SHUTDOWN状态，然后中断所有没有正在执行任务的线程。</p>
+
+<h3>shutdownNow</h3>
+
+<p>遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程，所以无法响应中断的任务可能永远无法终止。</p>
+
+<p>当调用上述任何一个方式，isShutdown方法就会返回true。当所有任务直接完成以后，isTermined方法会返回true。至于我们应该调用哪一种方法来关闭线程池，应该由提交到线程池的任务特性决定，通常调用shutdown来关闭线程池，如果任务不一定要执行完，则可以调用shutdownNow。</p>
+]]></content>
+  </entry>
+  
+</feed>
