@@ -20,7 +20,6 @@ layout: default
     {% if page.date %}<p class="meta">{% include post/date.html %}{{ time }}</p>{% endif %}
   </header>
   {% endif %}
-  {{ content }}
   <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
   <!-- 博客列表页面尾部自适应广告 -->
   <ins class="adsbygoogle"
@@ -31,6 +30,7 @@ layout: default
   <script>
   (adsbygoogle = window.adsbygoogle || []).push({});
   </script>
+  {{ content }}
   {% unless page.footer == false %}
     <footer>
       {% if page.date or page.author %}<p class="meta">
