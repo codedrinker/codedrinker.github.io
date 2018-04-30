@@ -194,6 +194,19 @@ enable_page_level_ads: true
 
 <p>如果是其他语言直接访问 Heroku帮助页面，<a href="https://devcenter.heroku.com">https://devcenter.heroku.com</a></p>
 
+<h4>注意事项</h4>
+
+<p>主要注意的是，笔者自己写的这个 JAVA 项目使用的是 MySQL，所以需要使用的人在创建好了 App 之后执行如下命令。删除默认数据库，添加MySQL数据库</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>heroku addons:destroy heroku-postgresql
+</span><span class='line'>heroku addons:create cleardb:ignite
+</span><span class='line'>heroku config <span class="c"># 过程中可以使用 config 命令查看数据库 URL 是否修改成功</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
 <h4>查看日志</h4>
 
 <p>如果启动过程中出现问题，可以使用heroku logs查看日志。如果看到发现变量不对可以使用如下命令打印变量</p>
