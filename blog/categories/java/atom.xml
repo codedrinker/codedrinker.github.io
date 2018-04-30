@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-04-30T09:11:50+08:00</updated>
+  <updated>2018-04-30T09:12:49+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -14,7 +14,7 @@
 
   
   <entry>
-    <title type="html"><![CDATA[JUC系列之-ThreadPoolExecutor]]></title>
+    <title type="html"><![CDATA[JUC系列:ThreadPoolExecutor]]></title>
     <link href="http://www.majiang.life/blog/juc-threadpoolexecutor/"/>
     <updated>2018-04-28T00:22:21+08:00</updated>
     <id>http://www.majiang.life/blog/juc-threadpoolexecutor</id>
