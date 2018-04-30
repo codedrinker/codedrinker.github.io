@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-04-28T01:02:25+08:00</updated>
+  <updated>2018-04-30T09:11:50+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,42 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[如何使用 Heroku 搭建免费的微信小程序服务]]></title>
+    <link href="http://www.majiang.life/blog/how-to-set-up-mini-programs-free-server-using-heroku/"/>
+    <updated>2018-04-30T08:42:05+08:00</updated>
+    <id>http://www.majiang.life/blog/how-to-set-up-mini-programs-free-server-using-heroku</id>
+    <content type="html"><![CDATA[<h2>起源</h2>
+
+<p>最近小程序愈发的火热，好多人都纷纷的加入到小程序的开发阵营。虽然小程序的开发对个人用户是免费的，但是还是有一些要求的，比如需要服务器支持，购买域名，并且需要 HTTPS 支持，那么这样对于一些想学习小程序开发，或者是做一些开源的小程序工具的开发者来说，购买域名，服务器，HTTPS搭建都是额外的成本。虽然腾讯云提供了免费的调试环境，但是生成环境还是需要购买的。这里小编就来给搭建提供一种免费搭建小程序服务的方式。</p>
+
+<!-- more -->
+
+
+<h2>简介</h2>
+
+<p>Heroku是一个支持多种编程语言的云平台即服务。在2010年被Salesforce.com收购。Heroku作为最开始的云平台之一，从2007年6月起开发，当时它仅支持Ruby，但后来增加了对Java、Node.js、Scala、Clojure、Python以及PHP和Perl的支持。基础操作系统是Debian，在最新的堆栈则是基于Debian的Ubuntu。</p>
+
+<p>这样一下自己就解决问题，Heroku 作为PaaS 支持各种语言，同时他默认支持 HTTPS。乍一看他不也是 PaaS 吗，肯定也需要收费啊。为什么博主说不收费呢？ <br/>
+那么我们看一下他的官方介绍。他提供起初的免费版本，他是<code>512 MB RAM │ 1 web/1 worker</code>，每个月提供免费的1000个小时，如果你超过1000个小时就不提供服务了，不过我们粗略的计算一下，1x24x30=720，按照30天计算的话才720小时，加上免费的版本还有一个特性，30分钟没有人使用就自动休眠，下次访问的时候自动启动，休眠期间不计入时间。这样对于刚刚小程序起步的我们已经足够了，并且你可以做好几个小程序的服务呢。</p>
+
+<h2>注册</h2>
+
+<p>直接去官网注册即可。<a href="https://www.heroku.com">https://www.heroku.com</a></p>
+
+<h2>搭建</h2>
+
+<p>进入 <a href="https://devcenter.heroku.com/">https://devcenter.heroku.com/</a> 页面，即可选择对应的语言进行开发。<br/>
+英文不是很好的小伙伴可能有点吃力，因为这个是纯外文的。不过笔者也整理了一个中文的搭建过程，希望可以帮到大家。<br/>
+<a href="http://www.majiang.life/blog/heroku-get-started/?utm_source=inner">Heroku 入门教程之：使用 Heroku 快速搭建站点</a></p>
+
+<h2>实例</h2>
+
+<p>官方提供的 JAVA 例子好多东西都自己集成，笔者结合官方的例子自己写了一个，增加了 Spring，MyBatis，MySQL，H2，Migration的支持。如果有需要的可以自取。<br/>
+<a href="https://github.com/codedrinker/heroku-spring-boot-mybatis-mysql-flyway-example">https://github.com/codedrinker/heroku-spring-boot-mybatis-mysql-flyway-example</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[JUC系列之-ThreadPoolExecutor]]></title>
@@ -648,7 +684,7 @@ IO密集型任务则由于需要等待IO操作，线程并不是一直在执行�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Heroku 入门教程之：绑定自定义域名]]></title>
+    <title type="html"><![CDATA[Heroku 教程：绑定自定义域名]]></title>
     <link href="http://www.majiang.life/blog/heroku-custom-domains/"/>
     <updated>2018-02-18T18:50:38+08:00</updated>
     <id>http://www.majiang.life/blog/heroku-custom-domains</id>
@@ -678,7 +714,7 @@ IO密集型任务则由于需要等待IO操作，线程并不是一直在执行�
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[Heroku 入门教程之：使用 Heroku 快速搭建站点]]></title>
+    <title type="html"><![CDATA[Heroku 教程：使用 Heroku 快速搭建站点]]></title>
     <link href="http://www.majiang.life/blog/heroku-get-started/"/>
     <updated>2018-02-18T17:49:25+08:00</updated>
     <id>http://www.majiang.life/blog/heroku-get-started</id>
@@ -3360,40 +3396,6 @@ color-index: number of entries in the output device&rsquo;s color lookup table, 
 
 
 <p>如果想修改<code>Read on</code>直接在<code>_config.yml</code>里面修改就可以了。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[使用 Idea 创建 Spring Boot 项目]]></title>
-    <link href="http://www.majiang.life/blog/spring-boot-get-started/"/>
-    <updated>2017-06-22T22:22:14+08:00</updated>
-    <id>http://www.majiang.life/blog/spring-boot-get-started</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
-
-<p>最近 <code>Spring Boot</code> 如火如荼，于是也开始试试，不过上手真的太简单了。<code>Idea</code>非常方便的就可以创建，或者直接<code>clone</code>官方的例子<a href="https://spring.io/guides/gs/spring-boot/">https://spring.io/guides/gs/spring-boot/</a>。通俗理解<code>Spring Boot</code>就是一个<code>平台</code>，让你非常便捷的构建和运行一个项目，并且他是基于组件化的，你想用什么直接<code>拿来主义</code>就可以了，话不多少直接上手。</p>
-
-<!-- more -->
-
-
-<h2>使用 <code>Idea</code> 快速搭建</h2>
-
-<p>选择<code>Spring Initialiar</code>直接创建。
-<img src="http://www.majiang.life/images/posts/spring-boot-get-started-1.png" alt="spring-boot-get-started-1" /></p>
-
-<p>填写好<code>Group</code>和<code>Artifact</code>。
-<img src="http://www.majiang.life/images/posts/spring-boot-get-started-2.png" alt="spring-boot-get-started-2" /></p>
-
-<p>下面直接选择<code>Web</code>就可以了，但是如果你想选择其他的直接勾选就行，她会自动为你加载依赖。并且一些<code>dependency</code>不需要配置版本，每一个<code>Spring Boot</code>的<code>parent</code>项目集成管理，这样省去了好多兼容麻烦。
-<img src="http://www.majiang.life/images/posts/spring-boot-get-started-3.png" alt="spring-boot-get-started-3" /></p>
-
-<p>我们写一个<code>HelloController</code>试一下效果。
-<img src="http://www.majiang.life/images/posts/spring-boot-get-started-4.png" alt="spring-boot-get-started-4" /></p>
-
-<p>最后访问<code>http://localhost:8080</code>成功。
-<img src="http://www.majiang.life/images/posts/spring-boot-get-started-5.png" alt="spring-boot-get-started-5" /></p>
-
-<p>如果想改变端口也是非常简单的。
-<img src="http://www.majiang.life/images/posts/spring-boot-get-started-6.png" alt="spring-boot-get-started-6" /></p>
 ]]></content>
   </entry>
   

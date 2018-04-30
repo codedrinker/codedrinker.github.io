@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 最近在使用 ElasticSearch，于是简单看了一下内部实现，看到 Doc Values的地方发现网上的翻译很是拗口，于是就有了下面的这篇文章。 ">
+  <meta name="description" content="前言 写过 Java 程序的同学一定都知道 hashCode 方法，它是 Object 对象的一个 native 方法。无论是我们平常使用的 HashMap 还是重写 equals 方法的时候，都会接触到 hashCode 方法，那么它究竟是怎么生成的，又有什么作用呢？笔者带着这个疑问开始探寻。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -101,6 +101,43 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/deep-dive-on-java-hashcode/">细说 Java hashCode</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-12-24T01:04:24+08:00'><span class='date'>2017-12-24</span> <span class='time'>1:04 am</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>写过 <code>Java</code> 程序的同学一定都知道 <code>hashCode</code> 方法，它是 <code>Object</code> 对象的一个 <code>native</code> 方法。无论是我们平常使用的 <code>HashMap</code> 还是重写 <code>equals</code> 方法的时候，都会接触到 <code>hashCode</code> 方法，那么它究竟是怎么生成的，又有什么作用呢？笔者带着这个疑问开始探寻。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/deep-dive-on-java-hashcode/">阅读全文</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -449,43 +486,6 @@ enable_page_level_ads: true
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/spring-boot-get-started/">使用 Idea 创建 Spring Boot 项目</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-06-22T22:22:14+08:00'><span class='date'>2017-06-22</span> <span class='time'>10:22 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>最近 <code>Spring Boot</code> 如火如荼，于是也开始试试，不过上手真的太简单了。<code>Idea</code>非常方便的就可以创建，或者直接<code>clone</code>官方的例子<a href="https://spring.io/guides/gs/spring-boot/">https://spring.io/guides/gs/spring-boot/</a>。通俗理解<code>Spring Boot</code>就是一个<code>平台</code>，让你非常便捷的构建和运行一个项目，并且他是基于组件化的，你想用什么直接<code>拿来主义</code>就可以了，话不多少直接上手。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/spring-boot-get-started/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -525,11 +525,15 @@ enable_page_level_ads: true
 </section>
 <section>
   <h1>标签云</h1>
-    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 125.71428571428572%'>heroku(3)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/java' style='font-size: 151.42857142857144%'>java(6)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/thread' style='font-size: 108.57142857142857%'>thread(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 134.28571428571428%'>heroku(4)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/java' style='font-size: 151.42857142857144%'>java(6)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/thread' style='font-size: 108.57142857142857%'>thread(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> <a href='/blog/categories/wei-xin-xiao-cheng-xu' style='font-size: 108.57142857142857%'>微信小程序(1)</a> </span>
 </section>
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/how-to-set-up-mini-programs-free-server-using-heroku/">如何使用 Heroku 搭建免费的微信小程序服务</a>
+      </li>
     
       <li class="post">
         <a href="/blog/juc-threadpoolexecutor/">JUC系列之-ThreadPoolExecutor</a>
@@ -556,11 +560,11 @@ enable_page_level_ads: true
       </li>
     
       <li class="post">
-        <a href="/blog/heroku-custom-domains/">Heroku 入门教程之：绑定自定义域名</a>
+        <a href="/blog/heroku-custom-domains/">Heroku 教程：绑定自定义域名</a>
       </li>
     
       <li class="post">
-        <a href="/blog/heroku-get-started/">Heroku 入门教程之：使用 Heroku 快速搭建站点</a>
+        <a href="/blog/heroku-get-started/">Heroku 教程：使用 Heroku 快速搭建站点</a>
       </li>
     
       <li class="post">
@@ -585,10 +589,6 @@ enable_page_level_ads: true
     
       <li class="post">
         <a href="/blog/quick-start-spring-data-redis/">Spring 集成 Redis 扫雷</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/spring-mybatis-and-dynamic-proxy/">从 Spring 集成 Mybatis 到 浅析Java动态代理</a>
       </li>
     
   </ul>
