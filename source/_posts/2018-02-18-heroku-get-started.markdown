@@ -46,6 +46,20 @@ https://github.com/codedrinker/heroku-spring-boot-mybatis-mysql-flyway-example.g
 #### 其他
 如果是其他语言直接访问 Heroku帮助页面，[https://devcenter.heroku.com](https://devcenter.heroku.com)
 
+#### 注意事项
+主要注意的是，笔者自己写的这个 JAVA 项目使用的是 MySQL，所以需要使用的人在创建好了 App 之后执行如下命令。删除默认数据库，添加MySQL数据库
+```
+heroku addons:destroy heroku-postgresql
+heroku addons:create cleardb:ignite
+heroku config # 过程中可以使用 config 命令查看数据库 URL 是否修改成功
+```
+
+#### 查看日志
+如果启动过程中出现问题，可以使用heroku logs查看日志。如果看到发现变量不对可以使用如下命令打印变量
+```
+heroku run echo \$JDBC_DATABASE_URL
+```
+
 ## 简单介绍
 ### 日志
 每次运行命令需要进入当前项目的目录，必要的时候需要输入 `heroku login`，使用 `heroku logs --tail` 命令实施查看输出日志。
