@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Heroku | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/heroku/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-04-30T09:12:49+08:00</updated>
+  <updated>2018-04-30T12:03:44+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -343,6 +343,10 @@ https://github.com/codedrinker/heroku-spring-boot-mybatis-mysql-flyway-example.g
 <h4>其他</h4>
 
 <p>如果是其他语言直接访问 Heroku帮助页面，<a href="https://devcenter.heroku.com">https://devcenter.heroku.com</a></p>
+
+<h4>查看日志</h4>
+
+<p>如果启动过程中出现问题，可以使用heroku logs查看日志。</p>
 
 <h2>简单介绍</h2>
 
