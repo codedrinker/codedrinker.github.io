@@ -196,7 +196,12 @@ enable_page_level_ads: true
 
 <h4>查看日志</h4>
 
-<p>如果启动过程中出现问题，可以使用heroku logs查看日志。</p>
+<p>如果启动过程中出现问题，可以使用heroku logs查看日志。如果看到发现变量不对可以使用如下命令打印变量</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sh'><span class='line'>heroku run <span class="nb">echo</span> <span class="se">\$</span>JDBC_DATABASE_URL
+</span></code></pre></td></tr></table></div></figure>
+
 
 <h2>简单介绍</h2>
 
