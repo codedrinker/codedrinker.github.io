@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "JUC系列之-ThreadPoolExecutor"
+title: "JUC系列:ThreadPoolExecutor"
 date: 2018-04-28 00:22:21 +0800
 comments: true
 categories: [java,thread]

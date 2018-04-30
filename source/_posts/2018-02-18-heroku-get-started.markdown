@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Heroku 入门教程之：使用 Heroku 快速搭建站点"
+title: "Heroku 教程：使用 Heroku 快速搭建站点"
 date: 2018-02-18 17:49:25 +0800
 comments: true
 categories: [Heroku]

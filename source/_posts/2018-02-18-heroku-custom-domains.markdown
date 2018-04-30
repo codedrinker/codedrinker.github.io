@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Heroku 入门教程之：绑定自定义域名"
+title: "Heroku 教程：绑定自定义域名"
 date: 2018-02-18 18:50:38 +0800
 comments: true
 categories: [Heroku]
