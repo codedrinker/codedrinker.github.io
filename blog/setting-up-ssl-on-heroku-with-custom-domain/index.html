@@ -12,12 +12,12 @@ google_ad_client: "ca-pub-9540087096615057",
 enable_page_level_ads: true
 });
 </script>
-  <title>Heroku 教程：使用 Heroku 快速搭建站点 - 码匠笔记</title>
+  <title>Heroku 教程：自定义域名配置 HTTPS - 码匠笔记</title>
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="简介 Heroku 是 Salesforce 旗下云服务商，提供方便便捷的各种云服务，如服务器，数据库，监控，计算等等。并且他提供了免费版本，这使得我们这些平时想搞一些小东西的人提供了莫大的便捷，虽然他有时长和宕机的限制，但是对于个人小程序来说已经足够了。 快速入门 注册账号 进入 Heroku &hellip;">
-  
+  <meta name="description" content="Heroku 自定义域名设置 HTTPS, Heroku 设置自定义域名 SSL 证书,为小程序域名配置 HTTPS">
+  <meta name="keywords" content="Heroku 自定义域名设置 HTTPS, Heroku 设置自定义域名 SSL 证书,为小程序域名配置 HTTPS">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -25,7 +25,7 @@ enable_page_level_ads: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.majiang.life/blog/heroku-get-started">
+  <link rel="canonical" href="http://www.majiang.life/blog/setting-up-ssl-on-heroku-with-custom-domain">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
@@ -104,7 +104,7 @@ enable_page_level_ads: true
   
   <header>
     
-      <h1 class="entry-title">Heroku 教程：使用 Heroku 快速搭建站点</h1>
+      <h1 class="entry-title">Heroku 教程：自定义域名配置 HTTPS</h1>
     
     
       <p class="meta">
@@ -113,7 +113,7 @@ enable_page_level_ads: true
 
 
 
-<time class='entry-date' datetime='2018-02-18T17:49:25+08:00'><span class='date'>2018-02-18</span> <span class='time'>5:49 pm</span></time>
+<time class='entry-date' datetime='2018-04-30T08:42:05+08:00'><span class='date'>2018-04-30</span> <span class='time'>8:42 am</span></time>
         <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
          访问 <span id="busuanzi_value_page_pv"></span> 次
       </p>
@@ -122,122 +122,256 @@ enable_page_level_ads: true
 
 
 
-<div class="entry-content"><h2>简介</h2>
+<style type="text/css">
+  .note {
+    margin: 30px 0;
+    padding: 20px 20px 24px;
+    padding-left: 50px;
+    -webkit-border-radius: 0 5px 5px 0;
+    -moz-border-radius: 0 5px 5px 0;
+    border-radius:8px;
+    position: relative;
+    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
+    -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.2),inset 0 -1px 0 rgba(0,0,0,0.3);
+    box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
+    background-color: #7e6d42;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+    background-image: -webkit-gradient(linear, left top, left bottom, from(#7e6d42), to(#5c4e35));
+    background-image: -webkit-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: -moz-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: -o-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
+    background-image: linear-gradient(to bottom, #86847f 0%, #3e3b36 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=&#8217;#7e6d42&#8217;, endColorstr=&#8217;#5c4e35&#8217;,GradientType=0 );
+  }
+  .note h4, .note p {
+    margin: 0;
+    color: #fff;
+  }
+</style>
+<div class="entry-content">
+  <div class="note">
+    <h4>本文内容概要如下：</h4>
+    <p>
+      
+      
+        1, Heroku 自定义域名设置 HTTPS<br>
+      
+        2,  Heroku 设置自定义域名 SSL 证书<br>
+      
+        3, 为小程序域名配置 HTTPS<br>
+      
+    </p>
+  </div>
+</div>
 
-<p>Heroku 是 Salesforce 旗下云服务商，提供方便便捷的各种云服务，如服务器，数据库，监控，计算等等。并且他提供了免费版本，这使得我们这些平时想搞一些小东西的人提供了莫大的便捷，虽然他有时长和宕机的限制，但是对于个人小程序来说已经足够了。</p>
+<div class="entry-content"><h2>起源</h2>
+
+<p>本身 Heroku 的 app 域名是开始 SSL 的，但是因为他的域名为 appname.herokuapp.com，没有在国内备案，所以我们需要绑定一个国内备案的域名到 Heroku 上面。于是就有了下面的文章。</p>
 
 <!-- more -->
 
 
-<h2>快速入门</h2>
+<h2>获取 SSL 证书</h2>
 
-<h3>注册账号</h3>
+<p>可以直接使用一些服务商购买域名 SSL 证书，或者用其他的方式自己生成。下面我们讲解一下怎么生成。</p>
 
-<p>进入 <a href="https://www.heroku.com">Heroku 官网</a>，因为 Heroku 是国外的站点，所以需要提前准备好翻墙。点击 Sign Up，根据要求填写好信息。这里需要注意的是，国内大部分的邮箱不支持，所以这里提前准备好 gmail 邮箱进行注册。</p>
+<h3>生成私有 Key</h3>
 
-<h3>创建 App</h3>
-
-<p>Heroku 提供了便捷的网页控制台和终端，登录成功后我们直接进入 Heroku 的网页控制台，选择我们熟悉的语言进行创建，我们这里选择两种方式进行介绍，PHP 和 Java。</p>
-
-<h4>PHP</h4>
-
-<h5>准备</h5>
-
-<p>点击按钮以后进入开始界面，界面提示我们需要提前安装好 <a href="http://php.net/">PHP</a> 和 <a href="https://getcomposer.org/doc/00-intro.md">Composer</a>，使用 PHP 的朋友就不需要更多的介绍了，直接点击 <code>I'm ready to start</code>。</p>
-
-<h5>Set up</h5>
-
-<p>下载 Heroku CLI，这是 Heroku 的命令行工具，下载以后可以使用命令行直接进行代码更新和部署等操作，当然下文也会介绍更方便的部署方式。下载成功以后使用 <code>heroku login</code> 命令，输入邮箱和密码进行登录。</p>
-
-<h5>准备项目</h5>
-
-<p>如果我们没有项目，可以直接使用如下命令下载项目源码，然后部署项目。</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>git clone https://github.com/heroku/php-getting-started.git sesamepaste</span></code></pre></td></tr></table></div></figure>
-
-
-<p>后面跟随的 sesamepaste 是我将来的项目名称，然后进入项目</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>cd sesamepaste</span></code></pre></td></tr></table></div></figure>
+<table>
+<thead>
+<tr>
+<th>系统  </th>
+<th> 安装方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mac OS X </td>
+<td> Homebrew: <code>brew install openssl</code></td>
+</tr>
+<tr>
+<td>Windows   </td>
+<td> <a href="http://slproweb.com/products/Win32OpenSSL.html">Windows complete package .exe installer</a></td>
+</tr>
+<tr>
+<td>Ubuntu Linux </td>
+<td> <code>apt-get install openssl</code></td>
+</tr>
+</tbody>
+</table>
 
 
-<h5>创建App</h5>
-
-<p>这里说的 App 不再是我们本地的项目，我们目前可以简单理解为 Heroku 的一个用来存放我们项目的容器，只有先有了这个容器才能部署我们的项目。运行如下命令创建，其中 sesamepaste 是项目的名称，也是 Heroku 的唯一标识，后面我们运行成功了，也需要使用 sesamepaste.herokuapp.com 来访问 App。</p>
+<p>Heroku 只支持 RSA，下面我们直接运行命令</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'> heroku create sesamepaste
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl genrsa -des3 -out server.pass.key 2048
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>创建成功以后运行如下命令部署，其实就是把代码push 到 Heroku 的仓库，它会帮助我们自动化部署。</p>
+<p>输入如下命令获取<code>server.key</code></p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>git push heroku master
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl rsa -in server.pass.key -out server.key
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>最后使用 <code>heroku open</code> 命令就可以打开我们部署好的网站了。</p>
+<h3>生成 CSR</h3>
 
-<h4>Java</h4>
+<p>CSR是证书签名请求，需要使用上一步生成的私有 Key 进行生成。这个时候需要输入 Country Name 和 Common Name，格式如下</p>
 
-<p>其他步骤和上面一样，除了项目地址，如下地址不是官方的例子，是笔者添加了一些spring，mybatis，flyway等集成的版本。</p>
+<table>
+<thead>
+<tr>
+<th>字段  </th>
+<th> 内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Country Name    </td>
+<td> <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166</a> 格式的简码</td>
+</tr>
+<tr>
+<td>Common Name  </td>
+<td> www.example.com,*.example.com 需要注意的是这个名字必须和使用的保持一致</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>输入如下命令生成 CSR</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>https://github.com/codedrinker/heroku-spring-boot-mybatis-mysql-flyway-example.git sesamepaste
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl req -nodes -new -key server.key -out server.csr
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>其他</h4>
+<h3>生成 CRT</h3>
 
-<p>如果是其他语言直接访问 Heroku帮助页面，<a href="https://devcenter.heroku.com">https://devcenter.heroku.com</a></p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl req -new -x509 -key server.key -out ca.crt -days 3650
+</span></code></pre></td></tr></table></div></figure>
 
-<h4>注意事项</h4>
 
-<p>主要注意的是，笔者自己写的这个 JAVA 项目使用的是 MySQL，所以需要使用的人在创建好了 App 之后执行如下命令。删除默认数据库，添加MySQL数据库</p>
+<p>这个证书用来给自己的证书签名，下面是创建服务器证书</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl x509 -req -days <span class="m">3650</span> -in server.csr -CA ca.crt -CAkey server.key -CAcreateserial -out server.crt
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>配置 Heroku</h2>
+
+<h3>创建插件</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>heroku addons:create ssl:endpoint
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>添加证书</h3>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>heroku certs:add server.crt server.key --type endpoint
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>运行完命令会为你分配一个新的 SSL 域名，需要你后面做绑定使用。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>appname now served by iiii-65701.herokussl.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h3>修改证书</h3>
+
+<p>如果后面更新了证书，可以使用如下命令修改证书。</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>heroku certs:update server.crt server.key --endpoint example-2121.herokussl.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>配置域名</h2>
+
+<h3>添加域名</h3>
+
+<p>直接使用如下命令配置刚才你输入的域名</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>heroku domains:add www.example.com
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>如果是配置域名，更多详情可以参照<br/>
+<a href="/blog/heroku-custom-domains/?utm_source=rel">Heroku 教程：绑定自定义域名</a></p>
+
+<h3>配置DNS</h3>
+
+<p>这个时候需要配置一下 DNS 创建一个 CNAME 指向 Heroku，这个时候就需要指向到我们刚才生成的,<code>iiii-65701.herokussl.com</code>。</p>
+
+<h2>验证</h2>
+
+<p>等待一会儿以后可以使用如下命令检测一下是否配置成功</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>heroku addons:destroy heroku-postgresql
-</span><span class='line'>heroku addons:create cleardb:ignite
-</span><span class='line'>heroku config <span class="c"># 过程中可以使用 config 命令查看数据库 URL 是否修改成功</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>curl -kvI https://www.example.com
+</span><span class='line'>* About to connect<span class="o">()</span> to www.example.com port <span class="m">443</span> <span class="o">(</span><span class="c">#0)</span>
+</span><span class='line'>*   Trying 50.16.234.21... connected
+</span><span class='line'>* Connected to www.example.com <span class="o">(</span>50.16.234.21<span class="o">)</span> port <span class="m">443</span> <span class="o">(</span><span class="c">#0)</span>
+</span><span class='line'>* SSLv3, TLS handshake, Client hello <span class="o">(</span>1<span class="o">)</span>:
+</span><span class='line'>* SSLv3, TLS handshake, Server hello <span class="o">(</span>2<span class="o">)</span>:
+</span><span class='line'>* SSLv3, TLS handshake, CERT <span class="o">(</span>11<span class="o">)</span>:
+</span><span class='line'>* SSLv3, TLS handshake, Server finished <span class="o">(</span>14<span class="o">)</span>:
+</span><span class='line'>* SSLv3, TLS handshake, Client key exchange <span class="o">(</span>16<span class="o">)</span>:
+</span><span class='line'>* SSLv3, TLS change cipher, Client hello <span class="o">(</span>1<span class="o">)</span>:
+</span><span class='line'>* SSLv3, TLS handshake, Finished <span class="o">(</span>20<span class="o">)</span>:
+</span><span class='line'>* SSLv3, TLS change cipher, Client hello <span class="o">(</span>1<span class="o">)</span>:
+</span><span class='line'>* SSLv3, TLS handshake, Finished <span class="o">(</span>20<span class="o">)</span>:
+</span><span class='line'>* SSL connection using AES256-SHA
+</span><span class='line'>* Server certificate:
+</span><span class='line'>*    subject: <span class="nv">C</span><span class="o">=</span>US<span class="p">;</span> <span class="nv">ST</span><span class="o">=</span>CA<span class="p">;</span> <span class="nv">L</span><span class="o">=</span>SF<span class="p">;</span> <span class="nv">O</span><span class="o">=</span>SFDC<span class="p">;</span> <span class="nv">OU</span><span class="o">=</span>Heroku<span class="p">;</span> <span class="nv">CN</span><span class="o">=</span>www.example.com
+</span><span class='line'>*    start date: 2011-11-01 17:18:11 GMT
+</span><span class='line'>*    expire date: 2012-10-31 17:18:11 GMT
+</span><span class='line'>*    common name: www.example.com <span class="o">(</span>matched<span class="o">)</span>
+</span><span class='line'>*    issuer: <span class="nv">C</span><span class="o">=</span>US<span class="p">;</span> <span class="nv">ST</span><span class="o">=</span>CA<span class="p">;</span> <span class="nv">L</span><span class="o">=</span>SF<span class="p">;</span> <span class="nv">O</span><span class="o">=</span>SFDC<span class="p">;</span> <span class="nv">OU</span><span class="o">=</span>Heroku<span class="p">;</span> <span class="nv">CN</span><span class="o">=</span>www.heroku.com
+</span><span class='line'>*    SSL certificate verify ok.
+</span><span class='line'>GET / HTTP/1.1
+</span><span class='line'>User-Agent: curl/7.19.7 <span class="o">(</span>universal-apple-darwin10.0<span class="o">)</span> libcurl/7.19.7 OpenSSL/0.9.8r zlib/1.2.3
+</span><span class='line'>Host: www.example.com
+</span><span class='line'>Accept: */*
+</span><span class='line'>...
 </span></code></pre></td></tr></table></div></figure>
 
 
-<h4>查看日志</h4>
+<h2>参考文档</h2>
 
-<p>如果启动过程中出现问题，可以使用heroku logs查看日志。如果看到发现变量不对可以使用如下命令打印变量</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>heroku run <span class="nb">echo</span> <span class="se">\$</span>JDBC_DATABASE_URL
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h2>简单介绍</h2>
-
-<h3>日志</h3>
-
-<p>每次运行命令需要进入当前项目的目录，必要的时候需要输入 <code>heroku login</code>，使用 <code>heroku logs --tail</code> 命令实施查看输出日志。</p>
-
-<h3>Procfile</h3>
-
-<p>你会发现拉取下来的代码里面有名字是 Procfile 的文件，这文件是用来定义运行项目时候的命令，默认如下，表示使用apache 运行 web项目，目录是web。</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='sh'><span class='line'>web: vendor/bin/heroku-php-apache2 web/
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>关联 Github</h3>
-
-<p>上文说到需要 push 到 heroku 的仓库才能部署，heroku 提供了更强带的功能，直接关联 Github 的仓库的分支，等分支有新内容更新的时候直接部署。这个配置就需要去 web控制台配置了。进入项目，点击 <code>Deploy</code>，勾选 <code>Github</code>，然后完成配置即可。</p>
-
-<h2>相关文章</h2>
-
-<p><a href="/blog/heroku-custom-domains/">Heroku 入门教程之：绑定自定义域名</a></p>
+<p><a href="https://devcenter.heroku.com/articles/ssl-endpoint#acquire-ssl-certificate">Heroku 官方配置</a></p>
 
 <h2>扩展阅读</h2>
 
@@ -245,10 +379,7 @@ enable_page_level_ads: true
       
         
         
-        <li>
-          <a href="/blog/setting-up-ssl-on-heroku-with-custom-domain/?utm_source=rel">Heroku 教程：自定义域名配置 HTTPS</a>
-        </li>
-        
+          
         
         <li>
           <a href="/blog/how-to-set-up-mini-programs-free-server-using-heroku/?utm_source=rel">如何使用 Heroku 搭建免费的微信小程序服务</a>
@@ -265,13 +396,20 @@ enable_page_level_ads: true
         </li>
         
         
+        <li>
+          <a href="/blog/heroku-get-started/?utm_source=rel">Heroku 教程：使用 Heroku 快速搭建站点</a>
+        </li>
+        
+      
+        
+        
           
       
     </ol>
 
 <h2>作者</h2>
 <p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="">Heroku 教程：使用 Heroku 快速搭建站点</a><br/>
+原文地址：<a href="">Heroku 教程：自定义域名配置 HTTPS</a><br/>
 如果兴趣可以关注作者微信订阅号:码匠笔记<br/>
 <img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 <h2></h2>
@@ -303,12 +441,12 @@ enable_page_level_ads: true
 
 
 
-<time class='entry-date' datetime='2018-02-18T17:49:25+08:00'><span class='date'>2018-02-18</span> <span class='time'>5:49 pm</span></time>
+<time class='entry-date' datetime='2018-04-30T08:42:05+08:00'><span class='date'>2018-04-30</span> <span class='time'>8:42 am</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/heroku/'>heroku</a>
+    <a class='category' href='/blog/categories/heroku/'>heroku</a>, <a class='category' href='/blog/categories/https/'>https</a>
   
 </span>
 
@@ -317,7 +455,7 @@ enable_page_level_ads: true
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/heroku-get-started/" data-via="" data-counturl="http://www.majiang.life/blog/heroku-get-started/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/setting-up-ssl-on-heroku-with-custom-domain/" data-via="" data-counturl="http://www.majiang.life/blog/setting-up-ssl-on-heroku-with-custom-domain/" >Tweet</a>
   
   
   
@@ -326,10 +464,8 @@ enable_page_level_ads: true
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/how-to-build-email-system-with-amazon-ses/" title="Previous Post: 基于 Amazon SES 搭建高可用的邮件系统">&laquo; 基于 Amazon SES 搭建高可用的邮件系统</a>
+        <a class="basic-alignment left" href="/blog/how-to-set-up-mini-programs-free-server-using-heroku/" title="Previous Post: 如何使用 Heroku 搭建免费的微信小程序服务">&laquo; 如何使用 Heroku 搭建免费的微信小程序服务</a>
       
-      
-        <a class="basic-alignment right" href="/blog/heroku-custom-domains/" title="Next Post: Heroku 教程：绑定自定义域名">Heroku 教程：绑定自定义域名 &raquo;</a>
       
     </p>
   </footer>
@@ -460,9 +596,9 @@ enable_page_level_ads: true
 <script type="text/javascript">
     var commenthub_id = '3821949';
     var commenthub_website = 'http://www.majiang.life';
-    var commenthub_identifier = '/blog/heroku-get-started/';
-    var commenthub_url = 'http://www.majiang.life/blog/heroku-get-started/';
-    var commenthub_title = 'Heroku 教程：使用 Heroku 快速搭建站点';
+    var commenthub_identifier = '/blog/setting-up-ssl-on-heroku-with-custom-domain/';
+    var commenthub_url = 'http://www.majiang.life/blog/setting-up-ssl-on-heroku-with-custom-domain/';
+    var commenthub_title = 'Heroku 教程：自定义域名配置 HTTPS';
     (function () {
         var dsq = document.createElement('script');
         dsq.type = 'text/javascript';

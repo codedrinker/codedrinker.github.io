@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://www.majiang.life/blog/setting-up-ssl-on-heroku-with-custom-domain/</loc>
+<lastmod>2018-04-30T08:42:05+08:00</lastmod>
+</url>
+<url>
 <loc>http://www.majiang.life/blog/how-to-set-up-mini-programs-free-server-using-heroku/</loc>
 <lastmod>2018-04-30T08:42:05+08:00</lastmod>
 </url>
@@ -218,13 +222,7 @@
 <loc>http://www.majiang.life/blog/categories/wei-xin-xiao-cheng-xu/</loc>
 </url>
 <url>
-<loc>http://www.majiang.life/posts/2/</loc>
-</url>
-<url>
-<loc>http://www.majiang.life/posts/3/</loc>
-</url>
-<url>
-<loc>http://www.majiang.life/posts/4/</loc>
+<loc>http://www.majiang.life/blog/categories/https/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/2015/01/10/begininng-and-summary/index.html</loc>

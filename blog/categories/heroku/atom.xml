@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Heroku | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/heroku/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-04-30T12:30:40+08:00</updated>
+  <updated>2018-04-30T23:17:57+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,186 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Heroku 教程：自定义域名配置 HTTPS]]></title>
+    <link href="http://www.majiang.life/blog/setting-up-ssl-on-heroku-with-custom-domain/"/>
+    <updated>2018-04-30T08:42:05+08:00</updated>
+    <id>http://www.majiang.life/blog/setting-up-ssl-on-heroku-with-custom-domain</id>
+    <content type="html"><![CDATA[<h2>起源</h2>
+
+<p>本身 Heroku 的 app 域名是开始 SSL 的，但是因为他的域名为 appname.herokuapp.com，没有在国内备案，所以我们需要绑定一个国内备案的域名到 Heroku 上面。于是就有了下面的文章。</p>
+
+<!-- more -->
+
+
+<h2>获取 SSL 证书</h2>
+
+<p>可以直接使用一些服务商购买域名 SSL 证书，或者用其他的方式自己生成。下面我们讲解一下怎么生成。</p>
+
+<h3>生成私有 Key</h3>
+
+<table>
+<thead>
+<tr>
+<th>系统  </th>
+<th> 安装方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mac OS X </td>
+<td> Homebrew: <code>brew install openssl</code></td>
+</tr>
+<tr>
+<td>Windows   </td>
+<td> <a href="http://slproweb.com/products/Win32OpenSSL.html">Windows complete package .exe installer</a></td>
+</tr>
+<tr>
+<td>Ubuntu Linux </td>
+<td> <code>apt-get install openssl</code></td>
+</tr>
+</tbody>
+</table>
+
+
+<p>Heroku 只支持 RSA，下面我们直接运行命令
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl genrsa -des3 -out server.pass.key 2048&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;输入如下命令获取<span class="sb">`</span>server.key<span class="sb">`</span>
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;openssl rsa -in server.pass.key -out server.key
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>生成 CSR</h3>
+
+<p>CSR是证书签名请求，需要使用上一步生成的私有 Key 进行生成。这个时候需要输入 Country Name 和 Common Name，格式如下</p>
+
+<table>
+<thead>
+<tr>
+<th>字段  </th>
+<th> 内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Country Name    </td>
+<td> <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166</a> 格式的简码</td>
+</tr>
+<tr>
+<td>Common Name  </td>
+<td> www.example.com,*.example.com 需要注意的是这个名字必须和使用的保持一致</td>
+</tr>
+</tbody>
+</table>
+
+
+<p>输入如下命令生成 CSR
+<code>
+openssl req -nodes -new -key server.key -out server.csr
+</code></p>
+
+<h3>生成 CRT</h3>
+
+<pre><code class="bash">openssl req -new -x509 -key server.key -out ca.crt -days 3650
+</code></pre>
+
+<p>这个证书用来给自己的证书签名，下面是创建服务器证书
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl x509 -req -days <span class="m">3650</span> -in server.csr -CA ca.crt -CAkey server.key -CAcreateserial -out server.crt&lt;/p&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;pre&gt;&lt;code&gt;
+</span><span class='line'><span class="c">## 配置 Heroku</span>
+</span><span class='line'><span class="c">### 创建插件</span>
+</span><span class='line'>&lt;/code&gt;&lt;/pre&gt;
+</span><span class='line'>
+</span><span class='line'>&lt;p&gt;heroku addons:create ssl:endpoint
+</span></code></pre></td></tr></table></div></figure></p>
+
+<h3>添加证书</h3>
+
+<pre><code>heroku certs:add server.crt server.key --type endpoint
+</code></pre>
+
+<p>运行完命令会为你分配一个新的 SSL 域名，需要你后面做绑定使用。
+<code>
+appname now served by iiii-65701.herokussl.com
+</code></p>
+
+<h3>修改证书</h3>
+
+<p>如果后面更新了证书，可以使用如下命令修改证书。
+<code>
+heroku certs:update server.crt server.key --endpoint example-2121.herokussl.com
+</code></p>
+
+<h2>配置域名</h2>
+
+<h3>添加域名</h3>
+
+<p>直接使用如下命令配置刚才你输入的域名
+<code>
+heroku domains:add www.example.com
+</code>
+如果是配置域名，更多详情可以参照<br/>
+<a href="/blog/heroku-custom-domains/?utm_source=rel">Heroku 教程：绑定自定义域名</a></p>
+
+<h3>配置DNS</h3>
+
+<p>这个时候需要配置一下 DNS 创建一个 CNAME 指向 Heroku，这个时候就需要指向到我们刚才生成的,<code>iiii-65701.herokussl.com</code>。</p>
+
+<h2>验证</h2>
+
+<p>等待一会儿以后可以使用如下命令检测一下是否配置成功
+<code>
+curl -kvI https://www.example.com
+* About to connect() to www.example.com port 443 (#0)
+*   Trying 50.16.234.21... connected
+* Connected to www.example.com (50.16.234.21) port 443 (#0)
+* SSLv3, TLS handshake, Client hello (1):
+* SSLv3, TLS handshake, Server hello (2):
+* SSLv3, TLS handshake, CERT (11):
+* SSLv3, TLS handshake, Server finished (14):
+* SSLv3, TLS handshake, Client key exchange (16):
+* SSLv3, TLS change cipher, Client hello (1):
+* SSLv3, TLS handshake, Finished (20):
+* SSLv3, TLS change cipher, Client hello (1):
+* SSLv3, TLS handshake, Finished (20):
+* SSL connection using AES256-SHA
+* Server certificate:
+*    subject: C=US; ST=CA; L=SF; O=SFDC; OU=Heroku; CN=www.example.com
+*    start date: 2011-11-01 17:18:11 GMT
+*    expire date: 2012-10-31 17:18:11 GMT
+*    common name: www.example.com (matched)
+*    issuer: C=US; ST=CA; L=SF; O=SFDC; OU=Heroku; CN=www.heroku.com
+*    SSL certificate verify ok.
+GET / HTTP/1.1
+User-Agent: curl/7.19.7 (universal-apple-darwin10.0) libcurl/7.19.7 OpenSSL/0.9.8r zlib/1.2.3
+Host: www.example.com
+Accept: */*
+...
+</code></p>
+
+<h2>参考文档</h2>
+
+<p><a href="https://devcenter.heroku.com/articles/ssl-endpoint#acquire-ssl-certificate">Heroku 官方配置</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[如何使用 Heroku 搭建免费的微信小程序服务]]></title>
@@ -41,6 +221,11 @@
 <p>进入 <a href="https://devcenter.heroku.com/">https://devcenter.heroku.com/</a> 页面，即可选择对应的语言进行开发。<br/>
 英文不是很好的小伙伴可能有点吃力，因为这个是纯外文的。不过笔者也整理了一个中文的搭建过程，希望可以帮到大家。<br/>
 <a href="/blog/heroku-get-started/?utm_source=inner">Heroku 入门教程之：使用 Heroku 快速搭建站点</a></p>
+
+<h2>配置 HTTPS</h2>
+
+<p>本身 heroku 免费提供的域名没有在国内备案，所以你需要自己把一个已经备案好的域名指定到 Heroku 空间，同时配置好 HTTPS，详情参考<br/>
+<a href="/blog/setting-up-ssl-on-heroku-with-custom-domain/?utm_source=inner">Heroku 教程：自定义域名配置 HTTPS</a></p>
 
 <h2>实例</h2>
 
