@@ -248,6 +248,8 @@ enable_page_level_ads: true
 
 <h3>生成 CRT</h3>
 
+<p>CRT 一般都是找签发 SSL 的机构签发，大部分是收费的，也有免费的，如果不找 SSL 机构签发，可以按照下面的方式自己生成，不过自己生成的证书可以使用，只是默认是不信任的，需要用户自己认证。通常情况生成的证书为 CRT 或者 PEM格式的。</p>
+
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl req -new -x509 -key server.key -out ca.crt -days 3650
 </span></code></pre></td></tr></table></div></figure>
@@ -259,6 +261,8 @@ enable_page_level_ads: true
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>openssl x509 -req -days <span class="m">3650</span> -in server.csr -CA ca.crt -CAkey server.key -CAcreateserial -out server.crt
 </span></code></pre></td></tr></table></div></figure>
 
+
+<p>笔者购买的是阿里云的域名，其默认支持生成3个免费的域名，而且使用他的生成，默认是信任的。直接通过阿里云控制台生成然后下载使用即可，可以省略上面的步骤。</p>
 
 <h2>配置 Heroku</h2>
 
