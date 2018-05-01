@@ -24,6 +24,10 @@ Heroku是一个支持多种编程语言的云平台即服务。在2010年被Sale
 英文不是很好的小伙伴可能有点吃力，因为这个是纯外文的。不过笔者也整理了一个中文的搭建过程，希望可以帮到大家。  
 [Heroku 入门教程之：使用 Heroku 快速搭建站点](/blog/heroku-get-started/?utm_source=inner) 
 
+## 配置 HTTPS
+本身 heroku 免费提供的域名没有在国内备案，所以你需要自己把一个已经备案好的域名指定到 Heroku 空间，同时配置好 HTTPS，详情参考  
+[Heroku 教程：自定义域名配置 HTTPS](/blog/setting-up-ssl-on-heroku-with-custom-domain/?utm_source=inner)
+
 ## 实例
 官方提供的 JAVA 例子好多东西都自己集成，笔者结合官方的例子自己写了一个，增加了 Spring，MyBatis，MySQL，H2，Migration的支持。如果有需要的可以自取。  
 https://github.com/codedrinker/heroku-spring-boot-mybatis-mysql-flyway-example
