@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 在使用 Octopress 的过程中随着文章数量的增加，首页越来越臃肿，不仅加载慢而且可读性很差。看到过其他人的 Octopress 首页很简洁，有一个 Read more，这样就非常方便了。查询了一下操作起来也非常简单。 添加更多 方法是十分的简单， &hellip;">
+  <meta name="description" content="前言 随着文章数量越来越多，分类也越来越多，不是很方便归类和查找，于是就有了标签云这个概念。简单明了的展示了标签和每一个标签下面的文章数量。这个功能可以自己编写，也非常简单。不过反正已经有轮子了，如果不喜欢重新造轮子，直接使用一个网上已经写好的就行了。下面直接进入正题： 使用轮子 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -101,6 +101,47 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/octopress-tag-cloud/">Octopress 添加标签云</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-06-24T15:11:51+08:00'><span class='date'>2017-06-24</span> <span class='time'>3:11 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>随着文章数量越来越多，分类也越来越多，不是很方便归类和查找，于是就有了<code>标签云</code>这个概念。简单明了的展示了标签和每一个标签下面的文章数量。这个功能可以自己编写，也非常简单。不过反正已经有轮子了，如果不喜欢重新造轮子，直接使用一个网上已经写好的就行了。下面直接进入正题：</p>
+
+<h2>使用轮子</h2>
+
+<p>直接<code>clone</code>轮子<code>https://github.com/tokkonopapa/octopress-tagcloud.git</code>到本地，如果不想<code>clone</code>直接点击<a href="/assets/octopress-tagcloud-master.zip">下载</a>，然后把对应的资源拷贝到相应的目录：</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/octopress-tag-cloud/">阅读全文</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -539,43 +580,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/auto-preview-front-end-changes/">Browsersync 前端实时预览工程搭建</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2016-12-24T20:46:37+08:00'><span class='date'>2016-12-24</span> <span class='time'>8:46 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>有Web开发经历的人都会遇到这样的一个情况，频繁的修改HTML,CSS,JS文件，然后刷新浏览器查看效果，有的时候索性UX就坐到你旁边指挥你，刷新次数能少么？大多数情况我们会连接一个外接显示器，这样不用频繁的切换窗口，但是未能避免频繁的刷新浏览器。更糟糕的是非静态页面，要是不能动态编译的话，还需要处理项目的热部署。所以笔者在网上查了查，同时咨询了一下身边的朋友<a href="https://github.com/HelloJacky">小马</a>，就有了下面这篇文章：通过<code>Browsersync</code>把文件变化实时更新到浏览器端，不同的前端技术架构体现的效果不一样，有的是不刷新页面的更新样式和布局，有的是刷新页面更新，效果更像是点击“F5”。无论做前端还是后端，使用它将提高30%的工作效率，下面我们就直接进入正题。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/auto-preview-front-end-changes/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -615,11 +619,15 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 </section>
 <section>
   <h1>标签云</h1>
-    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 142.85714285714286%'>heroku(5)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/https' style='font-size: 108.57142857142857%'>https(1)</a> <a href='/blog/categories/java' style='font-size: 151.42857142857144%'>java(6)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/thread' style='font-size: 108.57142857142857%'>thread(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> <a href='/blog/categories/wei-xin-xiao-cheng-xu' style='font-size: 108.57142857142857%'>微信小程序(1)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 151.42857142857144%'>heroku(6)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/https' style='font-size: 108.57142857142857%'>https(1)</a> <a href='/blog/categories/java' style='font-size: 151.42857142857144%'>java(6)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/mysql' style='font-size: 108.57142857142857%'>mysql(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/thread' style='font-size: 108.57142857142857%'>thread(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> <a href='/blog/categories/wei-xin-xiao-cheng-xu' style='font-size: 108.57142857142857%'>微信小程序(1)</a> </span>
 </section>
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/fix-heroku-cleardb-mysql-chinese-messy-code/">Heroku 教程：MySQL 中文乱码</a>
+      </li>
     
       <li class="post">
         <a href="/blog/setting-up-ssl-on-heroku-with-custom-domain/">Heroku 教程：自定义域名配置 HTTPS</a>
@@ -675,10 +683,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
     
       <li class="post">
         <a href="/blog/migrate-evernote-to-youdao-note/">是什么让我放弃印象笔记而使用有道云笔记的</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/head-first-responsive-web-design/">总是听别人说响应式布局，原来这么简单</a>
       </li>
     
   </ul>

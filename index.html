@@ -16,7 +16,9 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="起源 本身 Heroku 的 app 域名是开始 SSL 的，但是因为他的域名为 appname.herokuapp.com，没有在国内备案，所以我们需要绑定一个国内备案的域名到 Heroku 上面。于是就有了下面的文章。 ">
+  <meta name="description" content="方案 Heroku 的 MySQL 默认就是 UTF-8字符集，本身不应该出现乱码，但是笔者在测试过程中出现中文乱码。
+解决方法非常简单，直接在配置的URL后面添加如下内容即可。 1
+&useUnicode=true&characterEncoding=UTF-8 &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -101,6 +103,57 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/fix-heroku-cleardb-mysql-chinese-messy-code/">Heroku 教程：MySQL 中文乱码</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-05-01T16:03:01+08:00'><span class='date'>2018-05-01</span> <span class='time'>4:03 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>方案</h2>
+
+<p>Heroku 的 MySQL 默认就是 UTF-8字符集，本身不应该出现乱码，但是笔者在测试过程中出现中文乱码。<br/>
+解决方法非常简单，直接在配置的URL后面添加如下内容即可。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>&useUnicode=true&characterEncoding=UTF-8</span></code></pre></td></tr></table></div></figure>
+
+
+<p>不过在添加之前需要查看一下当前URL格式。</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>heroku run echo \$JDBC_DATABASE_URL</span></code></pre></td></tr></table></div></figure>
+
+
+<p>输出内容如下</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>jdbc:mysql://endpoint/database?reconnect=true&user=username&password=password</span></code></pre></td></tr></table></div></figure>
+
+
+<p>所以我直接在后面追加<code>&amp;useUnicode=true&amp;characterEncoding=UTF-8</code>即可。</p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -440,43 +493,6 @@ enable_page_level_ads: true
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/heroku-get-started/">Heroku 教程：使用 Heroku 快速搭建站点</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2018-02-18T17:49:25+08:00'><span class='date'>2018-02-18</span> <span class='time'>5:49 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>简介</h2>
-
-<p>Heroku 是 Salesforce 旗下云服务商，提供方便便捷的各种云服务，如服务器，数据库，监控，计算等等。并且他提供了免费版本，这使得我们这些平时想搞一些小东西的人提供了莫大的便捷，虽然他有时长和宕机的限制，但是对于个人小程序来说已经足够了。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/heroku-get-started/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -514,11 +530,15 @@ enable_page_level_ads: true
 </section>
 <section>
   <h1>标签云</h1>
-    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 142.85714285714286%'>heroku(5)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/https' style='font-size: 108.57142857142857%'>https(1)</a> <a href='/blog/categories/java' style='font-size: 151.42857142857144%'>java(6)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/thread' style='font-size: 108.57142857142857%'>thread(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> <a href='/blog/categories/wei-xin-xiao-cheng-xu' style='font-size: 108.57142857142857%'>微信小程序(1)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 151.42857142857144%'>heroku(6)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/https' style='font-size: 108.57142857142857%'>https(1)</a> <a href='/blog/categories/java' style='font-size: 151.42857142857144%'>java(6)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/mysql' style='font-size: 108.57142857142857%'>mysql(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/thread' style='font-size: 108.57142857142857%'>thread(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> <a href='/blog/categories/wei-xin-xiao-cheng-xu' style='font-size: 108.57142857142857%'>微信小程序(1)</a> </span>
 </section>
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/fix-heroku-cleardb-mysql-chinese-messy-code/">Heroku 教程：MySQL 中文乱码</a>
+      </li>
     
       <li class="post">
         <a href="/blog/setting-up-ssl-on-heroku-with-custom-domain/">Heroku 教程：自定义域名配置 HTTPS</a>
@@ -574,10 +594,6 @@ enable_page_level_ads: true
     
       <li class="post">
         <a href="/blog/migrate-evernote-to-youdao-note/">是什么让我放弃印象笔记而使用有道云笔记的</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/head-first-responsive-web-design/">总是听别人说响应式布局，原来这么简单</a>
       </li>
     
   </ul>

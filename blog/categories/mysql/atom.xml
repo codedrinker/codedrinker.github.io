@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mysql | 码匠笔记]]></title>
+  <link href="http://www.majiang.life/blog/categories/mysql/atom.xml" rel="self"/>
+  <link href="http://www.majiang.life/"/>
+  <updated>2018-05-01T16:10:05+08:00</updated>
+  <id>http://www.majiang.life/</id>
+  <author>
+    <name><![CDATA[麻酱]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Heroku 教程：MySQL 中文乱码]]></title>
+    <link href="http://www.majiang.life/blog/fix-heroku-cleardb-mysql-chinese-messy-code/"/>
+    <updated>2018-05-01T16:03:01+08:00</updated>
+    <id>http://www.majiang.life/blog/fix-heroku-cleardb-mysql-chinese-messy-code</id>
+    <content type="html"><![CDATA[<h2>方案</h2>
+
+<p>Heroku 的 MySQL 默认就是 UTF-8字符集，本身不应该出现乱码，但是笔者在测试过程中出现中文乱码。<br/>
+解决方法非常简单，直接在配置的URL后面添加如下内容即可。
+<code>
+&amp;useUnicode=true&amp;characterEncoding=UTF-8
+</code>
+不过在添加之前需要查看一下当前URL格式。</p>
+
+<pre><code>heroku run echo \$JDBC_DATABASE_URL
+</code></pre>
+
+<p>输出内容如下
+<code>
+jdbc:mysql://endpoint/database?reconnect=true&amp;user=username&amp;password=password
+</code>
+所以我直接在后面追加<code>&amp;useUnicode=true&amp;characterEncoding=UTF-8</code>即可。</p>
+]]></content>
+  </entry>
+  
+</feed>
