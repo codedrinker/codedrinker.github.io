@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-05-01T17:21:59+08:00</updated>
+  <updated>2018-05-02T23:09:32+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -1085,10 +1085,6 @@ IO密集型任务则由于需要等待IO操作，线程并不是一直在执行�
 <h3>关联 Github</h3>
 
 <p>上文说到需要 push 到 heroku 的仓库才能部署，heroku 提供了更强带的功能，直接关联 Github 的仓库的分支，等分支有新内容更新的时候直接部署。这个配置就需要去 web控制台配置了。进入项目，点击 <code>Deploy</code>，勾选 <code>Github</code>，然后完成配置即可。</p>
-
-<h2>相关文章</h2>
-
-<p><a href="http://www.majiang.life/blog/heroku-custom-domains/">Heroku 入门教程之：绑定自定义域名</a></p>
 ]]></content>
   </entry>
   
