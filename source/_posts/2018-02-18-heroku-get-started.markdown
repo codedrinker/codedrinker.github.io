@@ -72,5 +72,3 @@ web: vendor/bin/heroku-php-apache2 web/
 ### 关联 Github 
 上文说到需要 push 到 heroku 的仓库才能部署，heroku 提供了更强带的功能，直接关联 Github 的仓库的分支，等分支有新内容更新的时候直接部署。这个配置就需要去 web控制台配置了。进入项目，点击 `Deploy`，勾选 `Github`，然后完成配置即可。
 
-## 相关文章
-[Heroku 入门教程之：绑定自定义域名](/blog/heroku-custom-domains/)
