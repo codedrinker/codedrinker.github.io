@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 随着文章数量越来越多，分类也越来越多，不是很方便归类和查找，于是就有了标签云这个概念。简单明了的展示了标签和每一个标签下面的文章数量。这个功能可以自己编写，也非常简单。不过反正已经有轮子了，如果不喜欢重新造轮子，直接使用一个网上已经写好的就行了。下面直接进入正题： 使用轮子 &hellip;">
+  <meta name="description" content="前言 最近使用读读日报发现其阅读模式很是方便，除了字体和布局舒服了，最重要的是去掉了干扰阅读的所有因素，包括广告，相关文章，栏目等等。于是就查找了一下有没有类似的实现方案。最后找了一些方案，不过并不知道正解，只是抛砖引玉罢了。(PS:感觉更深层次的处理应该是机器学习吧) ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -101,6 +101,43 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/make-article-more-readable/">阅读模式是如何实现的?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-07-04T21:09:10+08:00'><span class='date'>2017-07-04</span> <span class='time'>9:09 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>最近使用读读日报发现其阅读模式很是方便，除了字体和布局舒服了，最重要的是去掉了干扰阅读的所有因素，包括广告，相关文章，栏目等等。于是就查找了一下有没有类似的实现方案。最后找了一些方案，不过并不知道正解，只是抛砖引玉罢了。(PS:感觉更深层次的处理应该是机器学习吧)</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/make-article-more-readable/">阅读全文</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -534,52 +571,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/the-smart-way-of-styling-and-customizing-file-input/">如何优雅的自定义File Input样式</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-03-11T15:05:51+08:00'><span class='date'>2017-03-11</span> <span class='time'>3:05 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>通过使用<code>label</code>标签，简单的自定义<code>&lt;input type='file'&gt;</code>的样式。</p>
-
-<h2>示例</h2>
-
-<p><img src="/images/posts/CustomFileInputs1.jpg" alt="Demo" /><br/>
-<a href="http://tympanus.net/Tutorials/CustomFileInputs/">在线示例</a> | <a href="http://tympanus.net/Tutorials/CustomFileInputs/CustomFileInputs.zip">下载源码</a></p>
-
-<h2>调研</h2>
-
-<p>我尝试了许多通过修改<code>&lt;input type='file'&gt;</code>样式的方式解决这个问题，效果都不是很好，没有一个能像<a href="http://readerrr.com/">Readerrr</a>(通过上传文件导入Feed)那样漂亮。还有一种奇怪的实现，把<code>&lt;input type='file'&gt;</code>放到一个容器里面，把容器画成按钮的样子，当你点击容器的任何地方的时候，实际是点击的<code>&lt;input type='file'&gt;</code>。这种实现方案很有趣，同时也很奇怪。因为从可用性和点击体验来说确实不是很理想。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/the-smart-way-of-styling-and-customizing-file-input/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -632,6 +623,10 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/auto-post-to-multiple-platform/">如何用 Post Dispather 把文章快速发布在多个平台</a>
+      </li>
     
       <li class="post">
         <a href="/blog/fix-heroku-cleardb-mysql-chinese-messy-code/">Heroku 教程：MySQL 中文乱码</a>
@@ -687,10 +682,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
     
       <li class="post">
         <a href="/blog/deep-dive-on-elasticsearch-doc-values/">深入理解 ElasticSearch Doc Values</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/migrate-evernote-to-youdao-note/">是什么让我放弃印象笔记而使用有道云笔记的</a>
       </li>
     
   </ul>
