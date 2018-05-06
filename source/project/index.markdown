@@ -7,6 +7,10 @@ sharing: true
 footer: true
 ---
 
+## post-dispatcher
+**描述**：自动发送 Markdown 博文到不同社交平台，SegmentFault、简书、CSDN等。   
+**地址**：[https://github.com/codedrinker/post-dispatcher](https://github.com/codedrinker/post-dispatcher)  
+
 ## table-of-contents-sidebar
 **描述**：通过解析页面 H* 标签生成目录，其提供 Chrome Extension 和 内嵌的方式集成到自己的 Web 站点。   
 **地址**：     
