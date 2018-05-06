@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="痛点 每次发布一篇新博文，如果想发布到不同的平台，需要人工处理好多事情，诸如，登录，点击发布文章，拷贝，粘贴，发布。想寻找一款工具能够一次编辑，同步到不同的社交平台。 解决方案 使用 Post Dispatcher 自动发送博文到不同社交平台，SegmentFault、简书、CSDN等， &hellip;">
+  <meta name="description" content="痛点 每次发布一篇新博文，如果想发布到不同的平台，需要人工处理好多事情，诸如，登录，点击发布文章，拷贝，粘贴，发布。想寻找一款工具能够一次编辑，同步到不同的社交平台。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -128,66 +128,12 @@ enable_page_level_ads: true
 
 <p>每次发布一篇新博文，如果想发布到不同的平台，需要人工处理好多事情，诸如，登录，点击发布文章，拷贝，粘贴，发布。想寻找一款工具能够一次编辑，同步到不同的社交平台。</p>
 
-<h2>解决方案</h2>
-
-<p>使用 <code>Post Dispatcher</code> 自动发送博文到不同社交平台，SegmentFault、简书、CSDN等，弊端是需要熟悉 <code>JAVA</code> 的同学使用运行程序的方式实现。</p>
-
-<h2>实现原理</h2>
-
-<p>本项目的实现原理比较简单，主要是使用 <code>Selenium</code> 的 <code>Webdriver</code>，模拟浏览在操作，从登陆，编辑，到发布一系列的流程如同自动化。</p>
-
-<h2>使用说明</h2>
-
-<h3>环境准备</h3>
-
-<ul>
-<li>JDK 1.8</li>
-<li>Idea(安装Lombok)</li>
-<li>Firefox</li>
-</ul>
-
-
-<h3>克隆代码</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>git clone https://github.com/codedrinker/post-dispatcher.git
-</span></code></pre></td></tr></table></div></figure>
-
-
-<h3>配置依赖</h3>
-
-<p>因为使用原生的 <code>Maven</code> 的依赖不能运行 <code>Selenium</code>，所以并未深究，直接使用下载版本的依赖，放在项目 <code>lib</code> 目录，所以需要我们手动添加整个目录为 <code>Library</code> 即可。</p>
-
-<h3>配置账号</h3>
-
-<p>上文已经说了，使用模拟账号登录的方式，所以需要在 <code>post-dispatcher.properties</code> 里面配置好每一个平台的用户名和密码。<br/>
-同时也支持使用<code>-Dcustom-config=dp.properties</code> 自定义配置名称。</p>
-
-<h3>运行</h3>
-
-<p>配置全部完成以后直接运行 <code>PostDispatcher</code> 即可。</p>
-
-<h2>支持平台</h2>
-
-<ul>
-<li>SegmentFault：用户名密码登录</li>
-<li>CSDN：Github 登录</li>
-<li>简书：用户名密码登录，需要功能介入点击图像验证码。</li>
-</ul>
-
-
-<h2>反馈</h2>
-
-<p>使用过程中需要问题，欢迎反馈到如下地址<br/>
-<a href="https://github.com/codedrinker/post-dispatcher/issues">https://github.com/codedrinker/post-dispatcher/issues</a></p>
-
-<h2>作者</h2>
-
-<p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-如果兴趣可以关注作者微信订阅号:码匠笔记
-<img src="http://www.majiang.life/images/mini-wechat.jpg" alt="微信二维码" /></p>
 </div>
   
+  
+    <footer>
+      <a rel="full-article" href="/blog/auto-post-to-multiple-platform/">阅读全文</a>
+    </footer>
   
 
 

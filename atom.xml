@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-05-06T12:15:01+08:00</updated>
+  <updated>2018-05-06T12:16:15+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -21,6 +21,9 @@
     <content type="html"><![CDATA[<h2>痛点</h2>
 
 <p>每次发布一篇新博文，如果想发布到不同的平台，需要人工处理好多事情，诸如，登录，点击发布文章，拷贝，粘贴，发布。想寻找一款工具能够一次编辑，同步到不同的社交平台。</p>
+
+<!-- more -->
+
 
 <h2>解决方案</h2>
 
