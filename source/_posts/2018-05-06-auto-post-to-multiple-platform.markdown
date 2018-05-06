@@ -45,8 +45,3 @@ git clone https://github.com/codedrinker/post-dispatcher.git
 ## 反馈
 使用过程中需要问题，欢迎反馈到如下地址  
 https://github.com/codedrinker/post-dispatcher/issues
-
-## 作者
-本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。  
-如果兴趣可以关注作者微信订阅号:码匠笔记
-![微信二维码](http://www.majiang.life/images/mini-wechat.jpg)
