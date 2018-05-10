@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-05-10T23:51:48+08:00</updated>
+  <updated>2018-05-10T23:58:27+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -39,8 +39,8 @@ You may assume that each input would have exactly one solution, and you may not 
 
 <h2>解题思路</h2>
 
-<p>首先循环数组中的证书，巧妙的定义一个 HashMap，用key记录整数的值，用 value 记录 该整数的下标。<br/>
-使用<code>map.get(target - nums[i]);</code>判断是否存在，如果存在说明给定的值减去当前的值的整数已经存在，那么可以判断循环结束了，如果不存在那么久把当前值和下标放到 Map中。</p>
+<p>首先循环数组中的整数，巧妙的定义一个 HashMap，用 key 记录整数的值，用 value 记录 该整数的下标。<br/>
+使用 <code>map.get(target-nums[i]);</code> 判断其是否存在，如果存在说明给定的值减去当前的值的整数已经存在，意思就是说已经找到了加和等于给定数的两个值，他们的下标就放在了map的 value里面，直接取出即可。那么可以判断循环结束了，如果不存在那么就继续把当前值和下标放到 Map中。</p>
 
 <h2>源码</h2>
 
