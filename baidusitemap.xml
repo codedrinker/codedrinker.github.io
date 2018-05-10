@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://www.majiang.life/blog/leetcode-two-sum/</loc>
+<lastmod>2018-05-10T23:36:59+08:00</lastmod>
+</url>
+<url>
 <loc>http://www.majiang.life/blog/auto-post-to-multiple-platform/</loc>
 <lastmod>2018-05-06T12:13:38+08:00</lastmod>
 </url>
@@ -234,6 +238,18 @@
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/mysql/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/blog/categories/leetcode/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/posts/2/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/posts/3/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/posts/4/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/2015/01/10/begininng-and-summary/index.html</loc>
