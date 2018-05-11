@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Leetcode | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/leetcode/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-05-11T22:46:59+08:00</updated>
+  <updated>2018-05-11T22:49:17+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,100 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[每日一则 LeetCode: Add Two Numbers]]></title>
+    <link href="http://www.majiang.life/blog/leetcode-add-two-numbers/"/>
+    <updated>2018-05-11T22:37:53+08:00</updated>
+    <id>http://www.majiang.life/blog/leetcode-add-two-numbers</id>
+    <content type="html"><![CDATA[<h2>描述</h2>
+
+<p>You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes contain a single digit. Add the two numbers and return it as a linked list.</p>
+
+<p>You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+<code>
+Input: (2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
+Output: 7 -&gt; 0 -&gt; 8
+Explanation: 342 + 465 = 807.
+</code></p>
+
+<h2>中文解释</h2>
+
+<p>给定两个非空的链表里面分别包含不等数量的正整数，每一个节点都包含一个正整数，肯能是0，但是不会是<code>01</code>这种情况。我们需要按照倒序计算他们的和然后再次倒序输出。</p>
+
+<h2>解题思路</h2>
+
+<p>这题没有什么巧妙的方式，不过仔细思考一下，它其实是在模拟正常的多位数加法。我们试想在计算多位数加法的时候，从最末位开始计算，如果大于10就进位，并加到下次高位计算中；如果不大于10继续计算；就这样我们就有了下面的阶梯思路。<br/>
+一次循环就可以搞定，通过判断他们其中是不是空，就像是多位数加减法，如果一个高位没有了，当然也要继续计算，所以有了下面默认 <code>int carry = 0</code>，然后通过 <code>sum / 10</code> 算出进位，通过 <code>sum % 10</code> 算出当前位，这个题就迎刃而解。</p>
+
+<h2>源码</h2>
+
+<pre><code class="java">public class AddTwoNumbers {
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode tempNode = new ListNode(0);
+        ListNode a = l1, b = l2, curr = tempNode;
+        int carry = 0;
+        while (a != null || b != null) {
+            int x = a != null ? a.val : 0;
+            int y = b != null ? b.val : 0;
+            int sum = carry + x + y;
+            carry = sum / 10;
+            curr.next = new ListNode(sum % 10);
+            curr = curr.next;
+            if (a != null) a = a.next;
+            if (b != null) b = b.next;
+        }
+
+        if (carry &gt; 0) {
+            curr.next = new ListNode(carry);
+        }
+
+        return tempNode.next;
+    }
+
+    public static void main(String[] args) {
+        ListNode l1 = new ListNode(2);
+        l1.add(new ListNode(4));
+        l1.add(new ListNode(3));
+        ListNode l2 = new ListNode(5);
+        l2.add(new ListNode(6));
+        l2.add(new ListNode(4));
+        ListNode listNode = new AddTwoNumbers().addTwoNumbers(l1, l2);
+        System.out.println(listNode.val);
+        while (listNode.next != null) {
+            System.out.println(listNode.next.val);
+            listNode = listNode.next;
+        }
+    }
+}
+
+class ListNode {
+    int val;
+    ListNode next;
+
+    ListNode(int x) {
+        val = x;
+    }
+
+    public void add(ListNode next) {
+        ListNode last = getLast(this);
+        last.next = next;
+    }
+
+    private ListNode getLast(ListNode next) {
+        while (next.next != null) {
+            return getLast(next.next);
+        }
+        return next;
+    }
+}
+</code></pre>
+
+<h2>原题地址</h2>
+
+<p><a href="https://leetcode.com/problems/add-two-numbers/">https://leetcode.com/problems/add-two-numbers/</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[每日一则 LeetCode: Two Sum]]></title>
