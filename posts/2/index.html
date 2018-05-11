@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 原生的 Octopress 没有更丰富的阅读体验，只有上一篇下一篇，每次需要为当前文章添加相关文章的时候都需要在 Markdown 里面手动填写，这样非常浪费时间又不全面，于是笔者使用 Category 作为相关性的依据，修改了 Liqiud 代码，使得每一个 post 里面有具有相关的文章 &hellip;">
+  <meta name="description" content="前言 Hexo 模板的博客都带了文章目录[toc]，但是作者当前使用的是 Octopress 博客系统，所以不支持目录。这样给阅读的人带来了很大的不便捷。所以作者使用了 Table of contents sidebar 为 Octopress 添加了目录，并且可以快速定位。过程很简单，内容如下。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -101,6 +101,43 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/blog-table-of-contents/">给博客添加目录</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-02-19T12:11:10+08:00'><span class='date'>2018-02-19</span> <span class='time'>12:11 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>Hexo 模板的博客都带了文章目录[toc]，但是作者当前使用的是 Octopress 博客系统，所以不支持目录。这样给阅读的人带来了很大的不便捷。所以作者使用了 Table of contents sidebar 为 Octopress 添加了目录，并且可以快速定位。过程很简单，内容如下。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/blog-table-of-contents/">阅读全文</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -435,43 +472,6 @@ enable_page_level_ads: true
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/spring-mybatis-and-dynamic-proxy/">从 Spring 集成 Mybatis 到 浅析Java动态代理</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-10-15T21:10:30+08:00'><span class='date'>2017-10-15</span> <span class='time'>9:10 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>因为 <code>MyBatis</code> 的易上手性和可控性，使得它成为了<code>ORM</code>框架中的首选。近日新起了一个项目，所以重新搭建了一下 <code>Spring-mybatis</code>, 下面是搭建笔记和从<code>Spring-mybatis</code>源码分析其如何使用<code>Java动态代理</code>，希望对大家有帮助。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/spring-mybatis-and-dynamic-proxy/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/3">&larr; Older</a>
@@ -524,6 +524,10 @@ enable_page_level_ads: true
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/leetcode-add-two-numbers/">Leetcode Add Two Numbers</a>
+      </li>
     
       <li class="post">
         <a href="/blog/leetcode-two-sum/">每日一则 LeetCode: Two Sum</a>
@@ -579,10 +583,6 @@ enable_page_level_ads: true
     
       <li class="post">
         <a href="/blog/how-to-build-email-system-with-amazon-ses/">基于 Amazon SES 搭建高可用的邮件系统</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/deep-dive-on-java-hashcode/">细说 Java hashCode</a>
       </li>
     
   </ul>

@@ -16,8 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 尝试在Google, Baidu, Bing 搜索之前写的文章的关键字基本搜不到，甚至使用标题一模一样去搜索也不行，更意外的是第一个出现的是转载的文章。于是就带着这个疑问去网上查了一些资料，尝试去优化一下，下面就是这次优化的笔记。
-PS:虽然做我们这行业的人基本都是用Google 搜索。 ">
+  <meta name="description" content="前言 一个“码农”基本都有一个自己的域名，有的人说是因为逼格，有的人说是因为有钱，无论怎么样都有自己的原因，我觉得是因为情节。 因为我的博客是通过Octopress搭建在Github Pages上面的，所以我需要让我的域名的DNS解析到Github Pages上面。 Github &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -102,6 +101,48 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。 ">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/github-and-godaddy/">Github Pages配置域名</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-04-03T00:32:47+08:00'><span class='date'>2017-04-03</span> <span class='time'>12:32 am</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>一个“码农”基本都有一个自己的域名，有的人说是因为逼格，有的人说是因为有钱，无论怎么样都有自己的原因，我觉得是因为情节。 <br/>
+因为我的博客是通过Octopress搭建在Github Pages上面的，所以我需要让我的域名的DNS解析到Github Pages上面。</p>
+
+<h2>Github</h2>
+
+<p>首先在<code>codedrinker.github.io</code>这个<code>repository</code>的<code>gh-pages</code>指向的分支根目录添加一个<code>CNAME</code>，里面写<code>majiang.life</code>，不需要添加<code>http</code>或者<code>www</code>。因为博客采用的Octopress，所以直接在<code>source</code>目录添加一个<code>CNAME</code>文件，然后<code>rake gen_deploy</code>就可以自动生成到<code>gh-pages</code>分支<code>master</code>了。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/github-and-godaddy/">阅读全文</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -353,6 +394,10 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/leetcode-add-two-numbers/">Leetcode Add Two Numbers</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/leetcode-two-sum/">每日一则 LeetCode: Two Sum</a>
       </li>
     
@@ -406,10 +451,6 @@ PS:虽然做我们这行业的人基本都是用Google 搜索。</p>
     
       <li class="post">
         <a href="/blog/how-to-build-email-system-with-amazon-ses/">基于 Amazon SES 搭建高可用的邮件系统</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/deep-dive-on-java-hashcode/">细说 Java hashCode</a>
       </li>
     
   </ul>

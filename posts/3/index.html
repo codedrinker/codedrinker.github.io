@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="前言 虽然移动设备已经很普遍了，但是大家使用电脑阅读网页的时间还是很长，尤其是做我们这个行业，除了阅读博客，通过网页搜索资料的时间也是比其他行业要多出来很多的。每次遇到特别长的文章的时候，从上到下的翻阅查找重点内容，肉眼的分离段落实在是比较费劲。但是有的网站这方面比较人性化， &hellip;">
+  <meta name="description" content="前言 因为 MyBatis 的易上手性和可控性，使得它成为了ORM框架中的首选。近日新起了一个项目，所以重新搭建了一下 Spring-mybatis, 下面是搭建笔记和从Spring-mybatis源码分析其如何使用Java动态代理，希望对大家有帮助。 ">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -101,6 +101,43 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/spring-mybatis-and-dynamic-proxy/">从 Spring 集成 Mybatis 到 浅析Java动态代理</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2017-10-15T21:10:30+08:00'><span class='date'>2017-10-15</span> <span class='time'>9:10 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>前言</h2>
+
+<p>因为 <code>MyBatis</code> 的易上手性和可控性，使得它成为了<code>ORM</code>框架中的首选。近日新起了一个项目，所以重新搭建了一下 <code>Spring-mybatis</code>, 下面是搭建笔记和从<code>Spring-mybatis</code>源码分析其如何使用<code>Java动态代理</code>，希望对大家有帮助。</p>
+
+</div>
+  
+  
+    <footer>
+      <a rel="full-article" href="/blog/spring-mybatis-and-dynamic-proxy/">阅读全文</a>
+    </footer>
+  
+
+
+    </article>
   
   
     <article>
@@ -528,48 +565,6 @@ enable_page_level_ads: true
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/github-and-godaddy/">Github Pages配置域名</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2017-04-03T00:32:47+08:00'><span class='date'>2017-04-03</span> <span class='time'>12:32 am</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>一个“码农”基本都有一个自己的域名，有的人说是因为逼格，有的人说是因为有钱，无论怎么样都有自己的原因，我觉得是因为情节。 <br/>
-因为我的博客是通过Octopress搭建在Github Pages上面的，所以我需要让我的域名的DNS解析到Github Pages上面。</p>
-
-<h2>Github</h2>
-
-<p>首先在<code>codedrinker.github.io</code>这个<code>repository</code>的<code>gh-pages</code>指向的分支根目录添加一个<code>CNAME</code>，里面写<code>majiang.life</code>，不需要添加<code>http</code>或者<code>www</code>。因为博客采用的Octopress，所以直接在<code>source</code>目录添加一个<code>CNAME</code>文件，然后<code>rake gen_deploy</code>就可以自动生成到<code>gh-pages</code>分支<code>master</code>了。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/github-and-godaddy/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/4">&larr; Older</a>
@@ -622,6 +617,10 @@ enable_page_level_ads: true
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/leetcode-add-two-numbers/">Leetcode Add Two Numbers</a>
+      </li>
     
       <li class="post">
         <a href="/blog/leetcode-two-sum/">每日一则 LeetCode: Two Sum</a>
@@ -677,10 +676,6 @@ enable_page_level_ads: true
     
       <li class="post">
         <a href="/blog/how-to-build-email-system-with-amazon-ses/">基于 Amazon SES 搭建高可用的邮件系统</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/deep-dive-on-java-hashcode/">细说 Java hashCode</a>
       </li>
     
   </ul>
