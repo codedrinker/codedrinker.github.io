@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-05-13T15:18:11+08:00</updated>
+  <updated>2018-05-13T15:30:39+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -555,6 +555,9 @@ dump 信息。<br/>
 
 <p>给定两个非空的链表里面分别包含不等数量的正整数，每一个节点都包含一个正整数，肯能是0，但是不会是<code>01</code>这种情况。我们需要按照倒序计算他们的和然后再次倒序输出。</p>
 
+<!-- more -->
+
+
 <h2>解题思路</h2>
 
 <p>这题没有什么巧妙的方式，不过仔细思考一下，它其实是在模拟正常的多位数加法。我们试想在计算多位数加法的时候，从最末位开始计算，如果大于10就进位，并加到下次高位计算中；如果不大于10继续计算；就这样我们就有了下面的阶梯思路。<br/>
@@ -712,6 +715,9 @@ You may assume that each input would have exactly one solution, and you may not 
 <h2>中文解释</h2>
 
 <p>给定一个整型数组和一个给定的整数，返回两个数加和等于给定数的下标值。假设答案只有一个并且数组中没有重复的整数。</p>
+
+<!-- more -->
+
 
 <h2>解题思路</h2>
 

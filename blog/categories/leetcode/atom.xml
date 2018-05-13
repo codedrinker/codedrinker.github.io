@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Leetcode | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/leetcode/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-05-13T15:18:11+08:00</updated>
+  <updated>2018-05-13T15:30:39+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -93,6 +93,9 @@ Explanation: 342 + 465 = 807.
 <h2>中文解释</h2>
 
 <p>给定两个非空的链表里面分别包含不等数量的正整数，每一个节点都包含一个正整数，肯能是0，但是不会是<code>01</code>这种情况。我们需要按照倒序计算他们的和然后再次倒序输出。</p>
+
+<!-- more -->
+
 
 <h2>解题思路</h2>
 
@@ -189,6 +192,9 @@ You may assume that each input would have exactly one solution, and you may not 
 <h2>中文解释</h2>
 
 <p>给定一个整型数组和一个给定的整数，返回两个数加和等于给定数的下标值。假设答案只有一个并且数组中没有重复的整数。</p>
+
+<!-- more -->
+
 
 <h2>解题思路</h2>
 
