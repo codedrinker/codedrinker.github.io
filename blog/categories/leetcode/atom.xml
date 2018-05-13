@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Leetcode | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/leetcode/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-05-11T22:49:17+08:00</updated>
+  <updated>2018-05-13T14:57:42+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,64 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[每日一则 LeetCode: Longest Substring Without Repeating Characters]]></title>
+    <link href="http://www.majiang.life/blog/longest-substring-without-repeating-characters/"/>
+    <updated>2018-05-13T14:42:51+08:00</updated>
+    <id>http://www.majiang.life/blog/longest-substring-without-repeating-characters</id>
+    <content type="html"><![CDATA[<h2>描述</h2>
+
+<p>Given a string, find the length of the longest substring without repeating characters.</p>
+
+<p>Examples:</p>
+
+<p>Given &ldquo;abcabcbb&rdquo;, the answer is &ldquo;abc&rdquo;, which the length is 3.</p>
+
+<p>Given &ldquo;bbbbb&rdquo;, the answer is &ldquo;b&rdquo;, with the length of 1.</p>
+
+<p>Given &ldquo;pwwkew&rdquo;, the answer is &ldquo;wke&rdquo;, with the length of 3. Note that the answer must be a substring, &ldquo;pwke&rdquo; is a subsequence and not a substring.</p>
+
+<h2>中文解释</h2>
+
+<p>给定一个字符串，获得它不重复连续子序列的长度</p>
+
+<h2>解题思路</h2>
+
+<p>这题没有什么巧妙的方式，误区是我们不需要太关注子字符串是什么，只要记录它的长度最终比较就可以了，所以求解方式比较简单，直接循环字符串的每一个字节，判断是否出现过，如果出现过从头计算，更新重复的index，如果没有出现过，计数+1继续循环。</p>
+
+<h2>源码</h2>
+
+<pre><code class="java">public class LongestSubstringWithoutRepeatingCharacters {
+    public int lengthOfLongestSubstring(String s) {
+        int repeatedIndex = 0, length = 0;
+        Map&lt;Character, Integer&gt; map = new HashMap&lt;&gt;();
+        for (int i = 0; i &lt; s.length(); i++) {
+            if (map.containsKey(s.charAt(i))) {
+                repeatedIndex = Math.max(map.get(s.charAt(i)), repeatedIndex);
+            }
+
+            length = Math.max(length, i - repeatedIndex + 1);
+            map.put(s.charAt(i), i + 1);
+        }
+        return length;
+    }
+
+    public static void main(String[] args) {
+        LongestSubstringWithoutRepeatingCharacters lswrc = new LongestSubstringWithoutRepeatingCharacters();
+        System.out.println(lswrc.lengthOfLongestSubstring("abcabcbb") == 3);
+        System.out.println(lswrc.lengthOfLongestSubstring("bbbbb") == 1);
+        System.out.println(lswrc.lengthOfLongestSubstring("pwwkew") == 3);
+
+    }
+}
+</code></pre>
+
+<h2>原题地址</h2>
+
+<p><a href="https://leetcode.com/problems/longest-substring-without-repeating-characters">https://leetcode.com/problems/longest-substring-without-repeating-characters</a></p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[每日一则 LeetCode: Add Two Numbers]]></title>

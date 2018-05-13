@@ -12,12 +12,12 @@ google_ad_client: "ca-pub-9540087096615057",
 enable_page_level_ads: true
 });
 </script>
-  <title>如何使用 Heroku 搭建免费的微信小程序服务 - 码匠笔记</title>
+  <title>每日一则 LeetCode: Longest Substring Without Repeating Characters - 码匠笔记</title>
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="如何使用 Heroku 搭建免费的微信小程序服务,免费的微信小程序服务,免费的HTTPS微信小程序服务">
-  <meta name="keywords" content="如何使用 Heroku 搭建免费的微信小程序服务,免费的微信小程序服务,免费的HTTPS微信小程序服务">
+  <meta name="description" content="描述 Given a string, find the length of the longest substring without repeating characters. Examples: Given &ldquo;abcabcbb&rdquo;, the answer is & &hellip;">
+  
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -25,7 +25,7 @@ enable_page_level_ads: true
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://www.majiang.life/blog/how-to-set-up-mini-programs-free-server-using-heroku">
+  <link rel="canonical" href="http://www.majiang.life/blog/longest-substring-without-repeating-characters">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <link href="/atom.xml" rel="alternate" title="码匠笔记" type="application/atom+xml">
@@ -104,7 +104,7 @@ enable_page_level_ads: true
   
   <header>
     
-      <h1 class="entry-title">如何使用 Heroku 搭建免费的微信小程序服务</h1>
+      <h1 class="entry-title">每日一则 LeetCode: Longest Substring Without Repeating Characters</h1>
     
     
       <p class="meta">
@@ -113,7 +113,7 @@ enable_page_level_ads: true
 
 
 
-<time class='entry-date' datetime='2018-04-30T08:42:05+08:00'><span class='date'>2018-04-30</span> <span class='time'>8:42 am</span></time>
+<time class='entry-date' datetime='2018-05-13T14:42:51+08:00'><span class='date'>2018-05-13</span> <span class='time'>2:42 pm</span></time>
         <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
          访问 <span id="busuanzi_value_page_pv"></span> 次
       </p>
@@ -122,81 +122,80 @@ enable_page_level_ads: true
 
 
 
-<style type="text/css">
-  .note {
-    margin: 30px 0;
-    padding: 20px 20px 24px;
-    padding-left: 50px;
-    -webkit-border-radius: 0 5px 5px 0;
-    -moz-border-radius: 0 5px 5px 0;
-    border-radius:8px;
-    position: relative;
-    -webkit-box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
-    -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.2),inset 0 -1px 0 rgba(0,0,0,0.3);
-    box-shadow: 0 1px 5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2), inset 0 -1px 0 rgba(0,0,0,0.3);
-    background-color: #7e6d42;
-    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJod…EiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-    background-image: -webkit-gradient(linear, left top, left bottom, from(#7e6d42), to(#5c4e35));
-    background-image: -webkit-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
-    background-image: -moz-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
-    background-image: -o-linear-gradient(top, #7e6d42 0%, #5c4e35 100%);
-    background-image: linear-gradient(to bottom, #86847f 0%, #3e3b36 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=&#8217;#7e6d42&#8217;, endColorstr=&#8217;#5c4e35&#8217;,GradientType=0 );
-  }
-  .note h4, .note p {
-    margin: 0;
-    color: #fff;
-  }
-</style>
-<div class="entry-content">
-  <div class="note">
-    <h4>本文内容概要如下：</h4>
-    <p>
-      
-      
-        1, 如何使用 Heroku 搭建免费的微信小程序服务<br>
-      
-        2, 免费的微信小程序服务<br>
-      
-        3, 免费的HTTPS微信小程序服务<br>
-      
-    </p>
-  </div>
-</div>
+<div class="entry-content"><h2>描述</h2>
 
-<div class="entry-content"><h2>起源</h2>
+<p>Given a string, find the length of the longest substring without repeating characters.</p>
 
-<p>最近小程序愈发的火热，好多人都纷纷的加入到小程序的开发阵营。虽然小程序的开发对个人用户是免费的，但是还是有一些要求的，比如需要服务器支持，购买域名，并且需要 HTTPS 支持，那么这样对于一些想学习小程序开发，或者是做一些开源的小程序工具的开发者来说，购买域名，服务器，HTTPS搭建都是额外的成本。虽然腾讯云提供了免费的调试环境，但是生成环境还是需要购买的。这里小编就来给搭建提供一种免费搭建小程序服务的方式。</p>
+<p>Examples:</p>
 
-<!-- more -->
+<p>Given &ldquo;abcabcbb&rdquo;, the answer is &ldquo;abc&rdquo;, which the length is 3.</p>
+
+<p>Given &ldquo;bbbbb&rdquo;, the answer is &ldquo;b&rdquo;, with the length of 1.</p>
+
+<p>Given &ldquo;pwwkew&rdquo;, the answer is &ldquo;wke&rdquo;, with the length of 3. Note that the answer must be a substring, &ldquo;pwke&rdquo; is a subsequence and not a substring.</p>
+
+<h2>中文解释</h2>
+
+<p>给定一个字符串，获得它不重复连续子序列的长度</p>
+
+<h2>解题思路</h2>
+
+<p>这题没有什么巧妙的方式，误区是我们不需要太关注子字符串是什么，只要记录它的长度最终比较就可以了，所以求解方式比较简单，直接循环字符串的每一个字节，判断是否出现过，如果出现过从头计算，更新重复的index，如果没有出现过，计数+1继续循环。</p>
+
+<h2>源码</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LongestSubstringWithoutRepeatingCharacters</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">lengthOfLongestSubstring</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">repeatedIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>        <span class="n">Map</span><span class="o">&lt;</span><span class="n">Character</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)))</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">repeatedIndex</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)),</span> <span class="n">repeatedIndex</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="n">length</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">length</span><span class="o">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">repeatedIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">),</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">length</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">LongestSubstringWithoutRepeatingCharacters</span> <span class="n">lswrc</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">LongestSubstringWithoutRepeatingCharacters</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">lswrc</span><span class="o">.</span><span class="na">lengthOfLongestSubstring</span><span class="o">(</span><span class="s">&quot;abcabcbb&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="mi">3</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">lswrc</span><span class="o">.</span><span class="na">lengthOfLongestSubstring</span><span class="o">(</span><span class="s">&quot;bbbbb&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">lswrc</span><span class="o">.</span><span class="na">lengthOfLongestSubstring</span><span class="o">(</span><span class="s">&quot;pwwkew&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="mi">3</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<h2>简介</h2>
+<h2>原题地址</h2>
 
-<p>Heroku是一个支持多种编程语言的云平台即服务。在2010年被Salesforce.com收购。Heroku作为最开始的云平台之一，从2007年6月起开发，当时它仅支持Ruby，但后来增加了对Java、Node.js、Scala、Clojure、Python以及PHP和Perl的支持。基础操作系统是Debian，在最新的堆栈则是基于Debian的Ubuntu。</p>
-
-<p>这样一下自己就解决问题，Heroku 作为PaaS 支持各种语言，同时他默认支持 HTTPS。乍一看他不也是 PaaS 吗，肯定也需要收费啊。为什么博主说不收费呢？ <br/>
-那么我们看一下他的官方介绍。他提供起初的免费版本，他是<code>512 MB RAM │ 1 web/1 worker</code>，每个月提供免费的1000个小时，如果你超过1000个小时就不提供服务了，不过我们粗略的计算一下，1x24x30=720，按照30天计算的话才720小时，加上免费的版本还有一个特性，30分钟没有人使用就自动休眠，下次访问的时候自动启动，休眠期间不计入时间。这样对于刚刚小程序起步的我们已经足够了，并且你可以做好几个小程序的服务呢。</p>
-
-<h2>注册</h2>
-
-<p>直接去官网注册即可。<a href="https://www.heroku.com">https://www.heroku.com</a></p>
-
-<h2>搭建</h2>
-
-<p>进入 <a href="https://devcenter.heroku.com/">https://devcenter.heroku.com/</a> 页面，即可选择对应的语言进行开发。<br/>
-英文不是很好的小伙伴可能有点吃力，因为这个是纯外文的。不过笔者也整理了一个中文的搭建过程，希望可以帮到大家。<br/>
-<a href="/blog/heroku-get-started/?utm_source=inner">Heroku 入门教程之：使用 Heroku 快速搭建站点</a></p>
-
-<h2>配置 HTTPS</h2>
-
-<p>本身 heroku 免费提供的域名没有在国内备案，所以你需要自己把一个已经备案好的域名指定到 Heroku 空间，同时配置好 HTTPS，详情参考<br/>
-<a href="/blog/setting-up-ssl-on-heroku-with-custom-domain/?utm_source=inner">Heroku 教程：自定义域名配置 HTTPS</a></p>
-
-<h2>实例</h2>
-
-<p>官方提供的 JAVA 例子好多东西都自己集成，笔者结合官方的例子自己写了一个，增加了 Spring，MyBatis，MySQL，H2，Migration的支持。如果有需要的可以自取。<br/>
-<a href="https://github.com/codedrinker/heroku-spring-boot-mybatis-mysql-flyway-example">https://github.com/codedrinker/heroku-spring-boot-mybatis-mysql-flyway-example</a></p>
+<p><a href="https://leetcode.com/problems/longest-substring-without-repeating-characters">https://leetcode.com/problems/longest-substring-without-repeating-characters</a></p>
 
 <h2>扩展阅读</h2>
 
@@ -204,42 +203,23 @@ enable_page_level_ads: true
       
         
         
-        <li>
-          <a href="/blog/fix-heroku-cleardb-mysql-chinese-messy-code/?utm_source=rel">Heroku 教程：MySQL 中文乱码</a>
-        </li>
-        
-        
-        <li>
-          <a href="/blog/setting-up-ssl-on-heroku-with-custom-domain/?utm_source=rel">Heroku 教程：自定义域名配置 HTTPS</a>
-        </li>
-        
-        
           
         
         <li>
-          <a href="/blog/octopress-and-hexo-comments-widget/?utm_source=rel">Commenthub —— 多说、网易云跟帖的替代品</a>
+          <a href="/blog/leetcode-add-two-numbers/?utm_source=rel">每日一则 LeetCode: Add Two Numbers</a>
         </li>
         
         
         <li>
-          <a href="/blog/heroku-custom-domains/?utm_source=rel">Heroku 教程：绑定自定义域名</a>
+          <a href="/blog/leetcode-two-sum/?utm_source=rel">每日一则 LeetCode: Two Sum</a>
         </li>
         
-        
-        <li>
-          <a href="/blog/heroku-get-started/?utm_source=rel">Heroku 教程：使用 Heroku 快速搭建站点</a>
-        </li>
-        
-      
-        
-        
-          
       
     </ol>
 
 <h2>作者</h2>
 <p>本文作者<code>麻酱</code>，欢迎讨论，指正和转载，转载请注明出处。<br/>
-原文地址：<a href="">如何使用 Heroku 搭建免费的微信小程序服务</a><br/>
+原文地址：<a href="">每日一则 LeetCode: Longest Substring Without Repeating Characters</a><br/>
 如果兴趣可以关注作者微信订阅号:码匠笔记<br/>
 <img src="/images/wechat.jpg" height="150" width="150" alt="majiangbiji" /></p>
 <h2></h2>
@@ -271,12 +251,12 @@ enable_page_level_ads: true
 
 
 
-<time class='entry-date' datetime='2018-04-30T08:42:05+08:00'><span class='date'>2018-04-30</span> <span class='time'>8:42 am</span></time>
+<time class='entry-date' datetime='2018-05-13T14:42:51+08:00'><span class='date'>2018-05-13</span> <span class='time'>2:42 pm</span></time>
       
 
 <span class="categories">
   
-    <a class='category' href='/blog/categories/heroku/'>heroku</a>, <a class='category' href='/blog/categories/wei-xin-xiao-cheng-xu/'>微信小程序</a>
+    <a class='category' href='/blog/categories/leetcode/'>leetcode</a>
   
 </span>
 
@@ -285,7 +265,7 @@ enable_page_level_ads: true
     
       <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/how-to-set-up-mini-programs-free-server-using-heroku/" data-via="" data-counturl="http://www.majiang.life/blog/how-to-set-up-mini-programs-free-server-using-heroku/" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://www.majiang.life/blog/longest-substring-without-repeating-characters/" data-via="" data-counturl="http://www.majiang.life/blog/longest-substring-without-repeating-characters/" >Tweet</a>
   
   
   
@@ -294,10 +274,8 @@ enable_page_level_ads: true
     
     <p class="meta">
       
-        <a class="basic-alignment left" href="/blog/juc-threadpoolexecutor/" title="Previous Post: JUC系列:ThreadPoolExecutor">&laquo; JUC系列:ThreadPoolExecutor</a>
+        <a class="basic-alignment left" href="/blog/leetcode-add-two-numbers/" title="Previous Post: 每日一则 LeetCode: Add Two Numbers">&laquo; 每日一则 LeetCode: Add Two Numbers</a>
       
-      
-        <a class="basic-alignment right" href="/blog/setting-up-ssl-on-heroku-with-custom-domain/" title="Next Post: Heroku 教程：自定义域名配置 HTTPS">Heroku 教程：自定义域名配置 HTTPS &raquo;</a>
       
     </p>
   </footer>
@@ -436,9 +414,9 @@ enable_page_level_ads: true
 <script type="text/javascript">
     var commenthub_id = '3821949';
     var commenthub_website = 'http://www.majiang.life';
-    var commenthub_identifier = '/blog/how-to-set-up-mini-programs-free-server-using-heroku/';
-    var commenthub_url = 'http://www.majiang.life/blog/how-to-set-up-mini-programs-free-server-using-heroku/';
-    var commenthub_title = '如何使用 Heroku 搭建免费的微信小程序服务';
+    var commenthub_identifier = '/blog/longest-substring-without-repeating-characters/';
+    var commenthub_url = 'http://www.majiang.life/blog/longest-substring-without-repeating-characters/';
+    var commenthub_title = '每日一则 LeetCode: Longest Substring Without Repeating Characters';
     (function () {
         var dsq = document.createElement('script');
         dsq.type = 'text/javascript';

@@ -16,7 +16,7 @@ enable_page_level_ads: true
   <meta name="author" content="麻酱">
 
   
-  <meta name="description" content="描述 You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order and each of their nodes &hellip;">
+  <meta name="description" content="描述 Given a string, find the length of the longest substring without repeating characters. Examples: Given &ldquo;abcabcbb&rdquo;, the answer is & &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -101,6 +101,109 @@ enable_page_level_ads: true
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/longest-substring-without-repeating-characters/">每日一则 LeetCode: Longest Substring Without Repeating Characters</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+<time class='entry-date' datetime='2018-05-13T14:42:51+08:00'><span class='date'>2018-05-13</span> <span class='time'>2:42 pm</span></time>
+        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+         访问 <span id="busuanzi_value_page_pv"></span> 次
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h2>描述</h2>
+
+<p>Given a string, find the length of the longest substring without repeating characters.</p>
+
+<p>Examples:</p>
+
+<p>Given &ldquo;abcabcbb&rdquo;, the answer is &ldquo;abc&rdquo;, which the length is 3.</p>
+
+<p>Given &ldquo;bbbbb&rdquo;, the answer is &ldquo;b&rdquo;, with the length of 1.</p>
+
+<p>Given &ldquo;pwwkew&rdquo;, the answer is &ldquo;wke&rdquo;, with the length of 3. Note that the answer must be a substring, &ldquo;pwke&rdquo; is a subsequence and not a substring.</p>
+
+<h2>中文解释</h2>
+
+<p>给定一个字符串，获得它不重复连续子序列的长度</p>
+
+<h2>解题思路</h2>
+
+<p>这题没有什么巧妙的方式，误区是我们不需要太关注子字符串是什么，只要记录它的长度最终比较就可以了，所以求解方式比较简单，直接循环字符串的每一个字节，判断是否出现过，如果出现过从头计算，更新重复的index，如果没有出现过，计数+1继续循环。</p>
+
+<h2>源码</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LongestSubstringWithoutRepeatingCharacters</span> <span class="o">{</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="kt">int</span> <span class="nf">lengthOfLongestSubstring</span><span class="o">(</span><span class="n">String</span> <span class="n">s</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="kt">int</span> <span class="n">repeatedIndex</span> <span class="o">=</span> <span class="mi">0</span><span class="o">,</span> <span class="n">length</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class='line'>        <span class="n">Map</span><span class="o">&lt;</span><span class="n">Character</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+</span><span class='line'>        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">s</span><span class="o">.</span><span class="na">length</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class='line'>            <span class="k">if</span> <span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)))</span> <span class="o">{</span>
+</span><span class='line'>                <span class="n">repeatedIndex</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">)),</span> <span class="n">repeatedIndex</span><span class="o">);</span>
+</span><span class='line'>            <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>            <span class="n">length</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">length</span><span class="o">,</span> <span class="n">i</span> <span class="o">-</span> <span class="n">repeatedIndex</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class='line'>            <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">s</span><span class="o">.</span><span class="na">charAt</span><span class="o">(</span><span class="n">i</span><span class="o">),</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class='line'>        <span class="o">}</span>
+</span><span class='line'>        <span class="k">return</span> <span class="n">length</span><span class="o">;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>        <span class="n">LongestSubstringWithoutRepeatingCharacters</span> <span class="n">lswrc</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">LongestSubstringWithoutRepeatingCharacters</span><span class="o">();</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">lswrc</span><span class="o">.</span><span class="na">lengthOfLongestSubstring</span><span class="o">(</span><span class="s">&quot;abcabcbb&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="mi">3</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">lswrc</span><span class="o">.</span><span class="na">lengthOfLongestSubstring</span><span class="o">(</span><span class="s">&quot;bbbbb&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class='line'>        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">lswrc</span><span class="o">.</span><span class="na">lengthOfLongestSubstring</span><span class="o">(</span><span class="s">&quot;pwwkew&quot;</span><span class="o">)</span> <span class="o">==</span> <span class="mi">3</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>原题地址</h2>
+
+<p><a href="https://leetcode.com/problems/longest-substring-without-repeating-characters">https://leetcode.com/problems/longest-substring-without-repeating-characters</a></p>
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -653,43 +756,6 @@ You may assume that each input would have exactly one solution, and you may not 
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <h1 class="entry-title"><a href="/blog/octopress-and-hexo-comments-widget/">Commenthub —— 多说、网易云跟帖的替代品</a></h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-<time class='entry-date' datetime='2018-02-19T20:57:35+08:00'><span class='date'>2018-02-19</span> <span class='time'>8:57 pm</span></time>
-        <script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-         访问 <span id="busuanzi_value_page_pv"></span> 次
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><h2>前言</h2>
-
-<p>“多说”和“网易云跟帖”相继不维护了，每一次给大家带来了希望又带来了失望，于是 <a href="https://github.com/codedrinker/commenthub">Commenthub</a> 出现了。Commenthub 是作者使用免费的服务 Heroku 和 Github Issues 结合起来做的一套开源的评论系统。其灵感源于 Gitment，但是 Gitment 的 Key 和 Secret 都存在浏览器端，这样对于安全也是一个问题，于是作者使用 Heroku 搭建后端服务用于处理业务和存储证书，通过 iframe 实现评论功能。</p>
-
-</div>
-  
-  
-    <footer>
-      <a rel="full-article" href="/blog/octopress-and-hexo-comments-widget/">阅读全文</a>
-    </footer>
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/posts/2">&larr; Older</a>
@@ -735,11 +801,15 @@ You may assume that each input would have exactly one solution, and you may not 
 </section>
 <section>
   <h1>标签云</h1>
-    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 151.42857142857144%'>heroku(6)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/https' style='font-size: 108.57142857142857%'>https(1)</a> <a href='/blog/categories/java' style='font-size: 151.42857142857144%'>java(6)</a> <a href='/blog/categories/leetcode' style='font-size: 117.14285714285714%'>leetcode(2)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/mysql' style='font-size: 108.57142857142857%'>mysql(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/thread' style='font-size: 108.57142857142857%'>thread(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> <a href='/blog/categories/wei-xin-xiao-cheng-xu' style='font-size: 108.57142857142857%'>微信小程序(1)</a> </span>
+    <span id="tag-cloud"><a href='/blog/categories/aws' style='font-size: 117.14285714285714%'>aws(2)</a> <a href='/blog/categories/cache' style='font-size: 108.57142857142857%'>cache(1)</a> <a href='/blog/categories/chrome-extension' style='font-size: 108.57142857142857%'>chrome extension(1)</a> <a href='/blog/categories/elasticsearch' style='font-size: 108.57142857142857%'>elasticsearch(1)</a> <a href='/blog/categories/github' style='font-size: 108.57142857142857%'>github(1)</a> <a href='/blog/categories/guava' style='font-size: 108.57142857142857%'>guava(1)</a> <a href='/blog/categories/heroku' style='font-size: 151.42857142857144%'>heroku(6)</a> <a href='/blog/categories/hexo' style='font-size: 108.57142857142857%'>hexo(1)</a> <a href='/blog/categories/https' style='font-size: 108.57142857142857%'>https(1)</a> <a href='/blog/categories/java' style='font-size: 151.42857142857144%'>java(6)</a> <a href='/blog/categories/leetcode' style='font-size: 125.71428571428572%'>leetcode(3)</a> <a href='/blog/categories/maven' style='font-size: 108.57142857142857%'>maven(1)</a> <a href='/blog/categories/mybatis' style='font-size: 108.57142857142857%'>mybatis(1)</a> <a href='/blog/categories/mysql' style='font-size: 108.57142857142857%'>mysql(1)</a> <a href='/blog/categories/octopress' style='font-size: 160.0%'>octopress(7)</a> <a href='/blog/categories/project' style='font-size: 108.57142857142857%'>project(1)</a> <a href='/blog/categories/redis' style='font-size: 108.57142857142857%'>redis(1)</a> <a href='/blog/categories/skill' style='font-size: 117.14285714285714%'>skill(2)</a> <a href='/blog/categories/spring' style='font-size: 125.71428571428572%'>spring(3)</a> <a href='/blog/categories/spring-boot' style='font-size: 108.57142857142857%'>spring-boot(1)</a> <a href='/blog/categories/tech' style='font-size: 108.57142857142857%'>tech(1)</a> <a href='/blog/categories/thread' style='font-size: 108.57142857142857%'>thread(1)</a> <a href='/blog/categories/threadlocal' style='font-size: 108.57142857142857%'>threadlocal(1)</a> <a href='/blog/categories/toc' style='font-size: 117.14285714285714%'>toc(2)</a> <a href='/blog/categories/tool' style='font-size: 108.57142857142857%'>tool(1)</a> <a href='/blog/categories/vagrant' style='font-size: 108.57142857142857%'>vagrant(1)</a> <a href='/blog/categories/web' style='font-size: 125.71428571428572%'>web(3)</a> <a href='/blog/categories/wei-xin-xiao-cheng-xu' style='font-size: 108.57142857142857%'>微信小程序(1)</a> </span>
 </section>
 <section>
   <h1>最新</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/longest-substring-without-repeating-characters/">每日一则 LeetCode: Longest Substring Without Repeating Characters</a>
+      </li>
     
       <li class="post">
         <a href="/blog/leetcode-add-two-numbers/">每日一则 LeetCode: Add Two Numbers</a>
@@ -795,10 +865,6 @@ You may assume that each input would have exactly one solution, and you may not 
     
       <li class="post">
         <a href="/blog/heroku-get-started/">Heroku 教程：使用 Heroku 快速搭建站点</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/how-to-build-email-system-with-amazon-ses/">基于 Amazon SES 搭建高可用的邮件系统</a>
       </li>
     
   </ul>
