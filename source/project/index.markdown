@@ -7,6 +7,10 @@ sharing: true
 footer: true
 ---
 
+## mdnote
+**描述**：Free Online Markdown Note | 开源免费的在线 Markdown 记事本。   
+**地址**：[https://github.com/mdnote/mdnote.github.io](https://github.com/mdnote/mdnote.github.io)  
+
 ## post-dispatcher
 **描述**：自动发送 Markdown 博文到不同社交平台，SegmentFault、简书、CSDN等。   
 **地址**：[https://github.com/codedrinker/post-dispatcher](https://github.com/codedrinker/post-dispatcher)  

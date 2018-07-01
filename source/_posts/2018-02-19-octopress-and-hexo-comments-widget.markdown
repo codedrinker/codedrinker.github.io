@@ -4,7 +4,7 @@ title: "Commenthub —— 多说、网易云跟帖的替代品"
 date: 2018-02-19 20:57:35 +0800
 comments: true
 keywords: 使用 GitHub Issues 搭建评论系统,Gitment 安全吗?,多说、网易云跟帖的替代品
-categories: [Heroku,Octopress,Hexo]
+categories: [Heroku,Octopress,Hexo,Project]
 ---
 
 ## 前言
