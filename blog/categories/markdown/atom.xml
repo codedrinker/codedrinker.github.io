@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Markdown | 码匠笔记]]></title>
+  <link href="http://www.majiang.life/blog/categories/markdown/atom.xml" rel="self"/>
+  <link href="http://www.majiang.life/"/>
+  <updated>2018-07-01T09:00:53+08:00</updated>
+  <id>http://www.majiang.life/</id>
+  <author>
+    <name><![CDATA[麻酱]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[notepad.cc 替代品——在线 Markdown 笔记]]></title>
+    <link href="http://www.majiang.life/blog/online-markdown-note-replace-notepad-dot-cc/"/>
+    <updated>2018-07-01T08:43:42+08:00</updated>
+    <id>http://www.majiang.life/blog/online-markdown-note-replace-notepad-dot-cc</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>方便简洁的 notepad.cc 关闭，对于喜欢使用不需要登录，又简单的云存储工具的我们是一个损失，于是笔者就自己写了一个。PS:不需要担心再次关闭，因为作者几乎使用的免费的工具来实现：<br/>
+1. Github Pages 承载空间<br/>
+2. 七牛免费 10G 的存储空间存储笔记，我们假定一个文档的使用空间是 1K，那么免费可以容纳 <code>10*1024*1024 = 10,485,760</code>，如果真的到了这个数量级，那么也不需要考虑是否免费了。</p>
+
+<p>所以请大家放心使用。至于安全问题，如果特别敏感的东西，相信你也不会存在这个地方，不过笔者还是做了一些限制，把七牛的 <code>key</code> 存储到了云端。</p>
+
+<!-- more -->
+
+
+<h2>实现</h2>
+
+<p>实现相对非常简单，使用了免费的 <a href="https://gitee.com/pandao/editor.md">Editor.md</a> 作为 Markdown 的编辑工具。  <br/>
+使用 <code>Github Pages</code> 承载编辑器页面，直接使用七牛 <code>JavaScript SDK</code>，同步编辑内容到七牛云空间。</p>
+
+<h2>使用</h2>
+
+<p>访问 <a href="http://mdnote.gettools.wang/">http://mdnote.gettools.wang/</a><br/>
+如果带 <code>#codedrinker</code>，先获取当前短链接下面是否有内容，如果有展示，没有的话自动填入 <code>Markdown</code> 语法<br/>
+编辑完成以后按 <code>Ctrl+S</code> 或者 <code>Command+S</code>保存</p>
+]]></content>
+  </entry>
+  
+</feed>

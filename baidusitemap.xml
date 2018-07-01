@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url>
+<loc>http://www.majiang.life/blog/online-markdown-note-replace-notepad-dot-cc/</loc>
+<lastmod>2018-07-01T08:43:42+08:00</lastmod>
+</url>
+<url>
 <loc>http://www.majiang.life/blog/alibaba-p3c/</loc>
 <lastmod>2018-05-13T14:59:27+08:00</lastmod>
 </url>
@@ -253,6 +257,9 @@
 </url>
 <url>
 <loc>http://www.majiang.life/blog/categories/leetcode/</loc>
+</url>
+<url>
+<loc>http://www.majiang.life/blog/categories/markdown/</loc>
 </url>
 <url>
 <loc>http://www.majiang.life/blog/2015/01/10/begininng-and-summary/index.html</loc>

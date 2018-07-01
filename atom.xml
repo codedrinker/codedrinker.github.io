@@ -4,7 +4,7 @@
   <title><![CDATA[码匠笔记]]></title>
   <link href="http://www.majiang.life/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-05-13T15:30:39+08:00</updated>
+  <updated>2018-07-01T09:00:53+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -12,6 +12,35 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[notepad.cc 替代品——在线 Markdown 笔记]]></title>
+    <link href="http://www.majiang.life/blog/online-markdown-note-replace-notepad-dot-cc/"/>
+    <updated>2018-07-01T08:43:42+08:00</updated>
+    <id>http://www.majiang.life/blog/online-markdown-note-replace-notepad-dot-cc</id>
+    <content type="html"><![CDATA[<h2>前言</h2>
+
+<p>方便简洁的 notepad.cc 关闭，对于喜欢使用不需要登录，又简单的云存储工具的我们是一个损失，于是笔者就自己写了一个。PS:不需要担心再次关闭，因为作者几乎使用的免费的工具来实现：<br/>
+1. Github Pages 承载空间<br/>
+2. 七牛免费 10G 的存储空间存储笔记，我们假定一个文档的使用空间是 1K，那么免费可以容纳 <code>10*1024*1024 = 10,485,760</code>，如果真的到了这个数量级，那么也不需要考虑是否免费了。</p>
+
+<p>所以请大家放心使用。至于安全问题，如果特别敏感的东西，相信你也不会存在这个地方，不过笔者还是做了一些限制，把七牛的 <code>key</code> 存储到了云端。</p>
+
+<!-- more -->
+
+
+<h2>实现</h2>
+
+<p>实现相对非常简单，使用了免费的 <a href="https://gitee.com/pandao/editor.md">Editor.md</a> 作为 Markdown 的编辑工具。  <br/>
+使用 <code>Github Pages</code> 承载编辑器页面，直接使用七牛 <code>JavaScript SDK</code>，同步编辑内容到七牛云空间。</p>
+
+<h2>使用</h2>
+
+<p>访问 <a href="http://mdnote.gettools.wang/">http://mdnote.gettools.wang/</a><br/>
+如果带 <code>#codedrinker</code>，先获取当前短链接下面是否有内容，如果有展示，没有的话自动填入 <code>Markdown</code> 语法<br/>
+编辑完成以后按 <code>Ctrl+S</code> 或者 <code>Command+S</code>保存</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[把《阿里巴巴Java开发手册》读薄]]></title>
@@ -2795,59 +2824,6 @@ IO密集型任务则由于需要等待IO操作，线程并不是一直在执行�
 <h2>总结</h2>
 
 <p><code>倒排索引</code>和 <code>Doc Values</code> 只是 <code>ElasticSearch</code>的冰山一角，如果有兴趣的同学可以做更深入的研究，本文只是笔者的学习笔记，希望对大家有帮助。</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[是什么让我放弃印象笔记而使用有道云笔记的]]></title>
-    <link href="http://www.majiang.life/blog/migrate-evernote-to-youdao-note/"/>
-    <updated>2017-11-04T09:28:59+08:00</updated>
-    <id>http://www.majiang.life/blog/migrate-evernote-to-youdao-note</id>
-    <content type="html"><![CDATA[<h2>前言</h2>
-
-<p>云笔记已经成了每一个开发人员的装机必备，联想到每一个开发人员的折腾也从未停止过，安装各种操作系统，各种IDE，各种博客系统，各种浏览器等等，有过同样经历的同学举手，虽然我也看不到！这次笔者就折腾起来云笔记！</p>
-
-<!-- more -->
-
-
-<h2>为什么放弃？</h2>
-
-<p>起初是因为印象笔记不支持Markdown笔记，我就在网上搜罗一番，最终发现就两个方案，马克飞象和有道云笔记。</p>
-
-<h2>马克飞象</h2>
-
-<p><strong>马克飞象</strong>是一款专为印象笔记（Evernote）打造的Markdown编辑器，通俗点说它就是提供 Markdown编辑功能，然后同步编辑内容到印象笔记。它同时提供网页版和应用版，然而毕竟是依托印象笔记的第三方应还用，所以有一些不足：</p>
-
-<ul>
-<li>单向编辑，支持单向编辑功能较好，在印象笔记里面编辑可能导致数据丢失和排版混乱；</li>
-<li>配合使用，在印象笔记里面不能方便的编   Markdown文档，所以导致普通笔记的时候需要切换，做一件事情需要两个工具难免有一些麻烦；</li>
-<li>移动设备，不支持移动设备</li>
-<li>同步，同步需要手动或者每十分钟同步一次；</li>
-<li>收费，最大的问题它是收费的，当然费用也非常便宜，79一年。虽然我们不吝啬在学习上，但是记录笔记收费其实也并非所有人可接受，排除那些酷爱破解的人。</li>
-</ul>
-
-
-<h2>有道云笔记</h2>
-
-<p>有道云笔记就比较直接，直接支 Markdown和标准模式的笔记，为了方便比对我们也按照列表方式罗列：</p>
-
-<ul>
-<li>Markdown，支持标准文本 Markdown两种合适笔记</li>
-<li>移动设备，并且基本支持所有的移动设备</li>
-<li>免费，虽然它也有收费版本，但是免费版本的功能对于记录笔记来说已经足够了。唯一不足的地方是免费版本会有广告，但是谁都得吃饭嘛，不收费让人家赚点广告费也不伤大雅嘛。</li>
-<li>PDF导出，支持 Markdown导出PDF合适</li>
-<li>快捷收藏，支持微信公共号文章内容一键收藏，微博一键收藏和地址收藏。很方便整理收藏。</li>
-<li>功能，印象笔记拥有的功能有道云笔记都包括。</li>
-</ul>
-
-
-<h2>迁移印象笔记</h2>
-
-<p>迁移就非常简答了，直接在印象笔记里面导出<code>enex</code>文件，然后在有道云笔记里面直接导入<code>enex</code>即可。只是<code>Mac</code>版本的有道云笔记不支持导入功能，可以选择PC版本或者Web版本导入。</p>
-
-<h2>总结</h2>
-
-<p>虽然说只是一个工具，重点在于内容。但是有一句话说得好，工欲善其事，必先利其器。</p>
 ]]></content>
   </entry>
   

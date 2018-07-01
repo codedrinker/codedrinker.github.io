@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Spring | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/spring/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-05-13T15:30:39+08:00</updated>
+  <updated>2018-07-01T09:00:53+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -293,7 +293,7 @@
 </span><span class='line'>  <span class="nt">&lt;/entry&gt;</span>
 </span><span class='line'>
 </span><span class='line'>  <span class="nt">&lt;entry&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;title</span> <span class="na">type=</span><span class="s">&quot;html&quot;</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[从 Spring 集成 Mybatis 到 浅析Java动态代理]]&gt;</span><span class="nt">&lt;/title&gt;</span>
+</span><span class='line'>    <span class="nt">&lt;title</span> <span class="na">type=</span><span class="s">&quot;html&quot;</span><span class="nt">&gt;</span><span class="cp">&lt;![CDATA[通过 Spring 集成 MyBatis 源码理解 Java动态代理]]&gt;</span><span class="nt">&lt;/title&gt;</span>
 </span><span class='line'>    <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">&quot;http://www.majiang.life/blog/spring-mybatis-and-dynamic-proxy/&quot;</span><span class="nt">/&gt;</span>
 </span><span class='line'>    <span class="nt">&lt;updated&gt;</span>2017-10-15T21:10:30+08:00<span class="nt">&lt;/updated&gt;</span>
 </span><span class='line'>    <span class="nt">&lt;id&gt;</span>http://www.majiang.life/blog/spring-mybatis-and-dynamic-proxy<span class="nt">&lt;/id&gt;</span>

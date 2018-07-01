@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | 码匠笔记]]></title>
   <link href="http://www.majiang.life/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://www.majiang.life/"/>
-  <updated>2018-05-13T15:30:39+08:00</updated>
+  <updated>2018-07-01T09:00:53+08:00</updated>
   <id>http://www.majiang.life/</id>
   <author>
     <name><![CDATA[麻酱]]></name>
@@ -805,7 +805,7 @@ hashCode方法必须始终返回相同的整数，
   </entry>
   
   <entry>
-    <title type="html"><![CDATA[从 Spring 集成 Mybatis 到 浅析Java动态代理]]></title>
+    <title type="html"><![CDATA[通过 Spring 集成 MyBatis 源码理解 Java动态代理]]></title>
     <link href="http://www.majiang.life/blog/spring-mybatis-and-dynamic-proxy/"/>
     <updated>2017-10-15T21:10:30+08:00</updated>
     <id>http://www.majiang.life/blog/spring-mybatis-and-dynamic-proxy</id>
