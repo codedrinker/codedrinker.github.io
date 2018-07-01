@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "从 Spring 集成 Mybatis 到 浅析Java动态代理"
+title: "通过 Spring 集成 MyBatis 源码理解 Java动态代理"
 date: 2017-10-15 21:10:30 +0800
 comments: true
 categories: [Spring,Mybatis,Java]
